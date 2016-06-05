@@ -15,6 +15,12 @@
  */
 
 apply plugin: 'com.android.library'
+apply plugin: 'com.github.dcendents.android-maven'
+apply plugin: 'com.jfrog.bintray'
+
+// Maven Group ID for the artifact
+group = 'uk.co.samuelwall'
+version = "1.0.0"
 
 android {
     compileSdkVersion 23
@@ -38,4 +44,82 @@ dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     testCompile 'junit:junit:4.12'
     compile 'com.android.support:support-annotations:23.4.0'
+}
+
+install {
+    repositories.mavenInstaller {
+        pom {
+            //noinspection GroovyAssignabilityCheck
+            project {
+                packaging 'aar'
+                name 'material-tap-target-prompt'
+                url 'https://github.com/sjwall/MaterialTapTargetPrompt'
+
+                groupId 'uk.co.samuelwall'
+                artifactId 'material-tap-target-prompt'
+
+                licenses {
+                    license {
+                        name 'The Apache Software License, Version 2.0'
+                        url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+                    }
+                }
+                developers {
+                    developer {
+                        id 'sjwall'
+                        name 'Samuel Wall'
+                        email 'wallsamuelj@gmail.com'
+                    }
+                }
+                scm {
+                    connection 'https://github.com/sjwall/MaterialTapTargetPrompt.git'
+                    developerConnection 'https://github.com/sjwall/MaterialTapTargetPrompt.git'
+                    url 'https://github.com/sjwall/MaterialTapTargetPrompt'
+
+                }
+            }
+        }
+    }
+}
+
+task sourcesJar(type: Jar) {
+    from android.sourceSets.main.java.srcDirs
+    classifier = 'sources'
+}
+
+task javadoc(type: Javadoc) {
+    source = android.sourceSets.main.java.srcDirs
+    classpath += project.files(android.getBootClasspath().join(File.pathSeparator))
+}
+
+task javadocJar(type: Jar, dependsOn: javadoc) {
+    classifier = 'javadoc'
+    from javadoc.destinationDir
+}
+
+artifacts {
+    archives javadocJar
+    archives sourcesJar
+}
+
+// Bintray
+Properties properties = new Properties()
+properties.load(project.rootProject.file('local.properties').newDataInputStream())
+
+bintray {
+    user = properties.getProperty("bintray.user")
+    key = properties.getProperty("bintray.apikey")
+
+    configurations = ['archives']
+
+    publish = false
+    pkg {
+        repo = 'maven'
+        name = 'material-tap-target-prompt'
+        desc = 'Material Design tap target for Android'
+        websiteUrl = 'https://github.com/sjwall/MaterialTapTargetPrompt'
+        vcsUrl = 'https://github.com/sjwall/MaterialTapTargetPrompt.git'
+        licenses = ["Apache-2.0"]
+        publicDownloadNumbers = false
+    }
 }

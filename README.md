@@ -3,6 +3,18 @@ A Tap Target implementation in Android based on Material Design Onboarding guide
 
 ![Example](http://i.imgur.com/Ei7iAcn.png?1)
 
+# Gradle
+To use the gradle dependency, add this to build.gradle:
+```groovy
+repositories {
+    jcenter()
+}
+
+dependencies {
+    compile 'uk.co.samuelwall:material-tap-target-prompt:1.0.0'
+}
+```
+
 # Usage
 Basic usage is shown below with more examples in the sample app:
 

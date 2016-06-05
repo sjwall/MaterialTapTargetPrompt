@@ -15,3 +15,5 @@
  */
 
 include ':library', ':sample'
+
+project(':library').name = 'material-tap-target-prompt'

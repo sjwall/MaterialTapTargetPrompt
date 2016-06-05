@@ -16,7 +16,7 @@
   -->
 
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="uk.co.samuelwall.sample">
+    package="uk.co.samuelwall.materialtaptargetprompt.sample">
 
     <application
         android:allowBackup="true"
