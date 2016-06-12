@@ -32,6 +32,7 @@ import android.support.annotation.ColorInt;
 import android.support.annotation.ColorRes;
 import android.support.annotation.DimenRes;
 import android.support.annotation.DrawableRes;
+import android.support.annotation.IdRes;
 import android.support.annotation.StringRes;
 import android.text.Layout;
 import android.text.StaticLayout;
@@ -77,6 +78,8 @@ public class MaterialTapTargetPrompt
     private boolean mDismissing;
     private ViewGroup mParentView;
     private boolean mParentViewIsDecor;
+    private ViewGroup mClipToView;
+    private final float mStatusBarHeight;
 
     MaterialTapTargetPrompt(final Activity activity)
     {
@@ -107,6 +110,16 @@ public class MaterialTapTargetPrompt
                     //Not used
                 }
             };
+
+        int resourceId = mView.getResources().getIdentifier("status_bar_height", "dimen", "android");
+        if (resourceId > 0)
+        {
+            mStatusBarHeight = mView.getResources().getDimensionPixelSize(resourceId);
+        }
+        else
+        {
+            mStatusBarHeight = 0;
+        }
     }
 
     private ViewGroup getParentView()
@@ -147,6 +160,8 @@ public class MaterialTapTargetPrompt
         {
             parent.addView(mView);
         }
+
+        updateFocalCentrePosition();
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB)
         {
@@ -462,18 +477,18 @@ public class MaterialTapTargetPrompt
             {
                 mView.mCentreLeft += mTargetView.getTranslationX();
                 mView.mCentreTop += mTargetView.getTranslationY();
+
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP
+                        && ((ViewGroup) mActivity.findViewById(android.R.id.content)).getChildAt(0).getFitsSystemWindows())
+                {
+                    mView.mCentreTop -= mStatusBarHeight;
+                }
             }
         }
         else
         {
             mView.mCentreLeft = mBaseLeft;
             mView.mCentreTop = mBaseTop;
-        }
-
-        //If the view was not added to the decor view remove the status bar height
-        if (!mParentViewIsDecor)
-        {
-            mView.mCentreTop -= mView.mClipBoundsTop;
         }
 
         final ViewGroup parent = getParentView();
@@ -566,6 +581,38 @@ public class MaterialTapTargetPrompt
             mView.mIconDrawableLeft = mView.mCentreLeft - (mView.mTargetView.getWidth() / 2);
             mView.mIconDrawableTop = mView.mCentreTop - (mView.mTargetView.getHeight() / 2);
         }
+        updateClipBounds();
+    }
+
+    private void updateClipBounds()
+    {
+        if (mClipToView != null && mClipToView.getLayoutParams() instanceof ViewGroup.MarginLayoutParams)
+        {
+            final ViewGroup.MarginLayoutParams margins = (ViewGroup.MarginLayoutParams) mClipToView.getLayoutParams();
+            mView.mClipBounds = true;
+            mView.mClipBoundsLeft = mClipToView.getLeft() + margins.leftMargin;
+            mView.mClipBoundsBottom = mClipToView.getBottom() - margins.bottomMargin;
+            mView.mClipBoundsTop = mClipToView.getTop() + margins.topMargin;
+            mView.mClipBoundsRight = mClipToView.getRight() - margins.rightMargin;
+            if (mParentViewIsDecor)
+            {
+                mView.mClipBoundsTop += mStatusBarHeight;
+                mView.mClipBoundsBottom += mStatusBarHeight;
+            }
+        }
+        else if (mParentViewIsDecor)
+        {
+            mView.mClipBounds = true;
+            //Stop the canvas drawing over the status bar
+            mView.mClipBoundsTop = mStatusBarHeight;
+            mView.mClipBoundsLeft = 0f;
+            mView.mClipBoundsBottom = mActivity.getResources().getDisplayMetrics().heightPixels - mStatusBarHeight;
+            mView.mClipBoundsRight = mActivity.getResources().getDisplayMetrics().widthPixels;
+        }
+        else
+        {
+            mView.mClipBounds = false;
+        }
     }
 
     protected void onHidePrompt(final MotionEvent event, final boolean targetTapped)
@@ -601,9 +648,7 @@ public class MaterialTapTargetPrompt
         private boolean mDrawRipple = Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB;
         private OnHidePromptListener mOnHidePromptListener;
         private boolean mCaptureTouchEventOnFocal;
-        private float mClipBoundsTop;
-        private float mClipBoundsWidth;
-        private float mClipBoundsHeight;
+        private float mClipBoundsTop, mClipBoundsLeft, mClipBoundsBottom, mClipBoundsRight;
         private View mTargetView;
         private float mTextSeparation;
         private boolean mClipBounds;
@@ -611,14 +656,6 @@ public class MaterialTapTargetPrompt
         public PromptView(final Context context)
         {
             super(context);
-            //Stop the canvas drawing over the status bar
-            int resourceId = getResources().getIdentifier("status_bar_height", "dimen", "android");
-            if (resourceId > 0)
-            {
-                mClipBoundsTop = getResources().getDimensionPixelSize(resourceId);
-            }
-            mClipBoundsWidth = getResources().getDisplayMetrics().widthPixels;
-            mClipBoundsHeight = getResources().getDisplayMetrics().heightPixels;
         }
 
         @Override
@@ -626,7 +663,7 @@ public class MaterialTapTargetPrompt
         {
             if (mClipBounds)
             {
-                canvas.clipRect(0, mClipBoundsTop, mClipBoundsWidth, mClipBoundsHeight);
+                canvas.clipRect(mClipBoundsLeft, mClipBoundsTop, mClipBoundsRight, mClipBoundsBottom);
             }
 
             //Draw the backgrounds
@@ -796,6 +833,18 @@ public class MaterialTapTargetPrompt
         }
 
         /**
+         * Set the view for the prompt to focus on using the given resource id.
+         *
+         * @return This Builder object to allow for chaining of calls to set methods
+         */
+        public Builder setTarget(@IdRes final int target)
+        {
+            mTargetView = mActivity.findViewById(target);
+            mTargetSet = mTargetView != null;
+            return this;
+        }
+
+        /**
          * Set the centre point as a screen position
          * @param left Centre point from screen left
          * @param top Centre point from screen top
@@ -808,6 +857,16 @@ public class MaterialTapTargetPrompt
             mCentreTop = top;
             mTargetSet = true;
             return this;
+        }
+
+        /**
+         * Has the target been set successfully?
+         *
+         * @return True if set successfully.
+         */
+        public boolean isTargetSet()
+        {
+            return mTargetSet;
         }
 
         /**
@@ -1193,14 +1252,8 @@ public class MaterialTapTargetPrompt
             {
                 mPrompt.mBaseLeft = mCentreLeft;
                 mPrompt.mBaseTop = mCentreTop;
-
-                //As the view is added to the decor view group the status bar height needs to be taken into account
-                int resourceId = mActivity.getResources().getIdentifier("status_bar_height", "dimen", "android");
-                if (resourceId > 0)
-                {
-                    mPrompt.mBaseTop += mActivity.getResources().getDimensionPixelSize(resourceId);
-                }
             }
+            mPrompt.mClipToView = (ViewGroup) ((ViewGroup) mActivity.findViewById(android.R.id.content)).getChildAt(0);
 
             mPrompt.mPrimaryText = mPrimaryText;
             mPrompt.mPrimaryTextColourAlpha = Color.alpha(mPrimaryTextColour);
@@ -1252,8 +1305,6 @@ public class MaterialTapTargetPrompt
             mPrompt.mPaintSecondaryText.setAlpha(Color.alpha(mSecondaryTextColour));
             mPrompt.mPaintSecondaryText.setAntiAlias(true);
             mPrompt.mPaintSecondaryText.setTextSize(mSecondaryTextSize);
-
-            mPrompt.updateFocalCentrePosition();
 
             return mPrompt;
         }

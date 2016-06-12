@@ -16,6 +16,7 @@
 
 package uk.co.samuelwall.materialtaptargetprompt.sample;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -128,6 +129,11 @@ public class MainActivity extends AppCompatActivity
     public void showStylePrompt(View view)
     {
         new MaterialTapTargetPrompt.Builder(this, R.style.MaterialTapTargetPromptTheme_FabTarget).show();
+    }
+
+    public void showDialog(View view)
+    {
+        startActivity(new Intent(this, DialogStyleActivity.class));
     }
 
     @Override

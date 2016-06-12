@@ -67,4 +67,14 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:onClick="showStylePrompt"/>
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Dialog"
+        android:id="@+id/button_dialog"
+        android:layout_below="@+id/button_overflow"
+        android:layout_toRightOf="@+id/button_nav"
+        android:layout_toEndOf="@+id/button_nav"
+        android:onClick="showDialog"/>
 </RelativeLayout>
