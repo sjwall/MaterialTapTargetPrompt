@@ -11,7 +11,7 @@ repositories {
 }
 
 dependencies {
-    compile 'uk.co.samuelwall:material-tap-target-prompt:1.0.0'
+    compile 'uk.co.samuelwall:material-tap-target-prompt:1.1.0'
 }
 ```
 
