@@ -57,4 +57,14 @@
         android:layout_toRightOf="@+id/button_overflow"
         android:layout_toEndOf="@+id/button_overflow"
         android:onClick="showFabPrompt"/>
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="From style"
+        android:id="@+id/button_style"
+        android:layout_below="@+id/button_nav"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:onClick="showStylePrompt"/>
 </RelativeLayout>

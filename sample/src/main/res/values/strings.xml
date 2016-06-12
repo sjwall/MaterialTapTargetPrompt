@@ -26,4 +26,7 @@
     <string name="menu_prompt_description">Tap the menu icon to switch accounts, change settings &amp; more</string>
     <string name="overflow_prompt_title">Search your emails</string>
     <string name="overflow_prompt_description">Tap the icon to quickly scan your emails</string>
+
+    <string name="FabTarget.primaryText">Loaded from style</string>
+    <string name="FabTarget.secondaryText">This was loaded from a style</string>
 </resources>

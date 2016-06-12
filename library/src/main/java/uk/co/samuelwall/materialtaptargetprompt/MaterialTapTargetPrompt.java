@@ -21,6 +21,7 @@ import android.animation.ValueAnimator;
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Context;
+import android.content.res.TypedArray;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -35,6 +36,7 @@ import android.support.annotation.StringRes;
 import android.text.Layout;
 import android.text.StaticLayout;
 import android.text.TextPaint;
+import android.util.TypedValue;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -720,7 +722,6 @@ public class MaterialTapTargetPrompt
          */
         private String mPrimaryText, mSecondaryText;
         private int mPrimaryTextColour, mSecondaryTextColour, mBackgroundColour, mFocalColour;
-        private final float mDensity;
         private float mFocalRadius;
         private float mPrimaryTextSize, mSecondaryTextSize;
         private float mMaxTextWidth;
@@ -740,19 +741,46 @@ public class MaterialTapTargetPrompt
          */
         public Builder(final Activity activity)
         {
+            this(activity, 0);
+        }
+
+        public Builder(final Activity activity, int themeResId)
+        {
             mActivity = activity;
-            mDensity = activity.getResources().getDisplayMetrics().density;
-            mPrimaryTextColour = Color.WHITE;
-            mSecondaryTextColour = Color.argb(179, 255, 255, 255);
-            mBackgroundColour = Color.argb(244, 63, 81, 181);
-            mFocalColour = Color.WHITE;
-            mFocalRadius = mDensity * 44;
-            mPrimaryTextSize = 22 * mDensity;
-            mSecondaryTextSize = 18 * mDensity;
-            mMaxTextWidth = 400 * mDensity;
-            mTextPadding = 40 * mDensity;
-            mFocalToTextPadding = 20 * mDensity;
-            mTextSeparation = 16 * mDensity;
+            //Attempt to load the theme from the activity theme
+            if (themeResId == 0)
+            {
+                final TypedValue outValue = new TypedValue();
+                activity.getTheme().resolveAttribute(R.attr.MaterialTapTargetPromptTheme, outValue, true);
+                themeResId = outValue.resourceId;
+            }
+
+            final float density = activity.getResources().getDisplayMetrics().density;
+            final TypedArray a = mActivity.obtainStyledAttributes(themeResId, R.styleable.PromptView);
+            mPrimaryTextColour = a.getColor(R.styleable.PromptView_primaryTextColour, Color.WHITE);
+            mSecondaryTextColour = a.getColor(R.styleable.PromptView_secondaryTextColour, Color.argb(179, 255, 255, 255));
+            mPrimaryText = a.getString(R.styleable.PromptView_primaryText);
+            mSecondaryText = a.getString(R.styleable.PromptView_secondaryText);
+            mBackgroundColour = a.getColor(R.styleable.PromptView_backgroundColour, Color.argb(244, 63, 81, 181));
+            mFocalColour = a.getColor(R.styleable.PromptView_focalColour, Color.WHITE);
+            mFocalRadius = a.getDimension(R.styleable.PromptView_focalRadius, density * 44);
+            mPrimaryTextSize = a.getDimension(R.styleable.PromptView_primaryTextSize, 22 * density);
+            mSecondaryTextSize = a.getDimension(R.styleable.PromptView_secondaryTextSize, 18 * density);
+            mMaxTextWidth = a.getDimension(R.styleable.PromptView_maxTextWidth, 400 * density);
+            mTextPadding = a.getDimension(R.styleable.PromptView_textPadding, 40 * density);
+            mFocalToTextPadding = a.getDimension(R.styleable.PromptView_focalToTextPadding, 20 * density);
+            mTextSeparation = a.getDimension(R.styleable.PromptView_textSeparation, 16 * density);
+            final int targetId = a.getResourceId(R.styleable.PromptView_target, 0);
+            a.recycle();
+
+            if (targetId != 0)
+            {
+                mTargetView = mActivity.findViewById(targetId);
+                if (mTargetView != null)
+                {
+                    mTargetSet = true;
+                }
+            }
         }
 
         /**

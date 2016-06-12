@@ -32,7 +32,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import uk.co.samuelwall.materialtaptargetprompt.MaterialTapTargetPrompt;
-import uk.co.samuelwall.sample.R;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener
@@ -124,6 +123,11 @@ public class MainActivity extends AppCompatActivity
             }
         });
         tapTargetPromptBuilder.show();
+    }
+
+    public void showStylePrompt(View view)
+    {
+        new MaterialTapTargetPrompt.Builder(this, R.style.MaterialTapTargetPromptTheme_FabTarget).show();
     }
 
     @Override

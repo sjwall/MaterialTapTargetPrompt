@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright (C) 2016 Samuel Wall
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~ http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<resources>
+    <attr name="MaterialTapTargetPromptTheme" format="reference"/>
+    <attr name="target" format="reference"/>
+    <attr name="primaryText" format="string"/>
+    <attr name="secondaryText" format="string"/>
+    <attr name="primaryTextColour" format="color"/>
+    <attr name="secondaryTextColour" format="color"/>
+    <attr name="backgroundColour" format="color"/>
+    <attr name="focalColour" format="color"/>
+    <attr name="focalRadius" format="dimension"/>
+    <attr name="primaryTextSize" format="dimension"/>
+    <attr name="secondaryTextSize" format="dimension"/>
+    <attr name="maxTextWidth" format="dimension"/>
+    <attr name="textPadding" format="dimension"/>
+    <attr name="focalToTextPadding" format="dimension"/>
+    <attr name="textSeparation" format="dimension"/>
+    <declare-styleable name="PromptView">
+        <attr name="target"/>
+        <attr name="primaryText"/>
+        <attr name="secondaryText"/>
+        <attr name="primaryTextColour"/>
+        <attr name="secondaryTextColour"/>
+        <attr name="backgroundColour"/>
+        <attr name="focalColour"/>
+        <attr name="focalRadius"/>
+        <attr name="primaryTextSize"/>
+        <attr name="secondaryTextSize"/>
+        <attr name="maxTextWidth"/>
+        <attr name="textPadding"/>
+        <attr name="focalToTextPadding"/>
+        <attr name="textSeparation"/>
+    </declare-styleable>
+</resources>
