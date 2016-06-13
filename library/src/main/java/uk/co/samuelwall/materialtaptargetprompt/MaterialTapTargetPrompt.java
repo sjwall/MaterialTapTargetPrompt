@@ -586,14 +586,13 @@ public class MaterialTapTargetPrompt
 
     private void updateClipBounds()
     {
-        if (mClipToView != null && mClipToView.getLayoutParams() instanceof ViewGroup.MarginLayoutParams)
+        if (mClipToView != null)
         {
-            final ViewGroup.MarginLayoutParams margins = (ViewGroup.MarginLayoutParams) mClipToView.getLayoutParams();
             mView.mClipBounds = true;
-            mView.mClipBoundsLeft = mClipToView.getLeft() + margins.leftMargin;
-            mView.mClipBoundsBottom = mClipToView.getBottom() - margins.bottomMargin;
-            mView.mClipBoundsTop = mClipToView.getTop() + margins.topMargin;
-            mView.mClipBoundsRight = mClipToView.getRight() - margins.rightMargin;
+            mView.mClipBoundsLeft = mClipToView.getLeft();
+            mView.mClipBoundsBottom = mClipToView.getBottom();
+            mView.mClipBoundsTop = mClipToView.getTop();
+            mView.mClipBoundsRight = mClipToView.getRight();
             if (mParentViewIsDecor)
             {
                 mView.mClipBoundsTop += mStatusBarHeight;
