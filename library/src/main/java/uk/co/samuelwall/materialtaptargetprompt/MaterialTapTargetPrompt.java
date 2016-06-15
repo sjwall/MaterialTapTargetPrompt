@@ -547,7 +547,14 @@ public class MaterialTapTargetPrompt
         {
             mView.mSecondaryTextLayout = null;
         }
+        
+        updateBackgroundRadius();
+        updateIconPosition();
+        updateClipBounds();
+    }
 
+    private void updateBackgroundRadius()
+    {
         final float height;
         if (mTextPositionAbove)
         {
@@ -570,7 +577,10 @@ public class MaterialTapTargetPrompt
         }
         //noinspection SuspiciousNameCombination
         mBaseBackgroundRadius = Double.valueOf(Math.sqrt(Math.pow(length, 2) + Math.pow(height, 2))).floatValue();
+    }
 
+    private void updateIconPosition()
+    {
         if (mView.mIconDrawable != null)
         {
             mView.mIconDrawableLeft = mView.mCentreLeft - (mView.mIconDrawable.getIntrinsicWidth() / 2);
@@ -581,7 +591,6 @@ public class MaterialTapTargetPrompt
             mView.mIconDrawableLeft = mView.mCentreLeft - (mView.mTargetView.getWidth() / 2);
             mView.mIconDrawableTop = mView.mCentreTop - (mView.mTargetView.getHeight() / 2);
         }
-        updateClipBounds();
     }
 
     private void updateClipBounds()
