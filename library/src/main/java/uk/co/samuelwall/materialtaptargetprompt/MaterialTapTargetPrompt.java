@@ -463,6 +463,7 @@ public class MaterialTapTargetPrompt
 
     private void updateFocalCentrePosition()
     {
+        updateClipBounds();
         if (mTargetView != null)
         {
             final int[] viewPosition = new int[2];
@@ -503,22 +504,22 @@ public class MaterialTapTargetPrompt
         final float primaryTextWidth = mPaintPrimaryText.measureText(mPrimaryText);
         final float secondaryTextWidth = mPaintSecondaryText.measureText(mSecondaryText);
         final float textWidth;
-        final float maxWidth = Math.max(80, getParentView().getWidth() - (mTextPadding * 2));
+        final float maxWidth = Math.max(80, (mView.mClipBounds ? mView.mClipBoundsRight - mView.mClipBoundsLeft : getParentView().getWidth()) - (mTextPadding * 2));
         final float textWidthCalculation = Math.min(mMaxTextWidth, Math.max(primaryTextWidth, secondaryTextWidth));
         if (textWidthCalculation > maxWidth)
         {
-            mView.mTextLeft = mTextPadding;
+            mView.mTextLeft = (mView.mClipBounds ? mView.mClipBoundsLeft : 0) + mTextPadding;
             textWidth = maxWidth;
         }
         else
         {
             if (mTextPositionRight)
             {
-                mView.mTextLeft = getParentView().getRight() - mTextPadding - textWidthCalculation;
+                mView.mTextLeft = (mView.mClipBounds ? mView.mClipBoundsRight : getParentView().getRight()) - mTextPadding - textWidthCalculation;
             }
             else
             {
-                mView.mTextLeft = mTextPadding;
+                mView.mTextLeft = mTextPadding + (mView.mClipBounds ? mView.mClipBoundsLeft : 0);
             }
             textWidth = textWidthCalculation;
         }
@@ -550,7 +551,6 @@ public class MaterialTapTargetPrompt
         
         updateBackgroundRadius();
         updateIconPosition();
-        updateClipBounds();
     }
 
     private void updateBackgroundRadius()
