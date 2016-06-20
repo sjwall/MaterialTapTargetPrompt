@@ -2,6 +2,12 @@
 
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## v1.1.2 (2016-06-20)
+
+### Bug Fixes
+
+* Fixed incorrect text positioning when view is clipped
+
 ## v1.1.1 (2016-06-13)
 
 ### Bug Fixes
