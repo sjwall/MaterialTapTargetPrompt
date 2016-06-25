@@ -1,4 +1,7 @@
 # Material Tap Target Prompt
+[![Build Status](https://travis-ci.org/sjwall/MaterialTapTargetPrompt.svg?branch=master)](https://travis-ci.org/sjwall/MaterialTapTargetPrompt)
+[![Download](https://api.bintray.com/packages/sjwall/maven/material-tap-target-prompt/images/download.svg)](https://bintray.com/sjwall/maven/material-tap-target-prompt/_latestVersion)
+
 A Tap Target implementation in Android based on Material Design Onboarding guidelines. For more information on tap targets check out the [guidelines][1].
 
 ![Example](http://i.imgur.com/Ei7iAcn.png?1)
