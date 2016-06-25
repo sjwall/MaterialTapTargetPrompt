@@ -502,7 +502,7 @@ public class MaterialTapTargetPrompt
     private void updateTextPositioning()
     {
         final float primaryTextWidth = mPaintPrimaryText.measureText(mPrimaryText);
-        final float secondaryTextWidth = mPaintSecondaryText.measureText(mSecondaryText);
+        final float secondaryTextWidth = mSecondaryText != null ? mPaintSecondaryText.measureText(mSecondaryText) : 0;
         final float textWidth;
         final float maxWidth = Math.max(80, (mView.mClipBounds ? mView.mClipBoundsRight - mView.mClipBoundsLeft : getParentView().getWidth()) - (mTextPadding * 2));
         final float textWidthCalculation = Math.min(mMaxTextWidth, Math.max(primaryTextWidth, secondaryTextWidth));
