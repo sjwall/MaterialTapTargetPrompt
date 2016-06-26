@@ -2,6 +2,13 @@
 
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## v1.1.3 (2016-06-26)
+
+### Bug Fixes
+
+* Fixed crash if secondary text not set
+* Fixed incorrectly named method getTextSeparation, renamed to setTextSeparation
+
 ## v1.1.2 (2016-06-20)
 
 ### Bug Fixes
