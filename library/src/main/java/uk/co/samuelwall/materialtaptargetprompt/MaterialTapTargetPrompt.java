@@ -1048,7 +1048,7 @@ public class MaterialTapTargetPrompt
          *
          * @return This Builder object to allow for chaining of calls to set methods
          */
-        public Builder getTextSeparation(@DimenRes final int resId)
+        public Builder setTextSeparation(@DimenRes final int resId)
         {
             mTextSeparation = mActivity.getResources().getDimension(resId);
             return this;
