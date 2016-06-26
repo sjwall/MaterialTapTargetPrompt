@@ -79,7 +79,7 @@ public class MainActivity extends AppCompatActivity
                 .setMaxTextWidth(R.dimen.tap_target_menu_max_width)
                 .setIcon(R.drawable.ic_menu);
         final Toolbar tb = (Toolbar) this.findViewById(R.id.toolbar);
-        tapTargetPromptBuilder.setTarget((float) tb.getPaddingLeft() + getResources().getDimension(R.dimen.tap_target_focal_radius_menu_width), tb.getBottom() / 2);
+        tapTargetPromptBuilder.setTarget(tb.getChildAt(1));
 
         tapTargetPromptBuilder.setOnHidePromptListener(new MaterialTapTargetPrompt.OnHidePromptListener()
         {
@@ -107,7 +107,7 @@ public class MainActivity extends AppCompatActivity
                 .setMaxTextWidth(R.dimen.tap_target_menu_max_width)
                 .setIcon(R.drawable.ic_more_vert);
         final Toolbar tb = (Toolbar) this.findViewById(R.id.toolbar);
-        tapTargetPromptBuilder.setTarget(getResources().getDisplayMetrics().widthPixels - tb.getPaddingRight() - getResources().getDimension(R.dimen.tap_target_focal_radius_more_menu_width), tb.getBottom() / 2);
+        tapTargetPromptBuilder.setTarget(tb.getChildAt(2));
 
         tapTargetPromptBuilder.setOnHidePromptListener(new MaterialTapTargetPrompt.OnHidePromptListener()
         {
