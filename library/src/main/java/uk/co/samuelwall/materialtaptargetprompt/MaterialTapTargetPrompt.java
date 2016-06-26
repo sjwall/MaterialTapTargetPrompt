@@ -1246,7 +1246,7 @@ public class MaterialTapTargetPrompt
          */
         public MaterialTapTargetPrompt create()
         {
-            if (!mTargetSet)
+            if (!mTargetSet || mPrimaryText == null)
             {
                 return null;
             }
