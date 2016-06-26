@@ -12,11 +12,7 @@
    width="48"
    id="svg2"
    version="1.1"
-   inkscape:version="0.91 r13725"
    sodipodi:docname="app_icon.svg"
-   inkscape:export-filename="E:\Projects\MaterialTapTargetPrompt\sample\src\main\res\mipmap-xxxhdpi\ic_launcher.png"
-   inkscape:export-xdpi="360"
-   inkscape:export-ydpi="360"
    style="fill:#000000">
   <metadata
      id="metadata11">
@@ -99,40 +95,6 @@
          operator="over"
          result="filter_container_shadow_composite22"
          id="feComposite36752" />
-    </filter>
-    <filter
-       style="color-interpolation-filters:sRGB"
-       inkscape:label="Drop Shadow"
-       id="filter_clock_shadow"
-       height="1.4"
-       width="1.4">
-      <feFlood
-         flood-opacity="0.4"
-         flood-color="#1A237E"
-         result="filter_clock_shadow_flood"
-         id="feFlood3668" />
-      <feComposite
-         in="filter_clock_shadow_flood"
-         in2="SourceGraphic"
-         operator="in"
-         result="filter_clock_shadow_composite1"
-         id="feComposite3670" />
-      <feGaussianBlur
-         in="filter_clock_shadow_composite1"
-         stdDeviation="1"
-         result="filter_clock_shadow_blur"
-         id="feGaussianBlur3672" />
-      <feOffset
-         dx="1"
-         dy="1"
-         result="filter_clock_shadow_offset"
-         id="feOffset3674" />
-      <feComposite
-         in="SourceGraphic"
-         in2="filter_clock_shadow_offset"
-         operator="over"
-         result="filter_clock_shadow_composite2"
-         id="feComposite3676" />
     </filter>
   </defs>
   <sodipodi:namedview

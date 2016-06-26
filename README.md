@@ -6,6 +6,11 @@ A Tap Target implementation in Android based on Material Design Onboarding guide
 
 ![Example](http://i.imgur.com/Ei7iAcn.png?1)
 
+# Sample App
+The sample app in the repository is available on Google Play:
+
+<a href='https://play.google.com/store/apps/details?id=uk.co.samuelwall.materialtaptargetprompt.sample&utm_source=global_co&utm_medium=prtnr&utm_content=Mar2515&utm_campaign=PartBadge&pcampaignid=MKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1'><img alt='Get it on Google Play' style='max-width:250px' src='https://play.google.com/intl/en_us/badges/images/generic/en_badge_web_generic.png'/></a>
+
 # Gradle
 To use the gradle dependency, add this to build.gradle:
 ```groovy
