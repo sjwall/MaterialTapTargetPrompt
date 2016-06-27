@@ -16,10 +16,13 @@
 
 package uk.co.samuelwall.materialtaptargetprompt;
 
+import android.animation.ValueAnimator;
 import android.app.Activity;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.os.Build;
 import android.text.StaticLayout;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.FrameLayout;
 
@@ -32,7 +35,9 @@ import org.robolectric.annotation.Config;
 
 import java.lang.reflect.Field;
 
+import static junit.framework.Assert.assertFalse;
 import static junit.framework.Assert.assertNotNull;
+import static junit.framework.Assert.assertTrue;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 
@@ -41,7 +46,8 @@ import static org.junit.Assert.assertNull;
 public class MaterialTapTargetPromptUnitTest
 {
     Field mPromptView, mPromptViewPrimaryTextLayout, mPromptViewSecondaryTextLayout, mPromptViewPaintBackground, mPromptViewPaintFocal,
-            mMaxTextWidth, mTextPadding, mBaseFocalRadius, mFocalRadius10Percent, mTargetView, mBaseLeft, mBaseTop;
+            mMaxTextWidth, mTextPadding, mBaseFocalRadius, mFocalRadius10Percent, mTargetView, mBaseLeft, mBaseTop, mAnimationCurrent,
+            mRevealedAmount, mPaintPrimaryText, mPaintSecondaryText;
 
     @Before
     public void setup() throws NoSuchFieldException, IllegalAccessException
@@ -61,6 +67,10 @@ public class MaterialTapTargetPromptUnitTest
         mTargetView = setFieldAccessible(MaterialTapTargetPrompt.class, "mTargetView");
         mBaseLeft = setFieldAccessible(MaterialTapTargetPrompt.class, "mBaseLeft");
         mBaseTop = setFieldAccessible(MaterialTapTargetPrompt.class, "mBaseTop");
+        mAnimationCurrent = setFieldAccessible(MaterialTapTargetPrompt.class, "mAnimationCurrent");
+        mRevealedAmount = setFieldAccessible(MaterialTapTargetPrompt.class, "mRevealedAmount");
+        mPaintPrimaryText = setFieldAccessible(MaterialTapTargetPrompt.class, "mPaintPrimaryText");
+        mPaintSecondaryText = setFieldAccessible(MaterialTapTargetPrompt.class, "mPaintSecondaryText");
 
         View view = (View) mPromptView.get(dummyPrompt);
         mPromptViewPrimaryTextLayout = setFieldAccessible(view.getClass(), "mPrimaryTextLayout");
@@ -81,10 +91,14 @@ public class MaterialTapTargetPromptUnitTest
             .setTextPadding(50f)
             .setBackgroundColour(Color.BLUE)
             .setFocalColour(Color.GREEN)
-            .setFocalRadius(55f);
-        MaterialTapTargetPrompt prompt = builder.create();
+            .setFocalRadius(55f)
+            .setPrimaryTextSize(30f)
+            .setSecondaryTextSize(20f)
+            .setPrimaryTextColour(Color.CYAN)
+            .setSecondaryTextColour(Color.GRAY);
 
-        prompt.show();
+        assertTrue(builder.isTargetSet());
+        MaterialTapTargetPrompt prompt = builder.show();
 
         assertEquals(600f, mMaxTextWidth.get(prompt));
         assertEquals(50f, mTextPadding.get(prompt));
@@ -93,11 +107,22 @@ public class MaterialTapTargetPromptUnitTest
         assertNull(mTargetView.get(prompt));
         assertEquals(50f, mBaseLeft.get(prompt));
         assertEquals(40f, mBaseTop.get(prompt));
+        assertEquals(30f, ((Paint) mPaintPrimaryText.get(prompt)).getTextSize(), 0f);
+        assertEquals(20f, ((Paint) mPaintSecondaryText.get(prompt)).getTextSize(), 0f);
+        assertEquals(Color.CYAN, ((Paint) mPaintPrimaryText.get(prompt)).getColor());
+        assertEquals(Color.GRAY, ((Paint) mPaintSecondaryText.get(prompt)).getColor());
 
         View promptView = (View) mPromptView.get(prompt);
         assertEquals("Primary text", ((StaticLayout) mPromptViewPrimaryTextLayout.get(promptView)).getText());
         assertEquals(Color.BLUE, ((Paint) mPromptViewPaintBackground.get(promptView)).getColor());
         assertEquals(Color.GREEN, ((Paint) mPromptViewPaintFocal.get(promptView)).getColor());
+
+        prompt.dismiss();
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB)
+        {
+            ((ValueAnimator) mAnimationCurrent.get(prompt)).end();
+        }
+        assertNull(promptView.getParent());
     }
 
     @Test
@@ -129,8 +154,160 @@ public class MaterialTapTargetPromptUnitTest
                 .setPrimaryText("Primary text");
         MaterialTapTargetPrompt prompt = builder.create();
         assertNotNull(prompt);
+        prompt.show();
+
         View view = (View) mPromptView.get(prompt);
         assertNull(mPromptViewSecondaryTextLayout.get(view));
+
+        prompt.finish();
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB)
+        {
+            ((ValueAnimator) mAnimationCurrent.get(prompt)).end();
+        }
+        assertNull(view.getParent());
+    }
+
+    @Test
+    public void promptAnimationCancel() throws IllegalAccessException
+    {
+        Activity activity = createActivity();
+        MaterialTapTargetPrompt prompt = new MaterialTapTargetPrompt.Builder(activity)
+                .setTarget(10, 10)
+                .setPrimaryText("Primary text")
+                .show();
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB)
+        {
+            ((ValueAnimator) mAnimationCurrent.get(prompt)).cancel();
+        }
+        assertEquals(1f, mRevealedAmount.getFloat(prompt), 0f);
+        assertNull(mAnimationCurrent.get(prompt));
+
+        View promptView = (View) mPromptView.get(prompt);
+        prompt.dismiss();
+        assertNotNull(mAnimationCurrent.get(prompt));
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB)
+        {
+            ((ValueAnimator) mAnimationCurrent.get(prompt)).cancel();
+        }
+        assertNull(mAnimationCurrent.get(prompt));
+        assertNull(promptView.getParent());
+    }
+
+    @Test
+    public void promptCancelFinishAnimation() throws IllegalAccessException
+    {
+        Activity activity = createActivity();
+        MaterialTapTargetPrompt prompt = new MaterialTapTargetPrompt.Builder(activity)
+                .setTarget(10, 10)
+                .setPrimaryText("Primary text")
+                .show();
+
+        View promptView = (View) mPromptView.get(prompt);
+        prompt.finish();
+        assertNotNull(mAnimationCurrent.get(prompt));
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB)
+        {
+            ((ValueAnimator) mAnimationCurrent.get(prompt)).cancel();
+        }
+        assertNull(mAnimationCurrent.get(prompt));
+        assertNull(promptView.getParent());
+    }
+
+    @Test
+    public void promptTouchEventFocal() throws IllegalAccessException
+    {
+        Activity activity = createActivity();
+        MaterialTapTargetPrompt prompt = new MaterialTapTargetPrompt.Builder(activity)
+                .setTarget(10, 10)
+                .setPrimaryText("Primary text")
+                .setOnHidePromptListener(new MaterialTapTargetPrompt.OnHidePromptListener()
+                {
+                    @Override
+                    public void onHidePrompt(MotionEvent event, boolean tappedTarget)
+                    {
+                        assertTrue(tappedTarget);
+                    }
+
+                    @Override
+                    public void onHidePromptComplete()
+                    {
+
+                    }
+                })
+                .show();
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB)
+        {
+            ((ValueAnimator) mAnimationCurrent.get(prompt)).end();
+        }
+
+        View promptView = (View) mPromptView.get(prompt);
+        assertFalse(promptView.onTouchEvent(MotionEvent.obtain(0, 0, MotionEvent.ACTION_DOWN, 10, 10, 0)));
+    }
+
+    @Test
+    public void promptTouchEventFocalCaptureEvent() throws IllegalAccessException
+    {
+        Activity activity = createActivity();
+        MaterialTapTargetPrompt prompt = new MaterialTapTargetPrompt.Builder(activity)
+                .setTarget(10, 10)
+                .setPrimaryText("Primary text")
+                .setCaptureTouchEventOnFocal(true)
+                .setOnHidePromptListener(new MaterialTapTargetPrompt.OnHidePromptListener()
+                {
+                    @Override
+                    public void onHidePrompt(MotionEvent event, boolean tappedTarget)
+                    {
+                        assertTrue(tappedTarget);
+                    }
+
+                    @Override
+                    public void onHidePromptComplete()
+                    {
+
+                    }
+                })
+                .show();
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB)
+        {
+            ((ValueAnimator) mAnimationCurrent.get(prompt)).end();
+        }
+
+        View promptView = (View) mPromptView.get(prompt);
+        assertTrue(promptView.onTouchEvent(MotionEvent.obtain(0, 0, MotionEvent.ACTION_DOWN, 10, 10, 0)));
+    }
+
+    @Test
+    public void promptTouchEventBackground() throws IllegalAccessException
+    {
+        Activity activity = createActivity();
+        MaterialTapTargetPrompt prompt = new MaterialTapTargetPrompt.Builder(activity)
+                .setTarget(10, 10)
+                .setPrimaryText("Primary text")
+                .setOnHidePromptListener(new MaterialTapTargetPrompt.OnHidePromptListener()
+                {
+                    @Override
+                    public void onHidePrompt(MotionEvent event, boolean tappedTarget)
+                    {
+                        assertFalse(tappedTarget);
+                    }
+
+                    @Override
+                    public void onHidePromptComplete()
+                    {
+
+                    }
+                })
+                .show();
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB)
+        {
+            ((ValueAnimator) mAnimationCurrent.get(prompt)).end();
+        }
+
+        View promptView = (View) mPromptView.get(prompt);
+        assertTrue(promptView.onTouchEvent(MotionEvent.obtain(0, 0, MotionEvent.ACTION_DOWN, 60, 60, 0)));
     }
 
     private Activity createActivity()
