@@ -24,6 +24,7 @@ import android.os.Build;
 import android.text.StaticLayout;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.animation.LinearInterpolator;
 import android.widget.FrameLayout;
 
 import org.junit.Before;
@@ -47,7 +48,7 @@ public class MaterialTapTargetPromptUnitTest
 {
     Field mPromptView, mPromptViewPrimaryTextLayout, mPromptViewSecondaryTextLayout, mPromptViewPaintBackground, mPromptViewPaintFocal,
             mMaxTextWidth, mTextPadding, mBaseFocalRadius, mFocalRadius10Percent, mTargetView, mBaseLeft, mBaseTop, mAnimationCurrent,
-            mRevealedAmount, mPaintPrimaryText, mPaintSecondaryText;
+            mRevealedAmount, mPaintPrimaryText, mPaintSecondaryText, mAnimationInterpolator;
 
     @Before
     public void setup() throws NoSuchFieldException, IllegalAccessException
@@ -71,6 +72,7 @@ public class MaterialTapTargetPromptUnitTest
         mRevealedAmount = setFieldAccessible(MaterialTapTargetPrompt.class, "mRevealedAmount");
         mPaintPrimaryText = setFieldAccessible(MaterialTapTargetPrompt.class, "mPaintPrimaryText");
         mPaintSecondaryText = setFieldAccessible(MaterialTapTargetPrompt.class, "mPaintSecondaryText");
+        mAnimationInterpolator = setFieldAccessible(MaterialTapTargetPrompt.class, "mAnimationInterpolator");
 
         View view = (View) mPromptView.get(dummyPrompt);
         mPromptViewPrimaryTextLayout = setFieldAccessible(view.getClass(), "mPrimaryTextLayout");
@@ -82,6 +84,7 @@ public class MaterialTapTargetPromptUnitTest
     @Test
     public void promptFromVariables() throws IllegalAccessException
     {
+        LinearInterpolator interpolator = new LinearInterpolator();
         Activity activity = createActivity();
         MaterialTapTargetPrompt.Builder builder = new MaterialTapTargetPrompt.Builder(activity)
             .setTarget(50, 40)
@@ -95,7 +98,8 @@ public class MaterialTapTargetPromptUnitTest
             .setPrimaryTextSize(30f)
             .setSecondaryTextSize(20f)
             .setPrimaryTextColour(Color.CYAN)
-            .setSecondaryTextColour(Color.GRAY);
+            .setSecondaryTextColour(Color.GRAY)
+            .setAnimationInterpolator(interpolator);
 
         assertTrue(builder.isTargetSet());
         MaterialTapTargetPrompt prompt = builder.show();
@@ -111,6 +115,7 @@ public class MaterialTapTargetPromptUnitTest
         assertEquals(20f, ((Paint) mPaintSecondaryText.get(prompt)).getTextSize(), 0f);
         assertEquals(Color.CYAN, ((Paint) mPaintPrimaryText.get(prompt)).getColor());
         assertEquals(Color.GRAY, ((Paint) mPaintSecondaryText.get(prompt)).getColor());
+        assertEquals(interpolator, mAnimationInterpolator.get(prompt));
 
         View promptView = (View) mPromptView.get(prompt);
         assertEquals("Primary text", ((StaticLayout) mPromptViewPrimaryTextLayout.get(promptView)).getText());
@@ -200,6 +205,20 @@ public class MaterialTapTargetPromptUnitTest
         MaterialTapTargetPrompt prompt = new MaterialTapTargetPrompt.Builder(activity)
                 .setTarget(10, 10)
                 .setPrimaryText("Primary text")
+                .setOnHidePromptListener(new MaterialTapTargetPrompt.OnHidePromptListener()
+                {
+                    @Override
+                    public void onHidePrompt(MotionEvent event, boolean tappedTarget)
+                    {
+
+                    }
+
+                    @Override
+                    public void onHidePromptComplete()
+                    {
+
+                    }
+                })
                 .show();
 
         View promptView = (View) mPromptView.get(prompt);
@@ -267,6 +286,25 @@ public class MaterialTapTargetPromptUnitTest
 
                     }
                 })
+                .show();
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB)
+        {
+            ((ValueAnimator) mAnimationCurrent.get(prompt)).end();
+        }
+
+        View promptView = (View) mPromptView.get(prompt);
+        assertTrue(promptView.onTouchEvent(MotionEvent.obtain(0, 0, MotionEvent.ACTION_DOWN, 10, 10, 0)));
+    }
+
+    @Test
+    public void promptTouchEventFocalNoListener() throws IllegalAccessException
+    {
+        Activity activity = createActivity();
+        MaterialTapTargetPrompt prompt = new MaterialTapTargetPrompt.Builder(activity)
+                .setTarget(10, 10)
+                .setPrimaryText("Primary text")
+                .setCaptureTouchEventOnFocal(true)
                 .show();
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB)
