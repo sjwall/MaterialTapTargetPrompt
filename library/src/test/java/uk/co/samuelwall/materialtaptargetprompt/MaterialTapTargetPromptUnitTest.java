@@ -24,6 +24,7 @@ import android.os.Build;
 import android.text.StaticLayout;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.animation.LinearInterpolator;
 import android.widget.FrameLayout;
 
@@ -35,6 +36,8 @@ import org.robolectric.RobolectricGradleTestRunner;
 import org.robolectric.annotation.Config;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 
 import static junit.framework.Assert.assertFalse;
 import static junit.framework.Assert.assertNotNull;
@@ -48,10 +51,11 @@ public class MaterialTapTargetPromptUnitTest
 {
     Field mPromptView, mPromptViewPrimaryTextLayout, mPromptViewSecondaryTextLayout, mPromptViewPaintBackground, mPromptViewPaintFocal,
             mMaxTextWidth, mTextPadding, mBaseFocalRadius, mFocalRadius10Percent, mTargetView, mBaseLeft, mBaseTop, mAnimationCurrent,
-            mRevealedAmount, mPaintPrimaryText, mPaintSecondaryText, mAnimationInterpolator;
+            mRevealedAmount, mPaintPrimaryText, mPaintSecondaryText, mAnimationInterpolator, mTextSeparation, mFocalToTextPadding;
+    Method mUpdateFocalCentrePosition, mGetParentView;
 
     @Before
-    public void setup() throws NoSuchFieldException, IllegalAccessException
+    public void setup() throws NoSuchFieldException, IllegalAccessException, NoSuchMethodException
     {
         mPromptView = setFieldAccessible(MaterialTapTargetPrompt.class, "mView");
 
@@ -60,6 +64,9 @@ public class MaterialTapTargetPromptUnitTest
                 .setTarget(0, 0)
                 .setPrimaryText("")
                 .show();
+
+        mUpdateFocalCentrePosition = setMethodAccessible(MaterialTapTargetPrompt.class, "updateFocalCentrePosition");
+        mGetParentView = setMethodAccessible(MaterialTapTargetPrompt.class, "getParentView");
 
         mMaxTextWidth = setFieldAccessible(MaterialTapTargetPrompt.class, "mMaxTextWidth");
         mTextPadding = setFieldAccessible(MaterialTapTargetPrompt.class, "mTextPadding");
@@ -73,16 +80,18 @@ public class MaterialTapTargetPromptUnitTest
         mPaintPrimaryText = setFieldAccessible(MaterialTapTargetPrompt.class, "mPaintPrimaryText");
         mPaintSecondaryText = setFieldAccessible(MaterialTapTargetPrompt.class, "mPaintSecondaryText");
         mAnimationInterpolator = setFieldAccessible(MaterialTapTargetPrompt.class, "mAnimationInterpolator");
+        mFocalToTextPadding = setFieldAccessible(MaterialTapTargetPrompt.class, "mFocalToTextPadding");
 
         View view = (View) mPromptView.get(dummyPrompt);
         mPromptViewPrimaryTextLayout = setFieldAccessible(view.getClass(), "mPrimaryTextLayout");
         mPromptViewSecondaryTextLayout = setFieldAccessible(view.getClass(), "mSecondaryTextLayout");
         mPromptViewPaintBackground = setFieldAccessible(view.getClass(), "mPaintBackground");
         mPromptViewPaintFocal = setFieldAccessible(view.getClass(), "mPaintFocal");
+        mTextSeparation = setFieldAccessible(view.getClass(), "mTextSeparation");
     }
 
     @Test
-    public void promptFromVariables() throws IllegalAccessException
+    public void promptFromVariables() throws IllegalAccessException, InvocationTargetException
     {
         LinearInterpolator interpolator = new LinearInterpolator();
         Activity activity = createActivity();
@@ -95,14 +104,18 @@ public class MaterialTapTargetPromptUnitTest
             .setBackgroundColour(Color.BLUE)
             .setFocalColour(Color.GREEN)
             .setFocalRadius(55f)
+            .setTextSeparation(22f)
             .setPrimaryTextSize(30f)
             .setSecondaryTextSize(20f)
             .setPrimaryTextColour(Color.CYAN)
             .setSecondaryTextColour(Color.GRAY)
+            .setFocalToTextPadding(30f)
             .setAnimationInterpolator(interpolator);
 
         assertTrue(builder.isTargetSet());
         MaterialTapTargetPrompt prompt = builder.show();
+
+        setScreenWidthAndHeight(prompt, 200, 600);
 
         assertEquals(600f, mMaxTextWidth.get(prompt));
         assertEquals(50f, mTextPadding.get(prompt));
@@ -116,11 +129,13 @@ public class MaterialTapTargetPromptUnitTest
         assertEquals(Color.CYAN, ((Paint) mPaintPrimaryText.get(prompt)).getColor());
         assertEquals(Color.GRAY, ((Paint) mPaintSecondaryText.get(prompt)).getColor());
         assertEquals(interpolator, mAnimationInterpolator.get(prompt));
+        assertEquals(30f, mFocalToTextPadding.get(prompt));
 
         View promptView = (View) mPromptView.get(prompt);
         assertEquals("Primary text", ((StaticLayout) mPromptViewPrimaryTextLayout.get(promptView)).getText());
         assertEquals(Color.BLUE, ((Paint) mPromptViewPaintBackground.get(promptView)).getColor());
         assertEquals(Color.GREEN, ((Paint) mPromptViewPaintFocal.get(promptView)).getColor());
+        assertEquals(22f, mTextSeparation.get(promptView));
 
         prompt.dismiss();
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB)
@@ -360,5 +375,26 @@ public class MaterialTapTargetPromptUnitTest
         final Field field = c.getDeclaredField(fieldName);
         field.setAccessible(true);
         return field;
+    }
+
+    private Method setMethodAccessible(final Class c, final String methodName) throws NoSuchMethodException
+    {
+        final Method method = c.getDeclaredMethod(methodName);
+        method.setAccessible(true);
+        return method;
+    }
+
+    private void setScreenWidthAndHeight(final MaterialTapTargetPrompt prompt, final int width, final int height) throws InvocationTargetException, IllegalAccessException
+    {
+        final ViewGroup parent = (ViewGroup) mGetParentView.invoke(prompt);
+        //TODO make this work for all versions
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB)
+        {
+            parent.setLeft(0);
+            parent.setRight(0);
+            parent.setRight(width);
+            parent.setBottom(height);
+        }
+        mUpdateFocalCentrePosition.invoke(prompt);
     }
 }
