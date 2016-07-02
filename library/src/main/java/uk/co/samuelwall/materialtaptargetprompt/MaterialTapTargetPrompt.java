@@ -526,14 +526,14 @@ public class MaterialTapTargetPrompt
 
         mView.mPrimaryTextLayout = new StaticLayout(mPrimaryText, mPaintPrimaryText, (int) textWidth, Layout.Alignment.ALIGN_NORMAL, 1f, 0f, false);
 
-        mView.mTextStartPositionTop = mView.mCentreTop;
+        mView.mPrimaryTextTop = mView.mCentreTop;
         if (mTextPositionAbove)
         {
-            mView.mTextStartPositionTop = mView.mTextStartPositionTop - mBaseFocalRadius - mFocalToTextPadding - mView.mPrimaryTextLayout.getHeight();
+            mView.mPrimaryTextTop = mView.mPrimaryTextTop - mBaseFocalRadius - mFocalToTextPadding - mView.mPrimaryTextLayout.getHeight();
         }
         else
         {
-            mView.mTextStartPositionTop += mBaseFocalRadius + mFocalToTextPadding;
+            mView.mPrimaryTextTop += mBaseFocalRadius + mFocalToTextPadding;
         }
 
         if (mSecondaryText != null)
@@ -541,8 +541,10 @@ public class MaterialTapTargetPrompt
             mView.mSecondaryTextLayout = new StaticLayout(mSecondaryText, mPaintSecondaryText, (int) textWidth, Layout.Alignment.ALIGN_NORMAL, 1f, 0f, false);
             if (mTextPositionAbove)
             {
-                mView.mTextStartPositionTop =  mView.mTextStartPositionTop - mView.mTextSeparation - mView.mSecondaryTextLayout.getHeight();
+                mView.mPrimaryTextTop =  mView.mPrimaryTextTop - mView.mTextSeparation - mView.mSecondaryTextLayout.getHeight();
             }
+
+            mView.mSecondaryTextOffsetTop = mView.mPrimaryTextLayout.getHeight() + mView.mTextSeparation;
         }
         else
         {
@@ -558,11 +560,11 @@ public class MaterialTapTargetPrompt
         final float height;
         if (mTextPositionAbove)
         {
-            height = mView.mCentreTop - mView.mTextStartPositionTop;
+            height = mView.mCentreTop - mView.mPrimaryTextTop;
         }
         else
         {
-            height = mView.mTextStartPositionTop + mView.mPrimaryTextLayout.getHeight() + (mView.mSecondaryTextLayout != null ? mView.mSecondaryTextLayout.getHeight() : 0) - mView.mCentreTop + mView.mTextSeparation;
+            height = mView.mPrimaryTextTop + mView.mPrimaryTextLayout.getHeight() + (mView.mSecondaryTextLayout != null ? mView.mSecondaryTextLayout.getHeight() : 0) - mView.mCentreTop + mView.mTextSeparation;
         }
 
         final float length;
@@ -650,7 +652,8 @@ public class MaterialTapTargetPrompt
         private float mIconDrawableLeft;
         private float mIconDrawableTop;
         private float mTextLeft;
-        private float mTextStartPositionTop;
+        private float mPrimaryTextTop;
+        private float mSecondaryTextOffsetTop;
         private Layout mPrimaryTextLayout;
         private Layout mSecondaryTextLayout;
         private boolean mDrawRipple = Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB;
@@ -702,11 +705,11 @@ public class MaterialTapTargetPrompt
             }
 
             //Draw the text
-            canvas.translate(mTextLeft, mTextStartPositionTop);
+            canvas.translate(mTextLeft, mPrimaryTextTop);
             mPrimaryTextLayout.draw(canvas);
             if (mSecondaryTextLayout != null)
             {
-                canvas.translate(0f, mPrimaryTextLayout.getHeight() + mTextSeparation);
+                canvas.translate(0f, mSecondaryTextOffsetTop);
                 mSecondaryTextLayout.draw(canvas);
             }
         }
