@@ -116,6 +116,13 @@ public class MaterialTapTargetPrompt
         }
     }
 
+    /**
+     * Returns {@link #mParentView}.
+     *
+     * If the {@link #mParentView} is {@link null} it determines what view it should be.
+     *
+     * @return The view to add the prompt view to.
+     */
     private ViewGroup getParentView()
     {
         if (mParentView == null)
@@ -140,9 +147,11 @@ public class MaterialTapTargetPrompt
         return mParentView;
     }
 
+    /**
+     * Displays the prompt.
+     */
     public void show()
     {
-
         final ViewGroup parent = getParentView();
         // If the content view is a drawer layout then that is the parent so
         // that the prompt can be added behind the navigation drawer
@@ -172,6 +181,11 @@ public class MaterialTapTargetPrompt
         }
     }
 
+    /**
+     * Removes the prompt from view, using a expand and fade animation.
+     *
+     * This is treated as if the user has touched the target focal point.
+     */
     public void finish()
     {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB)
@@ -247,6 +261,11 @@ public class MaterialTapTargetPrompt
         }
     }
 
+    /**
+     * Removes the prompt from view, using a contract and fade animation.
+     *
+     * This is treated as if the user has touched outside the target focal point.
+     */
     public void dismiss()
     {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB)
@@ -544,7 +563,7 @@ public class MaterialTapTargetPrompt
         {
             mView.mSecondaryTextLayout = null;
         }
-        
+
         updateBackgroundRadius();
         updateIconPosition();
     }
@@ -635,6 +654,9 @@ public class MaterialTapTargetPrompt
         }
     }
 
+    /**
+     * View used to render the tap target.
+     */
     static class PromptView extends View
     {
         private float mCentreLeft, mCentreTop;
@@ -726,6 +748,14 @@ public class MaterialTapTargetPrompt
             return captureEvent;
         }
 
+        /**
+         * Determines if a point is in the centre of a circle with a radius from the point ({@link #mCentreLeft, {@link #mCentreTop}}.
+         * 
+         * @param x The x position in the view.
+         * @param y The y position in the view.
+         * @param radius The radius of the circle.
+         * @return True if the point (x, y) is in the circle.
+         */
         private boolean pointInCircle(final float x, final float y, final float radius)
         {
             return Math.pow(x - mCentreLeft, 2) + Math.pow(y - mCentreTop, 2) < Math.pow(radius, 2);
@@ -754,6 +784,9 @@ public class MaterialTapTargetPrompt
         }
     }
 
+    /**
+     * A builder to create a {@link MaterialTapTargetPrompt} instance.
+     */
     public static class Builder
     {
         /**
@@ -800,6 +833,19 @@ public class MaterialTapTargetPrompt
             this(activity, 0);
         }
 
+        /**
+         * Creates a builder for a material tap target prompt that uses an explicit theme
+         * resource.
+         *
+         * The {@code themeResId} may be specified as {@code 0}
+         * to use the parent {@code context}'s resolved value for
+         * {@link R.attr#MaterialTapTargetPromptTheme}.
+         *
+         * @param activity the activity to show the prompt within.
+         * @param themeResId the resource ID of the theme against which to inflate
+         *                   this dialog, or {@code 0} to use the parent
+         *                   {@code context}'s default material tap target prompt theme
+         */
         public Builder(final Activity activity, int themeResId)
         {
             mActivity = activity;
@@ -1254,6 +1300,11 @@ public class MaterialTapTargetPrompt
          * Calling this method does not display the prompt. If no additional
          * processing is needed, {@link #show()} may be called instead to both
          * create and display the prompt.
+         * </p>
+         * <p>
+         * Will return {@link null} if a valid target has not been set or the primary text is {@link null}.
+         * To check that a valid target has been set call {@link #isTargetSet()}.
+         * </p>
          */
         public MaterialTapTargetPrompt create()
         {
@@ -1333,10 +1384,15 @@ public class MaterialTapTargetPrompt
          * builder and immediately displays the prompt.
          * <p>
          * Calling this method is functionally identical to:
+         * </p>
          * <pre>
          *     MaterialTapTargetPrompt prompt = builder.create();
          *     prompt.show();
          * </pre>
+         * <p>
+         * Will return {@link null} if a valid target has not been set or the primary text is {@link null}.
+         * To check that a valid target has been set call {@link #isTargetSet()}.
+         * </p>
          */
         public MaterialTapTargetPrompt show()
         {
@@ -1364,9 +1420,23 @@ public class MaterialTapTargetPrompt
         }
     }
 
+    /**
+     * Interface definition for a callback to be invoked when a {@link MaterialTapTargetPrompt} is removed from view.
+     */
     public interface OnHidePromptListener
     {
+        /**
+         * Called when the use touches the prompt view,
+         * but before the prompt is removed from view.
+         *
+         * @param event The touch event that triggered the dismiss or finish.
+         * @param tappedTarget True if the prompt focal point was touched.
+         */
         void onHidePrompt(final MotionEvent event, final boolean tappedTarget);
+
+        /**
+         * Called after the prompt has been removed from view.
+         */
         void onHidePromptComplete();
     }
 
