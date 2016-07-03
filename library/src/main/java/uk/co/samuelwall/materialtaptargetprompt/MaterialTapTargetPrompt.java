@@ -1333,7 +1333,10 @@ public class MaterialTapTargetPrompt
         public MaterialTapTargetPrompt show()
         {
             final MaterialTapTargetPrompt mPrompt = create();
-            mPrompt.show();
+            if (mPrompt != null)
+            {
+                mPrompt.show();
+            }
             return mPrompt;
         }
 
