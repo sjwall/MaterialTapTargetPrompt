@@ -85,10 +85,10 @@ public class MaterialTapTargetPrompt
     {
         mActivity = activity;
         mView = new PromptView(activity);
-        mView.mOnHidePromptListener = new OnHidePromptListener()
+        mView.mOnPromptTouchedListener = new PromptView.OnPromptTouchedListener()
             {
                 @Override
-                public void onHidePrompt(MotionEvent event, boolean tappedTarget)
+                public void onPromptTouched(MotionEvent event, boolean tappedTarget)
                 {
                     if (!mDismissing)
                     {
@@ -102,12 +102,6 @@ public class MaterialTapTargetPrompt
                             dismiss();
                         }
                     }
-                }
-
-                @Override
-                public void onHidePromptComplete()
-                {
-                    //Not used
                 }
             };
 
@@ -657,7 +651,7 @@ public class MaterialTapTargetPrompt
         private Layout mPrimaryTextLayout;
         private Layout mSecondaryTextLayout;
         private boolean mDrawRipple = Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB;
-        private OnHidePromptListener mOnHidePromptListener;
+        private OnPromptTouchedListener mOnPromptTouchedListener;
         private boolean mCaptureTouchEventOnFocal;
         private float mClipBoundsTop, mClipBoundsLeft, mClipBoundsBottom, mClipBoundsRight;
         private View mTargetView;
@@ -723,11 +717,11 @@ public class MaterialTapTargetPrompt
             if (captureEvent && pointInCircle(x, y, mFocalRadius))
             {
                 captureEvent = mCaptureTouchEventOnFocal;
-                onHidePrompt(event, true);
+                onPromptTouched(event, true);
             }
             else
             {
-                onHidePrompt(event, false);
+                onPromptTouched(event, false);
             }
             return captureEvent;
         }
@@ -737,12 +731,26 @@ public class MaterialTapTargetPrompt
             return Math.pow(x - mCentreLeft, 2) + Math.pow(y - mCentreTop, 2) < Math.pow(radius, 2);
         }
 
-        protected void onHidePrompt(final MotionEvent event, final boolean targetTapped)
+        protected void onPromptTouched(final MotionEvent event, final boolean targetTapped)
         {
-            if (mOnHidePromptListener != null)
+            if (mOnPromptTouchedListener != null)
             {
-                mOnHidePromptListener.onHidePrompt(event, targetTapped);
+                mOnPromptTouchedListener.onPromptTouched(event, targetTapped);
             }
+        }
+
+        /**
+         * Interface definition for a callback to be invoked when a {@link PromptView} is touched.
+         */
+        public interface OnPromptTouchedListener
+        {
+            /**
+             * Called when a touch event occurs in the prompt view.
+             *
+             * @param event The touch event that triggered the dismiss or finish.
+             * @param tappedTarget True if the prompt focal point was touched.
+             */
+            void onPromptTouched(final MotionEvent event, final boolean tappedTarget);
         }
     }
 
