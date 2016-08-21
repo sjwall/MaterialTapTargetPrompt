@@ -41,6 +41,7 @@ import android.util.TypedValue;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.view.animation.AccelerateDecelerateInterpolator;
 import android.view.animation.Interpolator;
 
@@ -80,6 +81,7 @@ public class MaterialTapTargetPrompt
     private boolean mParentViewIsDecor;
     private ViewGroup mClipToView;
     private final float mStatusBarHeight;
+    private final ViewTreeObserver.OnGlobalLayoutListener mGlobalLayoutListener;
 
     MaterialTapTargetPrompt(final Activity activity)
     {
@@ -114,6 +116,15 @@ public class MaterialTapTargetPrompt
         {
             mStatusBarHeight = 0;
         }
+
+        mGlobalLayoutListener = new ViewTreeObserver.OnGlobalLayoutListener()
+            {
+                @Override
+                public void onGlobalLayout()
+                {
+                    updateFocalCentrePosition();
+                }
+            };
     }
 
     /**
@@ -164,6 +175,8 @@ public class MaterialTapTargetPrompt
             parent.addView(mView);
         }
 
+        addGlobalLayoutListener();
+
         updateFocalCentrePosition();
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB)
@@ -178,6 +191,38 @@ public class MaterialTapTargetPrompt
             mView.mPaintBackground.setAlpha(244);
             mPaintSecondaryText.setAlpha(mSecondaryTextColourAlpha);
             mPaintPrimaryText.setAlpha(mPrimaryTextColourAlpha);
+        }
+    }
+
+    /**
+     * Adds layout listener to view parent to capture layout changes.
+     */
+    private void addGlobalLayoutListener()
+    {
+        final ViewTreeObserver viewTreeObserver = getParentView().getViewTreeObserver();
+        if (viewTreeObserver.isAlive())
+        {
+            viewTreeObserver.addOnGlobalLayoutListener(mGlobalLayoutListener);
+        }
+    }
+
+    /**
+     * Removes global layout listener added in {@link #addGlobalLayoutListener()}.
+     */
+    private void removeGlobalLayoutListener()
+    {
+        final ViewTreeObserver viewTreeObserver = getParentView().getViewTreeObserver();
+        if (viewTreeObserver.isAlive())
+        {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN)
+            {
+                viewTreeObserver.removeOnGlobalLayoutListener(mGlobalLayoutListener);
+            }
+            else
+            {
+                //noinspection deprecation
+                viewTreeObserver.removeGlobalOnLayoutListener(mGlobalLayoutListener);
+            }
         }
     }
 
@@ -231,6 +276,7 @@ public class MaterialTapTargetPrompt
                 @Override
                 public void onAnimationEnd(Animator animation)
                 {
+                    removeGlobalLayoutListener();
                     getParentView().removeView(mView);
                     mAnimationCurrent.removeAllListeners();
                     mAnimationCurrent = null;
@@ -243,6 +289,7 @@ public class MaterialTapTargetPrompt
                 @Override
                 public void onAnimationCancel(Animator animation)
                 {
+                    removeGlobalLayoutListener();
                     getParentView().removeView(mView);
                     mAnimationCurrent.removeAllListeners();
                     mAnimationCurrent = null;
@@ -255,6 +302,7 @@ public class MaterialTapTargetPrompt
         }
         else
         {
+            removeGlobalLayoutListener();
             getParentView().removeView(mView);
             onHidePromptComplete();
             mParentView = null;
@@ -309,6 +357,7 @@ public class MaterialTapTargetPrompt
                 @Override
                 public void onAnimationEnd(Animator animation)
                 {
+                    removeGlobalLayoutListener();
                     getParentView().removeView(mView);
                     mAnimationCurrent.removeAllListeners();
                     mAnimationCurrent = null;
@@ -321,6 +370,7 @@ public class MaterialTapTargetPrompt
                 @Override
                 public void onAnimationCancel(Animator animation)
                 {
+                    removeGlobalLayoutListener();
                     getParentView().removeView(mView);
                     mAnimationCurrent.removeAllListeners();
                     mAnimationCurrent = null;
@@ -333,6 +383,7 @@ public class MaterialTapTargetPrompt
         }
         else
         {
+            removeGlobalLayoutListener();
             getParentView().removeView(mView);
             onHidePromptComplete();
             mParentView = null;
@@ -486,18 +537,6 @@ public class MaterialTapTargetPrompt
 
             mView.mCentreLeft = mBaseLeft + targetPosition[0] - viewPosition[0] + (mTargetView.getWidth() / 2);
             mView.mCentreTop = mBaseTop + targetPosition[1] - viewPosition[1] + (mTargetView.getHeight() / 2);
-
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB)
-            {
-                mView.mCentreLeft += mTargetView.getTranslationX();
-                mView.mCentreTop += mTargetView.getTranslationY();
-
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP
-                        && ((ViewGroup) mActivity.findViewById(android.R.id.content)).getChildAt(0).getFitsSystemWindows())
-                {
-                    mView.mCentreTop -= mStatusBarHeight;
-                }
-            }
         }
         else
         {
