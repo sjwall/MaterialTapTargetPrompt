@@ -2,6 +2,13 @@
 
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## v1.1.4 (2016-08-21)
+
+### Bug Fixes
+
+* Fixed prompt view position not changing on target view position change
+* Fixed null pointer exception in Builder.show when create returns null
+
 ## v1.1.3 (2016-06-26)
 
 ### Bug Fixes
