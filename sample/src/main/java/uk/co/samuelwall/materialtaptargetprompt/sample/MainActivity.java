@@ -136,6 +136,40 @@ public class MainActivity extends AppCompatActivity
         startActivity(new Intent(this, DialogStyleActivity.class));
     }
 
+    public void showNoAutoDismiss(View view)
+    {
+        if (mFabPrompt != null)
+        {
+            return;
+        }
+        mFabPrompt = new MaterialTapTargetPrompt.Builder(MainActivity.this)
+                .setTarget(findViewById(R.id.fab))
+                .setPrimaryText("No Auto Dismiss")
+                .setSecondaryText("This prompt will only be removed after tapping the envelop")
+                .setAnimationInterpolator(new FastOutSlowInInterpolator())
+                .setAutoDismiss(false)
+                .setAutoFinish(false)
+                .setOnHidePromptListener(new MaterialTapTargetPrompt.OnHidePromptListener()
+                {
+                    @Override
+                    public void onHidePrompt(MotionEvent event, boolean tappedTarget)
+                    {
+                        if (tappedTarget)
+                        {
+                            mFabPrompt.finish();
+                            mFabPrompt = null;
+                        }
+                    }
+
+                    @Override
+                    public void onHidePromptComplete()
+                    {
+
+                    }
+                })
+                .show();
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {

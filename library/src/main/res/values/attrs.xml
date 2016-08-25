@@ -31,6 +31,8 @@
     <attr name="textPadding" format="dimension"/>
     <attr name="focalToTextPadding" format="dimension"/>
     <attr name="textSeparation" format="dimension"/>
+    <attr name="autoDismiss" format="boolean"/>
+    <attr name="autoFinish" format="boolean"/>
     <declare-styleable name="PromptView">
         <attr name="target"/>
         <attr name="primaryText"/>
@@ -46,5 +48,7 @@
         <attr name="textPadding"/>
         <attr name="focalToTextPadding"/>
         <attr name="textSeparation"/>
+        <attr name="autoDismiss"/>
+        <attr name="autoFinish"/>
     </declare-styleable>
 </resources>

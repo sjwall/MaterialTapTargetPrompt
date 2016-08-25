@@ -82,6 +82,7 @@ public class MaterialTapTargetPrompt
     private ViewGroup mClipToView;
     private final float mStatusBarHeight;
     private final ViewTreeObserver.OnGlobalLayoutListener mGlobalLayoutListener;
+    private boolean mAutoDismiss, mAutoFinish;
 
     MaterialTapTargetPrompt(final Activity activity)
     {
@@ -97,11 +98,17 @@ public class MaterialTapTargetPrompt
                         MaterialTapTargetPrompt.this.onHidePrompt(event, tappedTarget);
                         if (tappedTarget)
                         {
-                            finish();
+                            if (mAutoFinish)
+                            {
+                                finish();
+                            }
                         }
                         else
                         {
-                            dismiss();
+                            if (mAutoDismiss)
+                            {
+                                dismiss();
+                            }
                         }
                     }
                 }
@@ -860,6 +867,7 @@ public class MaterialTapTargetPrompt
         private OnHidePromptListener mOnHidePromptListener;
         private boolean mCaptureTouchEventOnFocal;
         private float mTextSeparation;
+        private boolean mAutoDismiss, mAutoFinish;
 
         /**
          * Creates a builder for a tap target prompt that uses the default
@@ -911,6 +919,8 @@ public class MaterialTapTargetPrompt
             mTextPadding = a.getDimension(R.styleable.PromptView_textPadding, 40 * density);
             mFocalToTextPadding = a.getDimension(R.styleable.PromptView_focalToTextPadding, 20 * density);
             mTextSeparation = a.getDimension(R.styleable.PromptView_textSeparation, 16 * density);
+            mAutoDismiss = a.getBoolean(R.styleable.PromptView_autoDismiss, true);
+            mAutoFinish = a.getBoolean(R.styleable.PromptView_autoFinish, true);
             final int targetId = a.getResourceId(R.styleable.PromptView_target, 0);
             a.recycle();
 
@@ -1333,6 +1343,32 @@ public class MaterialTapTargetPrompt
         }
 
         /**
+         * Set whether the prompt should dismiss itself when a touch event occurs outside the focal.
+         * Default is true.
+         *
+         * @param autoDismiss True - prompt will dismiss when touched outside the focal, false - no action taken.
+         * @return This Builder object to allow for chaining of calls to set methods
+         */
+        public Builder setAutoDismiss(final boolean autoDismiss)
+        {
+            mAutoDismiss = autoDismiss;
+            return this;
+        }
+
+        /**
+         * Set whether the prompt should finish itself when a touch event occurs inside the focal.
+         * Default is true.
+         *
+         * @param autoFinish True - prompt will finish when touched inside the focal, false - no action taken.
+         * @return This Builder object to allow for chaining of calls to set methods
+         */
+        public Builder setAutoFinish(final boolean autoFinish)
+        {
+            mAutoFinish = autoFinish;
+            return this;
+        }
+
+        /**
          * Creates an {@link MaterialTapTargetPrompt} with the arguments supplied to this
          * builder.
          * <p>
@@ -1414,6 +1450,9 @@ public class MaterialTapTargetPrompt
             mPrompt.mPaintSecondaryText.setAlpha(Color.alpha(mSecondaryTextColour));
             mPrompt.mPaintSecondaryText.setAntiAlias(true);
             mPrompt.mPaintSecondaryText.setTextSize(mSecondaryTextSize);
+
+            mPrompt.mAutoDismiss = mAutoDismiss;
+            mPrompt.mAutoFinish = mAutoFinish;
 
             return mPrompt;
         }
