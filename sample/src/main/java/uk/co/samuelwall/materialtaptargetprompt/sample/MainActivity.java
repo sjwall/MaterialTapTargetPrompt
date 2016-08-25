@@ -149,6 +149,7 @@ public class MainActivity extends AppCompatActivity
                 .setAnimationInterpolator(new FastOutSlowInInterpolator())
                 .setAutoDismiss(false)
                 .setAutoFinish(false)
+                .setCaptureTouchEventOutsidePrompt(true)
                 .setOnHidePromptListener(new MaterialTapTargetPrompt.OnHidePromptListener()
                 {
                     @Override

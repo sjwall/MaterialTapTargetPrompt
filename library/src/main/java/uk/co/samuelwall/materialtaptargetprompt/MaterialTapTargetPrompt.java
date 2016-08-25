@@ -725,6 +725,7 @@ public class MaterialTapTargetPrompt
         private View mTargetView;
         private float mTextSeparation;
         private boolean mClipBounds;
+        private boolean mCaptureTouchEventOutsidePrompt;
 
         public PromptView(final Context context)
         {
@@ -781,14 +782,22 @@ public class MaterialTapTargetPrompt
         {
             final float x = event.getX();
             final float y = event.getY();
+            //If the touch point is within the prompt background stop the event from passing through it
             boolean captureEvent = pointInCircle(x, y, mBackgroundRadius);
+            //If the touch event was at least in the background and in the focal
             if (captureEvent && pointInCircle(x, y, mFocalRadius))
             {
+                //Override allowing the touch event to pass through the view with the user defined value
                 captureEvent = mCaptureTouchEventOnFocal;
                 onPromptTouched(event, true);
             }
             else
             {
+                // If the prompt background was not touched
+                if (!captureEvent)
+                {
+                    captureEvent = mCaptureTouchEventOutsidePrompt;
+                }
                 onPromptTouched(event, false);
             }
             return captureEvent;
@@ -796,7 +805,7 @@ public class MaterialTapTargetPrompt
 
         /**
          * Determines if a point is in the centre of a circle with a radius from the point ({@link #mCentreLeft, {@link #mCentreTop}}.
-         * 
+         *
          * @param x The x position in the view.
          * @param y The y position in the view.
          * @param radius The radius of the circle.
@@ -868,6 +877,7 @@ public class MaterialTapTargetPrompt
         private boolean mCaptureTouchEventOnFocal;
         private float mTextSeparation;
         private boolean mAutoDismiss, mAutoFinish;
+        private boolean mCaptureTouchEventOutsidePrompt;
 
         /**
          * Creates a builder for a tap target prompt that uses the default
@@ -921,6 +931,7 @@ public class MaterialTapTargetPrompt
             mTextSeparation = a.getDimension(R.styleable.PromptView_textSeparation, 16 * density);
             mAutoDismiss = a.getBoolean(R.styleable.PromptView_autoDismiss, true);
             mAutoFinish = a.getBoolean(R.styleable.PromptView_autoFinish, true);
+            mCaptureTouchEventOutsidePrompt = a.getBoolean(R.styleable.PromptView_captureTouchEventOutsidePrompt, false);
             final int targetId = a.getResourceId(R.styleable.PromptView_target, 0);
             a.recycle();
 
@@ -1369,6 +1380,18 @@ public class MaterialTapTargetPrompt
         }
 
         /**
+         * Set if the prompt should stop touch events outside the prompt from passing
+         * to underlying views. Default is false.
+         *
+         * @return This Builder object to allow for chaining of calls to set methods
+         */
+        public Builder setCaptureTouchEventOutsidePrompt(final boolean captureTouchEventOutsidePrompt)
+        {
+            mCaptureTouchEventOutsidePrompt = captureTouchEventOutsidePrompt;
+            return this;
+        }
+
+        /**
          * Creates an {@link MaterialTapTargetPrompt} with the arguments supplied to this
          * builder.
          * <p>
@@ -1453,6 +1476,8 @@ public class MaterialTapTargetPrompt
 
             mPrompt.mAutoDismiss = mAutoDismiss;
             mPrompt.mAutoFinish = mAutoFinish;
+
+            mPrompt.mView.mCaptureTouchEventOutsidePrompt = mCaptureTouchEventOutsidePrompt;
 
             return mPrompt;
         }

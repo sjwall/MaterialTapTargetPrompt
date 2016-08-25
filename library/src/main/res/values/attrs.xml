@@ -33,6 +33,7 @@
     <attr name="textSeparation" format="dimension"/>
     <attr name="autoDismiss" format="boolean"/>
     <attr name="autoFinish" format="boolean"/>
+    <attr name="captureTouchEventOutsidePrompt" format="boolean"/>
     <declare-styleable name="PromptView">
         <attr name="target"/>
         <attr name="primaryText"/>
@@ -50,5 +51,6 @@
         <attr name="textSeparation"/>
         <attr name="autoDismiss"/>
         <attr name="autoFinish"/>
+        <attr name="captureTouchEventOutsidePrompt"/>
     </declare-styleable>
 </resources>
