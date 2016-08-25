@@ -2,6 +2,14 @@
 
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## v1.2.0
+
+### Features
+
+* Added style attribute for controlling capturing focal touch events
+* Added option to capture touch events outside prompt
+* Added options to disable auto dismiss and auto finish prompt
+
 ## v1.1.4 (2016-08-21)
 
 ### Bug Fixes
