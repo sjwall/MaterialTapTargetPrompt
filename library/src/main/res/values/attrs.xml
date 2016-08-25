@@ -34,6 +34,7 @@
     <attr name="autoDismiss" format="boolean"/>
     <attr name="autoFinish" format="boolean"/>
     <attr name="captureTouchEventOutsidePrompt" format="boolean"/>
+    <attr name="captureTouchEventOnFocal" format="boolean"/>
     <declare-styleable name="PromptView">
         <attr name="target"/>
         <attr name="primaryText"/>
@@ -52,5 +53,6 @@
         <attr name="autoDismiss"/>
         <attr name="autoFinish"/>
         <attr name="captureTouchEventOutsidePrompt"/>
+        <attr name="captureTouchEventOnFocal"/>
     </declare-styleable>
 </resources>

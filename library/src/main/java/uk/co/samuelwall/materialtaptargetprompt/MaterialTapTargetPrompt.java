@@ -932,6 +932,7 @@ public class MaterialTapTargetPrompt
             mAutoDismiss = a.getBoolean(R.styleable.PromptView_autoDismiss, true);
             mAutoFinish = a.getBoolean(R.styleable.PromptView_autoFinish, true);
             mCaptureTouchEventOutsidePrompt = a.getBoolean(R.styleable.PromptView_captureTouchEventOutsidePrompt, false);
+            mCaptureTouchEventOnFocal = a.getBoolean(R.styleable.PromptView_captureTouchEventOnFocal, false);
             final int targetId = a.getResourceId(R.styleable.PromptView_target, 0);
             a.recycle();
 
