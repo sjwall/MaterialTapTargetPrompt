@@ -414,7 +414,6 @@ public class MaterialTapTargetPrompt
         mAnimationCurrent = ValueAnimator.ofFloat(0f, 1f);
         mAnimationCurrent.setInterpolator(mAnimationInterpolator);
         mAnimationCurrent.setDuration(225);
-        mAnimationCurrent.setStartDelay(500);
         mAnimationCurrent.addUpdateListener(new ValueAnimator.AnimatorUpdateListener()
         {
             @TargetApi(Build.VERSION_CODES.HONEYCOMB)
