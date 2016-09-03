@@ -2,6 +2,12 @@
 
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## v1.2.1
+
+### Bug Fixes
+
+* Removed incorrect delay in starting the prompt display animation
+
 ## v1.2.0
 
 ### Features

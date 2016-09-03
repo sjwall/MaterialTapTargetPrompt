@@ -24,8 +24,8 @@ android {
         applicationId "uk.co.samuelwall.materialtaptargetprompt.sample"
         minSdkVersion 7
         targetSdkVersion 23
-        versionCode 7
-        versionName "1.2.0"
+        versionCode 8
+        versionName "1.2.1"
     }
     buildTypes {
         release {

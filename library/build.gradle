@@ -20,7 +20,7 @@ apply plugin: 'com.jfrog.bintray'
 
 // Maven Group ID for the artifact
 group = 'uk.co.samuelwall'
-version = "1.2.0"
+version = "1.2.1"
 
 android {
     compileSdkVersion 23
@@ -29,8 +29,8 @@ android {
     defaultConfig {
         minSdkVersion 7
         targetSdkVersion 23
-        versionCode 7
-        versionName "1.2.0"
+        versionCode 8
+        versionName version
     }
     buildTypes {
         debug {
