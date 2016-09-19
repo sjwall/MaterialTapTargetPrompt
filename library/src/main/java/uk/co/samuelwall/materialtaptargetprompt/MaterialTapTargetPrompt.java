@@ -26,6 +26,7 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.PorterDuff;
+import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.support.annotation.ColorInt;
@@ -877,6 +878,9 @@ public class MaterialTapTargetPrompt
         private float mTextSeparation;
         private boolean mAutoDismiss, mAutoFinish;
         private boolean mCaptureTouchEventOutsidePrompt;
+        private Typeface mPrimaryTextTypeface, mSecondaryTextTypeface;
+        private int mPrimaryTextTypefaceStyle, mSecondaryTextTypefaceStyle;
+        private int mPrimaryTextTypefaceIndex, mSecondaryTextTypefaceIndex;
 
         /**
          * Creates a builder for a tap target prompt that uses the default
@@ -932,6 +936,20 @@ public class MaterialTapTargetPrompt
             mAutoFinish = a.getBoolean(R.styleable.PromptView_autoFinish, true);
             mCaptureTouchEventOutsidePrompt = a.getBoolean(R.styleable.PromptView_captureTouchEventOutsidePrompt, false);
             mCaptureTouchEventOnFocal = a.getBoolean(R.styleable.PromptView_captureTouchEventOnFocal, false);
+            mPrimaryTextTypefaceStyle = a.getInt(R.styleable.PromptView_primaryTextStyle, 0);
+            mSecondaryTextTypefaceStyle = a.getInt(R.styleable.PromptView_secondaryTextStyle, 0);
+            final String primaryTextFontFamily = a.getString(R.styleable.PromptView_primaryTextFontFamily);
+            if (primaryTextFontFamily != null)
+            {
+                mPrimaryTextTypeface = Typeface.create(primaryTextFontFamily, mPrimaryTextTypefaceStyle);
+            }
+            final String secondaryTextFontFamily = a.getString(R.styleable.PromptView_secondaryTextFontFamily);
+            if (secondaryTextFontFamily != null)
+            {
+                mPrimaryTextTypeface = Typeface.create(secondaryTextFontFamily, mSecondaryTextTypefaceStyle);
+            }
+            mPrimaryTextTypefaceIndex = a.getInt(R.styleable.PromptView_primaryTextTypeface, 0);
+            mSecondaryTextTypefaceIndex = a.getInt(R.styleable.PromptView_secondaryTextTypeface, 0);
             final int targetId = a.getResourceId(R.styleable.PromptView_target, 0);
             a.recycle();
 
@@ -1061,6 +1079,24 @@ public class MaterialTapTargetPrompt
         }
 
         /**
+         * Sets the typeface and style used to display the primary text.
+         */
+        public Builder setPrimaryTextTypeface(final Typeface typeface)
+        {
+            return setPrimaryTextTypeface(typeface, 0);
+        }
+
+        /**
+         * Sets the typeface used to display the primary text.
+         */
+        public Builder setPrimaryTextTypeface(final Typeface typeface, final int style)
+        {
+            mPrimaryTextTypeface = typeface;
+            mPrimaryTextTypefaceStyle = style;
+            return this;
+        }
+
+        /**
          * Set the secondary text using the given resource id.
          *
          * @return This Builder object to allow for chaining of calls to set methods
@@ -1123,6 +1159,24 @@ public class MaterialTapTargetPrompt
         public Builder setSecondaryTextColourFromRes(@ColorRes final int resId)
         {
             mSecondaryTextColour = getColour(resId);
+            return this;
+        }
+
+        /**
+         * Sets the typeface used to display the secondary text.
+         */
+        public Builder setSecondaryTextTypeface(final Typeface typeface)
+        {
+            return setSecondaryTextTypeface(typeface, 0);
+        }
+
+        /**
+         * Sets the typeface and style used to display the secondary text.
+         */
+        public Builder setSecondaryTextTypeface(final Typeface typeface, final int style)
+        {
+            mSecondaryTextTypeface = typeface;
+            mSecondaryTextTypefaceStyle = style;
             return this;
         }
 
@@ -1467,12 +1521,14 @@ public class MaterialTapTargetPrompt
             mPrompt.mPaintPrimaryText.setAlpha(Color.alpha(mPrimaryTextColour));
             mPrompt.mPaintPrimaryText.setAntiAlias(true);
             mPrompt.mPaintPrimaryText.setTextSize(mPrimaryTextSize);
+            setTypeface(mPrompt.mPaintPrimaryText, mPrimaryTextTypeface, mPrimaryTextTypefaceStyle);
 
             mPrompt.mPaintSecondaryText = new TextPaint();
             mPrompt.mPaintSecondaryText.setColor(mSecondaryTextColour);
             mPrompt.mPaintSecondaryText.setAlpha(Color.alpha(mSecondaryTextColour));
             mPrompt.mPaintSecondaryText.setAntiAlias(true);
             mPrompt.mPaintSecondaryText.setTextSize(mSecondaryTextSize);
+            setTypeface(mPrompt.mPaintSecondaryText, mSecondaryTextTypeface, mSecondaryTextTypefaceStyle);
 
             mPrompt.mAutoDismiss = mAutoDismiss;
             mPrompt.mAutoFinish = mAutoFinish;
@@ -1520,6 +1576,36 @@ public class MaterialTapTargetPrompt
                 colour = mActivity.getResources().getColor(resId);
             }
             return colour;
+        }
+
+        /**
+         * Based on setTypeface in android TextView, Copyright (C) 2006 The Android Open Source Project.
+         * https://android.googlesource.com/platform/frameworks/base.git/+/master/core/java/android/widget/TextView.java
+         */
+        private void setTypeface(TextPaint textPaint, Typeface typeface, int style)
+        {
+            if (style > 0)
+            {
+                if (typeface == null)
+                {
+                    typeface = Typeface.defaultFromStyle(style);
+                }
+                else
+                {
+                    typeface = Typeface.create(typeface, style);
+                }
+
+                textPaint.setTypeface(typeface);
+
+                int typefaceStyle = typeface != null ? typeface.getStyle() : 0;
+                int need = style & ~typefaceStyle;
+                textPaint.setFakeBoldText((need & Typeface.BOLD) != 0);
+                textPaint.setTextSkewX((need & Typeface.ITALIC) != 0 ? -0.25f : 0);
+            }
+            else
+            {
+                textPaint.setTypeface(typeface);
+            }
         }
     }
 

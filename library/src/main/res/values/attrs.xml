@@ -35,6 +35,30 @@
     <attr name="autoFinish" format="boolean"/>
     <attr name="captureTouchEventOutsidePrompt" format="boolean"/>
     <attr name="captureTouchEventOnFocal" format="boolean"/>
+    <attr name="primaryTextFontFamily" format="string"/>
+    <attr name="secondaryTextFontFamily" format="string"/>
+    <attr name="primaryTextStyle" format="enum">
+        <enum name="normal" value="0"/>
+        <enum name="bold" value="1"/>
+        <enum name="italic" value="2"/>
+    </attr>
+    <attr name="secondaryTextStyle" format="enum">
+        <enum name="normal" value="0"/>
+        <enum name="bold" value="1"/>
+        <enum name="italic" value="2"/>
+    </attr>
+    <attr name="primaryTextTypeface" format="enum">
+        <enum name="normal" value="0" />
+        <enum name="sans" value="1" />
+        <enum name="serif" value="2" />
+        <enum name="monospace" value="3" />
+    </attr>
+    <attr name="secondaryTextTypeface" format="enum">
+        <enum name="normal" value="0" />
+        <enum name="sans" value="1" />
+        <enum name="serif" value="2" />
+        <enum name="monospace" value="3" />
+    </attr>
     <declare-styleable name="PromptView">
         <attr name="target"/>
         <attr name="primaryText"/>
@@ -54,5 +78,11 @@
         <attr name="autoFinish"/>
         <attr name="captureTouchEventOutsidePrompt"/>
         <attr name="captureTouchEventOnFocal"/>
+        <attr name="primaryTextFontFamily"/>
+        <attr name="secondaryTextFontFamily"/>
+        <attr name="primaryTextStyle"/>
+        <attr name="secondaryTextStyle"/>
+        <attr name="primaryTextTypeface"/>
+        <attr name="secondaryTextTypeface"/>
     </declare-styleable>
 </resources>
