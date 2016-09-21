@@ -2,6 +2,11 @@
 
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## v1.3.0
+
+* Added changing primary and secondary text typeface
+* Reduced number of generated methods
+
 ## v1.2.1
 
 ### Bug Fixes
