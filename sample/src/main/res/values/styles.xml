@@ -67,6 +67,9 @@
         <item name="textPadding">80dp</item>
         <item name="focalToTextPadding">8dp</item>
         <item name="textSeparation">0dp</item>
+        <item name="primaryTextTypeface">serif</item>
+        <item name="secondaryTextTypeface">monospace</item>
+        <item name="secondaryTextStyle">italic</item>
     </style>
 
 </resources>

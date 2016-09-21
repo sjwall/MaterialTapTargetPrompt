@@ -880,7 +880,6 @@ public class MaterialTapTargetPrompt
         private boolean mCaptureTouchEventOutsidePrompt;
         private Typeface mPrimaryTextTypeface, mSecondaryTextTypeface;
         private int mPrimaryTextTypefaceStyle, mSecondaryTextTypefaceStyle;
-        private int mPrimaryTextTypefaceIndex, mSecondaryTextTypefaceIndex;
 
         /**
          * Creates a builder for a tap target prompt that uses the default
@@ -938,18 +937,10 @@ public class MaterialTapTargetPrompt
             mCaptureTouchEventOnFocal = a.getBoolean(R.styleable.PromptView_captureTouchEventOnFocal, false);
             mPrimaryTextTypefaceStyle = a.getInt(R.styleable.PromptView_primaryTextStyle, 0);
             mSecondaryTextTypefaceStyle = a.getInt(R.styleable.PromptView_secondaryTextStyle, 0);
-            final String primaryTextFontFamily = a.getString(R.styleable.PromptView_primaryTextFontFamily);
-            if (primaryTextFontFamily != null)
-            {
-                mPrimaryTextTypeface = Typeface.create(primaryTextFontFamily, mPrimaryTextTypefaceStyle);
-            }
-            final String secondaryTextFontFamily = a.getString(R.styleable.PromptView_secondaryTextFontFamily);
-            if (secondaryTextFontFamily != null)
-            {
-                mPrimaryTextTypeface = Typeface.create(secondaryTextFontFamily, mSecondaryTextTypefaceStyle);
-            }
-            mPrimaryTextTypefaceIndex = a.getInt(R.styleable.PromptView_primaryTextTypeface, 0);
-            mSecondaryTextTypefaceIndex = a.getInt(R.styleable.PromptView_secondaryTextTypeface, 0);
+            mPrimaryTextTypeface = setTypefaceFromAttrs(a.getString(R.styleable.PromptView_primaryTextFontFamily), a.getInt(R.styleable.PromptView_primaryTextTypeface, 0), mPrimaryTextTypefaceStyle);
+            mSecondaryTextTypeface = setTypefaceFromAttrs(a.getString(R.styleable.PromptView_secondaryTextFontFamily), a.getInt(R.styleable.PromptView_secondaryTextTypeface, 0), mSecondaryTextTypefaceStyle);
+
+
             final int targetId = a.getResourceId(R.styleable.PromptView_target, 0);
             a.recycle();
 
@@ -1606,6 +1597,38 @@ public class MaterialTapTargetPrompt
             {
                 textPaint.setTypeface(typeface);
             }
+        }
+
+        /**
+         * Based on setTypefaceFromAttrs in android TextView, Copyright (C) 2006 The Android Open Source Project.
+         * https://android.googlesource.com/platform/frameworks/base.git/+/master/core/java/android/widget/TextView.java
+         */
+        private Typeface setTypefaceFromAttrs(String familyName, int typefaceIndex, int styleIndex)
+        {
+            Typeface tf = null;
+            if (familyName != null)
+            {
+                tf = Typeface.create(familyName, styleIndex);
+                if (tf != null)
+                {
+                    return tf;
+                }
+            }
+            switch (typefaceIndex)
+            {
+                case 1:
+                    tf = Typeface.SANS_SERIF;
+                    break;
+
+                case 2:
+                    tf = Typeface.SERIF;
+                    break;
+
+                case 3:
+                    tf = Typeface.MONOSPACE;
+                    break;
+            }
+            return tf;
         }
     }
 
