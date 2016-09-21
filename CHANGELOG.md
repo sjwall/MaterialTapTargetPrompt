@@ -2,18 +2,18 @@
 
 This project adheres to [Semantic Versioning](http://semver.org/).
 
-## v1.3.0
+## v1.3.0 (2016-09-21)
 
 * Added changing primary and secondary text typeface
 * Reduced number of generated methods
 
-## v1.2.1
+## v1.2.1 (2016-09-03)
 
 ### Bug Fixes
 
 * Removed incorrect delay in starting the prompt display animation
 
-## v1.2.0
+## v1.2.0 (2016-08-25)
 
 ### Features
 
