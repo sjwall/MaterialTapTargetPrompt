@@ -38,7 +38,7 @@ public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener
 {
 
-    private MaterialTapTargetPrompt mFabPrompt;
+    MaterialTapTargetPrompt mFabPrompt;
 
     public void showFabPrompt(View view)
     {

@@ -58,32 +58,32 @@ import android.view.animation.Interpolator;
  */
 public class MaterialTapTargetPrompt
 {
-    private Activity mActivity;
-    private PromptView mView;
-    private View mTargetView;
-    private float mBaseLeft, mBaseTop;
-    private float mBaseFocalRadius, mBaseBackgroundRadius;
-    private float mFocalRadius10Percent;
-    private float mRevealedAmount;
-    private String mPrimaryText, mSecondaryText;
-    private float mMaxTextWidth;
-    private float mTextPadding;
-    private boolean mTextPositionRight, mTextPositionAbove;
-    private float mFocalToTextPadding;
-    private int mPrimaryTextColourAlpha, mSecondaryTextColourAlpha;
-    private ValueAnimator mAnimationCurrent, mAnimationFocalRipple;
-    private Interpolator mAnimationInterpolator;
-    private float mFocalRippleProgress;
-    private int mBaseFocalRippleAlpha;
-    private TextPaint mPaintPrimaryText, mPaintSecondaryText;
-    private OnHidePromptListener mOnHidePromptListener;
-    private boolean mDismissing;
-    private ViewGroup mParentView;
-    private boolean mParentViewIsDecor;
-    private ViewGroup mClipToView;
-    private final float mStatusBarHeight;
-    private final ViewTreeObserver.OnGlobalLayoutListener mGlobalLayoutListener;
-    private boolean mAutoDismiss, mAutoFinish;
+    Activity mActivity;
+    PromptView mView;
+    View mTargetView;
+    float mBaseLeft, mBaseTop;
+    float mBaseFocalRadius, mBaseBackgroundRadius;
+    float mFocalRadius10Percent;
+    float mRevealedAmount;
+    String mPrimaryText, mSecondaryText;
+    float mMaxTextWidth;
+    float mTextPadding;
+    boolean mTextPositionRight, mTextPositionAbove;
+    float mFocalToTextPadding;
+    int mPrimaryTextColourAlpha, mSecondaryTextColourAlpha;
+    ValueAnimator mAnimationCurrent, mAnimationFocalRipple;
+    Interpolator mAnimationInterpolator;
+    float mFocalRippleProgress;
+    int mBaseFocalRippleAlpha;
+    TextPaint mPaintPrimaryText, mPaintSecondaryText;
+    OnHidePromptListener mOnHidePromptListener;
+    boolean mDismissing;
+    ViewGroup mParentView;
+    boolean mParentViewIsDecor;
+    ViewGroup mClipToView;
+    final float mStatusBarHeight;
+    final ViewTreeObserver.OnGlobalLayoutListener mGlobalLayoutListener;
+    boolean mAutoDismiss, mAutoFinish;
 
     MaterialTapTargetPrompt(final Activity activity)
     {
@@ -142,7 +142,7 @@ public class MaterialTapTargetPrompt
      *
      * @return The view to add the prompt view to.
      */
-    private ViewGroup getParentView()
+    ViewGroup getParentView()
     {
         if (mParentView == null)
         {
@@ -205,7 +205,7 @@ public class MaterialTapTargetPrompt
     /**
      * Adds layout listener to view parent to capture layout changes.
      */
-    private void addGlobalLayoutListener()
+    void addGlobalLayoutListener()
     {
         final ViewTreeObserver viewTreeObserver = getParentView().getViewTreeObserver();
         if (viewTreeObserver.isAlive())
@@ -217,7 +217,7 @@ public class MaterialTapTargetPrompt
     /**
      * Removes global layout listener added in {@link #addGlobalLayoutListener()}.
      */
-    private void removeGlobalLayoutListener()
+    void removeGlobalLayoutListener()
     {
         final ViewTreeObserver viewTreeObserver = getParentView().getViewTreeObserver();
         if (viewTreeObserver.isAlive())
@@ -399,7 +399,7 @@ public class MaterialTapTargetPrompt
     }
 
     @TargetApi(11)
-    private void startRevealAnimation()
+    void startRevealAnimation()
     {
         mPaintSecondaryText.setAlpha(0);
         mPaintPrimaryText.setAlpha(0);
@@ -460,7 +460,7 @@ public class MaterialTapTargetPrompt
     }
 
     @TargetApi(11)
-    private void startIdleAnimations()
+    void startIdleAnimations()
     {
         if (mAnimationCurrent != null)
         {
@@ -532,7 +532,7 @@ public class MaterialTapTargetPrompt
         });
     }
 
-    private void updateFocalCentrePosition()
+    void updateFocalCentrePosition()
     {
         updateClipBounds();
         if (mTargetView != null)
@@ -558,7 +558,7 @@ public class MaterialTapTargetPrompt
         updateTextPositioning();
     }
 
-    private void updateTextPositioning()
+    void updateTextPositioning()
     {
         final float primaryTextWidth = mPaintPrimaryText.measureText(mPrimaryText);
         final float secondaryTextWidth = mSecondaryText != null ? mPaintSecondaryText.measureText(mSecondaryText) : 0;
@@ -614,7 +614,7 @@ public class MaterialTapTargetPrompt
         updateIconPosition();
     }
 
-    private void updateBackgroundRadius()
+    void updateBackgroundRadius()
     {
         final float height;
         if (mTextPositionAbove)
@@ -640,7 +640,7 @@ public class MaterialTapTargetPrompt
         mBaseBackgroundRadius = Double.valueOf(Math.sqrt(Math.pow(length, 2) + Math.pow(height, 2))).floatValue();
     }
 
-    private void updateIconPosition()
+    void updateIconPosition()
     {
         if (mView.mIconDrawable != null)
         {
@@ -654,7 +654,7 @@ public class MaterialTapTargetPrompt
         }
     }
 
-    private void updateClipBounds()
+    void updateClipBounds()
     {
         if (mClipToView != null)
         {
@@ -705,27 +705,27 @@ public class MaterialTapTargetPrompt
      */
     static class PromptView extends View
     {
-        private float mCentreLeft, mCentreTop;
-        private Paint mPaintBackground, mPaintFocal;
-        private float mFocalRadius, mBackgroundRadius;
-        private float mFocalRippleSize;
-        private int mFocalRippleAlpha;
-        private Drawable mIconDrawable;
-        private float mIconDrawableLeft;
-        private float mIconDrawableTop;
-        private float mTextLeft;
-        private float mPrimaryTextTop;
-        private float mSecondaryTextOffsetTop;
-        private Layout mPrimaryTextLayout;
-        private Layout mSecondaryTextLayout;
-        private boolean mDrawRipple = Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB;
-        private OnPromptTouchedListener mOnPromptTouchedListener;
-        private boolean mCaptureTouchEventOnFocal;
-        private float mClipBoundsTop, mClipBoundsLeft, mClipBoundsBottom, mClipBoundsRight;
-        private View mTargetView;
-        private float mTextSeparation;
-        private boolean mClipBounds;
-        private boolean mCaptureTouchEventOutsidePrompt;
+        float mCentreLeft, mCentreTop;
+        Paint mPaintBackground, mPaintFocal;
+        float mFocalRadius, mBackgroundRadius;
+        float mFocalRippleSize;
+        int mFocalRippleAlpha;
+        Drawable mIconDrawable;
+        float mIconDrawableLeft;
+        float mIconDrawableTop;
+        float mTextLeft;
+        float mPrimaryTextTop;
+        float mSecondaryTextOffsetTop;
+        Layout mPrimaryTextLayout;
+        Layout mSecondaryTextLayout;
+        boolean mDrawRipple = Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB;
+        OnPromptTouchedListener mOnPromptTouchedListener;
+        boolean mCaptureTouchEventOnFocal;
+        float mClipBoundsTop, mClipBoundsLeft, mClipBoundsBottom, mClipBoundsRight;
+        View mTargetView;
+        float mTextSeparation;
+        boolean mClipBounds;
+        boolean mCaptureTouchEventOutsidePrompt;
 
         public PromptView(final Context context)
         {
@@ -811,7 +811,7 @@ public class MaterialTapTargetPrompt
          * @param radius The radius of the circle.
          * @return True if the point (x, y) is in the circle.
          */
-        private boolean pointInCircle(final float x, final float y, final float radius)
+        boolean pointInCircle(final float x, final float y, final float radius)
         {
             return Math.pow(x - mCentreLeft, 2) + Math.pow(y - mCentreTop, 2) < Math.pow(radius, 2);
         }
@@ -1630,7 +1630,7 @@ public class MaterialTapTargetPrompt
     }
 
     @TargetApi(Build.VERSION_CODES.HONEYCOMB)
-    private static class AnimatorListener implements Animator.AnimatorListener
+    static class AnimatorListener implements Animator.AnimatorListener
     {
 
         @Override

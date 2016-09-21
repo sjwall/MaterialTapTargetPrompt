@@ -16,14 +16,10 @@
 
 package uk.co.samuelwall.materialtaptargetprompt;
 
-import android.animation.ValueAnimator;
 import android.app.Activity;
 import android.graphics.Color;
-import android.graphics.Paint;
 import android.os.Build;
-import android.text.StaticLayout;
 import android.view.MotionEvent;
-import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.LinearInterpolator;
 import android.widget.FrameLayout;
@@ -35,10 +31,6 @@ import org.robolectric.Robolectric;
 import org.robolectric.RobolectricGradleTestRunner;
 import org.robolectric.annotation.Config;
 
-import java.lang.reflect.Field;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-
 import static junit.framework.Assert.assertFalse;
 import static junit.framework.Assert.assertNotNull;
 import static junit.framework.Assert.assertTrue;
@@ -49,49 +41,14 @@ import static org.junit.Assert.assertNull;
 @Config(constants = uk.co.samuelwall.materialtaptargetprompt.BuildConfig.class, sdk = 22)
 public class MaterialTapTargetPromptUnitTest
 {
-    Field mPromptView, mPromptViewPrimaryTextLayout, mPromptViewSecondaryTextLayout, mPromptViewPaintBackground, mPromptViewPaintFocal,
-            mMaxTextWidth, mTextPadding, mBaseFocalRadius, mFocalRadius10Percent, mTargetView, mBaseLeft, mBaseTop, mAnimationCurrent,
-            mRevealedAmount, mPaintPrimaryText, mPaintSecondaryText, mAnimationInterpolator, mTextSeparation, mFocalToTextPadding;
-    Method mUpdateFocalCentrePosition, mGetParentView;
-
     @Before
-    public void setup() throws NoSuchFieldException, IllegalAccessException, NoSuchMethodException
+    public void setup()
     {
-        mPromptView = setFieldAccessible(MaterialTapTargetPrompt.class, "mView");
-
-        Activity activity = createActivity();
-        MaterialTapTargetPrompt dummyPrompt = new MaterialTapTargetPrompt.Builder(activity)
-                .setTarget(0, 0)
-                .setPrimaryText("")
-                .show();
-
-        mUpdateFocalCentrePosition = setMethodAccessible(MaterialTapTargetPrompt.class, "updateFocalCentrePosition");
-        mGetParentView = setMethodAccessible(MaterialTapTargetPrompt.class, "getParentView");
-
-        mMaxTextWidth = setFieldAccessible(MaterialTapTargetPrompt.class, "mMaxTextWidth");
-        mTextPadding = setFieldAccessible(MaterialTapTargetPrompt.class, "mTextPadding");
-        mBaseFocalRadius = setFieldAccessible(MaterialTapTargetPrompt.class, "mBaseFocalRadius");
-        mFocalRadius10Percent = setFieldAccessible(MaterialTapTargetPrompt.class, "mFocalRadius10Percent");
-        mTargetView = setFieldAccessible(MaterialTapTargetPrompt.class, "mTargetView");
-        mBaseLeft = setFieldAccessible(MaterialTapTargetPrompt.class, "mBaseLeft");
-        mBaseTop = setFieldAccessible(MaterialTapTargetPrompt.class, "mBaseTop");
-        mAnimationCurrent = setFieldAccessible(MaterialTapTargetPrompt.class, "mAnimationCurrent");
-        mRevealedAmount = setFieldAccessible(MaterialTapTargetPrompt.class, "mRevealedAmount");
-        mPaintPrimaryText = setFieldAccessible(MaterialTapTargetPrompt.class, "mPaintPrimaryText");
-        mPaintSecondaryText = setFieldAccessible(MaterialTapTargetPrompt.class, "mPaintSecondaryText");
-        mAnimationInterpolator = setFieldAccessible(MaterialTapTargetPrompt.class, "mAnimationInterpolator");
-        mFocalToTextPadding = setFieldAccessible(MaterialTapTargetPrompt.class, "mFocalToTextPadding");
-
-        View view = (View) mPromptView.get(dummyPrompt);
-        mPromptViewPrimaryTextLayout = setFieldAccessible(view.getClass(), "mPrimaryTextLayout");
-        mPromptViewSecondaryTextLayout = setFieldAccessible(view.getClass(), "mSecondaryTextLayout");
-        mPromptViewPaintBackground = setFieldAccessible(view.getClass(), "mPaintBackground");
-        mPromptViewPaintFocal = setFieldAccessible(view.getClass(), "mPaintFocal");
-        mTextSeparation = setFieldAccessible(view.getClass(), "mTextSeparation");
+        
     }
 
     @Test
-    public void promptFromVariables() throws IllegalAccessException, InvocationTargetException
+    public void promptFromVariables()
     {
         LinearInterpolator interpolator = new LinearInterpolator();
         Activity activity = createActivity();
@@ -117,32 +74,31 @@ public class MaterialTapTargetPromptUnitTest
 
         setScreenWidthAndHeight(prompt, 200, 600);
 
-        assertEquals(600f, mMaxTextWidth.get(prompt));
-        assertEquals(50f, mTextPadding.get(prompt));
-        assertEquals(55f, mBaseFocalRadius.get(prompt));
-        assertEquals(5.5f, mFocalRadius10Percent.get(prompt));
-        assertNull(mTargetView.get(prompt));
-        assertEquals(50f, mBaseLeft.get(prompt));
-        assertEquals(40f, mBaseTop.get(prompt));
-        assertEquals(30f, ((Paint) mPaintPrimaryText.get(prompt)).getTextSize(), 0f);
-        assertEquals(20f, ((Paint) mPaintSecondaryText.get(prompt)).getTextSize(), 0f);
-        assertEquals(Color.CYAN, ((Paint) mPaintPrimaryText.get(prompt)).getColor());
-        assertEquals(Color.GRAY, ((Paint) mPaintSecondaryText.get(prompt)).getColor());
-        assertEquals(interpolator, mAnimationInterpolator.get(prompt));
-        assertEquals(30f, mFocalToTextPadding.get(prompt));
+        assertEquals(600f, prompt.mMaxTextWidth, 0.0f);
+        assertEquals(50f, prompt.mTextPadding, 0.0f);
+        assertEquals(55f, prompt.mBaseFocalRadius, 0.0f);
+        assertEquals(5.5f, prompt.mFocalRadius10Percent, 0.0f);
+        assertNull(prompt.mTargetView);
+        assertEquals(50f, prompt.mBaseLeft, 0.0f);
+        assertEquals(40f, prompt.mBaseTop, 0.0f);
+        assertEquals(30f, prompt.mPaintPrimaryText.getTextSize(), 0f);
+        assertEquals(20f, prompt.mPaintSecondaryText.getTextSize(), 0f);
+        assertEquals(Color.CYAN, prompt.mPaintPrimaryText.getColor());
+        assertEquals(Color.GRAY, prompt.mPaintSecondaryText.getColor());
+        assertEquals(interpolator, prompt.mAnimationInterpolator);
+        assertEquals(30f, prompt.mFocalToTextPadding, 0.0f);
 
-        View promptView = (View) mPromptView.get(prompt);
-        assertEquals("Primary text", ((StaticLayout) mPromptViewPrimaryTextLayout.get(promptView)).getText());
-        assertEquals(Color.BLUE, ((Paint) mPromptViewPaintBackground.get(promptView)).getColor());
-        assertEquals(Color.GREEN, ((Paint) mPromptViewPaintFocal.get(promptView)).getColor());
-        assertEquals(22f, mTextSeparation.get(promptView));
+        assertEquals("Primary text", prompt.mView.mPrimaryTextLayout.getText());
+        assertEquals(Color.BLUE, prompt.mView.mPaintBackground.getColor());
+        assertEquals(Color.GREEN, prompt.mView.mPaintFocal.getColor());
+        assertEquals(22f, prompt.mView.mTextSeparation, 0.0f);
 
         prompt.dismiss();
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB)
         {
-            ((ValueAnimator) mAnimationCurrent.get(prompt)).end();
+            prompt.mAnimationCurrent.end();
         }
-        assertNull(promptView.getParent());
+        assertNull(prompt.mView.getParent());
     }
 
     @Test
@@ -166,7 +122,7 @@ public class MaterialTapTargetPromptUnitTest
     }
 
     @Test
-    public void promptCreatedWhenSecondaryTextNotSet() throws IllegalAccessException
+    public void promptCreatedWhenSecondaryTextNotSet()
     {
         Activity activity = createActivity();
         MaterialTapTargetPrompt.Builder builder = new MaterialTapTargetPrompt.Builder(activity)
@@ -176,19 +132,18 @@ public class MaterialTapTargetPromptUnitTest
         assertNotNull(prompt);
         prompt.show();
 
-        View view = (View) mPromptView.get(prompt);
-        assertNull(mPromptViewSecondaryTextLayout.get(view));
+        assertNull(prompt.mView.mSecondaryTextLayout);
 
         prompt.finish();
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB)
         {
-            ((ValueAnimator) mAnimationCurrent.get(prompt)).end();
+            prompt.mAnimationCurrent.end();
         }
-        assertNull(view.getParent());
+        assertNull(prompt.mView.getParent());
     }
 
     @Test
-    public void promptAnimationCancel() throws IllegalAccessException
+    public void promptAnimationCancel()
     {
         Activity activity = createActivity();
         MaterialTapTargetPrompt prompt = new MaterialTapTargetPrompt.Builder(activity)
@@ -197,24 +152,21 @@ public class MaterialTapTargetPromptUnitTest
                 .show();
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB)
         {
-            ((ValueAnimator) mAnimationCurrent.get(prompt)).cancel();
+            prompt.mAnimationCurrent.cancel();
         }
-        assertEquals(1f, mRevealedAmount.getFloat(prompt), 0f);
-        assertNull(mAnimationCurrent.get(prompt));
+        assertEquals(1f, prompt.mRevealedAmount, 0f);
 
-        View promptView = (View) mPromptView.get(prompt);
         prompt.dismiss();
-        assertNotNull(mAnimationCurrent.get(prompt));
+        assertNotNull(prompt.mAnimationCurrent);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB)
         {
-            ((ValueAnimator) mAnimationCurrent.get(prompt)).cancel();
+            prompt.mAnimationCurrent.cancel();
         }
-        assertNull(mAnimationCurrent.get(prompt));
-        assertNull(promptView.getParent());
+        assertNull(prompt.mView.getParent());
     }
 
     @Test
-    public void promptCancelFinishAnimation() throws IllegalAccessException
+    public void promptCancelFinishAnimation()
     {
         Activity activity = createActivity();
         MaterialTapTargetPrompt prompt = new MaterialTapTargetPrompt.Builder(activity)
@@ -236,19 +188,18 @@ public class MaterialTapTargetPromptUnitTest
                 })
                 .show();
 
-        View promptView = (View) mPromptView.get(prompt);
         prompt.finish();
-        assertNotNull(mAnimationCurrent.get(prompt));
+        assertNotNull(prompt.mAnimationCurrent);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB)
         {
-            ((ValueAnimator) mAnimationCurrent.get(prompt)).cancel();
+            prompt.mAnimationCurrent.cancel();
         }
-        assertNull(mAnimationCurrent.get(prompt));
-        assertNull(promptView.getParent());
+        assertNull(prompt.mAnimationCurrent);
+        assertNull(prompt.mView.getParent());
     }
 
     @Test
-    public void promptTouchEventFocal() throws IllegalAccessException
+    public void promptTouchEventFocal()
     {
         Activity activity = createActivity();
         MaterialTapTargetPrompt prompt = new MaterialTapTargetPrompt.Builder(activity)
@@ -272,15 +223,14 @@ public class MaterialTapTargetPromptUnitTest
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB)
         {
-            ((ValueAnimator) mAnimationCurrent.get(prompt)).end();
+            prompt.mAnimationCurrent.end();
         }
 
-        View promptView = (View) mPromptView.get(prompt);
-        assertFalse(promptView.onTouchEvent(MotionEvent.obtain(0, 0, MotionEvent.ACTION_DOWN, 10, 10, 0)));
+        assertFalse(prompt.mView.onTouchEvent(MotionEvent.obtain(0, 0, MotionEvent.ACTION_DOWN, 10, 10, 0)));
     }
 
     @Test
-    public void promptTouchEventFocalCaptureEvent() throws IllegalAccessException
+    public void promptTouchEventFocalCaptureEvent()
     {
         Activity activity = createActivity();
         MaterialTapTargetPrompt prompt = new MaterialTapTargetPrompt.Builder(activity)
@@ -305,15 +255,14 @@ public class MaterialTapTargetPromptUnitTest
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB)
         {
-            ((ValueAnimator) mAnimationCurrent.get(prompt)).end();
+            prompt.mAnimationCurrent.end();
         }
 
-        View promptView = (View) mPromptView.get(prompt);
-        assertTrue(promptView.onTouchEvent(MotionEvent.obtain(0, 0, MotionEvent.ACTION_DOWN, 10, 10, 0)));
+        assertTrue(prompt.mView.onTouchEvent(MotionEvent.obtain(0, 0, MotionEvent.ACTION_DOWN, 10, 10, 0)));
     }
 
     @Test
-    public void promptTouchEventFocalNoListener() throws IllegalAccessException
+    public void promptTouchEventFocalNoListener()
     {
         Activity activity = createActivity();
         MaterialTapTargetPrompt prompt = new MaterialTapTargetPrompt.Builder(activity)
@@ -324,15 +273,14 @@ public class MaterialTapTargetPromptUnitTest
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB)
         {
-            ((ValueAnimator) mAnimationCurrent.get(prompt)).end();
+            prompt.mAnimationCurrent.end();
         }
 
-        View promptView = (View) mPromptView.get(prompt);
-        assertTrue(promptView.onTouchEvent(MotionEvent.obtain(0, 0, MotionEvent.ACTION_DOWN, 10, 10, 0)));
+        assertTrue(prompt.mView.onTouchEvent(MotionEvent.obtain(0, 0, MotionEvent.ACTION_DOWN, 10, 10, 0)));
     }
 
     @Test
-    public void promptTouchEventBackground() throws IllegalAccessException
+    public void promptTouchEventBackground()
     {
         Activity activity = createActivity();
         MaterialTapTargetPrompt prompt = new MaterialTapTargetPrompt.Builder(activity)
@@ -356,11 +304,10 @@ public class MaterialTapTargetPromptUnitTest
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB)
         {
-            ((ValueAnimator) mAnimationCurrent.get(prompt)).end();
+            prompt.mAnimationCurrent.end();
         }
 
-        View promptView = (View) mPromptView.get(prompt);
-        assertTrue(promptView.onTouchEvent(MotionEvent.obtain(0, 0, MotionEvent.ACTION_DOWN, 60, 60, 0)));
+        assertTrue(prompt.mView.onTouchEvent(MotionEvent.obtain(0, 0, MotionEvent.ACTION_DOWN, 60, 60, 0)));
     }
 
     private Activity createActivity()
@@ -370,23 +317,9 @@ public class MaterialTapTargetPromptUnitTest
         return activity;
     }
 
-    private Field setFieldAccessible(final Class c, final String fieldName) throws NoSuchFieldException
+    private void setScreenWidthAndHeight(final MaterialTapTargetPrompt prompt, final int width, final int height)
     {
-        final Field field = c.getDeclaredField(fieldName);
-        field.setAccessible(true);
-        return field;
-    }
-
-    private Method setMethodAccessible(final Class c, final String methodName) throws NoSuchMethodException
-    {
-        final Method method = c.getDeclaredMethod(methodName);
-        method.setAccessible(true);
-        return method;
-    }
-
-    private void setScreenWidthAndHeight(final MaterialTapTargetPrompt prompt, final int width, final int height) throws InvocationTargetException, IllegalAccessException
-    {
-        final ViewGroup parent = (ViewGroup) mGetParentView.invoke(prompt);
+        final ViewGroup parent = prompt.getParentView();
         //TODO make this work for all versions
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB)
         {
@@ -395,6 +328,6 @@ public class MaterialTapTargetPromptUnitTest
             parent.setRight(width);
             parent.setBottom(height);
         }
-        mUpdateFocalCentrePosition.invoke(prompt);
+        prompt.updateFocalCentrePosition();
     }
 }
