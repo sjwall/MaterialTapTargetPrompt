@@ -59,6 +59,16 @@
         <enum name="serif" value="2" />
         <enum name="monospace" value="3" />
     </attr>
+    <attr name="iconTint" format="reference"/>
+    <attr name="iconTintMode" format="enum">
+        <enum name="SRC_OVER" value="3" />
+        <enum name="SRC_IN" value="5" />
+        <enum name="SRC_ATOP" value="9" />
+        <enum name="MULTIPLY" value="14" />
+        <enum name="SCREEN" value="15" />
+        <enum name="ADD" value="16" />
+    </attr>
+    <attr name="iconColourFilter" format="color"/>
     <declare-styleable name="PromptView">
         <attr name="target"/>
         <attr name="primaryText"/>
@@ -84,5 +94,8 @@
         <attr name="secondaryTextStyle"/>
         <attr name="primaryTextTypeface"/>
         <attr name="secondaryTextTypeface"/>
+        <attr name="iconTint"/>
+        <attr name="iconTintMode"/>
+        <attr name="iconColourFilter"/>
     </declare-styleable>
 </resources>

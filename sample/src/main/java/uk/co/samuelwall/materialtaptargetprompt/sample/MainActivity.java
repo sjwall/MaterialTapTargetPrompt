@@ -128,7 +128,11 @@ public class MainActivity extends AppCompatActivity
 
     public void showStylePrompt(View view)
     {
-        new MaterialTapTargetPrompt.Builder(this, R.style.MaterialTapTargetPromptTheme_FabTarget).show();
+        final MaterialTapTargetPrompt.Builder builder = new MaterialTapTargetPrompt.Builder(this, R.style.MaterialTapTargetPromptTheme_FabTarget);
+        final Toolbar tb = (Toolbar) this.findViewById(R.id.toolbar);
+        builder.setIcon(R.drawable.ic_more_vert)
+                .setTarget(tb.getChildAt(2))
+                .show();
     }
 
     public void showDialog(View view)

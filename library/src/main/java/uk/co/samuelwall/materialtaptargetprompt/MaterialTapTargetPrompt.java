@@ -21,6 +21,7 @@ import android.animation.ValueAnimator;
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Context;
+import android.content.res.ColorStateList;
 import android.content.res.TypedArray;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -34,6 +35,7 @@ import android.support.annotation.ColorRes;
 import android.support.annotation.DimenRes;
 import android.support.annotation.DrawableRes;
 import android.support.annotation.IdRes;
+import android.support.annotation.Nullable;
 import android.support.annotation.StringRes;
 import android.text.Layout;
 import android.text.StaticLayout;
@@ -880,6 +882,10 @@ public class MaterialTapTargetPrompt
         private boolean mCaptureTouchEventOutsidePrompt;
         private Typeface mPrimaryTextTypeface, mSecondaryTextTypeface;
         private int mPrimaryTextTypefaceStyle, mSecondaryTextTypefaceStyle;
+        private ColorStateList mIconDrawableTintList = null;
+        private PorterDuff.Mode mIconDrawableTintMode = null;
+        private boolean mHasIconDrawableTint;
+        private int mIconDrawableColourFilter;
 
         /**
          * Creates a builder for a tap target prompt that uses the default
@@ -940,6 +946,10 @@ public class MaterialTapTargetPrompt
             mPrimaryTextTypeface = setTypefaceFromAttrs(a.getString(R.styleable.PromptView_primaryTextFontFamily), a.getInt(R.styleable.PromptView_primaryTextTypeface, 0), mPrimaryTextTypefaceStyle);
             mSecondaryTextTypeface = setTypefaceFromAttrs(a.getString(R.styleable.PromptView_secondaryTextFontFamily), a.getInt(R.styleable.PromptView_secondaryTextTypeface, 0), mSecondaryTextTypefaceStyle);
 
+            mIconDrawableColourFilter = a.getColor(R.styleable.PromptView_iconColourFilter, mBackgroundColour);
+            mIconDrawableTintList = a.getColorStateList(R.styleable.PromptView_iconTint);
+            mIconDrawableTintMode = parseTintMode(a.getInt(R.styleable.PromptView_iconTintMode, -1), PorterDuff.Mode.MULTIPLY);
+            mHasIconDrawableTint = true;
 
             final int targetId = a.getResourceId(R.styleable.PromptView_target, 0);
             a.recycle();
@@ -1266,12 +1276,6 @@ public class MaterialTapTargetPrompt
                 //noinspection deprecation
                 mIconDrawable = mActivity.getResources().getDrawable(resId);
             }
-            if (mIconDrawable != null)
-            {
-                mIconDrawable.setBounds(0, 0, mIconDrawable.getIntrinsicWidth(), mIconDrawable.getIntrinsicHeight());
-                mIconDrawable.setColorFilter(mBackgroundColour, PorterDuff.Mode.MULTIPLY);
-                mIconDrawable.setAlpha(Color.alpha(mBackgroundColour));
-            }
             return this;
         }
 
@@ -1284,6 +1288,76 @@ public class MaterialTapTargetPrompt
         {
             mIconDrawable = drawable;
             return this;
+        }
+
+        /**
+         * Applies a tint to the icon drawable
+         *
+         * @param tint the tint to apply to the icon drawable, {@code null} will remove the tint.
+         * @return This Builder object to allow for chaining of calls to set methods
+         */
+        public Builder setIconDrawableTintList(@Nullable ColorStateList tint)
+        {
+            mIconDrawableTintList = tint;
+            mHasIconDrawableTint = tint != null;
+            return this;
+        }
+
+        /**
+         * Sets the PorterDuff mode to use to apply the tint.
+         *
+         * @param tintMode the tint mode to use on the icon drawable, {@code null} will remove the tint.
+         * @return This Builder object to allow for chaining of calls to set methods
+         */
+        public Builder setIconDrawableTintMode(@Nullable PorterDuff.Mode tintMode)
+        {
+            mIconDrawableTintMode = tintMode;
+            if (tintMode == null)
+            {
+                mIconDrawableTintList = null;
+                mHasIconDrawableTint = false;
+            }
+            return this;
+        }
+
+        /**
+         * Sets the colour to use to tint the icon drawable.
+         *
+         * @param colour The colour to use to tint the icon drawable, call
+         *          {@link #setIconDrawableTintList(ColorStateList)} or
+         *           {@link #setIconDrawableTintMode(PorterDuff.Mode)} with {@code null}
+         *           to remove the tint.
+         * @return This Builder object to allow for chaining of calls to set methods
+         */
+        public Builder setIconDrawableColourFilter(@ColorInt final int colour)
+        {
+            mIconDrawableColourFilter = colour;
+            mIconDrawableTintList = null;
+            mHasIconDrawableTint = true;
+            return this;
+        }
+
+        /**
+         * Sets the colour (from a resource) to use to tint the icon drawable.
+         *
+         * @param id The resource id for the colour to use to tint the icon drawable,
+         *           call {@link #setIconDrawableTintList(ColorStateList)} or
+         *           {@link #setIconDrawableTintMode(PorterDuff.Mode)} with {@code null}
+         *           to remove the tint.
+         * @return This Builder object to allow for chaining of calls to set methods
+         */
+        public Builder setIconDrawableColourFilterFromRes(@ColorRes final int id)
+        {
+            final int colour;
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
+            {
+                colour = mActivity.getColor(id);
+            }
+            else
+            {
+                colour = mActivity.getResources().getColor(id);
+            }
+            return setIconDrawableColourFilter(colour);
         }
 
         /**
@@ -1495,6 +1569,27 @@ public class MaterialTapTargetPrompt
             //Calculate 10% of the focal radius
             mPrompt.mFocalRadius10Percent = mFocalRadius / 100 * 10;
 
+
+            if (mIconDrawable != null)
+            {
+                mIconDrawable.setBounds(0, 0, mIconDrawable.getIntrinsicWidth(), mIconDrawable.getIntrinsicHeight());
+                if (mHasIconDrawableTint)
+                {
+                    if (mIconDrawableTintList != null)
+                    {
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
+                        {
+                            mIconDrawable.setTintList(mIconDrawableTintList);
+                        }
+                    }
+                    else
+                    {
+                        mIconDrawable.setColorFilter(mIconDrawableColourFilter, mIconDrawableTintMode);
+                        mIconDrawable.setAlpha(Color.alpha(mIconDrawableColourFilter));
+                    }
+                }
+            }
+
             mPrompt.mView.mIconDrawable = mIconDrawable;
 
             mPrompt.mView.mPaintFocal = new Paint();
@@ -1629,6 +1724,26 @@ public class MaterialTapTargetPrompt
                     break;
             }
             return tf;
+        }
+
+        /**
+         * Based on parseTintMode in android appcompat v7 DrawableUtils, Copyright (C) 2014 The Android Open Source Project.
+         * https://android.googlesource.com/platform/frameworks/support.git/+/master/v7/appcompat/src/android/support/v7/widget/DrawableUtils.java
+         */
+        private PorterDuff.Mode parseTintMode(int value, PorterDuff.Mode defaultMode)
+        {
+            switch (value)
+            {
+                case 3: return PorterDuff.Mode.SRC_OVER;
+                case 5: return PorterDuff.Mode.SRC_IN;
+                case 9: return PorterDuff.Mode.SRC_ATOP;
+                case 14: return PorterDuff.Mode.MULTIPLY;
+                case 15: return PorterDuff.Mode.SCREEN;
+                case 16: return Build.VERSION.SDK_INT >= 11
+                        ? PorterDuff.Mode.valueOf("ADD")
+                        : defaultMode;
+                default: return defaultMode;
+            }
         }
     }
 

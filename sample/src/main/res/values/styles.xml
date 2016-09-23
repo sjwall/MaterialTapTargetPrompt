@@ -70,6 +70,7 @@
         <item name="primaryTextTypeface">serif</item>
         <item name="secondaryTextTypeface">monospace</item>
         <item name="secondaryTextStyle">italic</item>
+        <item name="iconColourFilter">@color/green_200</item>
     </style>
 
 </resources>
