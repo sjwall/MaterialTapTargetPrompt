@@ -2,7 +2,19 @@
 
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## v1.4.0 (2016-09-23)
+
+### Features
+
+* Added tinting icon drawable
+
+### Bug Fixes
+
+* Fixed icon drawable being incorrectly tinted
+
 ## v1.3.0 (2016-09-21)
+
+### Features
 
 * Added changing primary and secondary text typeface
 * Reduced number of generated methods
