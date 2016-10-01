@@ -2,6 +2,13 @@
 
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## v1.4.1 (2016-10-01)
+
+### Bug Fixes
+
+* Changed how status bar height is obtained
+* Fixed clip bounds being incorrectly calculated
+
 ## v1.4.0 (2016-09-23)
 
 ### Features
