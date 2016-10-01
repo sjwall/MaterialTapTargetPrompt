@@ -84,7 +84,7 @@ public class MaterialTapTargetPrompt
     ViewGroup mParentView;
     boolean mParentViewIsDecor;
     ViewGroup mClipToView;
-    final float mStatusBarHeight;
+    final float mStatusBarHeight, mScreenHeight;
     final ViewTreeObserver.OnGlobalLayoutListener mGlobalLayoutListener;
     boolean mAutoDismiss, mAutoFinish;
 
@@ -121,6 +121,7 @@ public class MaterialTapTargetPrompt
         Rect rect = new Rect();
         mActivity.getWindow().getDecorView().getWindowVisibleDisplayFrame(rect);
         mStatusBarHeight = rect.top;
+        mScreenHeight = rect.bottom + mStatusBarHeight;
 
         mGlobalLayoutListener = new ViewTreeObserver.OnGlobalLayoutListener()
             {
@@ -656,14 +657,17 @@ public class MaterialTapTargetPrompt
         if (mClipToView != null)
         {
             mView.mClipBounds = true;
-            mView.mClipBoundsLeft = mClipToView.getLeft();
-            mView.mClipBoundsBottom = mClipToView.getBottom();
-            mView.mClipBoundsTop = mClipToView.getTop();
-            mView.mClipBoundsRight = mClipToView.getRight();
-            if (mParentViewIsDecor)
+
+            final int[] location = new int[2];
+            mClipToView.getLocationOnScreen(location);
+            mView.mClipBoundsLeft = location[0];
+            mView.mClipBoundsBottom =  location[1] + mClipToView.getHeight();
+            mView.mClipBoundsTop = location[1];
+            mView.mClipBoundsRight = location[0] + mClipToView.getWidth();
+
+            if (mClipToView.getHeight() == mScreenHeight || (mParentViewIsDecor && mView.mClipBoundsTop == 0))
             {
                 mView.mClipBoundsTop += mStatusBarHeight;
-                mView.mClipBoundsBottom += mStatusBarHeight;
             }
         }
         else if (mParentViewIsDecor)
@@ -672,7 +676,7 @@ public class MaterialTapTargetPrompt
             //Stop the canvas drawing over the status bar
             mView.mClipBoundsTop = mStatusBarHeight;
             mView.mClipBoundsLeft = 0f;
-            mView.mClipBoundsBottom = mActivity.getResources().getDisplayMetrics().heightPixels - mStatusBarHeight;
+            mView.mClipBoundsBottom = mActivity.getResources().getDisplayMetrics().heightPixels;
             mView.mClipBoundsRight = mActivity.getResources().getDisplayMetrics().widthPixels;
         }
         else
