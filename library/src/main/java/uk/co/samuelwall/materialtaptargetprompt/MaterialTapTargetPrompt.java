@@ -27,6 +27,7 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.PorterDuff;
+import android.graphics.Rect;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
@@ -117,15 +118,9 @@ public class MaterialTapTargetPrompt
                 }
             };
 
-        int resourceId = mView.getResources().getIdentifier("status_bar_height", "dimen", "android");
-        if (resourceId > 0)
-        {
-            mStatusBarHeight = mView.getResources().getDimensionPixelSize(resourceId);
-        }
-        else
-        {
-            mStatusBarHeight = 0;
-        }
+        Rect rect = new Rect();
+        mActivity.getWindow().getDecorView().getWindowVisibleDisplayFrame(rect);
+        mStatusBarHeight = rect.top;
 
         mGlobalLayoutListener = new ViewTreeObserver.OnGlobalLayoutListener()
             {
