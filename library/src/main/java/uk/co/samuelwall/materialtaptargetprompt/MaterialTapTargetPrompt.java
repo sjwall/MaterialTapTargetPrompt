@@ -84,7 +84,7 @@ public class MaterialTapTargetPrompt
     ViewGroup mParentView;
     boolean mParentViewIsDecor;
     ViewGroup mClipToView;
-    final float mStatusBarHeight, mScreenHeight;
+    final float mStatusBarHeight;
     final ViewTreeObserver.OnGlobalLayoutListener mGlobalLayoutListener;
     boolean mAutoDismiss, mAutoFinish;
 
@@ -121,7 +121,6 @@ public class MaterialTapTargetPrompt
         Rect rect = new Rect();
         mActivity.getWindow().getDecorView().getWindowVisibleDisplayFrame(rect);
         mStatusBarHeight = rect.top;
-        mScreenHeight = rect.bottom + mStatusBarHeight;
 
         mGlobalLayoutListener = new ViewTreeObserver.OnGlobalLayoutListener()
             {
@@ -658,16 +657,25 @@ public class MaterialTapTargetPrompt
         {
             mView.mClipBounds = true;
 
+            //Reset the top to 0
+            mView.mClipBoundsTop = 0;
+
+            //Only add the status bar height if the parent is the decor view
+            if (mParentViewIsDecor)
+            {
+                mView.mClipBoundsTop += mStatusBarHeight;
+            }
+
+            //Find the location of the clip view on the screen
             final int[] location = new int[2];
             mClipToView.getLocationOnScreen(location);
             mView.mClipBoundsLeft = location[0];
-            mView.mClipBoundsBottom =  location[1] + mClipToView.getHeight();
-            mView.mClipBoundsTop = location[1];
             mView.mClipBoundsRight = location[0] + mClipToView.getWidth();
-
-            if (mClipToView.getHeight() == mScreenHeight || (mParentViewIsDecor && mView.mClipBoundsTop == 0))
+            mView.mClipBoundsBottom =  location[1] + mClipToView.getHeight();
+            //If the clip view is bellow the current top
+            if (location[1] > mView.mClipBoundsTop)
             {
-                mView.mClipBoundsTop += mStatusBarHeight;
+                mView.mClipBoundsTop = location[1];
             }
         }
         else if (mParentViewIsDecor)
