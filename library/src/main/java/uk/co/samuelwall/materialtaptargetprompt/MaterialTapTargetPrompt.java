@@ -26,6 +26,7 @@ import android.content.res.TypedArray;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.Point;
 import android.graphics.PorterDuff;
 import android.graphics.Rect;
 import android.graphics.Typeface;
@@ -660,22 +661,25 @@ public class MaterialTapTargetPrompt
             //Reset the top to 0
             mView.mClipBoundsTop = 0;
 
-            //Only add the status bar height if the parent is the decor view
+            //Find the location of the clip view on the screen
+            final Rect rect = new Rect();
+            final Point offset = new Point();
+            mClipToView.getGlobalVisibleRect(rect, offset);
+            mView.mClipBoundsLeft = rect.left;
+            mView.mClipBoundsTop = rect.top;
+            mView.mClipBoundsRight = rect.right;
+            mView.mClipBoundsBottom =  rect.bottom;
+
             if (mParentViewIsDecor)
             {
-                mView.mClipBoundsTop += mStatusBarHeight;
+                if (offset.y == 0)
+                {
+                    mView.mClipBoundsTop += mStatusBarHeight;
+                }
             }
-
-            //Find the location of the clip view on the screen
-            final int[] location = new int[2];
-            mClipToView.getLocationOnScreen(location);
-            mView.mClipBoundsLeft = location[0];
-            mView.mClipBoundsRight = location[0] + mClipToView.getWidth();
-            mView.mClipBoundsBottom =  location[1] + mClipToView.getHeight();
-            //If the clip view is bellow the current top
-            if (location[1] > mView.mClipBoundsTop)
+            else if (offset.y > 0)
             {
-                mView.mClipBoundsTop = location[1];
+                mView.mClipBoundsTop -= offset.y;
             }
         }
         else if (mParentViewIsDecor)
