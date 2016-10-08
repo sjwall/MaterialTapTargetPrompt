@@ -50,4 +50,11 @@
 
         android:onClick="showPrompt" android:src="@android:drawable/ic_dialog_email" />
 
+    <TextView
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical|center_horizontal"
+        android:text="@string/dialog_content"
+        android:layout_marginTop="@dimen/example_button_width"/>
+
 </android.support.design.widget.CoordinatorLayout>

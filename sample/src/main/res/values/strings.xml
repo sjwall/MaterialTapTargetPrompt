@@ -16,6 +16,7 @@
 
 <resources>
     <string name="app_name">Material Tap Target Prompt Sample</string>
+    <string name="github">github.com/sjwall/MaterialTapTargetPrompt</string>
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
@@ -29,4 +30,27 @@
 
     <string name="FabTarget.primaryText">Loaded from style</string>
     <string name="FabTarget.secondaryText">This was loaded from a style</string>
+
+    <string name="dialog_content">Tap on the Floating Action Button to see the prompt in this dialog</string>
+
+    <string name="example_navigation_title">Navigation</string>
+    <string name="example_navigation_description">Displays prompt over the hamburger menu icon</string>
+
+    <string name="example_overflow_title">Overflow</string>
+    <string name="example_overflow_description">Displays prompt over the app bar more items menu item</string>
+
+    <string name="example_fab_title">FAB</string>
+    <string name="example_fab_description">Displays prompt over the FAB button</string>
+
+    <string name="example_style_title">From style</string>
+    <string name="example_style_description">Displays prompt over the app bar more items menu item with a style loaded from a resource</string>
+
+    <string name="example_no_auto_dismiss_title">No auto dismiss</string>
+    <string name="example_no_auto_dismiss_description">Displays prompt over the FAB button that can only be dismissed by pressing the FAB button</string>
+
+    <string name="example_activity_title">Activity</string>
+    <string name="example_activity_description">An example with an Activity with out a navigation drawer</string>
+
+    <string name="example_dialog_title">Dialog</string>
+    <string name="example_dialog_description">An example with a dialog</string>
 </resources>

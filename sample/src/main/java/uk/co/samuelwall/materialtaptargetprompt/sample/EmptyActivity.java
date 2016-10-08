@@ -16,29 +16,33 @@
 
 package uk.co.samuelwall.materialtaptargetprompt.sample;
 
-import android.content.Intent;
-import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v4.view.animation.FastOutSlowInInterpolator;
-import android.view.MotionEvent;
-import android.view.View;
-import android.support.design.widget.NavigationView;
-import android.support.v4.view.GravityCompat;
-import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
+import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MotionEvent;
+import android.view.View;
 
 import uk.co.samuelwall.materialtaptargetprompt.MaterialTapTargetPrompt;
 
-public class MainActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener
+public class EmptyActivity extends AppCompatActivity
 {
 
     MaterialTapTargetPrompt mFabPrompt;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState)
+    {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.app_bar_main);
+        findViewById(R.id.other_examples_activity).setVisibility(View.GONE);
+        findViewById(R.id.other_examples_dialog).setVisibility(View.GONE);
+        final Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+    }
 
     public void showFabPrompt(View view)
     {
@@ -46,7 +50,7 @@ public class MainActivity extends AppCompatActivity
         {
             return;
         }
-        mFabPrompt = new MaterialTapTargetPrompt.Builder(MainActivity.this)
+        mFabPrompt = new MaterialTapTargetPrompt.Builder(EmptyActivity.this)
                 .setTarget(findViewById(R.id.fab))
                 .setPrimaryText("Send your first email")
                 .setSecondaryText("Tap the envelop to start composing your first email")
@@ -77,7 +81,7 @@ public class MainActivity extends AppCompatActivity
                 .setSecondaryText(R.string.menu_prompt_description)
                 .setAnimationInterpolator(new FastOutSlowInInterpolator())
                 .setMaxTextWidth(R.dimen.tap_target_menu_max_width)
-                .setIcon(R.drawable.ic_menu);
+                .setIcon(R.drawable.ic_back);
         final Toolbar tb = (Toolbar) this.findViewById(R.id.toolbar);
         tapTargetPromptBuilder.setTarget(tb.getChildAt(1));
 
@@ -135,23 +139,13 @@ public class MainActivity extends AppCompatActivity
                 .show();
     }
 
-    public void showDialog(View view)
-    {
-        startActivity(new Intent(this, DialogStyleActivity.class));
-    }
-
-    public void showActivity(View view)
-    {
-        startActivity(new Intent(this, EmptyActivity.class));
-    }
-
     public void showNoAutoDismiss(View view)
     {
         if (mFabPrompt != null)
         {
             return;
         }
-        mFabPrompt = new MaterialTapTargetPrompt.Builder(MainActivity.this)
+        mFabPrompt = new MaterialTapTargetPrompt.Builder(EmptyActivity.this)
                 .setTarget(findViewById(R.id.fab))
                 .setPrimaryText("No Auto Dismiss")
                 .setSecondaryText("This prompt will only be removed after tapping the envelop")
@@ -181,54 +175,6 @@ public class MainActivity extends AppCompatActivity
     }
 
     @Override
-    protected void onCreate(Bundle savedInstanceState)
-    {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-        final Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener()
-        {
-            @Override
-            public void onClick(View view)
-            {
-                if (mFabPrompt != null)
-                {
-                    mFabPrompt.finish();
-                    mFabPrompt = null;
-                }
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
-
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        drawer.setDrawerListener(toggle);
-        toggle.syncState();
-
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
-        navigationView.setNavigationItemSelectedListener(this);
-    }
-
-    @Override
-    public void onBackPressed()
-    {
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        if (drawer.isDrawerOpen(GravityCompat.START))
-        {
-            drawer.closeDrawer(GravityCompat.START);
-        }
-        else
-        {
-            super.onBackPressed();
-        }
-    }
-
-    @Override
     public boolean onCreateOptionsMenu(Menu menu)
     {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -249,17 +195,12 @@ public class MainActivity extends AppCompatActivity
         {
             return true;
         }
+        else if (id == android.R.id.home)
+        {
+            this.onBackPressed();
+            return true;
+        }
 
         return super.onOptionsItemSelected(item);
-    }
-
-    @SuppressWarnings("StatementWithEmptyBody")
-    @Override
-    public boolean onNavigationItemSelected(MenuItem item)
-    {
-        // Handle navigation view item clicks here.
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        drawer.closeDrawer(GravityCompat.START);
-        return true;
     }
 }
