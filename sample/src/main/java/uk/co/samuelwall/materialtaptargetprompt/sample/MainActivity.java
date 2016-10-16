@@ -18,6 +18,7 @@ package uk.co.samuelwall.materialtaptargetprompt.sample;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.view.animation.FastOutSlowInInterpolator;
@@ -31,14 +32,18 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.ViewGroup;
 
 import uk.co.samuelwall.materialtaptargetprompt.MaterialTapTargetPrompt;
+import uk.co.samuelwall.materialtaptargetprompt.MaterialTapTargetPrompt.OnHidePromptListener;
+import uk.co.samuelwall.materialtaptargetprompt.MaterialTapTargetPrompt.OnViewFoundListener;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener
 {
 
     MaterialTapTargetPrompt mFabPrompt;
+    Handler handler = new Handler();
 
     public void showFabPrompt(View view)
     {
@@ -51,7 +56,7 @@ public class MainActivity extends AppCompatActivity
                 .setPrimaryText("Send your first email")
                 .setSecondaryText("Tap the envelop to start composing your first email")
                 .setAnimationInterpolator(new FastOutSlowInInterpolator())
-                .setOnHidePromptListener(new MaterialTapTargetPrompt.OnHidePromptListener()
+                .setOnHidePromptListener(new OnHidePromptListener()
                 {
                     @Override
                     public void onHidePrompt(MotionEvent event, boolean tappedTarget)
@@ -81,7 +86,7 @@ public class MainActivity extends AppCompatActivity
         final Toolbar tb = (Toolbar) this.findViewById(R.id.toolbar);
         tapTargetPromptBuilder.setTarget(tb.getChildAt(1));
 
-        tapTargetPromptBuilder.setOnHidePromptListener(new MaterialTapTargetPrompt.OnHidePromptListener()
+        tapTargetPromptBuilder.setOnHidePromptListener(new OnHidePromptListener()
         {
             @Override
             public void onHidePrompt(MotionEvent event, boolean tappedTarget)
@@ -109,7 +114,7 @@ public class MainActivity extends AppCompatActivity
         final Toolbar tb = (Toolbar) this.findViewById(R.id.toolbar);
         tapTargetPromptBuilder.setTarget(tb.getChildAt(2));
 
-        tapTargetPromptBuilder.setOnHidePromptListener(new MaterialTapTargetPrompt.OnHidePromptListener()
+        tapTargetPromptBuilder.setOnHidePromptListener(new OnHidePromptListener()
         {
             @Override
             public void onHidePrompt(MotionEvent event, boolean tappedTarget)
@@ -140,6 +145,74 @@ public class MainActivity extends AppCompatActivity
         startActivity(new Intent(this, DialogStyleActivity.class));
     }
 
+    public void showFindDelayedPrompt(View view)
+    {
+        showFindDelayedPrompt(view, getLayoutInflater().inflate(R.layout.extra_fab_for_tageting_center,
+            (ViewGroup) findViewById(R.id.content_main), false), R.id.extra_target_fab,
+            "Delayed Find Prompt", "This prompt found it's view once the view was added to the screen");
+    }
+
+    public void showFindDelayedPrompt(View view, final View viewToAdd, int idToFind, String primary, String secondary)
+    {
+        abstract class CombinedPromptListener implements OnHidePromptListener, OnViewFoundListener
+        {
+            View targetView;
+
+            abstract void cleanup();
+
+            @Override
+            public void onHidePrompt(MotionEvent event, boolean tappedTarget)
+            {
+                cleanup();
+            }
+
+            @Override
+            public void onHidePromptComplete()
+            {
+                cleanup();
+            }
+
+            @Override
+            public void onViewFound(View view)
+            {
+                targetView = view;
+            }
+        }
+
+        CombinedPromptListener listener = new CombinedPromptListener()
+        {
+            @Override
+            void cleanup()
+            {
+                if (targetView != null)
+                {
+                    if (targetView.getParent() != null) {
+                        ((ViewGroup) targetView.getParent().getParent()).removeView((View) targetView.getParent());
+                    }
+                    targetView = null;
+                }
+            }
+        };
+
+        handler.postDelayed(new Runnable()
+        {
+            public void run()
+            {
+                ((ViewGroup) findViewById(R.id.content_main)).addView(viewToAdd);
+            }
+        }, 1000);
+
+        new MaterialTapTargetPrompt.Builder(MainActivity.this)
+            .setTarget(idToFind)
+            .setPrimaryText(primary)
+            .setSecondaryText(secondary)
+            .setAnimationInterpolator(new FastOutSlowInInterpolator())
+            .setCaptureTouchEventOutsidePrompt(true)
+            .setOnViewFroundListener(listener)
+            .setOnHidePromptListener(listener)
+            .show();
+    }
+
     public void showNoAutoDismiss(View view)
     {
         if (mFabPrompt != null)
@@ -147,32 +220,32 @@ public class MainActivity extends AppCompatActivity
             return;
         }
         mFabPrompt = new MaterialTapTargetPrompt.Builder(MainActivity.this)
-                .setTarget(findViewById(R.id.fab))
-                .setPrimaryText("No Auto Dismiss")
-                .setSecondaryText("This prompt will only be removed after tapping the envelop")
-                .setAnimationInterpolator(new FastOutSlowInInterpolator())
-                .setAutoDismiss(false)
-                .setAutoFinish(false)
-                .setCaptureTouchEventOutsidePrompt(true)
-                .setOnHidePromptListener(new MaterialTapTargetPrompt.OnHidePromptListener()
+            .setTarget(findViewById(R.id.fab))
+            .setPrimaryText("No Auto Dismiss")
+            .setSecondaryText("This prompt will only be removed after tapping the envelop")
+            .setAnimationInterpolator(new FastOutSlowInInterpolator())
+            .setAutoDismiss(false)
+            .setAutoFinish(false)
+            .setCaptureTouchEventOutsidePrompt(true)
+            .setOnHidePromptListener(new OnHidePromptListener()
+            {
+                @Override
+                public void onHidePrompt(MotionEvent event, boolean tappedTarget)
                 {
-                    @Override
-                    public void onHidePrompt(MotionEvent event, boolean tappedTarget)
+                    if (tappedTarget)
                     {
-                        if (tappedTarget)
-                        {
-                            mFabPrompt.finish();
-                            mFabPrompt = null;
-                        }
+                        mFabPrompt.finish();
+                        mFabPrompt = null;
                     }
+                }
 
-                    @Override
-                    public void onHidePromptComplete()
-                    {
+                @Override
+                public void onHidePromptComplete()
+                {
 
-                    }
-                })
-                .show();
+                }
+            })
+            .show();
     }
 
     @Override
