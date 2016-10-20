@@ -98,4 +98,67 @@
         android:layout_toRightOf="@+id/button_no_auto_dismiss"
         android:layout_toEndOf="@+id/button_no_auto_dismiss"
         android:onClick="showFindDelayedPrompt"/>
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Center"
+        android:id="@+id/button_center"
+        android:layout_below="@+id/button_no_auto_dismiss"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:onClick="showCenterPrompt"/>
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Center left"
+        android:id="@+id/button_center_left"
+        android:layout_below="@+id/button_no_auto_dismiss"
+        android:layout_toRightOf="@+id/button_center"
+        android:layout_toEndOf="@+id/button_center"
+        android:onClick="showCenterLeftPrompt"/>
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Center right"
+        android:id="@+id/button_center_right"
+        android:layout_below="@+id/button_no_auto_dismiss"
+        android:layout_toRightOf="@+id/button_center_left"
+        android:layout_toEndOf="@+id/button_center_left"
+        android:onClick="showCenterRightPrompt"/>
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Center top"
+        android:id="@+id/button_center_top"
+        android:layout_below="@+id/button_center_left"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:onClick="showCenterTopPrompt"/>
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Center bottom"
+        android:id="@+id/button_center_bottom"
+        android:layout_below="@+id/button_center_left"
+        android:layout_toRightOf="@+id/button_center_top"
+        android:layout_toEndOf="@+id/button_center_top"
+        android:onClick="showCenterBottomPrompt"/>
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Center right long"
+        android:id="@+id/button_center_right_long"
+        android:layout_below="@+id/button_center_top"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:onClick="showCenterRightLongPrompt"/>
+
+
+
 </RelativeLayout>

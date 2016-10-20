@@ -152,6 +152,64 @@ public class MainActivity extends AppCompatActivity
             "Delayed Find Prompt", "This prompt found it's view once the view was added to the screen");
     }
 
+    public void showCenterPrompt(View view)
+    {
+        View newView = getLayoutInflater().inflate(R.layout.extra_fab_for_tageting_center,
+            (ViewGroup) findViewById(R.id.content_main), false);
+        showFindDelayedPrompt(view, newView, R.id.extra_target_fab,
+            "Center Target Prompt", "This is a prompt of a target in the center of the screen");
+    }
+
+    public void showCenterLeftPrompt(View view)
+    {
+        View newView = getLayoutInflater().inflate(R.layout.extra_fab_for_tageting_center,
+            (ViewGroup) findViewById(R.id.content_main), false);
+        View mainLayout = findViewById(R.id.drawer_layout);
+        newView.setPadding(0, 0, mainLayout.getWidth()/2, 0);
+        showFindDelayedPrompt(view, newView, R.id.extra_target_fab,
+            "Center Left Target Prompt", "This is a prompt of a target to the left of the center of the screen");
+    }
+
+    public void showCenterRightPrompt(View view)
+    {
+        View newView = getLayoutInflater().inflate(R.layout.extra_fab_for_tageting_center,
+            (ViewGroup) findViewById(R.id.content_main), false);
+        View mainLayout = findViewById(R.id.drawer_layout);
+        newView.setPadding(mainLayout.getWidth()/2, 0, 0, 0);
+        showFindDelayedPrompt(view, newView, R.id.extra_target_fab,
+            "Center Right Target Prompt", "This is a prompt of a target to the right of the center of the screen");
+    }
+
+    public void showCenterTopPrompt(View view)
+    {
+        View newView = getLayoutInflater().inflate(R.layout.extra_fab_for_tageting_center,
+            (ViewGroup) findViewById(R.id.content_main), false);
+        View mainLayout = findViewById(R.id.drawer_layout);
+        newView.setPadding(0, 0, 0, mainLayout.getHeight()/2);
+        showFindDelayedPrompt(view, newView, R.id.extra_target_fab,
+            "Center Top Target Prompt", "This is a prompt of a target above of the center of the screen");
+    }
+
+    public void showCenterBottomPrompt(View view)
+    {
+        View newView = getLayoutInflater().inflate(R.layout.extra_fab_for_tageting_center,
+            (ViewGroup) findViewById(R.id.content_main), false);
+        View mainLayout = findViewById(R.id.drawer_layout);
+        newView.setPadding(0, mainLayout.getHeight()/2, 0, 0);
+        showFindDelayedPrompt(view, newView, R.id.extra_target_fab,
+            "Center Bottom Target Prompt", "This is a prompt of a target below the center of the screen");
+    }
+
+    public void showCenterRightLongPrompt(View view)
+    {
+        View newView = getLayoutInflater().inflate(R.layout.extra_fab_for_tageting_center,
+            (ViewGroup) findViewById(R.id.content_main), false);
+        View mainLayout = findViewById(R.id.drawer_layout);
+        newView.setPadding(mainLayout.getWidth()/2, 0, 0, 0);
+        showFindDelayedPrompt(view, newView, R.id.extra_target_fab,
+            "Center Right Target Prompt but with much longer text", "This is a prompt of a target to the right of the center of the screen but with really long text to see how it behaves.");
+    }
+
     public void showFindDelayedPrompt(View view, final View viewToAdd, int idToFind, String primary, String secondary)
     {
         abstract class CombinedPromptListener implements OnHidePromptListener, OnViewFoundListener
@@ -187,7 +245,7 @@ public class MainActivity extends AppCompatActivity
                 if (targetView != null)
                 {
                     if (targetView.getParent() != null) {
-                        ((ViewGroup) targetView.getParent().getParent()).removeView((View) targetView.getParent());
+                        ((ViewGroup) targetView.getParent()).removeView(targetView);
                     }
                     targetView = null;
                 }
@@ -200,7 +258,7 @@ public class MainActivity extends AppCompatActivity
             {
                 ((ViewGroup) findViewById(R.id.content_main)).addView(viewToAdd);
             }
-        }, 1000);
+        }, 500);
 
         new MaterialTapTargetPrompt.Builder(MainActivity.this)
             .setTarget(idToFind)
