@@ -569,8 +569,8 @@ public class MaterialTapTargetPrompt
         }
         updateClipBounds();
 
-        float nearToSideEdge = mScale * 10;
-        float nearToTopBottomEdge = mScale * 10;
+        float nearToSideEdge = mScale * 50;
+        float nearToTopBottomEdge = mScale * 50;
 
         if (mTargetView != null)
         {
@@ -617,6 +617,9 @@ public class MaterialTapTargetPrompt
 
         updateTextPositioning();
 
+        mView.mHorizontalOffset = mHorizontalOffset;
+        mView.mVerticalOffset = mVerticalOffset;
+
         if (!mAnimationStarted) {
             startAnimation();
         }
@@ -632,13 +635,14 @@ public class MaterialTapTargetPrompt
     void updateTextPositioning()
     {
         float leftBound = (mView.mClipBounds ? mView.mClipBoundsLeft : 0) + mTextPadding;
+        float rightBound = (mView.mClipBounds ? mView.mClipBoundsRight : getParentView().getRight()) - mTextPadding;
         final float primaryTextWidth = mPaintPrimaryText.measureText(mPrimaryText);
         final float secondaryTextWidth = mSecondaryText != null ? mPaintSecondaryText.measureText(mSecondaryText) : 0;
         final float containerWidth = mView.mClipBounds ? mView.mClipBoundsRight - mView.mClipBoundsLeft :
             getParentView().getWidth();
         final float maxWidth = mMaxTextWidth > 0 ? mMaxTextWidth :
             Math.max(80, containerWidth) - (mTextPadding * 2);
-        float titleMinTargetWidth = mBaseFocalRadius * 7; //min width before we are okay with title wrapping to 2 lines
+        float minTextWrapWidth = mBaseFocalRadius * 7; //min width before we are okay with text wrapping
         float startWidth = Math.min(mBaseFocalRadius * 2 + mTextPadding * 2, 2 * getParentView().getWidth()/3);
         float widthStep = mActivity.getResources().getDisplayMetrics().density * 5;
         float textWidthCalculation = Math.min(startWidth, Math.max(primaryTextWidth, secondaryTextWidth));
@@ -649,16 +653,22 @@ public class MaterialTapTargetPrompt
             StaticLayout primaryLayout = new StaticLayout(mPrimaryText, mPaintPrimaryText,
                 (int) textWidthCalculation, Layout.Alignment.ALIGN_NORMAL, 1f, 0f, false);
             if (primaryLayout.getLineCount() > 2 ||
-                (primaryLayout.getLineCount() == 2 && textWidthCalculation < titleMinTargetWidth))
+                (primaryLayout.getLineCount() == 2 && textWidthCalculation < minTextWrapWidth))
             {
                 textWidthCalculation += widthStep;
                 continue;
             }
+
+            if (mSecondaryText == null) {
+                break;
+            }
+
             StaticLayout secondaryLayout = new StaticLayout(mSecondaryText, mPaintSecondaryText,
                 (int) textWidthCalculation, Layout.Alignment.ALIGN_NORMAL, 1f, 0f, false);
 
-            if (secondaryLayout.getLineCount() < 4)
-            {
+
+            if (secondaryLayout.getLineCount() < 3 ||
+                (secondaryLayout.getLineCount() == 3 && textWidthCalculation >= minTextWrapWidth)) {
                 break;
             }
 
@@ -699,16 +709,15 @@ public class MaterialTapTargetPrompt
             mView.mSecondaryTextLayout = null;
         }
 
-        if (mTargetInCorner) {
-            float right = (mView.mClipBounds ? mView.mClipBoundsRight : getParentView().getRight());
-            if ((maxTextRenderedWidth + mView.mTextLeft) > right) {
-                mView.mTextLeft = Math.max((mView.mClipBounds ? mView.mClipBoundsLeft : 0) + mTextPadding,
-                    right - mTextPadding - maxTextRenderedWidth);
-            } else {
-                mView.mTextLeft = mTextPositionRight ?
-                    (mView.mClipBounds ? mView.mClipBoundsRight :
-                        getParentView().getRight()) - mTextPadding - textWidthCalculation :
-                    mTextPadding + (mView.mClipBounds ? mView.mClipBoundsLeft : 0);
+        if (mTargetInCorner)
+        {
+            if ((maxTextRenderedWidth + mView.mTextLeft) > rightBound)
+            {
+                mView.mTextLeft = Math.max(leftBound, rightBound - maxTextRenderedWidth);
+            }
+            else
+            {
+                mView.mTextLeft = mTextPositionRight ? rightBound - maxTextRenderedWidth : leftBound;
             }
         }
         else
@@ -721,11 +730,9 @@ public class MaterialTapTargetPrompt
                 targetX = targetPosition[0] + mTargetView.getWidth() / 2;
             }
             mView.mTextLeft = Math.max(targetX - maxTextRenderedWidth / 2 + mHorizontalOffset, leftBound);
-            float right = (mView.mClipBounds ? mView.mClipBoundsRight : getParentView().getRight());
-            if ((maxTextRenderedWidth + mView.mTextLeft) > right)
+            if ((maxTextRenderedWidth + mView.mTextLeft) > rightBound)
             {
-                mView.mTextLeft = Math.max((mView.mClipBounds ? mView.mClipBoundsLeft : 0) + mTextPadding,
-                    right - mTextPadding - maxTextRenderedWidth);
+                mView.mTextLeft = Math.max(leftBound, rightBound- maxTextRenderedWidth);
             }
         }
 
@@ -800,11 +807,15 @@ public class MaterialTapTargetPrompt
         Rect rect = new Rect();
         for (Layout layout : new Layout[]{mView.mPrimaryTextLayout, mView.mSecondaryTextLayout})
         {
+            if (layout == null)
+            {
+                continue;
+            }
             if (layout == mView.mSecondaryTextLayout)
             {
                 top += (mView.mPrimaryTextLayout.getHeight() + mView.mTextSeparation) * sign;
             }
-            if (layout != null && layout.getLineCount() > 0)
+            if (layout.getLineCount() > 0)
             {
                 for (int line=0; line < layout.getLineCount(); line++)
                 {
@@ -2056,6 +2067,8 @@ public class MaterialTapTargetPrompt
       /**
        * Called when the prompt acquires a reference to the targeted view, but before
        * the view is decorated with the prompt.
+       *
+       * @param view the target view that was found
        */
       void onViewFound(final View view);
   }

@@ -159,6 +159,16 @@
         android:layout_alignParentStart="true"
         android:onClick="showCenterRightLongPrompt"/>
 
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Center Primary Only"
+        android:id="@+id/button_center_primary_only"
+        android:layout_below="@+id/button_center_top"
+        android:layout_toRightOf="@+id/button_center_right_long"
+        android:layout_toEndOf="@+id/button_center_right_long"
+        android:onClick="showCenterPrimaryOnlyPrompt"/>
+
 
 
 </RelativeLayout>

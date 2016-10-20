@@ -210,6 +210,16 @@ public class MainActivity extends AppCompatActivity
             "Center Right Target Prompt but with much longer text", "This is a prompt of a target to the right of the center of the screen but with really long text to see how it behaves.");
     }
 
+    public void showCenterPrimaryOnlyPrompt(View view)
+    {
+        View newView = getLayoutInflater().inflate(R.layout.extra_fab_for_tageting_center,
+            (ViewGroup) findViewById(R.id.content_main), false);
+        View mainLayout = findViewById(R.id.drawer_layout);
+        newView.setPadding(mainLayout.getWidth()/2, 0, 0, 0);
+        showFindDelayedPrompt(view, newView, R.id.extra_target_fab,
+            "Center Primary Only Text", null);
+    }
+
     public void showFindDelayedPrompt(View view, final View viewToAdd, int idToFind, String primary, String secondary)
     {
         abstract class CombinedPromptListener implements OnHidePromptListener, OnViewFoundListener
