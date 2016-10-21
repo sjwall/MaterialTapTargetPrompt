@@ -43,7 +43,10 @@ public class MainActivity extends AppCompatActivity
 {
 
     MaterialTapTargetPrompt mFabPrompt;
-    Handler handler = new Handler();
+    MaterialTapTargetPrompt mPrompt;
+    Handler mHandler = new Handler();
+    int mViewId;
+
 
     public void showFabPrompt(View view)
     {
@@ -220,33 +223,33 @@ public class MainActivity extends AppCompatActivity
             "Center Primary Only Text", null);
     }
 
-    public void showFindDelayedPrompt(View view, final View viewToAdd, int idToFind, String primary, String secondary)
+    abstract class CombinedPromptListener implements OnHidePromptListener, OnViewFoundListener
     {
-        abstract class CombinedPromptListener implements OnHidePromptListener, OnViewFoundListener
+        View targetView;
+
+        abstract void cleanup();
+
+        @Override
+        public void onHidePrompt(MotionEvent event, boolean tappedTarget)
         {
-            View targetView;
-
-            abstract void cleanup();
-
-            @Override
-            public void onHidePrompt(MotionEvent event, boolean tappedTarget)
-            {
-                cleanup();
-            }
-
-            @Override
-            public void onHidePromptComplete()
-            {
-                cleanup();
-            }
-
-            @Override
-            public void onViewFound(View view)
-            {
-                targetView = view;
-            }
+            cleanup();
         }
 
+        @Override
+        public void onHidePromptComplete()
+        {
+            cleanup();
+        }
+
+        @Override
+        public void onViewFound(View view)
+        {
+            targetView = view;
+        }
+    }
+
+    public void showFindDelayedPrompt(View view, final View viewToAdd, int idToFind, String primary, String secondary)
+    {
         CombinedPromptListener listener = new CombinedPromptListener()
         {
             @Override
@@ -262,7 +265,7 @@ public class MainActivity extends AppCompatActivity
             }
         };
 
-        handler.postDelayed(new Runnable()
+        mHandler.postDelayed(new Runnable()
         {
             public void run()
             {
@@ -313,6 +316,168 @@ public class MainActivity extends AppCompatActivity
 
                 }
             })
+            .show();
+    }
+
+    public void showThenDisappear(View view)
+    {
+        final View newView = getLayoutInflater().inflate(R.layout.extra_fab_for_tageting_center,
+            (ViewGroup) findViewById(R.id.content_main), false);
+
+        ((ViewGroup) findViewById(R.id.content_main)).addView(newView);
+
+        final CombinedPromptListener promptListener = new CombinedPromptListener()
+        {
+            @Override
+            void cleanup()
+            {
+                if (targetView != null)
+                {
+                    if (targetView.getParent() != null) {
+                        ((ViewGroup) targetView.getParent()).removeView(targetView);
+                    }
+                    targetView = null;
+                }
+            }
+        };
+        new MaterialTapTargetPrompt.Builder(MainActivity.this)
+            .setTargetFinder(new MaterialTapTargetPrompt.ViewFinder() {
+                @Override
+                public View findView() {
+                    return findViewById(R.id.extra_target_fab);
+                }
+            })
+            .setOnHidePromptListener(promptListener)
+            .setOnViewFroundListener(promptListener)
+            .setPrimaryText("Disappearing ViewPrompt")
+            .setSecondaryText("View will disappear while being targeted by prompt")
+            .setAnimationInterpolator(new FastOutSlowInInterpolator())
+            .setCaptureTouchEventOutsidePrompt(true)
+            .show();
+
+        mHandler.postDelayed(new Runnable()
+        {
+            public void run()
+            {
+                ((ViewGroup) findViewById(R.id.content_main)).removeView(newView);
+            }
+        }, 3000);
+    }
+
+    public void showThenDisappearReappear(View view)
+    {
+        final View newView = getLayoutInflater().inflate(R.layout.extra_fab_for_tageting_center,
+            (ViewGroup) findViewById(R.id.content_main), false);
+
+        ((ViewGroup) findViewById(R.id.content_main)).addView(newView);
+
+        mViewId = R.id.extra_target_fab;
+        final MaterialTapTargetPrompt.ViewFinder finder = new MaterialTapTargetPrompt.ViewFinder() {
+            @Override
+            public View findView() {
+                return findViewById(mViewId);
+            }
+        };
+
+        final CombinedPromptListener promptListener = new CombinedPromptListener()
+        {
+            @Override
+            void cleanup()
+            {
+                if (targetView != null)
+                {
+                    if (targetView.getParent() != null) {
+                        ((ViewGroup) targetView.getParent()).removeView(targetView);
+                    }
+                    targetView = null;
+                }
+            }
+        };
+        new MaterialTapTargetPrompt.Builder(MainActivity.this)
+            .setTargetFinder(finder)
+            .setPrimaryText("Disappearing ViewPrompt")
+            .setSecondaryText("View will disappear while being targeted by prompt")
+            .setOnHidePromptListener(promptListener)
+            .setOnViewFroundListener(promptListener)
+            .setAnimationInterpolator(new FastOutSlowInInterpolator())
+            .setCaptureTouchEventOutsidePrompt(true)
+            .show();
+
+        mHandler.postDelayed(new Runnable()
+        {
+            public void run()
+            {
+                final View view2 = getLayoutInflater().inflate(R.layout.extra_fab_for_tageting_top,
+                    (ViewGroup) findViewById(R.id.content_main), false);
+                ((ViewGroup) findViewById(R.id.content_main)).addView(view2);
+                mViewId = R.id.extra_target_fab_two;
+                ((ViewGroup) findViewById(R.id.content_main)).removeView(newView);
+            }
+        }, 3000);
+    }
+
+    public void showThenDisappearReappearDelay(View view)
+    {
+        final View newView = getLayoutInflater().inflate(R.layout.extra_fab_for_tageting_center,
+            (ViewGroup) findViewById(R.id.content_main), false);
+
+        ((ViewGroup) findViewById(R.id.content_main)).addView(newView);
+
+        mViewId = R.id.extra_target_fab;
+        final MaterialTapTargetPrompt.ViewFinder finder = new MaterialTapTargetPrompt.ViewFinder() {
+            @Override
+            public View findView() {
+                if (mViewId != R.id.extra_target_fab) {
+                    mPrompt.dismiss(false);
+                }
+                return findViewById(mViewId);
+            }
+        };
+        final CombinedPromptListener promptListener = new CombinedPromptListener()
+        {
+            @Override
+            void cleanup()
+            {
+                if (targetView != null)
+                {
+                    if (targetView.getParent() != null) {
+                        ((ViewGroup) targetView.getParent()).removeView(targetView);
+                    }
+                    targetView = null;
+                }
+            }
+        };
+        mHandler.postDelayed(new Runnable()
+        {
+            public void run()
+            {
+                mViewId = R.id.extra_target_fab_two;
+                ((ViewGroup) findViewById(R.id.content_main)).removeView(newView);
+                mHandler.postDelayed(new Runnable() {
+                    public void run() {
+                        final View view2 = getLayoutInflater().inflate(R.layout.extra_fab_for_tageting_top,
+                            (ViewGroup) findViewById(R.id.content_main), false);
+                        ((ViewGroup) findViewById(R.id.content_main)).addView(view2);
+                        mPrompt = new MaterialTapTargetPrompt.Builder(MainActivity.this)
+                            .setTargetFinder(finder)
+                            .setPrimaryText("Disappearing ViewPrompt")
+                            .setSecondaryText("View will disappear while being targeted by prompt")
+                            .setOnHidePromptListener(promptListener)
+                            .setOnViewFroundListener(promptListener)
+                            .setAnimationInterpolator(new FastOutSlowInInterpolator())
+                            .setCaptureTouchEventOutsidePrompt(true)
+                            .show(false);
+                    }
+                }, 50);
+            }
+        }, 3000);
+
+        mPrompt = new MaterialTapTargetPrompt.Builder(MainActivity.this)
+            .setTargetFinder(finder)
+            .setPrimaryText("Disappearing ViewPrompt")
+            .setSecondaryText("View will disappear while being targeted by prompt")
+            .setAnimationInterpolator(new FastOutSlowInInterpolator())
+            .setCaptureTouchEventOutsidePrompt(true)
             .show();
     }
 

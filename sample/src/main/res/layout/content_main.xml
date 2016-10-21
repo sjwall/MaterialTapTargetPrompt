@@ -169,6 +169,34 @@
         android:layout_toEndOf="@+id/button_center_right_long"
         android:onClick="showCenterPrimaryOnlyPrompt"/>
 
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Disappear"
+        android:id="@+id/button_disappear"
+        android:layout_below="@+id/button_center_right_long"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:onClick="showThenDisappear"/>
 
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Disappear/Reappear"
+        android:id="@+id/button_disappear_reappear"
+        android:layout_below="@+id/button_center_right_long"
+        android:layout_toRightOf="@+id/button_disappear"
+        android:layout_toEndOf="@+id/button_disappear"
+        android:onClick="showThenDisappearReappear"/>
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Disappear/Reappear w/Delay"
+        android:id="@+id/button_disappear_reappear_delay"
+        android:layout_below="@+id/button_disappear"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:onClick="showThenDisappearReappearDelay"/>
 
 </RelativeLayout>
