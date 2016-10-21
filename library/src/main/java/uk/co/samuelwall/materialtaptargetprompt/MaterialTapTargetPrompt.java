@@ -645,10 +645,15 @@ public class MaterialTapTargetPrompt
             mView.mIconDrawableLeft = mView.mCentreLeft - (mView.mIconDrawable.getIntrinsicWidth() / 2);
             mView.mIconDrawableTop = mView.mCentreTop - (mView.mIconDrawable.getIntrinsicHeight() / 2);
         }
-        else if (mView.mTargetView != null)
+        else if (mView.mTargetRenderView != null)
         {
-            mView.mIconDrawableLeft = mView.mCentreLeft - (mView.mTargetView.getWidth() / 2);
-            mView.mIconDrawableTop = mView.mCentreTop - (mView.mTargetView.getHeight() / 2);
+            final int[] viewPosition = new int[2];
+            mView.getLocationInWindow(viewPosition);
+            final int[] targetPosition = new int[2];
+            mView.mTargetRenderView.getLocationInWindow(targetPosition);
+
+            mView.mIconDrawableLeft = mBaseLeft + targetPosition[0] - viewPosition[0];
+            mView.mIconDrawableTop = mBaseTop + targetPosition[1] - viewPosition[1];
         }
     }
 
@@ -735,7 +740,7 @@ public class MaterialTapTargetPrompt
         OnPromptTouchedListener mOnPromptTouchedListener;
         boolean mCaptureTouchEventOnFocal;
         float mClipBoundsTop, mClipBoundsLeft, mClipBoundsBottom, mClipBoundsRight;
-        View mTargetView;
+        View mTargetView, mTargetRenderView;
         float mTextSeparation;
         boolean mClipBounds;
         boolean mCaptureTouchEventOutsidePrompt;
@@ -773,10 +778,10 @@ public class MaterialTapTargetPrompt
                 mIconDrawable.draw(canvas);
                 canvas.translate(-mIconDrawableLeft, -mIconDrawableTop);
             }
-            else if (mTargetView != null)
+            else if (mTargetRenderView != null)
             {
                 canvas.translate(mIconDrawableLeft, mIconDrawableTop);
-                mTargetView.draw(canvas);
+                mTargetRenderView.draw(canvas);
                 canvas.translate(-mIconDrawableLeft, -mIconDrawableTop);
             }
 
@@ -897,6 +902,7 @@ public class MaterialTapTargetPrompt
         private PorterDuff.Mode mIconDrawableTintMode = null;
         private boolean mHasIconDrawableTint;
         private int mIconDrawableColourFilter;
+        private View mTargetRenderView;
 
         /**
          * Creates a builder for a tap target prompt that uses the default
@@ -1011,6 +1017,19 @@ public class MaterialTapTargetPrompt
             mCentreLeft = left;
             mCentreTop = top;
             mTargetSet = true;
+            return this;
+        }
+
+        /**
+         * Change the view that is rendered as the target.
+         * By default the view from {@link #setTarget(View)} is rendered as the target.
+         *
+         * @param view The view to use to render the prompt target
+         * @return This Builder object to allow for chaining of calls to set methods
+         */
+        public Builder setTargetRenderView(final View view)
+        {
+            mTargetRenderView = view;
             return this;
         }
 
@@ -1631,6 +1650,15 @@ public class MaterialTapTargetPrompt
             mPrompt.mAutoFinish = mAutoFinish;
 
             mPrompt.mView.mCaptureTouchEventOutsidePrompt = mCaptureTouchEventOutsidePrompt;
+
+            if (mTargetRenderView == null)
+            {
+                mPrompt.mView.mTargetRenderView = mPrompt.mView.mTargetView;
+            }
+            else
+            {
+                mPrompt.mView.mTargetRenderView = mTargetRenderView;
+            }
 
             return mPrompt;
         }
