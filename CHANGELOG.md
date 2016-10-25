@@ -2,6 +2,17 @@
 
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## v1.5.0 (2016-10-25)
+
+### Features
+
+* Added method to change the view that is rendered as the target
+* Improved dialog style sample
+
+### Bug Fixes
+
+* Fixed prompt text positioning not taking clip bounds into account
+
 ## v1.4.3 (2016-10-05)
 
 ### Bug Fixes
