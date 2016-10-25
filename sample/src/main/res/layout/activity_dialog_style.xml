@@ -47,14 +47,71 @@
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
         android:layout_margin="@dimen/fab_margin"
+        android:src="@android:drawable/ic_dialog_email" />
 
-        android:onClick="showPrompt" android:src="@android:drawable/ic_dialog_email" />
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                  xmlns:app="http://schemas.android.com/apk/res-auto"
+                  xmlns:tools="http://schemas.android.com/tools"
+                  android:orientation="vertical"
+                  android:layout_width="match_parent"
+                  android:layout_height="wrap_content"
+                  android:paddingBottom="@dimen/activity_vertical_margin"
+                  android:paddingLeft="@dimen/activity_horizontal_margin"
+                  android:paddingRight="@dimen/activity_horizontal_margin"
+                  android:paddingTop="@dimen/activity_vertical_margin"
+                  app:layout_behavior="@string/appbar_scrolling_view_behavior"
+                  tools:context="uk.co.samuelwall.materialtaptargetprompt.sample.MainActivity"
+                  tools:showIn="@layout/app_bar_main">
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:width="@dimen/example_button_width"
+                android:text="@string/example_navigation_title"
+                android:onClick="showSideNavigationPrompt"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:text="@string/example_navigation_description"/>
+        </LinearLayout>
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingTop="@dimen/example_item_top_padding">
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:width="@dimen/example_button_width"
+                android:text="@string/example_overflow_title"
+                android:onClick="showOverflowPrompt"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:text="@string/example_overflow_description"/>
+        </LinearLayout>
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingTop="@dimen/example_item_top_padding">
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:width="@dimen/example_button_width"
+                android:text="@string/example_fab_title"
+                android:onClick="showFabPrompt"/>
 
-    <TextView
-        android:layout_width="200dp"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_vertical|center_horizontal"
-        android:text="@string/dialog_content"
-        android:layout_marginTop="@dimen/example_button_width"/>
-
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:text="@string/example_fab_description"/>
+        </LinearLayout>
+    </LinearLayout>
 </android.support.design.widget.CoordinatorLayout>
