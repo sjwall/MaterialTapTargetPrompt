@@ -549,9 +549,8 @@ public class MaterialTapTargetPrompt
             mView.mCentreTop = mBaseTop;
         }
 
-        final ViewGroup parent = getParentView();
-        mTextPositionAbove = mView.mCentreTop > parent.getHeight() / 2;
-        mTextPositionRight = mView.mCentreLeft > parent.getWidth() / 2;
+        mTextPositionAbove = mView.mCentreTop > mView.mClipBoundsTop + ((mView.mClipBoundsBottom - mView.mClipBoundsTop) / 2);
+        mTextPositionRight = mView.mCentreLeft > mView.mClipBoundsLeft + ((mView.mClipBoundsRight - mView.mClipBoundsLeft) / 2);
 
         updateTextPositioning();
     }
