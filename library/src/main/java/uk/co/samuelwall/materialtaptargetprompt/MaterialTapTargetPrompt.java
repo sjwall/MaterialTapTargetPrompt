@@ -741,6 +741,8 @@ public class MaterialTapTargetPrompt
 
         if (!mAnimationStarted) {
             startAnimation(mAnimateIn);
+        } else {
+            mView.mBackgroundRadius = mBaseBackgroundRadius * mRevealedAmount;
         }
 
         mView.mReadyToDraw = true;
@@ -755,7 +757,6 @@ public class MaterialTapTargetPrompt
 
     void updateTextPositioning()
     {
-
         float leftBound = (mView.mClipBounds ? mView.mClipBoundsLeft : 0) + mTextPadding;
         float rightBound = (mView.mClipBounds ? mView.mClipBoundsRight : getParentView().getRight()) - mTextPadding;
         final float primaryTextWidth = mPaintPrimaryText.measureText(mPrimaryText);
@@ -858,58 +859,20 @@ public class MaterialTapTargetPrompt
             }
         }
 
-        updateBackgroundRadius();
+        updateBackground();
         updateIconPosition();
-    }
-
-    void updateBackgroundRadius()
-    {
-        if (mTargetInCorner)
-        {
-            updateBackgroundWhenInCorner();
-        }
-        else
-        {
-            updateBackground();
-        }
-    }
-
-    void updateBackgroundWhenInCorner()
-    {
-        final float height;
-        if (mTextPositionAbove)
-        {
-            height = mView.mCentreTop - mView.mPrimaryTextTop;
-        }
-        else
-        {
-            height = mView.mPrimaryTextTop + mView.mPrimaryTextLayout.getHeight() + (mView.mSecondaryTextLayout != null ? mView.mSecondaryTextLayout.getHeight() : 0) - mView.mCentreTop + mView.mTextSeparation;
-        }
-
-        final float length;
-        if (mTextPositionRight)
-        {
-            length = mView.mCentreLeft - mView.mTextLeft + mTextPadding;
-        }
-        else
-        {
-            length = mView.mTextLeft + Math.max(mView.mPrimaryTextLayout.getWidth(), mView.mSecondaryTextLayout != null ? mView.mSecondaryTextLayout.getWidth() : 0)
-                + mTextPadding - mView.mCentreLeft;
-        }
-        //noinspection SuspiciousNameCombination
-        mBaseBackgroundRadius = Double.valueOf(Math.sqrt(Math.pow(length, 2) + Math.pow(height, 2))).floatValue();
     }
 
     void updateBackground()
     {
-        int parentWidth = getParentView().getHeight();
+        int parentWidth = getParentView().getWidth();
         int parentHeight = getParentView().getHeight();
         final float baseRadius = mBaseFocalRadius + mFocalRadius10Percent;
         final float textLength = Math.max(mView.mPrimaryTextLayout.getWidth(), mView.mSecondaryTextLayout != null ? mView.mSecondaryTextLayout.getWidth() : 0);
         float currentRadius = textLength/2 + mTextPadding;
         float radiusStep = mActivity.getResources().getDisplayMetrics().density * 5;
-        float verticalOffset;
         float horizontalOffset = mHorizontalOffset;
+        float verticalOffset = 0;
         float centerWithHorizontalOffset = mView.mCentreLeft + mHorizontalOffset;
         List<Point> pointsToCheck = new ArrayList<>();
         float left = Math.abs(mView.mTextLeft - centerWithHorizontalOffset);
@@ -953,15 +916,22 @@ public class MaterialTapTargetPrompt
 
         do
         {
-            if (mTextPositionAbove)
+            if (!mTargetInCorner) //only offset circle if not in corner
             {
-                //JESS TODO
-                verticalOffset = -(float)Math.min(mView.mCentreTop, Math.sqrt(Math.pow(currentRadius - baseRadius - mTextPadding, 2) - Math.pow(horizontalOffset, 2)));
+                if (mTextPositionAbove)
+                {
+                    //JESS TODO
+                    verticalOffset = -(float) Math.min(mView.mCentreTop, Math.sqrt(Math.pow(currentRadius - baseRadius - mTextPadding, 2) - Math.pow(horizontalOffset, 2)));
+                }
+                else
+                {
+                    //JESS TODO
+                    verticalOffset = (float) Math.min((parentHeight - mView.mCentreTop), Math.sqrt(Math.abs(Math.pow(currentRadius - baseRadius - mTextPadding, 2) - Math.pow(horizontalOffset, 2))));
+                }
             }
             else
             {
-                //JESS TODO
-                verticalOffset = (float)Math.min((parentHeight - mView.mCentreTop), Math.sqrt(Math.abs(Math.pow(currentRadius - baseRadius - mTextPadding, 2) - Math.pow(horizontalOffset, 2))));
+                verticalOffset = -(float) Math.min(mView.mCentreTop, Math.sqrt(Math.pow(currentRadius - baseRadius - mTextPadding, 2) - Math.pow(horizontalOffset, 2)));
             }
 
             boolean result = true;
@@ -1949,6 +1919,10 @@ public class MaterialTapTargetPrompt
                 return null;
             }
             final MaterialTapTargetPrompt mPrompt = new MaterialTapTargetPrompt(mActivity);
+            mPrompt.mViewFinder = mViewFinder;
+            mPrompt.mOnHidePromptListener = mOnHidePromptListener;
+            mPrompt.mOnViewFoundListener = mOnViewFoundListener;
+
             mPrompt.mTargetId = mTargetId;
             if (mTargetView != null)
             {
@@ -1972,10 +1946,6 @@ public class MaterialTapTargetPrompt
 
             mPrompt.mView.mTextSeparation = mTextSeparation;
 
-            mPrompt.mViewFinder = mViewFinder;
-            mPrompt.mOnHidePromptListener = mOnHidePromptListener;
-            mPrompt.mOnViewFoundListener = mOnViewFoundListener;
-
             mPrompt.mView.mCaptureTouchEventOnFocal = mCaptureTouchEventOnFocal;
 
             if (mAnimationInterpolator != null)
@@ -1990,7 +1960,6 @@ public class MaterialTapTargetPrompt
             mPrompt.mBaseFocalRadius = mFocalRadius;
             //Calculate 10% of the focal radius
             mPrompt.mFocalRadius10Percent = mFocalRadius / 100 * 10;
-
 
             if (mIconDrawable != null)
             {
