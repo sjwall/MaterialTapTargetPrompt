@@ -865,8 +865,8 @@ public class MaterialTapTargetPrompt
 
     void updateBackground()
     {
-        int parentWidth = getParentView().getWidth();
         int parentHeight = getParentView().getHeight();
+        int maxRadius = Math.max(getParentView().getWidth(), parentHeight);
         final float baseRadius = mBaseFocalRadius + mFocalRadius10Percent;
         final float textLength = Math.max(mView.mPrimaryTextLayout.getWidth(), mView.mSecondaryTextLayout != null ? mView.mSecondaryTextLayout.getWidth() : 0);
         float currentRadius = textLength/2 + mTextPadding;
@@ -875,7 +875,7 @@ public class MaterialTapTargetPrompt
         float verticalOffset = 0;
         float centerWithHorizontalOffset = mView.mCentreLeft + mHorizontalOffset;
         List<Point> pointsToCheck = new ArrayList<>();
-        float left = Math.abs(mView.mTextLeft - centerWithHorizontalOffset);
+        float left = Math.abs(centerWithHorizontalOffset - mView.mTextLeft);
         float top;
         int sign;
         if (mTextPositionAbove)
@@ -905,11 +905,11 @@ public class MaterialTapTargetPrompt
                 for (int line=0; line < layout.getLineCount(); line++)
                 {
                     layout.getLineBounds(line, rect);
-                    int right = rect.right - layout.getLineEnd(line);
+                    int right = Math.abs(rect.right + (int)mView.mTextLeft - (int)centerWithHorizontalOffset);
                     pointsToCheck.add(new Point((int)left + rect.left, (int)top + rect.top * sign));
                     pointsToCheck.add(new Point((int)left + rect.left, (int)top + rect.bottom * sign));
-                    pointsToCheck.add(new Point(right - (int)left, (int)top + rect.top * sign));
-                    pointsToCheck.add(new Point(right - (int)left, (int)top + rect.bottom * sign));
+                    pointsToCheck.add(new Point(right, (int)top + rect.top * sign));
+                    pointsToCheck.add(new Point(right, (int)top + rect.bottom * sign));
                 }
             }
         }
@@ -929,10 +929,6 @@ public class MaterialTapTargetPrompt
                     verticalOffset = (float) Math.min((parentHeight - mView.mCentreTop), Math.sqrt(Math.abs(Math.pow(currentRadius - baseRadius - mTextPadding, 2) - Math.pow(horizontalOffset, 2))));
                 }
             }
-            else
-            {
-                verticalOffset = -(float) Math.min(mView.mCentreTop, Math.sqrt(Math.pow(currentRadius - baseRadius - mTextPadding, 2) - Math.pow(horizontalOffset, 2)));
-            }
 
             boolean result = true;
             double radiusSquared = Math.pow(currentRadius - mTextPadding, 2);
@@ -951,7 +947,7 @@ public class MaterialTapTargetPrompt
             }
 
             currentRadius += radiusStep;
-        } while (currentRadius < Math.max(parentWidth, parentHeight));
+        } while (currentRadius < maxRadius);
 
         mVerticalOffset = verticalOffset;
         mHorizontalOffset = horizontalOffset;
