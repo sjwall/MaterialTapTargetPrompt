@@ -903,7 +903,7 @@ public class MaterialTapTargetPrompt
         private boolean mHasIconDrawableTint;
         private int mIconDrawableColourFilter;
         private View mTargetRenderView;
-        private boolean mIdleAnimationEnabled;
+        private boolean mIdleAnimationEnabled = true;
 
         /**
          * Creates a builder for a tap target prompt that uses the default
