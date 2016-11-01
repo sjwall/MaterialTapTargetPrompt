@@ -88,6 +88,7 @@ public class MaterialTapTargetPrompt
     final float mStatusBarHeight;
     final ViewTreeObserver.OnGlobalLayoutListener mGlobalLayoutListener;
     boolean mAutoDismiss, mAutoFinish;
+    boolean mIdleAnimationEnabled = true;
 
     MaterialTapTargetPrompt(final Activity activity)
     {
@@ -442,7 +443,7 @@ public class MaterialTapTargetPrompt
                 animation.removeAllListeners();
                 mAnimationCurrent = null;
                 mRevealedAmount = 1;
-                startIdleAnimations();
+                if (mIdleAnimationEnabled) startIdleAnimations();
             }
 
             @TargetApi(Build.VERSION_CODES.HONEYCOMB)
@@ -902,6 +903,7 @@ public class MaterialTapTargetPrompt
         private boolean mHasIconDrawableTint;
         private int mIconDrawableColourFilter;
         private View mTargetRenderView;
+        private boolean mIdleAnimationEnabled = true;
 
         /**
          * Creates a builder for a tap target prompt that uses the default
@@ -1290,6 +1292,18 @@ public class MaterialTapTargetPrompt
         }
 
         /**
+         * Enable/disable animation above target.
+         * true by default
+         *
+         * @return This Builder object to allow for chaining of calls to set methods
+         */
+        public Builder setIdleAnimationEnabled(final boolean enabled)
+        {
+            mIdleAnimationEnabled = enabled;
+            return this;
+        }
+
+        /**
          * Set the icon to draw in the focal point using the given resource id.
          *
          * @return This Builder object to allow for chaining of calls to set methods
@@ -1569,6 +1583,10 @@ public class MaterialTapTargetPrompt
                 mPrompt.mBaseLeft = mCentreLeft;
                 mPrompt.mBaseTop = mCentreTop;
             }
+            
+            mPrompt.mView.mDrawRipple = Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB && mIdleAnimationEnabled;
+            mPrompt.mIdleAnimationEnabled = mIdleAnimationEnabled;
+            
             mPrompt.mClipToView = (ViewGroup) ((ViewGroup) mActivity.findViewById(android.R.id.content)).getChildAt(0);
 
             mPrompt.mPrimaryText = mPrimaryText;
