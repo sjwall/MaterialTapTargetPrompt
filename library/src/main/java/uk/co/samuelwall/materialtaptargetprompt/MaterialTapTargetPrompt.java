@@ -1577,14 +1577,16 @@ public class MaterialTapTargetPrompt
             {
                 mPrompt.mTargetView = mTargetView;
                 mPrompt.mView.mTargetView = mTargetView;
-                mPrompt.mView.mDrawRipple = Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB && mIdleAnimationEnabled;
-                mPrompt.mIdleAnimationEnabled = mIdleAnimationEnabled;
             }
             else
             {
                 mPrompt.mBaseLeft = mCentreLeft;
                 mPrompt.mBaseTop = mCentreTop;
             }
+            
+            mPrompt.mView.mDrawRipple = Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB && mIdleAnimationEnabled;
+            mPrompt.mIdleAnimationEnabled = mIdleAnimationEnabled;
+            
             mPrompt.mClipToView = (ViewGroup) ((ViewGroup) mActivity.findViewById(android.R.id.content)).getChildAt(0);
 
             mPrompt.mPrimaryText = mPrimaryText;
