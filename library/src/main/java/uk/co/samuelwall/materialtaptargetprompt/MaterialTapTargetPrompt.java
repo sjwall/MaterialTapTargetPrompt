@@ -22,6 +22,7 @@ import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Context;
 import android.content.res.ColorStateList;
+import android.content.res.Configuration;
 import android.content.res.TypedArray;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -43,6 +44,7 @@ import android.text.Layout;
 import android.text.StaticLayout;
 import android.text.TextPaint;
 import android.util.TypedValue;
+import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -89,6 +91,7 @@ public class MaterialTapTargetPrompt
     final ViewTreeObserver.OnGlobalLayoutListener mGlobalLayoutListener;
     boolean mAutoDismiss, mAutoFinish;
     boolean mIdleAnimationEnabled = true;
+    Layout.Alignment mPrimaryTextAlignment, mSecondaryTextAlignment;
 
     MaterialTapTargetPrompt(final Activity activity)
     {
@@ -581,7 +584,7 @@ public class MaterialTapTargetPrompt
             textWidth = textWidthCalculation;
         }
 
-        mView.mPrimaryTextLayout = new StaticLayout(mPrimaryText, mPaintPrimaryText, (int) textWidth, Layout.Alignment.ALIGN_NORMAL, 1f, 0f, false);
+        mView.mPrimaryTextLayout = createStaticTextLayout(mPrimaryText, mPaintPrimaryText, (int) textWidth, mPrimaryTextAlignment);
 
         mView.mPrimaryTextTop = mView.mCentreTop;
         if (mTextPositionAbove)
@@ -595,7 +598,7 @@ public class MaterialTapTargetPrompt
 
         if (mSecondaryText != null)
         {
-            mView.mSecondaryTextLayout = new StaticLayout(mSecondaryText, mPaintSecondaryText, (int) textWidth, Layout.Alignment.ALIGN_NORMAL, 1f, 0f, false);
+            mView.mSecondaryTextLayout = createStaticTextLayout(mSecondaryText, mPaintSecondaryText, (int) textWidth, mSecondaryTextAlignment);
             if (mTextPositionAbove)
             {
                 mView.mPrimaryTextTop =  mView.mPrimaryTextTop - mView.mTextSeparation - mView.mSecondaryTextLayout.getHeight();
@@ -610,6 +613,23 @@ public class MaterialTapTargetPrompt
 
         updateBackgroundRadius();
         updateIconPosition();
+    }
+
+    private StaticLayout createStaticTextLayout(final String text, final TextPaint paint,
+                                    final int maxTextWidth, final Layout.Alignment textAlignment)
+    {
+        final StaticLayout layout;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
+        {
+            final StaticLayout.Builder builder = StaticLayout.Builder.obtain(text, 0, text.length(), paint, maxTextWidth);
+            builder.setAlignment(textAlignment);
+            layout = builder.build();
+        }
+        else
+        {
+            layout = new StaticLayout(text, paint, maxTextWidth, textAlignment, 1f, 0f, false);
+        }
+        return layout;
     }
 
     void updateBackgroundRadius()
@@ -904,6 +924,7 @@ public class MaterialTapTargetPrompt
         private int mIconDrawableColourFilter;
         private View mTargetRenderView;
         private boolean mIdleAnimationEnabled = true;
+        private int mPrimaryTextGravity = Gravity.START, mSecondaryTextGravity = Gravity.START;
 
         /**
          * Creates a builder for a tap target prompt that uses the default
@@ -1554,6 +1575,46 @@ public class MaterialTapTargetPrompt
         }
 
         /**
+         * Set the primary and secondary text horizontal layout gravity.
+         * Default: {@link Gravity#START}
+         *
+         * @param gravity The horizontal gravity
+         * @return This Builder object to allow for chaining of calls to set methods
+         */
+        public Builder setTextGravity(final int gravity)
+        {
+            mPrimaryTextGravity = gravity;
+            mSecondaryTextGravity = gravity;
+            return this;
+        }
+
+        /**
+         * Set the primary text horizontal layout gravity.
+         * Default: {@link Gravity#START}
+         *
+         * @param gravity The horizontal gravity
+         * @return This Builder object to allow for chaining of calls to set methods
+         */
+        public Builder setPrimaryTextGravity(final int gravity)
+        {
+            mPrimaryTextGravity = gravity;
+            return this;
+        }
+
+        /**
+         * Set the secondary text horizontal layout gravity.
+         * Default: {@link Gravity#START}
+         *
+         * @param gravity The horizontal gravity
+         * @return This Builder object to allow for chaining of calls to set methods
+         */
+        public Builder setSecondaryTextGravity(final int gravity)
+        {
+            mSecondaryTextGravity = gravity;
+            return this;
+        }
+
+        /**
          * Creates an {@link MaterialTapTargetPrompt} with the arguments supplied to this
          * builder.
          * <p>
@@ -1583,10 +1644,8 @@ public class MaterialTapTargetPrompt
                 mPrompt.mBaseLeft = mCentreLeft;
                 mPrompt.mBaseTop = mCentreTop;
             }
-            
             mPrompt.mView.mDrawRipple = Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB && mIdleAnimationEnabled;
             mPrompt.mIdleAnimationEnabled = mIdleAnimationEnabled;
-            
             mPrompt.mClipToView = (ViewGroup) ((ViewGroup) mActivity.findViewById(android.R.id.content)).getChildAt(0);
 
             mPrompt.mPrimaryText = mPrimaryText;
@@ -1655,6 +1714,7 @@ public class MaterialTapTargetPrompt
             mPrompt.mPaintPrimaryText.setAntiAlias(true);
             mPrompt.mPaintPrimaryText.setTextSize(mPrimaryTextSize);
             setTypeface(mPrompt.mPaintPrimaryText, mPrimaryTextTypeface, mPrimaryTextTypefaceStyle);
+            mPrompt.mPrimaryTextAlignment = getTextAlignment(mPrimaryTextGravity);
 
             mPrompt.mPaintSecondaryText = new TextPaint();
             mPrompt.mPaintSecondaryText.setColor(mSecondaryTextColour);
@@ -1662,6 +1722,7 @@ public class MaterialTapTargetPrompt
             mPrompt.mPaintSecondaryText.setAntiAlias(true);
             mPrompt.mPaintSecondaryText.setTextSize(mSecondaryTextSize);
             setTypeface(mPrompt.mPaintSecondaryText, mSecondaryTextTypeface, mSecondaryTextTypefaceStyle);
+            mPrompt.mSecondaryTextAlignment = getTextAlignment(mSecondaryTextGravity);
 
             mPrompt.mAutoDismiss = mAutoDismiss;
             mPrompt.mAutoFinish = mAutoFinish;
@@ -1800,6 +1861,52 @@ public class MaterialTapTargetPrompt
                         : defaultMode;
                 default: return defaultMode;
             }
+        }
+
+        /**
+         * Gets the absolute text alignment value based on the supplied gravity and the activities layout
+         * direction.
+         *
+         * @param gravity The gravity to convert to absolute values
+         * @return absolute layout direction
+         */
+        private Layout.Alignment getTextAlignment(final int gravity)
+        {
+            final int absoluteGravity;
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1)
+            {
+                absoluteGravity = Gravity.getAbsoluteGravity(gravity,
+                                mActivity.getResources().getConfiguration().getLayoutDirection());
+            }
+            else
+            {
+                if ((gravity & Gravity.START) == Gravity.START)
+                {
+                    absoluteGravity = Gravity.LEFT;
+                }
+                else if ((gravity & Gravity.END) == Gravity.END)
+                {
+                    absoluteGravity = Gravity.RIGHT;
+                }
+                else
+                {
+                    absoluteGravity = gravity & Gravity.HORIZONTAL_GRAVITY_MASK;
+                }
+            }
+            final Layout.Alignment alignment;
+            switch (absoluteGravity)
+            {
+                case Gravity.RIGHT:
+                    alignment = Layout.Alignment.ALIGN_OPPOSITE;
+                    break;
+                case Gravity.CENTER_HORIZONTAL:
+                    alignment = Layout.Alignment.ALIGN_CENTER;
+                    break;
+                default:
+                    alignment = Layout.Alignment.ALIGN_NORMAL;
+                    break;
+            }
+            return alignment;
         }
     }
 
