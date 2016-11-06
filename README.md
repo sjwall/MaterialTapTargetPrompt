@@ -19,7 +19,7 @@ repositories {
 }
 
 dependencies {
-    compile 'uk.co.samuelwall:material-tap-target-prompt:1.5.0'
+    compile 'uk.co.samuelwall:material-tap-target-prompt:1.6.0'
 }
 ```
 

@@ -2,6 +2,14 @@
 
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## v1.6.0 (2016-11-06)
+
+### Features
+
+* Added RTL layout support
+* Added methods to change text gravity
+* Added disabling idle animation
+
 ## v1.5.0 (2016-10-25)
 
 ### Features
