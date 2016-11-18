@@ -2,6 +2,12 @@
 
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## v1.6.1 (2016-11-18)
+
+### Bug Fixes
+
+* Fixed prompt being shown behind ActionMode (removed drawing behind DrawerLayout)
+
 ## v1.6.0 (2016-11-06)
 
 ### Features
