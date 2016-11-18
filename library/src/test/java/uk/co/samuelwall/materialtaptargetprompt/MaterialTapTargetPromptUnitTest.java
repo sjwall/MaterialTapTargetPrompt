@@ -319,7 +319,7 @@ public class MaterialTapTargetPromptUnitTest
 
     private void setScreenWidthAndHeight(final MaterialTapTargetPrompt prompt, final int width, final int height)
     {
-        final ViewGroup parent = prompt.getParentView();
+        final ViewGroup parent = prompt.mParentView;
         //TODO make this work for all versions
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB)
         {
