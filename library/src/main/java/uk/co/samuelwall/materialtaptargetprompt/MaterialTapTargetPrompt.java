@@ -48,6 +48,7 @@ import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewParent;
 import android.view.ViewTreeObserver;
 import android.view.animation.AccelerateDecelerateInterpolator;
 import android.view.animation.Interpolator;
@@ -154,8 +155,29 @@ public class MaterialTapTargetPrompt
             // that the prompt can be added behind the navigation drawer
             if (contentView.getClass().getName().equals("android.support.v4.widget.DrawerLayout"))
             {
-                mParentView = contentView;
-                mParentViewIsDecor = false;
+                boolean isChild = false;
+                ViewParent parent = mTargetView.getParent();
+                while (parent != null)
+                {
+                    if (parent == contentView)
+                    {
+                        isChild = true;
+                        break;
+                    }
+                    parent = parent.getParent();
+                }
+                // Only add the prompt below the navigation drawer if the target is a child of the
+                // drawer layout
+                if (isChild)
+                {
+                    mParentView = contentView;
+                    mParentViewIsDecor = false;
+                }
+                else
+                {
+                    mParentView = decorView;
+                    mParentViewIsDecor = true;
+                }
             }
             else
             {
