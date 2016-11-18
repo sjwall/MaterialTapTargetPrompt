@@ -22,7 +22,6 @@ import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Context;
 import android.content.res.ColorStateList;
-import android.content.res.Configuration;
 import android.content.res.TypedArray;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -48,7 +47,6 @@ import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.ViewParent;
 import android.view.ViewTreeObserver;
 import android.view.animation.AccelerateDecelerateInterpolator;
 import android.view.animation.Interpolator;
@@ -86,7 +84,6 @@ public class MaterialTapTargetPrompt
     OnHidePromptListener mOnHidePromptListener;
     boolean mDismissing;
     ViewGroup mParentView;
-    boolean mParentViewIsDecor;
     ViewGroup mClipToView;
     final float mStatusBarHeight;
     final ViewTreeObserver.OnGlobalLayoutListener mGlobalLayoutListener;
@@ -139,73 +136,11 @@ public class MaterialTapTargetPrompt
     }
 
     /**
-     * Returns {@link #mParentView}.
-     *
-     * If the {@link #mParentView} is {@link null} it determines what view it should be.
-     *
-     * @return The view to add the prompt view to.
-     */
-    ViewGroup getParentView()
-    {
-        if (mParentView == null)
-        {
-            final ViewGroup decorView = (ViewGroup) mActivity.getWindow().getDecorView();
-            final ViewGroup contentView = (ViewGroup) ((ViewGroup) decorView.findViewById(android.R.id.content)).getChildAt(0);
-            // If the content view is a drawer layout then that is the parent so
-            // that the prompt can be added behind the navigation drawer
-            if (contentView.getClass().getName().equals("android.support.v4.widget.DrawerLayout"))
-            {
-                boolean isChild = false;
-                ViewParent parent = mTargetView.getParent();
-                while (parent != null)
-                {
-                    if (parent == contentView)
-                    {
-                        isChild = true;
-                        break;
-                    }
-                    parent = parent.getParent();
-                }
-                // Only add the prompt below the navigation drawer if the target is a child of the
-                // drawer layout
-                if (isChild)
-                {
-                    mParentView = contentView;
-                    mParentViewIsDecor = false;
-                }
-                else
-                {
-                    mParentView = decorView;
-                    mParentViewIsDecor = true;
-                }
-            }
-            else
-            {
-                mParentView = decorView;
-                mParentViewIsDecor = true;
-            }
-            mView.mClipBounds = mParentViewIsDecor;
-        }
-
-        return mParentView;
-    }
-
-    /**
      * Displays the prompt.
      */
     public void show()
     {
-        final ViewGroup parent = getParentView();
-        // If the content view is a drawer layout then that is the parent so
-        // that the prompt can be added behind the navigation drawer
-        if (parent.getClass().getName().equals("android.support.v4.widget.DrawerLayout"))
-        {
-            parent.addView(mView, 1);
-        }
-        else
-        {
-            parent.addView(mView);
-        }
+        mParentView.addView(mView);
 
         addGlobalLayoutListener();
 
@@ -231,7 +166,7 @@ public class MaterialTapTargetPrompt
      */
     void addGlobalLayoutListener()
     {
-        final ViewTreeObserver viewTreeObserver = getParentView().getViewTreeObserver();
+        final ViewTreeObserver viewTreeObserver = mParentView.getViewTreeObserver();
         if (viewTreeObserver.isAlive())
         {
             viewTreeObserver.addOnGlobalLayoutListener(mGlobalLayoutListener);
@@ -243,7 +178,7 @@ public class MaterialTapTargetPrompt
      */
     void removeGlobalLayoutListener()
     {
-        final ViewTreeObserver viewTreeObserver = getParentView().getViewTreeObserver();
+        final ViewTreeObserver viewTreeObserver = mParentView.getViewTreeObserver();
         if (viewTreeObserver.isAlive())
         {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN)
@@ -309,7 +244,7 @@ public class MaterialTapTargetPrompt
                 public void onAnimationEnd(Animator animation)
                 {
                     removeGlobalLayoutListener();
-                    getParentView().removeView(mView);
+                    mParentView.removeView(mView);
                     mAnimationCurrent.removeAllListeners();
                     mAnimationCurrent = null;
                     mDismissing = false;
@@ -322,7 +257,7 @@ public class MaterialTapTargetPrompt
                 public void onAnimationCancel(Animator animation)
                 {
                     removeGlobalLayoutListener();
-                    getParentView().removeView(mView);
+                    mParentView.removeView(mView);
                     mAnimationCurrent.removeAllListeners();
                     mAnimationCurrent = null;
                     mDismissing = false;
@@ -335,7 +270,7 @@ public class MaterialTapTargetPrompt
         else
         {
             removeGlobalLayoutListener();
-            getParentView().removeView(mView);
+            mParentView.removeView(mView);
             onHidePromptComplete();
             mParentView = null;
         }
@@ -390,7 +325,7 @@ public class MaterialTapTargetPrompt
                 public void onAnimationEnd(Animator animation)
                 {
                     removeGlobalLayoutListener();
-                    getParentView().removeView(mView);
+                    mParentView.removeView(mView);
                     mAnimationCurrent.removeAllListeners();
                     mAnimationCurrent = null;
                     mDismissing = false;
@@ -403,7 +338,7 @@ public class MaterialTapTargetPrompt
                 public void onAnimationCancel(Animator animation)
                 {
                     removeGlobalLayoutListener();
-                    getParentView().removeView(mView);
+                    mParentView.removeView(mView);
                     mAnimationCurrent.removeAllListeners();
                     mAnimationCurrent = null;
                     mDismissing = false;
@@ -416,7 +351,7 @@ public class MaterialTapTargetPrompt
         else
         {
             removeGlobalLayoutListener();
-            getParentView().removeView(mView);
+            mParentView.removeView(mView);
             onHidePromptComplete();
             mParentView = null;
         }
@@ -586,7 +521,7 @@ public class MaterialTapTargetPrompt
         final float primaryTextWidth = mPaintPrimaryText.measureText(mPrimaryText);
         final float secondaryTextWidth = mSecondaryText != null ? mPaintSecondaryText.measureText(mSecondaryText) : 0;
         final float textWidth;
-        final float maxWidth = Math.max(80, (mView.mClipBounds ? mView.mClipBoundsRight - mView.mClipBoundsLeft : getParentView().getWidth()) - (mTextPadding * 2));
+        final float maxWidth = Math.max(80, (mView.mClipBounds ? mView.mClipBoundsRight - mView.mClipBoundsLeft : mParentView.getWidth()) - (mTextPadding * 2));
         final float textWidthCalculation = Math.min(mMaxTextWidth, Math.max(primaryTextWidth, secondaryTextWidth));
         if (textWidthCalculation > maxWidth)
         {
@@ -597,7 +532,7 @@ public class MaterialTapTargetPrompt
         {
             if (mTextPositionRight)
             {
-                mView.mTextLeft = (mView.mClipBounds ? mView.mClipBoundsRight : getParentView().getRight()) - mTextPadding - textWidthCalculation;
+                mView.mTextLeft = (mView.mClipBounds ? mView.mClipBoundsRight : mParentView.getRight()) - mTextPadding - textWidthCalculation;
             }
             else
             {
@@ -717,26 +652,10 @@ public class MaterialTapTargetPrompt
             mView.mClipBoundsRight = rect.right;
             mView.mClipBoundsBottom =  rect.bottom;
 
-            if (mParentViewIsDecor)
+            if (offset.y == 0)
             {
-                if (offset.y == 0)
-                {
-                    mView.mClipBoundsTop += mStatusBarHeight;
-                }
+                mView.mClipBoundsTop += mStatusBarHeight;
             }
-            else if (offset.y > 0)
-            {
-                mView.mClipBoundsTop -= offset.y;
-            }
-        }
-        else if (mParentViewIsDecor)
-        {
-            mView.mClipBounds = true;
-            //Stop the canvas drawing over the status bar
-            mView.mClipBoundsTop = mStatusBarHeight;
-            mView.mClipBoundsLeft = 0f;
-            mView.mClipBoundsBottom = mActivity.getResources().getDisplayMetrics().heightPixels;
-            mView.mClipBoundsRight = mActivity.getResources().getDisplayMetrics().widthPixels;
         }
         else
         {
@@ -1666,6 +1585,7 @@ public class MaterialTapTargetPrompt
                 mPrompt.mBaseLeft = mCentreLeft;
                 mPrompt.mBaseTop = mCentreTop;
             }
+            mPrompt.mParentView = (ViewGroup) mActivity.getWindow().getDecorView();
             mPrompt.mView.mDrawRipple = Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB && mIdleAnimationEnabled;
             mPrompt.mIdleAnimationEnabled = mIdleAnimationEnabled;
             mPrompt.mClipToView = (ViewGroup) ((ViewGroup) mActivity.findViewById(android.R.id.content)).getChildAt(0);
