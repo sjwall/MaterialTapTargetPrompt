@@ -53,4 +53,10 @@
 
     <string name="example_dialog_title">Dialog</string>
     <string name="example_dialog_description">An example with a dialog</string>
+
+    <string name="example_action_mode_title">Action Mode</string>
+    <string name="example_action_mode_description">Shows an action mode with a prompt shown</string>
+
+    <string name="action_mode_prompt_title">Action Mode</string>
+    <string name="action_mode_prompt_description">Tap the back arrow to close the action mode</string>
 </resources>

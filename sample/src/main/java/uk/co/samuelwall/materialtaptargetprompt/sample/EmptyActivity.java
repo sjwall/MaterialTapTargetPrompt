@@ -19,11 +19,15 @@ package uk.co.samuelwall.materialtaptargetprompt.sample;
 import android.support.v4.view.animation.FastOutSlowInInterpolator;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.view.ActionMode;
+import android.support.v7.widget.ActionBarContextView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
 
 import uk.co.samuelwall.materialtaptargetprompt.MaterialTapTargetPrompt;
 
@@ -31,6 +35,37 @@ public class EmptyActivity extends AppCompatActivity
 {
 
     MaterialTapTargetPrompt mFabPrompt;
+
+    private ActionMode mActionMode;
+    private ActionMode.Callback mActionModeCallback = new ActionMode.Callback()
+    {
+        @Override
+        public boolean onCreateActionMode(ActionMode mode, Menu menu)
+        {
+            MenuInflater inflater = mode.getMenuInflater();
+            inflater.inflate(R.menu.main, menu);
+            return true;
+        }
+
+        @Override
+        public boolean onPrepareActionMode(ActionMode mode, Menu menu)
+        {
+            return false;
+        }
+
+        @Override
+        public boolean onActionItemClicked(ActionMode mode, MenuItem item)
+        {
+            mActionMode.finish();
+            return true;
+        }
+
+        @Override
+        public void onDestroyActionMode(ActionMode mode)
+        {
+            mActionMode = null;
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -172,6 +207,57 @@ public class EmptyActivity extends AppCompatActivity
                     }
                 })
                 .show();
+    }
+
+    public void showActionModePrompt(View view)
+    {
+        mActionMode =  this.startSupportActionMode(mActionModeCallback);
+        getWindow().getDecorView().post(new Runnable() {
+            @Override
+            public void run() {
+                final ActionBarContextView actionBarContextView =
+                        findActionBarContextView(getWindow().getDecorView().getRootView());
+                if (actionBarContextView != null)
+                {
+                    new MaterialTapTargetPrompt.Builder(EmptyActivity.this)
+                            .setPrimaryText(R.string.action_mode_prompt_title)
+                            .setSecondaryText(R.string.action_mode_prompt_description)
+                            .setAnimationInterpolator(new FastOutSlowInInterpolator())
+                            .setMaxTextWidth(R.dimen.tap_target_menu_max_width)
+                            .setTarget(actionBarContextView.getChildAt(0))
+                            .setIcon(R.drawable.ic_back).show();
+                }
+            }
+        });
+    }
+
+    /**
+     * Finds the action bar context view by searching backwards through the views.
+     * TODO: There must be a better way to do this.
+     *
+     * @param inView First view to search from
+     * @return The found view or null
+     */
+    private ActionBarContextView findActionBarContextView(final View inView)
+    {
+        if (inView instanceof ViewGroup)
+        {
+            final ViewGroup viewGroup = (ViewGroup) inView;
+            for (int i = viewGroup.getChildCount() - 1; i > -1; i--)
+            {
+                final View view = viewGroup.getChildAt(i);
+                if (view instanceof ActionBarContextView)
+                {
+                    return (ActionBarContextView) view;
+                }
+                final ActionBarContextView contextView = this.findActionBarContextView(view);
+                if (contextView != null)
+                {
+                    return contextView;
+                }
+            }
+        }
+        return null;
     }
 
     @Override
