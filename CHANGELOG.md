@@ -2,6 +2,12 @@
 
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## v1.6.2 (2016-11-21)
+
+### Bug Fixes
+
+* Fixed crash when running on Gingerbread and below that was introduced in v1.6.1
+
 ## v1.6.1 (2016-11-18)
 
 ### Bug Fixes
