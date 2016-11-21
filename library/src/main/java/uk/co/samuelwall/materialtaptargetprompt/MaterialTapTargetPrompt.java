@@ -243,36 +243,27 @@ public class MaterialTapTargetPrompt
                 @Override
                 public void onAnimationEnd(Animator animation)
                 {
-                    removeGlobalLayoutListener();
-                    mParentView.removeView(mView);
                     mAnimationCurrent.removeAllListeners();
                     mAnimationCurrent = null;
                     mDismissing = false;
-                    onHidePromptComplete();
-                    mParentView = null;
+                    cleanUpPrompt();
                 }
 
                 @TargetApi(Build.VERSION_CODES.HONEYCOMB)
                 @Override
                 public void onAnimationCancel(Animator animation)
                 {
-                    removeGlobalLayoutListener();
-                    mParentView.removeView(mView);
                     mAnimationCurrent.removeAllListeners();
                     mAnimationCurrent = null;
                     mDismissing = false;
-                    onHidePromptComplete();
-                    mParentView = null;
+                    cleanUpPrompt();
                 }
             });
             mAnimationCurrent.start();
         }
         else
         {
-            removeGlobalLayoutListener();
-            mParentView.removeView(mView);
-            onHidePromptComplete();
-            mParentView = null;
+            cleanUpPrompt();
         }
     }
 
@@ -324,37 +315,38 @@ public class MaterialTapTargetPrompt
                 @Override
                 public void onAnimationEnd(Animator animation)
                 {
-                    removeGlobalLayoutListener();
-                    mParentView.removeView(mView);
                     mAnimationCurrent.removeAllListeners();
                     mAnimationCurrent = null;
                     mDismissing = false;
-                    onHidePromptComplete();
-                    mParentView = null;
+                    cleanUpPrompt();
                 }
 
                 @TargetApi(Build.VERSION_CODES.HONEYCOMB)
                 @Override
                 public void onAnimationCancel(Animator animation)
                 {
-                    removeGlobalLayoutListener();
-                    mParentView.removeView(mView);
                     mAnimationCurrent.removeAllListeners();
                     mAnimationCurrent = null;
                     mDismissing = false;
-                    onHidePromptComplete();
-                    mParentView = null;
+                    cleanUpPrompt();
                 }
             });
             mAnimationCurrent.start();
         }
         else
         {
-            removeGlobalLayoutListener();
-            mParentView.removeView(mView);
-            onHidePromptComplete();
-            mParentView = null;
+            cleanUpPrompt();
         }
+    }
+
+    /**
+     * Removes the prompt from view and triggers the {@link #onHidePromptComplete()} event.
+     */
+    void cleanUpPrompt()
+    {
+        removeGlobalLayoutListener();
+        mParentView.removeView(mView);
+        onHidePromptComplete();
     }
 
     @TargetApi(11)
