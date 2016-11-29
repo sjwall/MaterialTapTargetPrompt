@@ -16,6 +16,9 @@
 
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
 
+project.ext.set("versionCode", 17)
+project.ext.set("versionName", '1.6.2')
+
 buildscript {
     repositories {
         jcenter()
