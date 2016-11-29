@@ -59,4 +59,9 @@
 
     <string name="action_mode_prompt_title">Action Mode</string>
     <string name="action_mode_prompt_description">Tap the back arrow to close the action mode</string>
+
+    <string name="action_mode_tick_prompt_title">Tick</string>
+    <string name="action_mode_tick_prompt_description">Replace this with your own action description</string>
+
+    <string name="action_tick">Positive action</string>
 </resources>

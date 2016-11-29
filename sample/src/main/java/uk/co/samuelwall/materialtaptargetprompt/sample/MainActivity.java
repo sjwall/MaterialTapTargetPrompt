@@ -50,7 +50,7 @@ public class MainActivity extends AppCompatActivity
         public boolean onCreateActionMode(ActionMode mode, Menu menu)
         {
             MenuInflater inflater = mode.getMenuInflater();
-            inflater.inflate(R.menu.main, menu);
+            inflater.inflate(R.menu.actionmode, menu);
             return true;
         }
 
@@ -179,52 +179,14 @@ public class MainActivity extends AppCompatActivity
     public void showActionModePrompt(View view)
     {
         mActionMode =  this.startSupportActionMode(mActionModeCallback);
-        getWindow().getDecorView().post(new Runnable() {
-            @Override
-            public void run() {
-                final ActionBarContextView actionBarContextView =
-                        findActionBarContextView(getWindow().getDecorView().getRootView());
-                if (actionBarContextView != null)
-                {
-                    new MaterialTapTargetPrompt.Builder(MainActivity.this)
-                            .setPrimaryText(R.string.action_mode_prompt_title)
-                            .setSecondaryText(R.string.action_mode_prompt_description)
-                            .setAnimationInterpolator(new FastOutSlowInInterpolator())
-                            .setMaxTextWidth(R.dimen.tap_target_menu_max_width)
-                            .setTarget(actionBarContextView.getChildAt(0))
-                            .setIcon(R.drawable.ic_back).show();
-                }
-            }
-        });
-    }
-
-    /**
-     * Finds the action bar context view by searching backwards through the views.
-     * TODO: There must be a better way to do this.
-     *
-     * @param inView First view to search from
-     * @return The found view or null
-     */
-    private ActionBarContextView findActionBarContextView(final View inView)
-    {
-        if (inView instanceof ViewGroup)
-        {
-            final ViewGroup viewGroup = (ViewGroup) inView;
-            for (int i = viewGroup.getChildCount() - 1; i > -1; i--)
-            {
-                final View view = viewGroup.getChildAt(i);
-                if (view instanceof ActionBarContextView)
-                {
-                    return (ActionBarContextView) view;
-                }
-                final ActionBarContextView contextView = this.findActionBarContextView(view);
-                if (contextView != null)
-                {
-                    return contextView;
-                }
-            }
-        }
-        return null;
+        new MaterialTapTargetPrompt.Builder(MainActivity.this)
+                .setPrimaryText(R.string.action_mode_prompt_title)
+                .setSecondaryText(R.string.action_mode_prompt_description)
+                .setAnimationInterpolator(new FastOutSlowInInterpolator())
+                .setMaxTextWidth(R.dimen.tap_target_menu_max_width)
+                .setTarget(findViewById(android.support.v7.appcompat.R.id.action_mode_close_button))
+                .setIcon(R.drawable.ic_back)
+                .show();
     }
 
     public void showActivity(View view)
