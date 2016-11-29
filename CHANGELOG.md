@@ -2,6 +2,13 @@
 
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## v1.6.3 (2016-11-29)
+
+### Bug Fixes
+
+* Fixed prompt icon sharing its state with other drawables
+* Improved ActionMode example
+
 ## v1.6.2 (2016-11-21)
 
 ### Bug Fixes
@@ -13,6 +20,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 ### Bug Fixes
 
 * Fixed prompt being shown behind ActionMode (removed drawing behind DrawerLayout)
+* Added ActionMode example
 
 ## v1.6.0 (2016-11-06)
 
