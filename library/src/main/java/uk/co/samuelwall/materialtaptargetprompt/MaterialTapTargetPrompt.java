@@ -1612,6 +1612,7 @@ public class MaterialTapTargetPrompt
 
             if (mIconDrawable != null)
             {
+                mIconDrawable.mutate();
                 mIconDrawable.setBounds(0, 0, mIconDrawable.getIntrinsicWidth(), mIconDrawable.getIntrinsicHeight());
                 if (mHasIconDrawableTint)
                 {
