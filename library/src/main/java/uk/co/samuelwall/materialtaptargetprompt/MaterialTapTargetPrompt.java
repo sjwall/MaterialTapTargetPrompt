@@ -73,7 +73,7 @@ public class MaterialTapTargetPrompt
     String mPrimaryText, mSecondaryText;
     float mMaxTextWidth;
     float mTextPadding;
-    boolean mTextPositionRight, mTextPositionAbove;
+    boolean mTextPositionLeft, mTextPositionAbove;
     float mFocalToTextPadding;
     int mPrimaryTextColourAlpha, mSecondaryTextColourAlpha;
     ValueAnimator mAnimationCurrent, mAnimationFocalRipple;
@@ -141,11 +141,7 @@ public class MaterialTapTargetPrompt
     public void show()
     {
         mParentView.addView(mView);
-
         addGlobalLayoutListener();
-
-        updateFocalCentrePosition();
-
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB)
         {
             startRevealAnimation();
@@ -503,37 +499,38 @@ public class MaterialTapTargetPrompt
         }
 
         mTextPositionAbove = mView.mCentreTop > mView.mClipBoundsTop + ((mView.mClipBoundsBottom - mView.mClipBoundsTop) / 2);
-        mTextPositionRight = mView.mCentreLeft > mView.mClipBoundsLeft + ((mView.mClipBoundsRight - mView.mClipBoundsLeft) / 2);
+        mTextPositionLeft = mView.mCentreLeft > mView.mClipBoundsLeft + ((mView.mClipBoundsRight - mView.mClipBoundsLeft) / 2);
 
         updateTextPositioning();
+        updateIconPosition();
     }
 
     void updateTextPositioning()
     {
-        final float primaryTextWidth = mPaintPrimaryText.measureText(mPrimaryText);
-        final float secondaryTextWidth = mSecondaryText != null ? mPaintSecondaryText.measureText(mSecondaryText) : 0;
-        final float textWidth;
-        final float maxWidth = Math.max(80, (mView.mClipBounds ? mView.mClipBoundsRight - mView.mClipBoundsLeft : mParentView.getWidth()) - (mTextPadding * 2));
-        final float textWidthCalculation = Math.min(mMaxTextWidth, Math.max(primaryTextWidth, secondaryTextWidth));
-        if (textWidthCalculation > maxWidth)
+        final float maxWidth = Math.min(mMaxTextWidth, (mView.mClipBounds ? mView.mClipBoundsRight - mView.mClipBoundsLeft : mParentView.getWidth()) - (mTextPadding * 2));
+        mView.mPrimaryTextLayout = createStaticTextLayout(mPrimaryText, mPaintPrimaryText, (int) maxWidth, mPrimaryTextAlignment);
+        if (mSecondaryText != null)
         {
-            mView.mTextLeft = (mView.mClipBounds ? mView.mClipBoundsLeft : 0) + mTextPadding;
-            textWidth = maxWidth;
+            mView.mSecondaryTextLayout = createStaticTextLayout(mSecondaryText, mPaintSecondaryText, (int) maxWidth, mSecondaryTextAlignment);
         }
         else
         {
-            if (mTextPositionRight)
-            {
-                mView.mTextLeft = (mView.mClipBounds ? mView.mClipBoundsRight : mParentView.getRight()) - mTextPadding - textWidthCalculation;
-            }
-            else
-            {
-                mView.mTextLeft = mTextPadding + (mView.mClipBounds ? mView.mClipBoundsLeft : 0);
-            }
-            textWidth = textWidthCalculation;
+            mView.mSecondaryTextLayout = null;
         }
 
-        mView.mPrimaryTextLayout = createStaticTextLayout(mPrimaryText, mPaintPrimaryText, (int) textWidth, mPrimaryTextAlignment);
+        final float primaryTextWidth = calculateMaxTextWidth(mView.mPrimaryTextLayout);
+        final float secondaryTextWidth = calculateMaxTextWidth(mView.mSecondaryTextLayout);
+        final float textWidth  = Math.max(primaryTextWidth, secondaryTextWidth);
+
+        if (mTextPositionLeft)
+        {
+            mView.mTextLeft = (mView.mClipBounds ? mView.mClipBoundsRight : mParentView.getRight()) - mTextPadding - textWidth;
+
+        }
+        else
+        {
+            mView.mTextLeft = (mView.mClipBounds ? mView.mClipBoundsLeft : mParentView.getLeft()) + mTextPadding;
+        }
 
         mView.mPrimaryTextTop = mView.mCentreTop;
         if (mTextPositionAbove)
@@ -547,7 +544,6 @@ public class MaterialTapTargetPrompt
 
         if (mSecondaryText != null)
         {
-            mView.mSecondaryTextLayout = createStaticTextLayout(mSecondaryText, mPaintSecondaryText, (int) textWidth, mSecondaryTextAlignment);
             if (mTextPositionAbove)
             {
                 mView.mPrimaryTextTop =  mView.mPrimaryTextTop - mView.mTextSeparation - mView.mSecondaryTextLayout.getHeight();
@@ -555,13 +551,8 @@ public class MaterialTapTargetPrompt
 
             mView.mSecondaryTextOffsetTop = mView.mPrimaryTextLayout.getHeight() + mView.mTextSeparation;
         }
-        else
-        {
-            mView.mSecondaryTextLayout = null;
-        }
 
-        updateBackgroundRadius();
-        updateIconPosition();
+        updateBackgroundRadius(textWidth);
     }
 
     private StaticLayout createStaticTextLayout(final String text, final TextPaint paint,
@@ -581,30 +572,30 @@ public class MaterialTapTargetPrompt
         return layout;
     }
 
-    void updateBackgroundRadius()
+    float calculateMaxTextWidth(final Layout textLayout)
     {
-        final float height;
-        if (mTextPositionAbove)
+        float maxTextWidth = 0f;
+        if (textLayout != null)
         {
-            height = mView.mCentreTop - mView.mPrimaryTextTop;
+            for (int i = 0, count = textLayout.getLineCount(); i < count; i++)
+            {
+                maxTextWidth = Math.max(maxTextWidth, textLayout.getLineWidth(i));
+            }
         }
-        else
-        {
-            height = mView.mPrimaryTextTop + mView.mPrimaryTextLayout.getHeight() + (mView.mSecondaryTextLayout != null ? mView.mSecondaryTextLayout.getHeight() : 0) - mView.mCentreTop + mView.mTextSeparation;
-        }
+        return maxTextWidth;
+    }
 
-        final float length;
-        if (mTextPositionRight)
+    void updateBackgroundRadius(final float maxTextWidth)
+    {
+        final float length = maxTextWidth + mTextPadding;
+        float height = mBaseFocalRadius + mFocalToTextPadding + mTextPadding
+                            + mView.mPrimaryTextLayout.getHeight();
+        //Check if secondary text should be included with text separation
+        if (mView.mSecondaryTextLayout != null)
         {
-            length = mView.mCentreLeft - mView.mTextLeft + mTextPadding;
+            height += mView.mSecondaryTextLayout.getHeight() + mView.mTextSeparation;
         }
-        else
-        {
-            length = mView.mTextLeft + Math.max(mView.mPrimaryTextLayout.getWidth(), mView.mSecondaryTextLayout != null ? mView.mSecondaryTextLayout.getWidth() : 0)
-                    + mTextPadding - mView.mCentreLeft;
-        }
-        //noinspection SuspiciousNameCombination
-        mBaseBackgroundRadius = Double.valueOf(Math.sqrt(Math.pow(length, 2) + Math.pow(height, 2))).floatValue();
+        mBaseBackgroundRadius = (float) Math.sqrt(Math.pow(length, 2) + Math.pow(height, 2));
     }
 
     void updateIconPosition()
