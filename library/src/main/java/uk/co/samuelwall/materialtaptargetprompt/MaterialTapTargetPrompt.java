@@ -131,6 +131,10 @@ public class MaterialTapTargetPrompt
                 public void onGlobalLayout()
                 {
                     updateFocalCentrePosition();
+                    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.HONEYCOMB)
+                    {
+                        mView.mBackgroundRadius = mBaseBackgroundRadius;
+                    }
                 }
             };
     }
