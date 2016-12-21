@@ -25,8 +25,12 @@
 
     <string name="menu_prompt_title">Just how you want it</string>
     <string name="menu_prompt_description">Tap the menu icon to switch accounts, change settings &amp; more</string>
-    <string name="overflow_prompt_title">Search your emails</string>
-    <string name="overflow_prompt_description">Tap the icon to quickly scan your emails</string>
+
+    <string name="overflow_prompt_title">More actions</string>
+    <string name="overflow_prompt_description">Tap the 3 vertical dots to see more options</string>
+
+    <string name="search_prompt_title">Search your emails</string>
+    <string name="search_prompt_description">Tap the icon to quickly scan your emails</string>
 
     <string name="FabTarget.primaryText">Loaded from style</string>
     <string name="FabTarget.secondaryText">This was loaded from a style</string>
@@ -38,6 +42,9 @@
 
     <string name="example_overflow_title">Overflow</string>
     <string name="example_overflow_description">Displays prompt over the app bar more items menu item</string>
+
+    <string name="example_search_title">App bar action icon</string>
+    <string name="example_search_description">Displays prompt over the search icon in the app bar</string>
 
     <string name="example_fab_title">FAB</string>
     <string name="example_fab_description">Displays prompt over the FAB button</string>
@@ -64,4 +71,6 @@
     <string name="action_mode_tick_prompt_description">Replace this with your own action description</string>
 
     <string name="action_tick">Positive action</string>
+
+    <string name="overflow_unavailable">Overflow unavailable</string>
 </resources>

@@ -19,24 +19,22 @@ package uk.co.samuelwall.materialtaptargetprompt.sample;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
-import android.support.v4.view.animation.FastOutSlowInInterpolator;
-import android.support.v7.view.ActionMode;
-import android.support.v7.widget.ActionBarContextView;
-import android.view.MenuInflater;
-import android.view.MotionEvent;
-import android.view.View;
 import android.support.design.widget.NavigationView;
+import android.support.design.widget.Snackbar;
 import android.support.v4.view.GravityCompat;
+import android.support.v4.view.animation.FastOutSlowInInterpolator;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.view.ActionMode;
+import android.support.v7.widget.ActionMenuView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.ViewGroup;
-
-import java.util.Iterator;
+import android.view.MotionEvent;
+import android.view.View;
+import android.widget.Toast;
 
 import uk.co.samuelwall.materialtaptargetprompt.MaterialTapTargetPrompt;
 
@@ -143,23 +141,29 @@ public class MainActivity extends AppCompatActivity
                 .setMaxTextWidth(R.dimen.tap_target_menu_max_width)
                 .setIcon(R.drawable.ic_more_vert);
         final Toolbar tb = (Toolbar) this.findViewById(R.id.toolbar);
-        tapTargetPromptBuilder.setTarget(tb.getChildAt(2));
-
-        tapTargetPromptBuilder.setOnHidePromptListener(new MaterialTapTargetPrompt.OnHidePromptListener()
+        final View child = tb.getChildAt(2);
+        if (child instanceof ActionMenuView)
         {
-            @Override
-            public void onHidePrompt(MotionEvent event, boolean tappedTarget)
-            {
-                //Do something such as storing a value so that this prompt is never shown again
-            }
-
-            @Override
-            public void onHidePromptComplete()
-            {
-
-            }
-        });
+            final ActionMenuView actionMenuView = ((ActionMenuView) child);
+            tapTargetPromptBuilder.setTarget(actionMenuView.getChildAt(actionMenuView.getChildCount() - 1));
+        }
+        else
+        {
+            Toast.makeText(this, R.string.overflow_unavailable, Toast.LENGTH_SHORT);
+        }
         tapTargetPromptBuilder.show();
+    }
+
+    public void showSearchPrompt(View view)
+    {
+        new MaterialTapTargetPrompt.Builder(this)
+                .setPrimaryText(R.string.search_prompt_title)
+                .setSecondaryText(R.string.search_prompt_description)
+                .setAnimationInterpolator(new FastOutSlowInInterpolator())
+                .setMaxTextWidth(R.dimen.tap_target_menu_max_width)
+                .setIcon(R.drawable.ic_search)
+                .setTarget(R.id.action_search)
+                .show();
     }
 
     public void showStylePrompt(View view)

@@ -72,6 +72,23 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:width="@dimen/example_button_width"
+            android:text="@string/example_search_title"
+            android:onClick="showSearchPrompt"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:text="@string/example_search_description"/>
+    </LinearLayout>
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingTop="@dimen/example_item_top_padding">
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:width="@dimen/example_button_width"
             android:text="@string/example_fab_title"
             android:onClick="showFabPrompt"/>
 
