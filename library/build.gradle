@@ -47,6 +47,10 @@ android {
     }
 }
 
+configurations {
+    javadocCompile
+}
+
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     compile 'com.android.support:support-annotations:' + rootProject.supportLibVersion
@@ -55,6 +59,8 @@ dependencies {
     testCompile 'junit:junit:4.12'
     testCompile "org.robolectric:robolectric:3.1"
     testCompile 'org.mockito:mockito-core:1.10.19'
+
+    javadocCompile 'com.android.support:support-annotations:' + rootProject.supportLibVersion
 }
 
 install {
@@ -101,6 +107,7 @@ task sourcesJar(type: Jar) {
 task javadoc(type: Javadoc) {
     source = android.sourceSets.main.java.srcDirs
     classpath += project.files(android.getBootClasspath().join(File.pathSeparator))
+    classpath += configurations.javadocCompile
 }
 
 task javadocJar(type: Jar, dependsOn: javadoc) {
