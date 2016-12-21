@@ -391,7 +391,10 @@ public class MaterialTapTargetPrompt
                 animation.removeAllListeners();
                 mAnimationCurrent = null;
                 mRevealedAmount = 1;
-                if (mIdleAnimationEnabled) startIdleAnimations();
+                if (mIdleAnimationEnabled)
+                {
+                    startIdleAnimations();
+                }
             }
 
             @TargetApi(Build.VERSION_CODES.HONEYCOMB)
@@ -498,8 +501,8 @@ public class MaterialTapTargetPrompt
             mView.mCentreTop = mBaseTop;
         }
 
-        mTextPositionAbove = mView.mCentreTop > mView.mClipBoundsTop + ((mView.mClipBoundsBottom - mView.mClipBoundsTop) / 2);
-        mTextPositionLeft = mView.mCentreLeft > mView.mClipBoundsLeft + ((mView.mClipBoundsRight - mView.mClipBoundsLeft) / 2);
+        mTextPositionAbove = mView.mCentreTop > mView.mClipBounds.centerY();
+        mTextPositionLeft = mView.mCentreLeft > mView.mClipBounds.centerX();
 
         updateTextPositioning();
         updateIconPosition();
@@ -507,7 +510,7 @@ public class MaterialTapTargetPrompt
 
     void updateTextPositioning()
     {
-        final float maxWidth = Math.max(80, Math.min(mMaxTextWidth, (mView.mClipBounds ? mView.mClipBoundsRight - mView.mClipBoundsLeft : mParentView.getWidth()) - (mTextPadding * 2)));
+        final float maxWidth = Math.max(80, Math.min(mMaxTextWidth, (mView.mClipToBounds ? mView.mClipBounds.right - mView.mClipBounds.left : mParentView.getWidth()) - (mTextPadding * 2)));
         mView.mPrimaryTextLayout = createStaticTextLayout(mPrimaryText, mPaintPrimaryText, (int) maxWidth, mPrimaryTextAlignment);
         if (mSecondaryText != null)
         {
@@ -524,12 +527,12 @@ public class MaterialTapTargetPrompt
 
         if (mTextPositionLeft)
         {
-            mView.mTextLeft = (mView.mClipBounds ? mView.mClipBoundsRight : mParentView.getRight()) - mTextPadding - textWidth;
+            mView.mTextLeft = (mView.mClipToBounds ? mView.mClipBounds.right : mParentView.getRight()) - mTextPadding - textWidth;
 
         }
         else
         {
-            mView.mTextLeft = (mView.mClipBounds ? mView.mClipBoundsLeft : mParentView.getLeft()) + mTextPadding;
+            mView.mTextLeft = (mView.mClipToBounds ? mView.mClipBounds.left : mParentView.getLeft()) + mTextPadding;
         }
 
         mView.mPrimaryTextTop = mView.mCentreTop;
@@ -621,28 +624,23 @@ public class MaterialTapTargetPrompt
     {
         if (mClipToView != null)
         {
-            mView.mClipBounds = true;
+            mView.mClipToBounds = true;
 
             //Reset the top to 0
-            mView.mClipBoundsTop = 0;
+            mView.mClipBounds.set(0, 0, 0, 0);
 
             //Find the location of the clip view on the screen
-            final Rect rect = new Rect();
             final Point offset = new Point();
-            mClipToView.getGlobalVisibleRect(rect, offset);
-            mView.mClipBoundsLeft = rect.left;
-            mView.mClipBoundsTop = rect.top;
-            mView.mClipBoundsRight = rect.right;
-            mView.mClipBoundsBottom =  rect.bottom;
+            mClipToView.getGlobalVisibleRect(mView.mClipBounds, offset);
 
             if (offset.y == 0)
             {
-                mView.mClipBoundsTop += mStatusBarHeight;
+                mView.mClipBounds.top += mStatusBarHeight;
             }
         }
         else
         {
-            mView.mClipBounds = false;
+            mView.mClipToBounds = false;
         }
     }
 
@@ -683,10 +681,10 @@ public class MaterialTapTargetPrompt
         boolean mDrawRipple = Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB;
         OnPromptTouchedListener mOnPromptTouchedListener;
         boolean mCaptureTouchEventOnFocal;
-        float mClipBoundsTop, mClipBoundsLeft, mClipBoundsBottom, mClipBoundsRight;
+        Rect mClipBounds = new Rect();
         View mTargetView, mTargetRenderView;
         float mTextSeparation;
-        boolean mClipBounds;
+        boolean mClipToBounds;
         boolean mCaptureTouchEventOutsidePrompt;
 
         public PromptView(final Context context)
@@ -697,9 +695,9 @@ public class MaterialTapTargetPrompt
         @Override
         public void onDraw(final Canvas canvas)
         {
-            if (mClipBounds)
+            if (mClipToBounds)
             {
-                canvas.clipRect(mClipBoundsLeft, mClipBoundsTop, mClipBoundsRight, mClipBoundsBottom);
+                canvas.clipRect(mClipBounds);
             }
 
             //Draw the backgrounds
