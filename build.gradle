@@ -15,10 +15,6 @@
  */
 
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
-
-project.ext.set("versionCode", 18)
-project.ext.set("versionName", '1.6.3')
-
 buildscript {
     repositories {
         jcenter()
@@ -41,4 +37,17 @@ allprojects {
 
 task clean(type: Delete) {
     delete rootProject.buildDir
+}
+
+
+ext {
+    buildToolsVersion = '23.0.3'
+    supportLibVersion = '23.4.0'
+
+    minSdkVersion = 7
+    targetSdkVersion = 23
+    compileSdkVersion = 23
+
+    versionCode = 18
+    versionName = '1.6.3'
 }

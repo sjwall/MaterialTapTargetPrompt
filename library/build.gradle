@@ -14,23 +14,24 @@
  * limitations under the License.
  */
 
+apply plugin: 'jacoco'
 apply plugin: 'com.android.library'
 apply plugin: 'com.github.dcendents.android-maven'
 apply plugin: 'com.jfrog.bintray'
 
 // Maven Group ID for the artifact
 group = 'uk.co.samuelwall'
-version project.versionName
+version rootProject.versionName
 
 android {
-    compileSdkVersion 23
-    buildToolsVersion "23.0.3"
+    compileSdkVersion rootProject.compileSdkVersion
+    buildToolsVersion rootProject.buildToolsVersion
 
     defaultConfig {
-        minSdkVersion 7
-        targetSdkVersion 23
-        versionCode project.versionCode
-        versionName project.versionName
+        minSdkVersion rootProject.minSdkVersion
+        targetSdkVersion rootProject.targetSdkVersion
+        versionCode rootProject.versionCode
+        versionName rootProject.versionName
     }
     buildTypes {
         debug {
@@ -48,9 +49,12 @@ android {
 
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
+    compile 'com.android.support:support-annotations:' + rootProject.supportLibVersion
+
+    testCompile 'com.android.support:support-annotations:' + rootProject.supportLibVersion
     testCompile 'junit:junit:4.12'
     testCompile "org.robolectric:robolectric:3.1"
-    compile 'com.android.support:support-annotations:23.4.0'
+    testCompile 'org.mockito:mockito-core:1.10.19'
 }
 
 install {
@@ -134,8 +138,11 @@ bintray {
     }
 }
 
-apply plugin: 'jacoco'
-//gradlew clean createDebugCoverageReport jacocoTestReport
+jacoco {
+    toolVersion = "0.7.1.201405082137"
+}
+
+//gradlew clean jacocoTestReport
 task jacocoTestReport(type: JacocoReport, dependsOn: 'testDebugUnitTest') {
 
     reports {
@@ -148,6 +155,7 @@ task jacocoTestReport(type: JacocoReport, dependsOn: 'testDebugUnitTest') {
     def debugTree = fileTree(dir: "${buildDir}/intermediates/classes/debug", excludes: fileFilter)
     def mainSrc = "${project.projectDir}/src/main/java"
 
+    additionalSourceDirs = files([mainSrc])
     sourceDirectories = files([mainSrc])
     classDirectories = files([debugTree])
     executionData = files("${buildDir}/jacoco/testDebugUnitTest.exec")

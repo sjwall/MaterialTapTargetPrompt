@@ -20,13 +20,17 @@ import android.app.Activity;
 import android.graphics.Color;
 import android.os.Build;
 import android.view.MotionEvent;
-import android.view.ViewGroup;
+import android.view.View;
+import android.view.ViewParent;
 import android.view.animation.LinearInterpolator;
 import android.widget.FrameLayout;
 
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.Mockito;
+import org.mockito.invocation.InvocationOnMock;
+import org.mockito.stubbing.Answer;
 import org.robolectric.Robolectric;
 import org.robolectric.RobolectricGradleTestRunner;
 import org.robolectric.annotation.Config;
@@ -51,8 +55,7 @@ public class MaterialTapTargetPromptUnitTest
     public void promptFromVariables()
     {
         LinearInterpolator interpolator = new LinearInterpolator();
-        Activity activity = createActivity();
-        MaterialTapTargetPrompt.Builder builder = new MaterialTapTargetPrompt.Builder(activity)
+        MaterialTapTargetPrompt.Builder builder = createBuilder(1080, 1920, 340)
             .setTarget(50, 40)
             .setPrimaryText("Primary text")
             .setSecondaryText("Secondary text")
@@ -71,8 +74,6 @@ public class MaterialTapTargetPromptUnitTest
 
         assertTrue(builder.isTargetSet());
         MaterialTapTargetPrompt prompt = builder.show();
-
-        setScreenWidthAndHeight(prompt, 200, 600);
 
         assertEquals(600f, prompt.mMaxTextWidth, 0.0f);
         assertEquals(50f, prompt.mTextPadding, 0.0f);
@@ -104,8 +105,7 @@ public class MaterialTapTargetPromptUnitTest
     @Test
     public void promptNotCreatedWhenTargetNotSet()
     {
-        Activity activity = createActivity();
-        MaterialTapTargetPrompt.Builder builder = new MaterialTapTargetPrompt.Builder(activity)
+        MaterialTapTargetPrompt.Builder builder = createBuilder(1080, 1920, 340)
                 .setPrimaryText("Primary text")
                 .setSecondaryText("Secondary text");
         assertNull(builder.create());
@@ -114,8 +114,7 @@ public class MaterialTapTargetPromptUnitTest
     @Test
     public void promptNotCreatedWhenPrimaryTextNotSet()
     {
-        Activity activity = createActivity();
-        MaterialTapTargetPrompt.Builder builder = new MaterialTapTargetPrompt.Builder(activity)
+        MaterialTapTargetPrompt.Builder builder = createBuilder(1080, 1920, 340)
                 .setTarget(50, 40)
                 .setSecondaryText("Secondary text");
         assertNull(builder.create());
@@ -124,8 +123,7 @@ public class MaterialTapTargetPromptUnitTest
     @Test
     public void promptCreatedWhenSecondaryTextNotSet()
     {
-        Activity activity = createActivity();
-        MaterialTapTargetPrompt.Builder builder = new MaterialTapTargetPrompt.Builder(activity)
+        MaterialTapTargetPrompt.Builder builder = createBuilder(1080, 1920, 340)
                 .setTarget(50, 40)
                 .setPrimaryText("Primary text");
         MaterialTapTargetPrompt prompt = builder.create();
@@ -145,8 +143,7 @@ public class MaterialTapTargetPromptUnitTest
     @Test
     public void promptAnimationCancel()
     {
-        Activity activity = createActivity();
-        MaterialTapTargetPrompt prompt = new MaterialTapTargetPrompt.Builder(activity)
+        MaterialTapTargetPrompt prompt = createBuilder(1080, 1920, 340)
                 .setTarget(10, 10)
                 .setPrimaryText("Primary text")
                 .show();
@@ -168,8 +165,7 @@ public class MaterialTapTargetPromptUnitTest
     @Test
     public void promptCancelFinishAnimation()
     {
-        Activity activity = createActivity();
-        MaterialTapTargetPrompt prompt = new MaterialTapTargetPrompt.Builder(activity)
+        MaterialTapTargetPrompt prompt = createBuilder(1080, 1920, 340)
                 .setTarget(10, 10)
                 .setPrimaryText("Primary text")
                 .setOnHidePromptListener(new MaterialTapTargetPrompt.OnHidePromptListener()
@@ -201,8 +197,7 @@ public class MaterialTapTargetPromptUnitTest
     @Test
     public void promptTouchEventFocal()
     {
-        Activity activity = createActivity();
-        MaterialTapTargetPrompt prompt = new MaterialTapTargetPrompt.Builder(activity)
+        MaterialTapTargetPrompt prompt = createBuilder(1080, 1920, 340)
                 .setTarget(10, 10)
                 .setPrimaryText("Primary text")
                 .setOnHidePromptListener(new MaterialTapTargetPrompt.OnHidePromptListener()
@@ -220,20 +215,13 @@ public class MaterialTapTargetPromptUnitTest
                     }
                 })
                 .show();
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB)
-        {
-            prompt.mAnimationCurrent.end();
-        }
-
         assertFalse(prompt.mView.onTouchEvent(MotionEvent.obtain(0, 0, MotionEvent.ACTION_DOWN, 10, 10, 0)));
     }
 
     @Test
     public void promptTouchEventFocalCaptureEvent()
     {
-        Activity activity = createActivity();
-        MaterialTapTargetPrompt prompt = new MaterialTapTargetPrompt.Builder(activity)
+        MaterialTapTargetPrompt prompt = createBuilder(1080, 1920, 340)
                 .setTarget(10, 10)
                 .setPrimaryText("Primary text")
                 .setCaptureTouchEventOnFocal(true)
@@ -252,38 +240,24 @@ public class MaterialTapTargetPromptUnitTest
                     }
                 })
                 .show();
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB)
-        {
-            prompt.mAnimationCurrent.end();
-        }
-
         assertTrue(prompt.mView.onTouchEvent(MotionEvent.obtain(0, 0, MotionEvent.ACTION_DOWN, 10, 10, 0)));
     }
 
     @Test
     public void promptTouchEventFocalNoListener()
     {
-        Activity activity = createActivity();
-        MaterialTapTargetPrompt prompt = new MaterialTapTargetPrompt.Builder(activity)
+        MaterialTapTargetPrompt prompt = createBuilder(1080, 1920, 340)
                 .setTarget(10, 10)
                 .setPrimaryText("Primary text")
                 .setCaptureTouchEventOnFocal(true)
                 .show();
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB)
-        {
-            prompt.mAnimationCurrent.end();
-        }
-
         assertTrue(prompt.mView.onTouchEvent(MotionEvent.obtain(0, 0, MotionEvent.ACTION_DOWN, 10, 10, 0)));
     }
 
     @Test
     public void promptTouchEventBackground()
     {
-        Activity activity = createActivity();
-        MaterialTapTargetPrompt prompt = new MaterialTapTargetPrompt.Builder(activity)
+        MaterialTapTargetPrompt prompt = createBuilder(1080, 1920, 340)
                 .setTarget(10, 10)
                 .setPrimaryText("Primary text")
                 .setOnHidePromptListener(new MaterialTapTargetPrompt.OnHidePromptListener()
@@ -301,33 +275,89 @@ public class MaterialTapTargetPromptUnitTest
                     }
                 })
                 .show();
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB)
-        {
-            prompt.mAnimationCurrent.end();
-        }
-
         assertTrue(prompt.mView.onTouchEvent(MotionEvent.obtain(0, 0, MotionEvent.ACTION_DOWN, 60, 60, 0)));
     }
 
-    private Activity createActivity()
+    private MaterialTapTargetPrompt.Builder createBuilder(final int screenWidth,
+                                              final int screenHeight, final float primaryTextWidth)
     {
         final Activity activity = Robolectric.buildActivity(Activity.class).create().get();
-        activity.setContentView(new FrameLayout(activity));
-        return activity;
+        final FrameLayout layout = Mockito.spy(new FrameLayout(activity));
+        activity.setContentView(layout);
+        setViewBounds(layout, screenWidth, screenHeight);
+        final MaterialTapTargetPrompt.Builder builder = Mockito.spy(new MaterialTapTargetPrompt.Builder(activity));
+        Mockito.doAnswer(new Answer<MaterialTapTargetPrompt>()
+            {
+                @Override
+                public MaterialTapTargetPrompt answer(final InvocationOnMock invocation)
+                        throws Throwable
+                {
+                    final MaterialTapTargetPrompt basePrompt = (MaterialTapTargetPrompt) invocation.callRealMethod();
+                    if (basePrompt != null)
+                    {
+                        final MaterialTapTargetPrompt prompt = Mockito.spy(basePrompt);
+                        Mockito.when(prompt.calculateMaxTextWidth(prompt.mView.mPrimaryTextLayout))
+                                .thenReturn(primaryTextWidth);
+
+                        Mockito.doAnswer(new Answer<Void>()
+                        {
+                            public Void answer(InvocationOnMock invocation)
+                            {
+                                prompt.mView.mClipToBounds = true;
+                                prompt.mView.mClipBounds.set(0, 0, screenWidth, screenHeight);
+                                return null;
+                            }
+                        }).when(prompt).updateClipBounds();
+
+                        Mockito.doAnswer(new Answer<Void>()
+                        {
+                            public Void answer(InvocationOnMock invocation)
+                            {
+                                try
+                                {
+                                    invocation.callRealMethod();
+                                }
+                                catch (Throwable throwable)
+                                {
+                                    throwable.printStackTrace();
+                                }
+                                prompt.updateFocalCentrePosition();
+                                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB)
+                                {
+                                    //End the animation
+                                    prompt.mAnimationCurrent.end();
+                                    prompt.mView.mBackgroundRadius = prompt.mBaseBackgroundRadius;
+                                    prompt.mView.mFocalRadius = prompt.mBaseFocalRadius;
+                                    prompt.mView.mPaintFocal.setAlpha(255);
+                                    prompt.mView.mPaintBackground.setAlpha(244);
+                                    prompt.mPaintSecondaryText.setAlpha(prompt.mSecondaryTextColourAlpha);
+                                    prompt.mPaintPrimaryText.setAlpha(prompt.mPrimaryTextColourAlpha);
+                                }
+                                return null;
+                            }
+                        }).when(prompt).show();
+                        return prompt;
+                    }
+                    return null;
+                }
+            }).when(builder).create();
+        return builder;
     }
 
-    private void setScreenWidthAndHeight(final MaterialTapTargetPrompt prompt, final int width, final int height)
+    private void setViewBounds(final View view, final int width, final int height)
     {
-        final ViewGroup parent = prompt.mParentView;
         //TODO make this work for all versions
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB)
         {
-            parent.setLeft(0);
-            parent.setRight(0);
-            parent.setRight(width);
-            parent.setBottom(height);
+            view.setLeft(0);
+            view.setRight(0);
+            view.setRight(width);
+            view.setBottom(height);
+            final ViewParent parent = view.getParent();
+            if (parent != null && ((View) parent).getRight() != 0 && ((View) parent).getBottom() != 0)
+            {
+                setViewBounds(((View) parent), width, height);
+            }
         }
-        prompt.updateFocalCentrePosition();
     }
 }

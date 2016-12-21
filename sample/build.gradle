@@ -17,15 +17,15 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 23
-    buildToolsVersion "23.0.3"
+    compileSdkVersion rootProject.compileSdkVersion
+    buildToolsVersion rootProject.buildToolsVersion
 
     defaultConfig {
         applicationId "uk.co.samuelwall.materialtaptargetprompt.sample"
-        minSdkVersion 7
-        targetSdkVersion 23
-        versionCode project.versionCode
-        versionName project.versionName
+        minSdkVersion rootProject.minSdkVersion
+        targetSdkVersion rootProject.targetSdkVersion
+        versionCode rootProject.versionCode
+        versionName rootProject.versionName
     }
     buildTypes {
         release {
@@ -41,8 +41,8 @@ android {
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     testCompile 'junit:junit:4.12'
-    compile 'com.android.support:appcompat-v7:23.4.0'
-    compile 'com.android.support:support-v4:23.4.0'
-    compile 'com.android.support:design:23.4.0'
+    compile 'com.android.support:appcompat-v7:' + rootProject.supportLibVersion
+    compile 'com.android.support:support-v4:' + rootProject.supportLibVersion
+    compile 'com.android.support:design:' + rootProject.supportLibVersion
     compile project(':material-tap-target-prompt')
 }
