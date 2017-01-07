@@ -170,8 +170,17 @@ public class MainActivity extends AppCompatActivity
     {
         final MaterialTapTargetPrompt.Builder builder = new MaterialTapTargetPrompt.Builder(this, R.style.MaterialTapTargetPromptTheme_FabTarget);
         final Toolbar tb = (Toolbar) this.findViewById(R.id.toolbar);
+        final View child = tb.getChildAt(2);
+        if (child instanceof ActionMenuView)
+        {
+            final ActionMenuView actionMenuView = ((ActionMenuView) child);
+            builder.setTarget(actionMenuView.getChildAt(actionMenuView.getChildCount() - 1));
+        }
+        else
+        {
+            Toast.makeText(this, R.string.overflow_unavailable, Toast.LENGTH_SHORT);
+        }
         builder.setIcon(R.drawable.ic_more_vert)
-                .setTarget(tb.getChildAt(2))
                 .show();
     }
 
