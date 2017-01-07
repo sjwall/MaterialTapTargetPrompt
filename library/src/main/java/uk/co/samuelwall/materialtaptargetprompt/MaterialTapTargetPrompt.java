@@ -84,7 +84,7 @@ public class MaterialTapTargetPrompt
     OnHidePromptListener mOnHidePromptListener;
     boolean mDismissing;
     ViewGroup mParentView;
-    ViewGroup mClipToView;
+    View mClipToView;
     final float mStatusBarHeight;
     final ViewTreeObserver.OnGlobalLayoutListener mGlobalLayoutListener;
     boolean mAutoDismiss, mAutoFinish;
@@ -644,6 +644,11 @@ public class MaterialTapTargetPrompt
         }
         else
         {
+            final View contentView = mActivity.findViewById(android.R.id.content);
+            if (contentView != null)
+            {
+                contentView.getGlobalVisibleRect(mView.mClipBounds, new Point());
+            }
             mView.mClipToBounds = false;
         }
     }
@@ -851,6 +856,7 @@ public class MaterialTapTargetPrompt
         private View mTargetRenderView;
         private boolean mIdleAnimationEnabled = true;
         private int mPrimaryTextGravity = Gravity.START, mSecondaryTextGravity = Gravity.START;
+        private View mClipToView;
 
         /**
          * Creates a builder for a tap target prompt that uses the default
@@ -927,6 +933,8 @@ public class MaterialTapTargetPrompt
                     mTargetSet = true;
                 }
             }
+
+            mClipToView = mActivity.findViewById(android.R.id.content);
         }
 
         /**
@@ -1541,6 +1549,21 @@ public class MaterialTapTargetPrompt
         }
 
         /**
+         * Set the view to clip the prompt to.
+         * Default: {@link android.R.id#content}
+         *
+         * Null can be used to stop the prompt being clipped to a view.
+         *
+         * @param view The view to clip to
+         * @return This Builder object to allow for chaining of calls to set methods
+         */
+        public Builder setClipToView(final View view)
+        {
+            mClipToView = view;
+            return this;
+        }
+
+        /**
          * Creates an {@link MaterialTapTargetPrompt} with the arguments supplied to this
          * builder.
          * <p>
@@ -1573,7 +1596,7 @@ public class MaterialTapTargetPrompt
             mPrompt.mParentView = (ViewGroup) mActivity.getWindow().getDecorView();
             mPrompt.mView.mDrawRipple = Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB && mIdleAnimationEnabled;
             mPrompt.mIdleAnimationEnabled = mIdleAnimationEnabled;
-            mPrompt.mClipToView = (ViewGroup) ((ViewGroup) mActivity.findViewById(android.R.id.content)).getChildAt(0);
+            mPrompt.mClipToView = mClipToView;
 
             mPrompt.mPrimaryText = mPrimaryText;
             mPrompt.mPrimaryTextColourAlpha = Color.alpha(mPrimaryTextColour);

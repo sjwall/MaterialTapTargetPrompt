@@ -50,6 +50,7 @@ public class DialogStyleActivity extends AppCompatActivity
                 .setAnimationInterpolator(new FastOutSlowInInterpolator())
                 .setPrimaryText("Clipped to activity bounds")
                 .setSecondaryText("The prompt does not draw outside the activity")
+                .setClipToView(findViewById(R.id.dialog_view))
                 .show();
     }
 
@@ -60,7 +61,8 @@ public class DialogStyleActivity extends AppCompatActivity
                 .setSecondaryText(R.string.menu_prompt_description)
                 .setAnimationInterpolator(new FastOutSlowInInterpolator())
                 .setMaxTextWidth(R.dimen.tap_target_menu_max_width)
-                .setIcon(R.drawable.ic_back);
+                .setIcon(R.drawable.ic_back)
+                .setClipToView(findViewById(R.id.dialog_view));
         final Toolbar tb = (Toolbar) this.findViewById(R.id.toolbar);
         tapTargetPromptBuilder.setTarget(tb.getChildAt(1));
 
@@ -88,7 +90,8 @@ public class DialogStyleActivity extends AppCompatActivity
                 .setSecondaryText(R.string.overflow_prompt_description)
                 .setAnimationInterpolator(new FastOutSlowInInterpolator())
                 .setMaxTextWidth(R.dimen.tap_target_menu_max_width)
-                .setIcon(R.drawable.ic_more_vert);
+                .setIcon(R.drawable.ic_more_vert)
+                .setClipToView(findViewById(R.id.dialog_view));
         final Toolbar tb = (Toolbar) this.findViewById(R.id.toolbar);
         final View child = tb.getChildAt(2);
         if (child instanceof ActionMenuView)
@@ -112,6 +115,7 @@ public class DialogStyleActivity extends AppCompatActivity
                 .setMaxTextWidth(R.dimen.tap_target_menu_max_width)
                 .setIcon(R.drawable.ic_search)
                 .setTarget(R.id.action_search)
+                .setClipToView(findViewById(R.id.dialog_view))
                 .show();
     }
 
