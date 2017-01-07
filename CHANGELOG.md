@@ -2,6 +2,31 @@
 
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## v1.7.0 (2017-01-07)
+
+### Dialog style breaking changes
+
+The fix for the target activity not having a view group as its first child view changed the default view that is clipped to.
+This means that for the dialog activity sample the view that is clipped to needs to be set.
+
+```java
+builder.setClipToView(findViewById(R.id.dialog_view))
+```
+
+### Features
+
+* Added ability to set the view that the prompt is clipped to
+* Added app bar action icon examples
+
+### Bug Fixes
+
+* Fixed crash that occurred when target activity did not have a view group as its first child view
+
+### Other
+
+* Improved text position calculations
+* Improved background radius calculations
+
 ## v1.6.3 (2016-11-29)
 
 ### Bug Fixes
