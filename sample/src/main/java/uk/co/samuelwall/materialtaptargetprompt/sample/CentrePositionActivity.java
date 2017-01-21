@@ -45,7 +45,6 @@ public class CentrePositionActivity extends AppCompatActivity
                 .setSecondaryText(R.string.fab_centre_description)
                 .setAnimationInterpolator(new FastOutSlowInInterpolator())
                 .setMaxTextWidth(R.dimen.max_prompt_width)
-                .setIcon(R.drawable.ic_search)
                 .setTarget(view)
                 .setClipToView(findViewById(R.id.dialog_view))
                 .show();

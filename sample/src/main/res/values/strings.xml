@@ -76,6 +76,7 @@
 
     <string name="example_centre_title">Centre</string>
     <string name="example_centre_description">Displays activity with examples where the prompt is position away from the activity edges</string>
+    <string name="example_centre_instructions">Tap on a button to show a prompt</string>
 
     <string name="fab_centre_title">Centre</string>
     <string name="fab_centre_description">Text and background are positioned differently</string>
