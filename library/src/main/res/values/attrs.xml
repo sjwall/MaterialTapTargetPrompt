@@ -23,7 +23,9 @@
     <attr name="primaryTextColour" format="color"/>
     <attr name="secondaryTextColour" format="color"/>
     <attr name="backgroundColour" format="color"/>
+    <attr name="backgroundColourAlpha" format="integer"/>
     <attr name="focalColour" format="color"/>
+    <attr name="focalColourAlpha" format="integer"/>
     <attr name="focalRadius" format="dimension"/>
     <attr name="primaryTextSize" format="dimension"/>
     <attr name="secondaryTextSize" format="dimension"/>
@@ -76,7 +78,9 @@
         <attr name="primaryTextColour"/>
         <attr name="secondaryTextColour"/>
         <attr name="backgroundColour"/>
+        <attr name="backgroundColourAlpha"/>
         <attr name="focalColour"/>
+        <attr name="focalColourAlpha"/>
         <attr name="focalRadius"/>
         <attr name="primaryTextSize"/>
         <attr name="secondaryTextSize"/>
