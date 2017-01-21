@@ -232,9 +232,14 @@ public class MaterialTapTargetPrompt
     final ViewTreeObserver.OnGlobalLayoutListener mGlobalLayoutListener;
 
     /**
-     *
+     * Allow auto dismissing.
      */
-    boolean mAutoDismiss, mAutoFinish;
+    boolean mAutoDismiss;
+
+    /**
+     * Allow auto finishing.
+     */
+    boolean mAutoFinish;
 
     /**
      * True if the idle animation is enabled.
@@ -2149,7 +2154,7 @@ public class MaterialTapTargetPrompt
          * Based on parseTintMode in android appcompat v7 DrawableUtils, Copyright (C) 2014 The Android Open Source Project.
          * https://android.googlesource.com/platform/frameworks/support.git/+/master/v7/appcompat/src/android/support/v7/widget/DrawableUtils.java
          */
-        private PorterDuff.Mode parseTintMode(int value, PorterDuff.Mode defaultMode)
+        PorterDuff.Mode parseTintMode(int value, PorterDuff.Mode defaultMode)
         {
             switch (value)
             {
@@ -2172,10 +2177,10 @@ public class MaterialTapTargetPrompt
          * @param gravity The gravity to convert to absolute values
          * @return absolute layout direction
          */
-        private Layout.Alignment getTextAlignment(final int gravity)
+        Layout.Alignment getTextAlignment(final int gravity)
         {
             final int absoluteGravity;
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1)
+            if (isVersionAfterJellyBeanMR1())
             {
                 absoluteGravity = Gravity.getAbsoluteGravity(gravity,
                                 mActivity.getResources().getConfiguration().getLayoutDirection());
@@ -2209,6 +2214,11 @@ public class MaterialTapTargetPrompt
                     break;
             }
             return alignment;
+        }
+
+        boolean isVersionAfterJellyBeanMR1()
+        {
+            return Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1;
         }
     }
 

@@ -16,14 +16,21 @@
 
 package uk.co.samuelwall.materialtaptargetprompt;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.graphics.Color;
+import android.graphics.PorterDuff;
+import android.graphics.Typeface;
 import android.os.Build;
+import android.text.Layout;
+import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewParent;
 import android.view.animation.LinearInterpolator;
 import android.widget.FrameLayout;
+
+import junit.framework.Assert;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -281,6 +288,71 @@ public class MaterialTapTargetPromptUnitTest
         assertTrue(prompt.mView.onTouchEvent(MotionEvent.obtain(0, 0, MotionEvent.ACTION_DOWN, 60, 60, 0)));
     }
 
+    @Test
+    public void promptCentreLeft()
+    {
+        final MaterialTapTargetPrompt prompt = createBuilder(SCREEN_WIDTH, SCREEN_HEIGHT, 300)
+                .setPrimaryText("Primary text")
+                .setTarget(90, 90)
+                .show();
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB && prompt.mAnimationCurrent != null)
+        {
+            prompt.mAnimationCurrent.end();
+        }
+        assertEquals(191, prompt.mBaseBackgroundRadius, 1);
+        assertEquals(44, prompt.mBaseFocalRadius, 0);
+        assertEquals(4.4, prompt.mFocalRadius10Percent, .1);
+        assertEquals(90, prompt.mTargetPosition.x, 0);
+        assertEquals(90, prompt.mTargetPosition.y, 0);
+        assertTrue(prompt.mHorizontalTextPositionCentred);
+        assertFalse(prompt.mHorizontalTextPositionLeft);
+        assertEquals(190, prompt.mBaseBackgroundPosition.x, 1);
+        assertEquals(180, prompt.mBaseBackgroundPosition.y, 1);
+    }
+
+    @SuppressLint("RtlHardcoded")
+    @Test
+    public void testGetTextAlignment()
+    {
+        final MaterialTapTargetPrompt.Builder builder = createBuilder(SCREEN_WIDTH, SCREEN_HEIGHT, 340);
+        assertEquals(Layout.Alignment.ALIGN_NORMAL, builder.getTextAlignment(Gravity.START));
+        assertEquals(Layout.Alignment.ALIGN_NORMAL, builder.getTextAlignment(Gravity.LEFT));
+
+        assertEquals(Layout.Alignment.ALIGN_OPPOSITE, builder.getTextAlignment(Gravity.END));
+        assertEquals(Layout.Alignment.ALIGN_OPPOSITE, builder.getTextAlignment(Gravity.RIGHT));
+
+        assertEquals(Layout.Alignment.ALIGN_CENTER, builder.getTextAlignment(Gravity.CENTER_HORIZONTAL));
+
+        Mockito.when(builder.isVersionAfterJellyBeanMR1()).thenReturn(false);
+
+        assertEquals(Layout.Alignment.ALIGN_NORMAL, builder.getTextAlignment(Gravity.START));
+        assertEquals(Layout.Alignment.ALIGN_NORMAL, builder.getTextAlignment(Gravity.LEFT));
+
+        assertEquals(Layout.Alignment.ALIGN_OPPOSITE, builder.getTextAlignment(Gravity.END));
+        assertEquals(Layout.Alignment.ALIGN_OPPOSITE, builder.getTextAlignment(Gravity.RIGHT));
+
+        assertEquals(Layout.Alignment.ALIGN_CENTER, builder.getTextAlignment(Gravity.CENTER_HORIZONTAL));
+    }
+
+    @Test
+    public void testParseTintMode()
+    {
+        final MaterialTapTargetPrompt.Builder builder = createBuilder(SCREEN_WIDTH, SCREEN_HEIGHT, 340);
+        builder.parseTintMode(3, PorterDuff.Mode.SRC_OVER);
+        builder.parseTintMode(5, PorterDuff.Mode.SRC_IN);
+        builder.parseTintMode(9, PorterDuff.Mode.SRC_ATOP);
+        builder.parseTintMode(14, PorterDuff.Mode.MULTIPLY);
+        builder.parseTintMode(15, PorterDuff.Mode.SCREEN);
+        if (Build.VERSION.SDK_INT >= 11)
+        {
+            builder.parseTintMode(16, PorterDuff.Mode.ADD);
+        }
+        else
+        {
+            builder.parseTintMode(16, PorterDuff.Mode.valueOf("ADD"));
+        }
+    }
+
     private MaterialTapTargetPrompt.Builder createBuilder(final int screenWidth,
                                               final int screenHeight, final float primaryTextWidth)
     {
@@ -306,8 +378,18 @@ public class MaterialTapTargetPromptUnitTest
                         {
                             public Void answer(InvocationOnMock invocation)
                             {
+                                try
+                                {
+                                    invocation.callRealMethod();
+                                }
+                                catch (final Throwable throwable)
+                                {
+                                    throwable.printStackTrace();
+                                }
                                 prompt.mView.mClipToBounds = true;
                                 prompt.mView.mClipBounds.set(0, 0, screenWidth, screenHeight);
+                                prompt.mLeft88dp = prompt.mView.mClipBounds.left + prompt.m88dp;
+                                prompt.mRight88dp = prompt.mView.mClipBounds.right - prompt.m88dp;
                                 return null;
                             }
                         }).when(prompt).updateClipBounds();
