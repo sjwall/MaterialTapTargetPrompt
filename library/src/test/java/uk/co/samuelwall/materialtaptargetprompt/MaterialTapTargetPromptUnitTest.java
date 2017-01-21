@@ -80,8 +80,8 @@ public class MaterialTapTargetPromptUnitTest
         assertEquals(55f, prompt.mBaseFocalRadius, 0.0f);
         assertEquals(5.5f, prompt.mFocalRadius10Percent, 0.0f);
         assertNull(prompt.mTargetView);
-        assertEquals(50f, prompt.mBaseLeft, 0.0f);
-        assertEquals(40f, prompt.mBaseTop, 0.0f);
+        assertEquals(50f, prompt.mTargetPosition.x, 0.0f);
+        assertEquals(40f, prompt.mTargetPosition.y, 0.0f);
         assertEquals(30f, prompt.mPaintPrimaryText.getTextSize(), 0f);
         assertEquals(20f, prompt.mPaintSecondaryText.getTextSize(), 0f);
         assertEquals(Color.CYAN, prompt.mPaintPrimaryText.getColor());
