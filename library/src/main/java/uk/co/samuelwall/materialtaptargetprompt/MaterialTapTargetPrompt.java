@@ -64,15 +64,65 @@ import android.view.animation.Interpolator;
  */
 public class MaterialTapTargetPrompt
 {
+    /**
+     * The activity that contains the view.
+     */
     Activity mActivity;
+
+    /**
+     * The view that renders the prompt.
+     */
     PromptView mView;
+
+    /**
+     * The prompt view target.
+     */
     View mTargetView;
-    float mBaseLeft, mBaseTop;
-    float mBaseFocalRadius, mBaseBackgroundRadius;
+
+    /**
+     * The prompt target as a position.
+     */
+    PointF mTargetPosition;
+
+    /**
+     * The focal radius prior to animation changes.
+     */
+    float mBaseFocalRadius;
+
+    /**
+     * The background radius prior to animation changes.
+     */
+    float mBaseBackgroundRadius;
+
+    /**
+     * The background centre position prior to animation changes.
+     */
     PointF mBaseBackgroundPosition = new PointF();
+
+    /**
+     * The focal radius + 10 percent.
+     */
     float mFocalRadius10Percent;
+
+    /**
+     * The current amount that the prompt has been revealed.
+     * Any value between 1 to 0 inclusive.
+     */
     float mRevealedAmount;
-    String mPrimaryText, mSecondaryText;
+
+    /**
+     * The primary text to display.
+     */
+    String mPrimaryText;
+
+    /**
+     * The secondary text to display.
+     */
+    String mSecondaryText;
+
+    /**
+     * The maximum width that the displayed text can be.
+     */
     float mMaxTextWidth;
 
     /**
@@ -97,22 +147,111 @@ public class MaterialTapTargetPrompt
      * False: Background centre should be the same as the focal centre.
      */
     boolean mHorizontalTextPositionCentred;
+
+    /**
+     * The distance between the focal edge and the displayed text.
+     */
     float mFocalToTextPadding;
-    int mPrimaryTextColourAlpha, mSecondaryTextColourAlpha;
-    ValueAnimator mAnimationCurrent, mAnimationFocalRipple;
+
+    /**
+     * The primary text colour alpha value.
+     */
+    int mPrimaryTextColourAlpha;
+
+    /**
+     * The secondary text colour alpha value.
+     */
+    int mSecondaryTextColourAlpha;
+
+    /**
+     * Used to calculate the animation progress for the reveal and dismiss animations.
+     */
+    ValueAnimator mAnimationCurrent;
+
+    /**
+     * Used to calculate the animation progress for the idle animation.
+     */
+    ValueAnimator mAnimationFocalRipple;
+
+    /**
+     * The animation interpolator to use for animations.
+     */
     Interpolator mAnimationInterpolator;
+
+    /**
+     * The last percentage progress for idle animation.
+     * Value between 1 to 0 inclusive.
+     * Used in the idle animation to track when the animation should change direction.
+     */
     float mFocalRippleProgress;
+
+    /**
+     * The focal ripple alpha value.
+     */
     int mBaseFocalRippleAlpha;
-    TextPaint mPaintPrimaryText, mPaintSecondaryText;
+
+    /**
+     * The paint used to draw the primary text.
+     */
+    TextPaint mPaintPrimaryText;
+
+    /**
+     * The paint used to draw the secondary text.
+     */
+    TextPaint mPaintSecondaryText;
+
+    /**
+     * The listener for prompt events.
+     * Can be null.
+     */
     OnHidePromptListener mOnHidePromptListener;
+
+    /**
+     * Is the prompt currently being removed from view.
+     */
     boolean mDismissing;
+
+    /**
+     * The view group which contains the target view.
+     */
     ViewGroup mParentView;
+
+    /**
+     * The view to clip the prompt drawing to.
+     */
     View mClipToView;
+
+    /**
+     * The system status bar height.
+     */
     final float mStatusBarHeight;
+
+    /**
+     * Listener for the view layout changing.
+     */
     final ViewTreeObserver.OnGlobalLayoutListener mGlobalLayoutListener;
+
+    /**
+     *
+     */
     boolean mAutoDismiss, mAutoFinish;
+
+    /**
+     * True if the idle animation is enabled.
+     */
     boolean mIdleAnimationEnabled = true;
-    Layout.Alignment mPrimaryTextAlignment, mSecondaryTextAlignment;
+
+    /**
+     * The primary text layout alignment.
+     * Left, centre or right.
+     */
+    Layout.Alignment mPrimaryTextAlignment;
+
+    /**
+     * The secondary text layout alignment.
+     * Left, centre or right.
+     */
+    Layout.Alignment mSecondaryTextAlignment;
 
     /**
      * X position that is 88dp from the left edge.
@@ -134,6 +273,11 @@ public class MaterialTapTargetPrompt
      */
     float m20dp;
 
+    /**
+     * Default constructor.
+     *
+     * @param activity The activity that contains the target view.
+     */
     MaterialTapTargetPrompt(final Activity activity)
     {
         mActivity = activity;
@@ -546,13 +690,13 @@ public class MaterialTapTargetPrompt
             final int[] targetPosition = new int[2];
             mTargetView.getLocationInWindow(targetPosition);
 
-            mView.mFocalCentre.x = mBaseLeft + targetPosition[0] - viewPosition[0] + (mTargetView.getWidth() / 2);
-            mView.mFocalCentre.y = mBaseTop + targetPosition[1] - viewPosition[1] + (mTargetView.getHeight() / 2);
+            mView.mFocalCentre.x = targetPosition[0] - viewPosition[0] + (mTargetView.getWidth() / 2);
+            mView.mFocalCentre.y = targetPosition[1] - viewPosition[1] + (mTargetView.getHeight() / 2);
         }
         else
         {
-            mView.mFocalCentre.x = mBaseLeft;
-            mView.mFocalCentre.y = mBaseTop;
+            mView.mFocalCentre.x = mTargetPosition.x;
+            mView.mFocalCentre.y = mTargetPosition.y;
         }
 
         mVerticalTextPositionAbove = mView.mFocalCentre.y > mView.mClipBounds.centerY();
@@ -637,6 +781,15 @@ public class MaterialTapTargetPrompt
         updateBackgroundRadius(textWidth);
     }
 
+    /**
+     * Creates a static text layout. Uses the {@link android.text.StaticLayout.Builder} if available.
+     * 
+     * @param text The text to be laid out, optionally with spans
+     * @param paint The base paint used for layout
+     * @param maxTextWidth The width in pixels
+     * @param textAlignment Alignment for the resulting {@link StaticLayout}
+     * @return the newly constructed {@link StaticLayout} object
+     */
     private StaticLayout createStaticTextLayout(final String text, final TextPaint paint,
                                     final int maxTextWidth, final Layout.Alignment textAlignment)
     {
@@ -654,6 +807,12 @@ public class MaterialTapTargetPrompt
         return layout;
     }
 
+    /**
+     * Calculates the maximum width line in a text layout.
+     *
+     * @param textLayout The text layout
+     * @return The maximum length line
+     */
     float calculateMaxTextWidth(final Layout textLayout)
     {
         float maxTextWidth = 0f;
@@ -667,6 +826,11 @@ public class MaterialTapTargetPrompt
         return maxTextWidth;
     }
 
+    /**
+     * Updates the background position and radius.
+     *
+     * @param maxTextWidth The maximum width for the displayed text.
+     */
     void updateBackgroundRadius(final float maxTextWidth)
     {
         final float length = maxTextWidth + mTextPadding;
@@ -738,8 +902,8 @@ public class MaterialTapTargetPrompt
             final int[] targetPosition = new int[2];
             mView.mTargetRenderView.getLocationInWindow(targetPosition);
 
-            mView.mIconDrawableLeft = mBaseLeft + targetPosition[0] - viewPosition[0];
-            mView.mIconDrawableTop = mBaseTop + targetPosition[1] - viewPosition[1];
+            mView.mIconDrawableLeft = targetPosition[0] - viewPosition[0];
+            mView.mIconDrawableTop = targetPosition[1] - viewPosition[1];
         }
     }
 
@@ -953,7 +1117,7 @@ public class MaterialTapTargetPrompt
         /**
          * The left and top positioning for the focal centre point.
          */
-        private float mCentreLeft, mCentreTop;
+        private PointF mTargetPosition;
 
         /**
          * The text to display.
@@ -1085,6 +1249,7 @@ public class MaterialTapTargetPrompt
         public Builder setTarget(@IdRes final int target)
         {
             mTargetView = mActivity.findViewById(target);
+            mTargetPosition = null;
             mTargetSet = mTargetView != null;
             return this;
         }
@@ -1098,8 +1263,7 @@ public class MaterialTapTargetPrompt
         public Builder setTarget(final float left, final float top)
         {
             mTargetView = null;
-            mCentreLeft = left;
-            mCentreTop = top;
+            mTargetPosition = new PointF(left, top);
             mTargetSet = true;
             return this;
         }
@@ -1718,8 +1882,7 @@ public class MaterialTapTargetPrompt
             }
             else
             {
-                mPrompt.mBaseLeft = mCentreLeft;
-                mPrompt.mBaseTop = mCentreTop;
+                mPrompt.mTargetPosition = mTargetPosition;
             }
             mPrompt.mParentView = (ViewGroup) mActivity.getWindow().getDecorView();
             mPrompt.mView.mDrawRipple = Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB && mIdleAnimationEnabled;
