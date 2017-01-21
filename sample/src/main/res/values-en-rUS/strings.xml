@@ -1,5 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
 <!--
-  ~ Copyright (C) 2016 Samuel Wall
+  ~ Copyright (C) 2017 Samuel Wall
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
   ~ you may not use this file except in compliance with the License.
@@ -74,9 +75,9 @@
 
     <string name="overflow_unavailable">Overflow unavailable</string>
 
-    <string name="example_centre_title">Centre</string>
+    <string name="example_centre_title">Center</string>
     <string name="example_centre_description">Displays activity with examples where the prompt is position away from the activity edges</string>
 
-    <string name="fab_centre_title">Centre</string>
+    <string name="fab_centre_title">Center</string>
     <string name="fab_centre_description">Text and background are positioned differently</string>
 </resources>

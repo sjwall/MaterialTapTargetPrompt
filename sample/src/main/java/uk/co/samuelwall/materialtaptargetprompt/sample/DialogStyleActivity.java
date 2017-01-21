@@ -89,7 +89,7 @@ public class DialogStyleActivity extends AppCompatActivity
                 .setPrimaryText(R.string.overflow_prompt_title)
                 .setSecondaryText(R.string.overflow_prompt_description)
                 .setAnimationInterpolator(new FastOutSlowInInterpolator())
-                .setMaxTextWidth(R.dimen.tap_target_menu_max_width)
+                .setMaxTextWidth(R.dimen.max_prompt_width)
                 .setIcon(R.drawable.ic_more_vert)
                 .setClipToView(findViewById(R.id.dialog_view));
         final Toolbar tb = (Toolbar) this.findViewById(R.id.toolbar);
@@ -112,7 +112,7 @@ public class DialogStyleActivity extends AppCompatActivity
                 .setPrimaryText(R.string.search_prompt_title)
                 .setSecondaryText(R.string.search_prompt_description)
                 .setAnimationInterpolator(new FastOutSlowInInterpolator())
-                .setMaxTextWidth(R.dimen.tap_target_menu_max_width)
+                .setMaxTextWidth(R.dimen.max_prompt_width)
                 .setIcon(R.drawable.ic_search)
                 .setTarget(R.id.action_search)
                 .setClipToView(findViewById(R.id.dialog_view))

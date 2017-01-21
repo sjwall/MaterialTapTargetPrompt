@@ -207,6 +207,12 @@ public class MainActivity extends AppCompatActivity
         startActivity(new Intent(this, EmptyActivity.class));
     }
 
+
+    public void showCentreActivity(View view)
+    {
+        startActivity(new Intent(this, CentrePositionActivity.class));
+    }
+
     public void showNoAutoDismiss(View view)
     {
         if (mFabPrompt != null)

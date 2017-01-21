@@ -74,6 +74,7 @@ public class EmptyActivity extends AppCompatActivity
         setContentView(R.layout.app_bar_main);
         findViewById(R.id.other_examples_activity).setVisibility(View.GONE);
         findViewById(R.id.other_examples_dialog).setVisibility(View.GONE);
+        findViewById(R.id.other_examples_centre).setVisibility(View.GONE);
         final Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);

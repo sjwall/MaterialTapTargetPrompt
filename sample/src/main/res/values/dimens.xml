@@ -25,4 +25,6 @@
     <dimen name="tap_target_menu_max_width">350dp</dimen>
     <dimen name="example_button_width">140dp</dimen>
     <dimen name="example_item_top_padding">8dp</dimen>
+    <dimen name="max_prompt_width">300dp</dimen>
+    <dimen name="centre_example_padding">90dp</dimen>
 </resources>

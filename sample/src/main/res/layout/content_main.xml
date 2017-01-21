@@ -190,5 +190,23 @@
                 android:layout_gravity="center_vertical"
                 android:text="@string/example_dialog_description"/>
     </LinearLayout>
+    <LinearLayout
+        android:id="@+id/other_examples_centre"
+        android:orientation="horizontal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingTop="@dimen/example_item_top_padding">
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:width="@dimen/example_button_width"
+            android:text="@string/example_centre_title"
+            android:onClick="showCentreActivity"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:text="@string/example_centre_description"/>
+    </LinearLayout>
 </LinearLayout>
 </ScrollView>
