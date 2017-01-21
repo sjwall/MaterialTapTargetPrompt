@@ -2,6 +2,18 @@
 
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## v1.8.0 (2017-01-21)
+
+### Features
+
+* Added following guidelines on centre positioned targets
+* Added setting background colour alpha
+* Added setting focal colour alpha
+
+### Bug Fixes
+
+* Fixed incorrect text positioning on centre positioned targets
+
 ## v1.7.0 (2017-01-07)
 
 ### Dialog style breaking changes
