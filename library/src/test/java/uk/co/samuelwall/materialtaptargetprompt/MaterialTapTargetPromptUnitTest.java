@@ -45,6 +45,9 @@ import static org.junit.Assert.assertNull;
 @Config(constants = uk.co.samuelwall.materialtaptargetprompt.BuildConfig.class, sdk = 22)
 public class MaterialTapTargetPromptUnitTest
 {
+    private static int SCREEN_WIDTH = 1080;
+    private static int SCREEN_HEIGHT = 1920;
+
     @Before
     public void setup()
     {
@@ -55,7 +58,7 @@ public class MaterialTapTargetPromptUnitTest
     public void promptFromVariables()
     {
         LinearInterpolator interpolator = new LinearInterpolator();
-        MaterialTapTargetPrompt.Builder builder = createBuilder(1080, 1920, 340)
+        MaterialTapTargetPrompt.Builder builder = createBuilder(SCREEN_WIDTH, SCREEN_HEIGHT, 340)
             .setTarget(50, 40)
             .setPrimaryText("Primary text")
             .setSecondaryText("Secondary text")
@@ -105,7 +108,7 @@ public class MaterialTapTargetPromptUnitTest
     @Test
     public void promptNotCreatedWhenTargetNotSet()
     {
-        MaterialTapTargetPrompt.Builder builder = createBuilder(1080, 1920, 340)
+        MaterialTapTargetPrompt.Builder builder = createBuilder(SCREEN_WIDTH, SCREEN_HEIGHT, 340)
                 .setPrimaryText("Primary text")
                 .setSecondaryText("Secondary text");
         assertNull(builder.create());
@@ -114,7 +117,7 @@ public class MaterialTapTargetPromptUnitTest
     @Test
     public void promptNotCreatedWhenPrimaryTextNotSet()
     {
-        MaterialTapTargetPrompt.Builder builder = createBuilder(1080, 1920, 340)
+        MaterialTapTargetPrompt.Builder builder = createBuilder(SCREEN_WIDTH, SCREEN_HEIGHT, 340)
                 .setTarget(50, 40)
                 .setSecondaryText("Secondary text");
         assertNull(builder.create());
@@ -123,7 +126,7 @@ public class MaterialTapTargetPromptUnitTest
     @Test
     public void promptCreatedWhenSecondaryTextNotSet()
     {
-        MaterialTapTargetPrompt.Builder builder = createBuilder(1080, 1920, 340)
+        MaterialTapTargetPrompt.Builder builder = createBuilder(SCREEN_WIDTH, SCREEN_HEIGHT, 340)
                 .setTarget(50, 40)
                 .setPrimaryText("Primary text");
         MaterialTapTargetPrompt prompt = builder.create();
@@ -143,7 +146,7 @@ public class MaterialTapTargetPromptUnitTest
     @Test
     public void promptAnimationCancel()
     {
-        MaterialTapTargetPrompt prompt = createBuilder(1080, 1920, 340)
+        MaterialTapTargetPrompt prompt = createBuilder(SCREEN_WIDTH, SCREEN_HEIGHT, 340)
                 .setTarget(10, 10)
                 .setPrimaryText("Primary text")
                 .show();
@@ -165,7 +168,7 @@ public class MaterialTapTargetPromptUnitTest
     @Test
     public void promptCancelFinishAnimation()
     {
-        MaterialTapTargetPrompt prompt = createBuilder(1080, 1920, 340)
+        MaterialTapTargetPrompt prompt = createBuilder(SCREEN_WIDTH, SCREEN_HEIGHT, 340)
                 .setTarget(10, 10)
                 .setPrimaryText("Primary text")
                 .setOnHidePromptListener(new MaterialTapTargetPrompt.OnHidePromptListener()
@@ -197,7 +200,7 @@ public class MaterialTapTargetPromptUnitTest
     @Test
     public void promptTouchEventFocal()
     {
-        MaterialTapTargetPrompt prompt = createBuilder(1080, 1920, 340)
+        MaterialTapTargetPrompt prompt = createBuilder(SCREEN_WIDTH, SCREEN_HEIGHT, 340)
                 .setTarget(10, 10)
                 .setPrimaryText("Primary text")
                 .setOnHidePromptListener(new MaterialTapTargetPrompt.OnHidePromptListener()
@@ -221,7 +224,7 @@ public class MaterialTapTargetPromptUnitTest
     @Test
     public void promptTouchEventFocalCaptureEvent()
     {
-        MaterialTapTargetPrompt prompt = createBuilder(1080, 1920, 340)
+        MaterialTapTargetPrompt prompt = createBuilder(SCREEN_WIDTH, SCREEN_HEIGHT, 340)
                 .setTarget(10, 10)
                 .setPrimaryText("Primary text")
                 .setCaptureTouchEventOnFocal(true)
@@ -246,7 +249,7 @@ public class MaterialTapTargetPromptUnitTest
     @Test
     public void promptTouchEventFocalNoListener()
     {
-        MaterialTapTargetPrompt prompt = createBuilder(1080, 1920, 340)
+        MaterialTapTargetPrompt prompt = createBuilder(SCREEN_WIDTH, SCREEN_HEIGHT, 340)
                 .setTarget(10, 10)
                 .setPrimaryText("Primary text")
                 .setCaptureTouchEventOnFocal(true)
@@ -257,7 +260,7 @@ public class MaterialTapTargetPromptUnitTest
     @Test
     public void promptTouchEventBackground()
     {
-        MaterialTapTargetPrompt prompt = createBuilder(1080, 1920, 340)
+        MaterialTapTargetPrompt prompt = createBuilder(SCREEN_WIDTH, SCREEN_HEIGHT, 340)
                 .setTarget(10, 10)
                 .setPrimaryText("Primary text")
                 .setOnHidePromptListener(new MaterialTapTargetPrompt.OnHidePromptListener()
