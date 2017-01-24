@@ -2,6 +2,12 @@
 
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## v1.8.1 (2017-01-24)
+
+### Bug Fixes
+
+* Fixed background not showing when animations are disabled
+
 ## v1.8.0 (2017-01-21)
 
 ### Features
