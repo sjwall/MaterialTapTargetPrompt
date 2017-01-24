@@ -333,10 +333,6 @@ public class MaterialTapTargetPrompt
                 public void onGlobalLayout()
                 {
                     updateFocalCentrePosition();
-                    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.HONEYCOMB)
-                    {
-                        mView.mBackgroundRadius = mBaseBackgroundRadius;
-                    }
                 }
             };
     }
@@ -354,6 +350,7 @@ public class MaterialTapTargetPrompt
         }
         else
         {
+            mRevealedAmount = 1f;
             mView.mBackgroundRadius = mBaseBackgroundRadius;
             mView.mFocalRadius = mBaseFocalRadius;
             mView.mPaintFocal.setAlpha(mBaseFocalColourAlpha);
@@ -902,6 +899,7 @@ public class MaterialTapTargetPrompt
             }
             mBaseBackgroundRadius = (float) Math.sqrt(Math.pow(length, 2) + Math.pow(height, 2));
         }
+        mView.mBackgroundRadius = mBaseBackgroundRadius * mRevealedAmount;
     }
 
     void updateIconPosition()
