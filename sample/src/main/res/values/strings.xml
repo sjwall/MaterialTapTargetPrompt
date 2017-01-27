@@ -80,4 +80,15 @@
 
     <string name="fab_centre_title">Centre</string>
     <string name="fab_centre_description">Text and background are positioned differently</string>
+
+    <string name="example_card_title">Cards</string>
+    <string name="example_card_description">Displays activity with a prompt contained within a card</string>
+
+    <string name="title_activity_card">Card Example</string>
+
+    <string name="example_card_fab_title">Card example</string>
+    <string name="example_card_fab_description">Tap to see a card example</string>
+
+    <string name="example_card_card_title">Card example</string>
+    <string name="example_card_card_description">Clipped to card bounds</string>
 </resources>

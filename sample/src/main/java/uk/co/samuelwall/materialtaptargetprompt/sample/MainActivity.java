@@ -213,6 +213,11 @@ public class MainActivity extends AppCompatActivity
         startActivity(new Intent(this, CentrePositionActivity.class));
     }
 
+    public void showCardsActivity(View view)
+    {
+        startActivity(new Intent(this, CardActivity.class));
+    }
+
     public void showNoAutoDismiss(View view)
     {
         if (mFabPrompt != null)

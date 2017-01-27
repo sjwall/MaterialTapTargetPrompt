@@ -22,4 +22,6 @@
 
     <color name="green_200">#68EFAD</color>
     <color name="orange_200">#FFCC80</color>
+
+    <color name="gray_300">#E0E0E0</color>
 </resources>
