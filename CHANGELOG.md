@@ -2,6 +2,16 @@
 
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## v1.8.2 (2017-01-27)
+
+### Bug Fixes
+
+* Fixed point in background calculation
+
+### Other
+
+* Added card example
+
 ## v1.8.1 (2017-01-24)
 
 ### Bug Fixes
