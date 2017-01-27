@@ -5,12 +5,14 @@
 
 A Tap Target implementation in Android based on Material Design Onboarding guidelines. For more information on tap targets check out the [guidelines][1].
 
-![Example](http://i.imgur.com/Ei7iAcn.png?1)
+![FAB Example](art/example_FAB.png) ![App Bar Example](art/example_appbar.png)
+
+![Card Example](art/example_card.png) ![Centre Example](art/example_centre.png)
 
 # Sample App
 The sample app in the repository is available on Google Play:
 
-<a href='https://play.google.com/store/apps/details?id=uk.co.samuelwall.materialtaptargetprompt.sample&utm_source=global_co&utm_medium=prtnr&utm_content=Mar2515&utm_campaign=PartBadge&pcampaignid=MKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1'><img alt='Get it on Google Play' style='max-width:250px' src='https://play.google.com/intl/en_us/badges/images/generic/en_badge_web_generic.png'/></a>
+<a href='https://play.google.com/store/apps/details?id=uk.co.samuelwall.materialtaptargetprompt.sample&utm_source=global_co&utm_medium=prtnr&utm_content=Mar2515&utm_campaign=PartBadge&pcampaignid=MKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1'><img alt='Get it on Google Play' style='max-width:250px' src='art/play_store.png'/></a>
 
 # Gradle
 To use the gradle dependency, add this to build.gradle:
@@ -23,7 +25,7 @@ dependencies {
     compile 'uk.co.samuelwall:material-tap-target-prompt:1.8.2'
 }
 ```
-
+Supports minSdkVersion 7
 # Usage
 Basic usage is shown below with more examples in the sample app:
 
