@@ -1055,9 +1055,10 @@ public class MaterialTapTargetPrompt
             final float x = event.getX();
             final float y = event.getY();
             //If the touch point is within the prompt background stop the event from passing through it
-            boolean captureEvent = pointInCircle(x, y, mBackgroundRadius);
+            boolean captureEvent = (!mClipToBounds || mClipBounds.contains((int) x, (int) y))
+                                    && pointInCircle(x, y, mBackgroundPosition, mBackgroundRadius);
             //If the touch event was at least in the background and in the focal
-            if (captureEvent && pointInCircle(x, y, mFocalRadius))
+            if (captureEvent && pointInCircle(x, y, mFocalCentre, mFocalRadius))
             {
                 //Override allowing the touch event to pass through the view with the user defined value
                 captureEvent = mCaptureTouchEventOnFocal;
@@ -1080,12 +1081,13 @@ public class MaterialTapTargetPrompt
          *
          * @param x The x position in the view.
          * @param y The y position in the view.
+         * @param circleCentre The circle centre position
          * @param radius The radius of the circle.
          * @return True if the point (x, y) is in the circle.
          */
-        boolean pointInCircle(final float x, final float y, final float radius)
+        boolean pointInCircle(final float x, final float y, final PointF circleCentre, final float radius)
         {
-            return Math.pow(x - mFocalCentre.x, 2) + Math.pow(y - mFocalCentre.y, 2) < Math.pow(radius, 2);
+            return Math.pow(x - circleCentre.x, 2) + Math.pow(y - circleCentre.y, 2) < Math.pow(radius, 2);
         }
 
         protected void onPromptTouched(final MotionEvent event, final boolean targetTapped)
