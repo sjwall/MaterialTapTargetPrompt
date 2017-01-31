@@ -1266,7 +1266,7 @@ public class MaterialTapTargetPrompt
         public Builder setTarget(final View target)
         {
             mTargetView = target;
-            mTargetSet = true;
+            mTargetSet = mTargetView != null;
             return this;
         }
 
