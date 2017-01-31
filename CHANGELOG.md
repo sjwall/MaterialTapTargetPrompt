@@ -2,6 +2,12 @@
 
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## v1.8.3 (2017-01-31)
+
+### Bug Fixes
+
+* Fixed null target view not being handled gracefully
+
 ## v1.8.2 (2017-01-27)
 
 ### Bug Fixes
