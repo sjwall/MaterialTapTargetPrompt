@@ -30,6 +30,7 @@ import android.graphics.Point;
 import android.graphics.PointF;
 import android.graphics.PorterDuff;
 import android.graphics.Rect;
+import android.graphics.RectF;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
@@ -259,14 +260,9 @@ public class MaterialTapTargetPrompt
     Layout.Alignment mSecondaryTextAlignment;
 
     /**
-     * X position that is 88dp from the left edge.
+     * Clip view bounds inset by 88dp.
      */
-    float mLeft88dp;
-
-    /**
-     * X position that is 88dp from the right edge.
-     */
-    float mRight88dp;
+    RectF mClipViewBoundsInset88dp;
 
     /**
      * 88dp pixel value.
@@ -714,7 +710,8 @@ public class MaterialTapTargetPrompt
 
         mVerticalTextPositionAbove = mView.mFocalCentre.y > mView.mClipBounds.centerY();
         mHorizontalTextPositionLeft = mView.mFocalCentre.x > mView.mClipBounds.centerX();
-        mHorizontalTextPositionCentred = mView.mFocalCentre.x > mLeft88dp && mView.mFocalCentre.x < mRight88dp;
+        mHorizontalTextPositionCentred = (mView.mFocalCentre.x > mClipViewBoundsInset88dp.left && mView.mFocalCentre.x < mClipViewBoundsInset88dp.right)
+                                        || (mView.mFocalCentre.y > mClipViewBoundsInset88dp.top && mView.mFocalCentre.y < mClipViewBoundsInset88dp.bottom);
 
         updateTextPositioning();
         updateIconPosition();
@@ -939,8 +936,8 @@ public class MaterialTapTargetPrompt
                 mView.mClipBounds.top += mStatusBarHeight;
             }
 
-            mLeft88dp = mView.mClipBounds.left + m88dp;
-            mRight88dp = mView.mClipBounds.right - m88dp;
+            mClipViewBoundsInset88dp = new RectF(mView.mClipBounds);
+            mClipViewBoundsInset88dp.inset(m88dp,  m88dp);
         }
         else
         {
@@ -948,8 +945,8 @@ public class MaterialTapTargetPrompt
             if (contentView != null)
             {
                 contentView.getGlobalVisibleRect(mView.mClipBounds, new Point());
-                mLeft88dp = mView.mClipBounds.left + m88dp;
-                mRight88dp = mView.mClipBounds.right - m88dp;
+                mClipViewBoundsInset88dp = new RectF(mView.mClipBounds);
+                mClipViewBoundsInset88dp.inset(m88dp,  m88dp);
             }
             mView.mClipToBounds = false;
         }

@@ -46,7 +46,6 @@ public class CentrePositionActivity extends AppCompatActivity
                 .setAnimationInterpolator(new FastOutSlowInInterpolator())
                 .setMaxTextWidth(R.dimen.max_prompt_width)
                 .setTarget(view)
-                .setClipToView(findViewById(R.id.dialog_view))
                 .show();
     }
 

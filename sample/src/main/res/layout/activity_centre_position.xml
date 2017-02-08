@@ -38,7 +38,6 @@
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
             android:layout_centerVertical="true"
-            android:layout_margin="@dimen/centre_example_padding"
             android:onClick="showPrompt"
             android:src="@android:drawable/ic_dialog_email" />
 
@@ -49,7 +48,6 @@
             android:layout_alignParentRight="true"
             android:layout_alignParentEnd="true"
             android:layout_centerVertical="true"
-            android:layout_margin="@dimen/centre_example_padding"
             android:onClick="showPrompt"
             android:src="@android:drawable/ic_dialog_email" />
 
@@ -59,7 +57,6 @@
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
             android:layout_centerHorizontal="true"
-            android:layout_margin="@dimen/centre_example_padding"
             android:onClick="showPrompt"
             android:src="@android:drawable/ic_dialog_email" />
 
@@ -69,7 +66,6 @@
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
             android:layout_centerHorizontal="true"
-            android:layout_margin="@dimen/centre_example_padding"
             android:onClick="showPrompt"
             android:src="@android:drawable/ic_dialog_email" />
 
@@ -78,7 +74,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
-            android:layout_margin="@dimen/centre_example_padding"
             android:onClick="showPrompt"
             android:src="@android:drawable/ic_dialog_email" />
     </RelativeLayout>
