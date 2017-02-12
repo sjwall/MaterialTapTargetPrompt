@@ -144,10 +144,14 @@ public class MaterialTapTargetPrompt
     boolean mHorizontalTextPositionLeft;
 
     /**
-     * True: Background should be offset by 20dp as defined in guidelines.
-     * False: Background centre should be the same as the focal centre.
+     * Is the target more than 88dp from the left or right.
      */
     boolean mHorizontalTextPositionCentred;
+
+    /**
+     * Is the target more than 88dp from the top or bottom.
+     */
+    boolean mVerticalTextPositionCentred;
 
     /**
      * The distance between the focal edge and the displayed text.
@@ -713,8 +717,8 @@ public class MaterialTapTargetPrompt
 
         mVerticalTextPositionAbove = mView.mFocalCentre.y > mView.mClipBounds.centerY();
         mHorizontalTextPositionLeft = mView.mFocalCentre.x > mView.mClipBounds.centerX();
-        mHorizontalTextPositionCentred = (mView.mFocalCentre.x > mClipViewBoundsInset88dp.left && mView.mFocalCentre.x < mClipViewBoundsInset88dp.right)
-                                        || (mView.mFocalCentre.y > mClipViewBoundsInset88dp.top && mView.mFocalCentre.y < mClipViewBoundsInset88dp.bottom);
+        mHorizontalTextPositionCentred = (mView.mFocalCentre.x > mClipViewBoundsInset88dp.left && mView.mFocalCentre.x < mClipViewBoundsInset88dp.right);
+        mVerticalTextPositionCentred = (mView.mFocalCentre.y > mClipViewBoundsInset88dp.top && mView.mFocalCentre.y < mClipViewBoundsInset88dp.bottom);
 
         updateTextPositioning();
         updateIconPosition();
@@ -737,7 +741,7 @@ public class MaterialTapTargetPrompt
         final float secondaryTextWidth = calculateMaxTextWidth(mView.mSecondaryTextLayout);
         final float textWidth  = Math.max(primaryTextWidth, secondaryTextWidth);
 
-        if (mHorizontalTextPositionCentred)
+        if (mHorizontalTextPositionCentred || mVerticalTextPositionCentred)
         {
             mView.mTextLeft = mView.mClipBounds.left;
             final float width = Math.min(textWidth, maxWidth);
@@ -849,47 +853,84 @@ public class MaterialTapTargetPrompt
         final float length = maxTextWidth + mTextPadding;
         if (mHorizontalTextPositionCentred)
         {
-            final float x1 = mView.mFocalCentre.x + (mHorizontalTextPositionLeft ? -m20dp : m20dp);
-            final float y1,x2, y2;
+            // Get the text left position minus the text padding
+            final float x1 = mView.mTextLeft - mTextPadding;
+            // Get the text top
+            final float y1 = mView.mPrimaryTextTop;
+            // Get the text right plus the text padding
+            final float x2 = mView.mTextLeft + maxTextWidth + mTextPadding;
+            // Get the text bottom
+            final float y2 = calculateTextBottom();
+            // Calculate the text centre X position
+            final float x3 = (x1 + x2) / 2;
+            // Calculate the text centre Y position
+            float y3 = (y1 + y2) / 2;
+
+            // The position offset from the focal centre by opposite
+            final float x4, y4;
+            // Calculate the X and Y minimum distance from the focal centre to the background edge
+            final float opposite = calculateOpposite(mBaseFocalRadius + m20dp + mTextPadding + Math.abs(x3 - mView.mFocalCentre.x));
             if (mVerticalTextPositionAbove)
             {
-                y1 = mView.mFocalCentre.y + mBaseFocalRadius + mTextPadding;
+                y4 = mView.mFocalCentre.y +- opposite;
+                y3 += m20dp;
+            }
+            else
+            {
+                y4 = mView.mFocalCentre.y + opposite;
+                y3 -= m20dp;
+            }
 
+            if (x3 < mView.mFocalCentre.x)
+            {
+                x4 = mView.mFocalCentre.x - opposite;
+            }
+            else
+            {
+                x4 = mView.mFocalCentre.x + opposite;
+            }
+
+            // Background radius is the distance between xy3 and xy4
+            mBaseBackgroundRadius = (float) Math.abs(Math.sqrt(Math.pow(x3 - x4, 2) + Math.pow(y3 - y4, 2)));
+            mBaseBackgroundPosition.set(x3, y3);
+        }
+        else if (mVerticalTextPositionCentred)
+        {
+            // The positions are opposite corners, i.e. top right of the focal and bottom left of the text
+            final float x1, x2, y1, y2;
+            // Calculate the X and Y minimum distance from the focal centre to the background edge
+            final float opposite = calculateOpposite(mBaseFocalRadius + m20dp + mTextPadding);
+            if (mVerticalTextPositionAbove)
+            {
+                y1 = mView.mFocalCentre.y - opposite;
                 y2 = mView.mPrimaryTextTop;
+            }
+            else
+            {
+                y1 = mView.mFocalCentre.y + opposite;
+                y2 = calculateTextBottom();
+            }
+
+            if (mHorizontalTextPositionLeft)
+            {
+                x1 = mView.mFocalCentre.x - opposite;
                 x2 = mView.mTextLeft - mTextPadding;
             }
             else
             {
-                y1 = mView.mFocalCentre.y - mBaseFocalRadius - mTextPadding;
-
-                float baseY2 = mView.mPrimaryTextTop + mView.mPrimaryTextLayout.getHeight();
-                if (mView.mSecondaryTextLayout != null)
-                {
-                    baseY2 += mView.mSecondaryTextLayout.getHeight() + mView.mTextSeparation;
-                }
-                y2 = baseY2;
-                x2 = mView.mTextLeft - mTextPadding;
+                x1 = mView.mFocalCentre.x + opposite;
+                x2 = mView.mTextLeft + maxTextWidth + mTextPadding;
             }
-            final float y3 = y2;
-            final float x3 = x2 + maxTextWidth + mTextPadding + mTextPadding;
 
-            final double offset = Math.pow(x2,2) + Math.pow(y2,2);
-            final double bc = (Math.pow(x1,2) + Math.pow(y1,2) - offset )/2.0;
-            final double cd = (offset - Math.pow(x3, 2) - Math.pow(y3, 2))/2.0;
-            final double det = (x1 - x2) * (y2 - y3) - (x2 - x3)* (y1 - y2);
-
-            final double idet = 1/det;
-
-            mBaseBackgroundPosition.set((float) ((bc * (y2 - y3) - cd * (y1 - y2)) * idet),
-                                                (float) ((cd * (x1 - x2) - bc * (x2 - x3)) * idet));
-            mBaseBackgroundRadius = (float) Math.sqrt(Math.pow(x2 - mBaseBackgroundPosition.x, 2)
-                                                    + Math.pow(y2 - mBaseBackgroundPosition.y, 2));
-            mView.mBackgroundPosition.set(mBaseBackgroundPosition);
+            final float x3 = (x1 + x2) / 2;
+            final float y3 = (y1 + y2) / 2;
+            // Background radius is the distance between xy2 and xy3
+            mBaseBackgroundRadius = (float) Math.sqrt(Math.pow(x2 - x3, 2) + Math.pow(y2 - y3, 2));
+            mBaseBackgroundPosition.set(x3, y3);
         }
         else
         {
             mBaseBackgroundPosition.set(mView.mFocalCentre.x, mView.mFocalCentre.y);
-            mView.mBackgroundPosition.set(mBaseBackgroundPosition);
             float height = mBaseFocalRadius + mFocalToTextPadding + mTextPadding
                     + mView.mPrimaryTextLayout.getHeight();
             //Check if secondary text should be included with text separation
@@ -899,7 +940,23 @@ public class MaterialTapTargetPrompt
             }
             mBaseBackgroundRadius = (float) Math.sqrt(Math.pow(length, 2) + Math.pow(height, 2));
         }
+        mView.mBackgroundPosition.set(mBaseBackgroundPosition);
         mView.mBackgroundRadius = mBaseBackgroundRadius * mRevealedAmount;
+    }
+
+    float calculateTextBottom()
+    {
+        float bottom = mView.mPrimaryTextTop + mView.mPrimaryTextLayout.getHeight();
+        if (mView.mSecondaryTextLayout != null)
+        {
+            bottom += mView.mSecondaryTextLayout.getHeight() + mView.mTextSeparation;
+        }
+        return bottom;
+    }
+
+    float calculateOpposite(final float hypotenuse)
+    {
+        return hypotenuse * (float) Math.cos(90);
     }
 
     void updateIconPosition()

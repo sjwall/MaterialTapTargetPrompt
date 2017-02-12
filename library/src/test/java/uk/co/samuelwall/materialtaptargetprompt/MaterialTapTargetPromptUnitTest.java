@@ -299,7 +299,7 @@ public class MaterialTapTargetPromptUnitTest
         {
             prompt.mAnimationCurrent.end();
         }
-        assertEquals(191, prompt.mBaseBackgroundRadius, 1);
+        assertEquals(234, prompt.mBaseBackgroundRadius, 1);
         assertEquals(44, prompt.mBaseFocalRadius, 0);
         assertEquals(4.4, prompt.mFocalRadius10Percent, .1);
         assertEquals(90, prompt.mTargetPosition.x, 0);
@@ -307,7 +307,7 @@ public class MaterialTapTargetPromptUnitTest
         assertTrue(prompt.mHorizontalTextPositionCentred);
         assertFalse(prompt.mHorizontalTextPositionLeft);
         assertEquals(190, prompt.mBaseBackgroundPosition.x, 1);
-        assertEquals(180, prompt.mBaseBackgroundPosition.y, 1);
+        assertEquals(134, prompt.mBaseBackgroundPosition.y, 1);
     }
 
     @SuppressLint("RtlHardcoded")
@@ -388,8 +388,10 @@ public class MaterialTapTargetPromptUnitTest
                                 }
                                 prompt.mView.mClipToBounds = true;
                                 prompt.mView.mClipBounds.set(0, 0, screenWidth, screenHeight);
-                                prompt.mLeft88dp = prompt.mView.mClipBounds.left + prompt.m88dp;
-                                prompt.mRight88dp = prompt.mView.mClipBounds.right - prompt.m88dp;
+                                prompt.mClipViewBoundsInset88dp.left = prompt.mView.mClipBounds.left + prompt.m88dp;
+                                prompt.mClipViewBoundsInset88dp.right = prompt.mView.mClipBounds.right - prompt.m88dp;
+                                prompt.mClipViewBoundsInset88dp.top = prompt.mView.mClipBounds.top + prompt.m88dp;
+                                prompt.mClipViewBoundsInset88dp.bottom = prompt.mView.mClipBounds.bottom - prompt.m88dp;
                                 return null;
                             }
                         }).when(prompt).updateClipBounds();
