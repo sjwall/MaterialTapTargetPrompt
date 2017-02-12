@@ -440,8 +440,8 @@ public class MaterialTapTargetPrompt
                 {
                     mAnimationCurrent.removeAllListeners();
                     mAnimationCurrent = null;
-                    mDismissing = false;
                     cleanUpPrompt();
+                    mDismissing = false;
                 }
 
                 @TargetApi(Build.VERSION_CODES.HONEYCOMB)
@@ -450,8 +450,8 @@ public class MaterialTapTargetPrompt
                 {
                     mAnimationCurrent.removeAllListeners();
                     mAnimationCurrent = null;
-                    mDismissing = false;
                     cleanUpPrompt();
+                    mDismissing = false;
                 }
             });
             mAnimationCurrent.start();
@@ -515,8 +515,8 @@ public class MaterialTapTargetPrompt
                 {
                     mAnimationCurrent.removeAllListeners();
                     mAnimationCurrent = null;
-                    mDismissing = false;
                     cleanUpPrompt();
+                    mDismissing = false;
                 }
 
                 @TargetApi(Build.VERSION_CODES.HONEYCOMB)
@@ -525,8 +525,8 @@ public class MaterialTapTargetPrompt
                 {
                     mAnimationCurrent.removeAllListeners();
                     mAnimationCurrent = null;
-                    mDismissing = false;
                     cleanUpPrompt();
+                    mDismissing = false;
                 }
             });
             mAnimationCurrent.start();
@@ -544,7 +544,10 @@ public class MaterialTapTargetPrompt
     {
         removeGlobalLayoutListener();
         mParentView.removeView(mView);
-        onHidePromptComplete();
+        if (mDismissing)
+        {
+            onHidePromptComplete();
+        }
     }
 
     @TargetApi(11)
