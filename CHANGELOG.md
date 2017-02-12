@@ -2,6 +2,17 @@
 
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## v1.9 (2017-02-12)
+
+### Features
+
+* Prompts greater than 88dp from the top or bottom now use an optimized background
+
+### Bug Fixes
+
+* Fixed onHidePromptComplete event being triggered twice
+* Fixed background being too small in certain use cases
+
 ## v1.8.3 (2017-01-31)
 
 ### Bug Fixes
