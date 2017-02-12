@@ -872,26 +872,41 @@ public class MaterialTapTargetPrompt
             final float opposite = calculateOpposite(mBaseFocalRadius + m20dp + mTextPadding + Math.abs(x3 - mView.mFocalCentre.x));
             if (mVerticalTextPositionAbove)
             {
-                y4 = mView.mFocalCentre.y +- opposite;
+                y4 = mView.mFocalCentre.y + opposite;
                 y3 += m20dp;
             }
             else
             {
-                y4 = mView.mFocalCentre.y + opposite;
+                y4 = mView.mFocalCentre.y - opposite;
                 y3 -= m20dp;
             }
 
             if (x3 < mView.mFocalCentre.x)
             {
-                x4 = mView.mFocalCentre.x - opposite;
+                x4 = mView.mFocalCentre.x + opposite;
             }
             else
             {
-                x4 = mView.mFocalCentre.x + opposite;
+                x4 = mView.mFocalCentre.x - opposite;
             }
 
             // Background radius is the distance between xy3 and xy4
             mBaseBackgroundRadius = (float) Math.abs(Math.sqrt(Math.pow(x3 - x4, 2) + Math.pow(y3 - y4, 2)));
+            // When the text width is near the screen width then the distance to the text edge can
+            //  be greater than the distance to the focal
+            final float distanceToTextEdge = (float) Math.abs(Math.sqrt(Math.pow(x3 - mView.mTextLeft, 2) + Math.pow(y3 - y2, 2)));
+            if (distanceToTextEdge + calculateOpposite(mTextPadding) > mBaseBackgroundRadius)
+            {
+                if (mVerticalTextPositionAbove)
+                {
+                    y3 -= m20dp;
+                }
+                else
+                {
+                    y3 += m20dp;
+                }
+                mBaseBackgroundRadius = (float) Math.abs(Math.sqrt(Math.pow(x3 - x2, 2) + Math.pow(y3 - y2, 2)));
+            }
             mBaseBackgroundPosition.set(x3, y3);
         }
         else if (mVerticalTextPositionCentred)
@@ -902,23 +917,23 @@ public class MaterialTapTargetPrompt
             final float opposite = calculateOpposite(mBaseFocalRadius + m20dp + mTextPadding);
             if (mVerticalTextPositionAbove)
             {
-                y1 = mView.mFocalCentre.y - opposite;
+                y1 = mView.mFocalCentre.y + opposite;
                 y2 = mView.mPrimaryTextTop;
             }
             else
             {
-                y1 = mView.mFocalCentre.y + opposite;
+                y1 = mView.mFocalCentre.y - opposite;
                 y2 = calculateTextBottom();
             }
 
             if (mHorizontalTextPositionLeft)
             {
-                x1 = mView.mFocalCentre.x - opposite;
+                x1 = mView.mFocalCentre.x + opposite;
                 x2 = mView.mTextLeft - mTextPadding;
             }
             else
             {
-                x1 = mView.mFocalCentre.x + opposite;
+                x1 = mView.mFocalCentre.x - opposite;
                 x2 = mView.mTextLeft + maxTextWidth + mTextPadding;
             }
 
@@ -956,7 +971,7 @@ public class MaterialTapTargetPrompt
 
     float calculateOpposite(final float hypotenuse)
     {
-        return hypotenuse * (float) Math.cos(90);
+        return Math.abs(hypotenuse * (float) Math.cos(90));
     }
 
     void updateIconPosition()
