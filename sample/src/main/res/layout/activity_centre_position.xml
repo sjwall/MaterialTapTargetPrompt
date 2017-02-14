@@ -32,7 +32,6 @@
             android:layout_margin="@dimen/fab_margin"/>
 
         <android.support.design.widget.FloatingActionButton
-            android:id="@+id/fab_start"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
@@ -42,7 +41,16 @@
             android:src="@android:drawable/ic_dialog_email" />
 
         <android.support.design.widget.FloatingActionButton
-            android:id="@+id/fab_end"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_centerVertical="true"
+            android:layout_margin="50dp"
+            android:onClick="showPrompt"
+            android:src="@android:drawable/ic_dialog_email" />
+
+        <android.support.design.widget.FloatingActionButton
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
@@ -52,7 +60,16 @@
             android:src="@android:drawable/ic_dialog_email" />
 
         <android.support.design.widget.FloatingActionButton
-            android:id="@+id/fab_top"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:layout_margin="50dp"
+            android:onClick="showPrompt"
+            android:src="@android:drawable/ic_dialog_email" />
+
+        <android.support.design.widget.FloatingActionButton
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
@@ -61,7 +78,6 @@
             android:src="@android:drawable/ic_dialog_email" />
 
         <android.support.design.widget.FloatingActionButton
-            android:id="@+id/fab_bottom"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
@@ -70,10 +86,53 @@
             android:src="@android:drawable/ic_dialog_email" />
 
         <android.support.design.widget.FloatingActionButton
-            android:id="@+id/fab_centre"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:layout_margin="@dimen/centre_example_padding"
+            android:onClick="showPrompt"
+            android:src="@android:drawable/ic_dialog_email" />
+
+        <android.support.design.widget.FloatingActionButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentTop="true"
+            android:layout_margin="@dimen/centre_example_padding"
+            android:layout_centerVertical="true"
+            android:onClick="showPrompt"
+            android:src="@android:drawable/ic_dialog_email" />
+
+        <android.support.design.widget.FloatingActionButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
+            android:layout_margin="@dimen/centre_example_padding"
+            android:layout_centerHorizontal="true"
+            android:onClick="showPrompt"
+            android:src="@android:drawable/ic_dialog_email" />
+
+        <android.support.design.widget.FloatingActionButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentBottom="true"
+            android:layout_margin="@dimen/centre_example_padding"
+            android:onClick="showPrompt"
+            android:src="@android:drawable/ic_dialog_email" />
+
+        <android.support.design.widget.FloatingActionButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:layout_margin="@dimen/centre_example_padding"
             android:onClick="showPrompt"
             android:src="@android:drawable/ic_dialog_email" />
     </RelativeLayout>
