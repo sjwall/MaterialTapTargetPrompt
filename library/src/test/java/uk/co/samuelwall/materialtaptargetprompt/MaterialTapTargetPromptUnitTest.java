@@ -20,7 +20,6 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
-import android.graphics.Typeface;
 import android.os.Build;
 import android.text.Layout;
 import android.view.Gravity;
@@ -29,8 +28,6 @@ import android.view.View;
 import android.view.ViewParent;
 import android.view.animation.LinearInterpolator;
 import android.widget.FrameLayout;
-
-import junit.framework.Assert;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -299,15 +296,15 @@ public class MaterialTapTargetPromptUnitTest
         {
             prompt.mAnimationCurrent.end();
         }
-        assertEquals(234, prompt.mBaseBackgroundRadius, 1);
+        assertEquals(190, prompt.mBaseBackgroundRadius, 1);
         assertEquals(44, prompt.mBaseFocalRadius, 0);
         assertEquals(4.4, prompt.mFocalRadius10Percent, .1);
         assertEquals(90, prompt.mTargetPosition.x, 0);
         assertEquals(90, prompt.mTargetPosition.y, 0);
-        assertTrue(prompt.mHorizontalTextPositionCentred);
+        assertTrue(prompt.mInside88dpBounds);
         assertFalse(prompt.mHorizontalTextPositionLeft);
         assertEquals(190, prompt.mBaseBackgroundPosition.x, 1);
-        assertEquals(134, prompt.mBaseBackgroundPosition.y, 1);
+        assertEquals(147, prompt.mBaseBackgroundPosition.y, 1);
     }
 
     @SuppressLint("RtlHardcoded")
