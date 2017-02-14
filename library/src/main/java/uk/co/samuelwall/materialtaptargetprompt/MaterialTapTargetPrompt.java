@@ -853,61 +853,36 @@ public class MaterialTapTargetPrompt
         final float length = maxTextWidth + mTextPadding;
         if (mHorizontalTextPositionCentred)
         {
-            // Get the text left position minus the text padding
-            final float x1 = mView.mTextLeft - mTextPadding;
-            // Get the text top
-            final float y1 = mView.mPrimaryTextTop;
-            // Get the text right plus the text padding
-            final float x2 = mView.mTextLeft + maxTextWidth + mTextPadding;
-            // Get the text bottom
-            final float y2 = calculateTextBottom();
-            // Calculate the text centre X position
-            final float x3 = (x1 + x2) / 2;
-            // Calculate the text centre Y position
-            float y3 = (y1 + y2) / 2;
-
-            // The position offset from the focal centre by opposite
-            final float x4, y4;
-            // Calculate the X and Y minimum distance from the focal centre to the background edge
-            final float opposite = calculateOpposite(mBaseFocalRadius + m20dp + mTextPadding + Math.abs(x3 - mView.mFocalCentre.x));
+            final float x1 = mView.mFocalCentre.x + (mHorizontalTextPositionLeft ? -m20dp : m20dp);
+            final float y1,x2, y2;
             if (mVerticalTextPositionAbove)
             {
-                y4 = mView.mFocalCentre.y + opposite;
-                y3 += m20dp;
+                y1 = mView.mFocalCentre.y + mBaseFocalRadius + mTextPadding;
+                y2 = mView.mPrimaryTextTop;
+                x2 = mView.mTextLeft - mTextPadding;
             }
             else
             {
-                y4 = mView.mFocalCentre.y - opposite;
-                y3 -= m20dp;
-            }
-
-            if (x3 < mView.mFocalCentre.x)
-            {
-                x4 = mView.mFocalCentre.x + opposite;
-            }
-            else
-            {
-                x4 = mView.mFocalCentre.x - opposite;
-            }
-
-            // Background radius is the distance between xy3 and xy4
-            mBaseBackgroundRadius = (float) Math.abs(Math.sqrt(Math.pow(x3 - x4, 2) + Math.pow(y3 - y4, 2)));
-            // When the text width is near the screen width then the distance to the text edge can
-            //  be greater than the distance to the focal
-            final float distanceToTextEdge = (float) Math.abs(Math.sqrt(Math.pow(x3 - mView.mTextLeft, 2) + Math.pow(y3 - y2, 2)));
-            if (distanceToTextEdge + calculateOpposite(mTextPadding) > mBaseBackgroundRadius)
-            {
-                if (mVerticalTextPositionAbove)
+                y1 = mView.mFocalCentre.y - mBaseFocalRadius - mTextPadding;
+                float baseY2 = mView.mPrimaryTextTop + mView.mPrimaryTextLayout.getHeight();
+                if (mView.mSecondaryTextLayout != null)
                 {
-                    y3 -= m20dp;
+                    baseY2 += mView.mSecondaryTextLayout.getHeight() + mView.mTextSeparation;
                 }
-                else
-                {
-                    y3 += m20dp;
-                }
-                mBaseBackgroundRadius = (float) Math.abs(Math.sqrt(Math.pow(x3 - x2, 2) + Math.pow(y3 - y2, 2)));
+                y2 = baseY2;
+                x2 = mView.mTextLeft - mTextPadding;
             }
-            mBaseBackgroundPosition.set(x3, y3);
+            final float y3 = y2;
+            final float x3 = x2 + maxTextWidth + mTextPadding + mTextPadding;
+            final double offset = Math.pow(x2,2) + Math.pow(y2,2);
+            final double bc = (Math.pow(x1,2) + Math.pow(y1,2) - offset )/2.0;
+            final double cd = (offset - Math.pow(x3, 2) - Math.pow(y3, 2))/2.0;
+            final double det = (x1 - x2) * (y2 - y3) - (x2 - x3)* (y1 - y2);
+            final double idet = 1/det;
+            mBaseBackgroundPosition.set((float) ((bc * (y2 - y3) - cd * (y1 - y2)) * idet),
+                                                (float) ((cd * (x1 - x2) - bc * (x2 - x3)) * idet));
+            mBaseBackgroundRadius = (float) Math.sqrt(Math.pow(x2 - mBaseBackgroundPosition.x, 2)
+                            + Math.pow(y2 - mBaseBackgroundPosition.y, 2));
         }
         else if (mVerticalTextPositionCentred)
         {
