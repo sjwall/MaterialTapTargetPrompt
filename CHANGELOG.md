@@ -2,6 +2,12 @@
 
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## v1.9.1 (2017-02-14)
+
+### Bug Fixes
+
+* Fixed background not covering text in certain scenarios
+
 ## v1.9 (2017-02-12)
 
 ### Features
