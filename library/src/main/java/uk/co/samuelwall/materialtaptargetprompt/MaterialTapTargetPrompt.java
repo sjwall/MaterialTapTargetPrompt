@@ -1000,45 +1000,51 @@ public class MaterialTapTargetPrompt
         @Override
         public void onDraw(final Canvas canvas)
         {
-            if (mClipToBounds)
+            if (this.mBackgroundRadius > 0)
             {
-                canvas.clipRect(mClipBounds);
-            }
+                if (mClipToBounds)
+                {
+                    canvas.clipRect(mClipBounds);
+                }
 
-            //Draw the backgrounds
-            canvas.drawCircle(mBackgroundPosition.x, mBackgroundPosition.y, mBackgroundRadius, mPaintBackground);
-            //Draw the ripple
-            if (mDrawRipple)
-            {
-                final int oldAlpha = mPaintFocal.getAlpha();
-                mPaintFocal.setAlpha(mFocalRippleAlpha);
-                canvas.drawCircle(mFocalCentre.x, mFocalCentre.y, mFocalRippleSize, mPaintFocal);
-                mPaintFocal.setAlpha(oldAlpha);
-            }
-            //Draw the focal
-            canvas.drawCircle(mFocalCentre.x, mFocalCentre.y, mFocalRadius, mPaintFocal);
+                //Draw the backgrounds
+                canvas.drawCircle(mBackgroundPosition.x, mBackgroundPosition.y, mBackgroundRadius, mPaintBackground);
+                //Draw the ripple
+                if (mDrawRipple)
+                {
+                    final int oldAlpha = mPaintFocal.getAlpha();
+                    mPaintFocal.setAlpha(mFocalRippleAlpha);
+                    canvas.drawCircle(mFocalCentre.x, mFocalCentre.y, mFocalRippleSize, mPaintFocal);
+                    mPaintFocal.setAlpha(oldAlpha);
+                }
+                //Draw the focal
+                canvas.drawCircle(mFocalCentre.x, mFocalCentre.y, mFocalRadius, mPaintFocal);
 
-            //Draw the icon
-            if (mIconDrawable != null)
-            {
-                canvas.translate(mIconDrawableLeft, mIconDrawableTop);
-                mIconDrawable.draw(canvas);
-                canvas.translate(-mIconDrawableLeft, -mIconDrawableTop);
-            }
-            else if (mTargetRenderView != null)
-            {
-                canvas.translate(mIconDrawableLeft, mIconDrawableTop);
-                mTargetRenderView.draw(canvas);
-                canvas.translate(-mIconDrawableLeft, -mIconDrawableTop);
-            }
+                //Draw the icon
+                if (mIconDrawable != null)
+                {
+                    canvas.translate(mIconDrawableLeft, mIconDrawableTop);
+                    mIconDrawable.draw(canvas);
+                    canvas.translate(-mIconDrawableLeft, -mIconDrawableTop);
+                }
+                else if (mTargetRenderView != null)
+                {
+                    canvas.translate(mIconDrawableLeft, mIconDrawableTop);
+                    mTargetRenderView.draw(canvas);
+                    canvas.translate(-mIconDrawableLeft, -mIconDrawableTop);
+                }
 
-            //Draw the text
-            canvas.translate(mTextLeft, mPrimaryTextTop);
-            mPrimaryTextLayout.draw(canvas);
-            if (mSecondaryTextLayout != null)
-            {
-                canvas.translate(0f, mSecondaryTextOffsetTop);
-                mSecondaryTextLayout.draw(canvas);
+                //Draw the text
+                canvas.translate(mTextLeft, mPrimaryTextTop);
+                if (mPrimaryTextLayout != null)
+                {
+                    mPrimaryTextLayout.draw(canvas);
+                }
+                if (mSecondaryTextLayout != null)
+                {
+                    canvas.translate(0f, mSecondaryTextOffsetTop);
+                    mSecondaryTextLayout.draw(canvas);
+                }
             }
         }
 
