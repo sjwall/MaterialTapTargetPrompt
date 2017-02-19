@@ -2,6 +2,12 @@
 
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## v1.9.2 (2017-02-19)
+
+### Bug Fixes
+
+* Added check for primary text layout being created before drawing
+
 ## v1.9.1 (2017-02-14)
 
 ### Bug Fixes
