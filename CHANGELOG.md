@@ -2,6 +2,12 @@
 
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## v1.9.3 (2017-02-26)
+
+### Bug Fixes
+
+* Fixed right to left text drawing outside the background
+
 ## v1.9.2 (2017-02-19)
 
 ### Bug Fixes
