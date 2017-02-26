@@ -1154,16 +1154,6 @@ public class MaterialTapTargetPrompt
         private String mPrimaryText, mSecondaryText;
         private int mPrimaryTextColour, mSecondaryTextColour, mBackgroundColour, mFocalColour;
 
-        /**
-         * The background colour
-         */
-        private int mBackgroundColourAlpha;
-
-        /**
-         * The focal colour alpha value.
-         */
-        private int mFocalColourAlpha;
-
         private float mFocalRadius;
         private float mPrimaryTextSize, mSecondaryTextSize;
         private float mMaxTextWidth;
@@ -1248,8 +1238,6 @@ public class MaterialTapTargetPrompt
             mSecondaryTextTypefaceStyle = a.getInt(R.styleable.PromptView_secondaryTextStyle, 0);
             mPrimaryTextTypeface = setTypefaceFromAttrs(a.getString(R.styleable.PromptView_primaryTextFontFamily), a.getInt(R.styleable.PromptView_primaryTextTypeface, 0), mPrimaryTextTypefaceStyle);
             mSecondaryTextTypeface = setTypefaceFromAttrs(a.getString(R.styleable.PromptView_secondaryTextFontFamily), a.getInt(R.styleable.PromptView_secondaryTextTypeface, 0), mSecondaryTextTypefaceStyle);
-            mBackgroundColourAlpha = a.getInt(R.styleable.PromptView_backgroundColourAlpha, 244);
-            mFocalColourAlpha = a.getInt(R.styleable.PromptView_focalColourAlpha, 255);
 
             mIconDrawableColourFilter = a.getColor(R.styleable.PromptView_iconColourFilter, mBackgroundColour);
             mIconDrawableTintList = a.getColorStateList(R.styleable.PromptView_iconTint);
@@ -1740,6 +1728,7 @@ public class MaterialTapTargetPrompt
 
         /**
          * Set the background colour.
+         * The Material Design Guidelines specify that this should be 244 or hex F4.
          *
          * @return This Builder object to allow for chaining of calls to set methods
          */
@@ -1757,22 +1746,6 @@ public class MaterialTapTargetPrompt
         public Builder setBackgroundColourFromRes(@ColorRes final int resId)
         {
             mBackgroundColour = getColour(resId);
-            return this;
-        }
-
-        /**
-         * Set the background colour alpha value.
-         * The alpha value set using {@link #setBackgroundColour(int)} and
-         * {@link #setBackgroundColourFromRes(int)} is ignored.
-         *
-         * Default value is 244.
-         *
-         * @param alpha Alpha value between 0-255.
-         * @return This Builder object to allow for chaining of calls to set methods
-         */
-        public Builder setBackgroundColourAlpha(final int alpha)
-        {
-            mBackgroundColourAlpha = alpha;
             return this;
         }
 
@@ -1795,22 +1768,6 @@ public class MaterialTapTargetPrompt
         public Builder setFocalColourFromRes(@ColorRes final int resId)
         {
             mFocalColour = getColour(resId);
-            return this;
-        }
-
-        /**
-         * Set the focal colour alpha value.
-         * The alpha value set using {@link #setFocalColour(int)} and
-         * {@link #setFocalColourFromRes(int)} is ignored.
-         *
-         * Default value is 244.
-         *
-         * @param alpha Alpha value between 0-255.
-         * @return This Builder object to allow for chaining of calls to set methods
-         */
-        public Builder setFocalColourAlpha(final int alpha)
-        {
-            mFocalColourAlpha = alpha;
             return this;
         }
 
@@ -1973,8 +1930,8 @@ public class MaterialTapTargetPrompt
             mPrompt.mBaseFocalRippleAlpha = 150;
             mPrompt.m88dp = m88dp;
             mPrompt.m20dp = m20dp;
-            mPrompt.mBaseBackgroundColourAlpha = mBackgroundColourAlpha;
-            mPrompt.mBaseFocalColourAlpha = mFocalColourAlpha;
+            mPrompt.mBaseBackgroundColourAlpha = Color.alpha(mBackgroundColour);
+            mPrompt.mBaseFocalColourAlpha = Color.alpha(mFocalColour);
 
             mPrompt.mView.mTextSeparation = mTextSeparation;
 
@@ -2020,12 +1977,12 @@ public class MaterialTapTargetPrompt
 
             mPrompt.mView.mPaintFocal = new Paint();
             mPrompt.mView.mPaintFocal.setColor(mFocalColour);
-            mPrompt.mView.mPaintFocal.setAlpha(mFocalColourAlpha);
+            mPrompt.mView.mPaintFocal.setAlpha(Color.alpha(mFocalColour));
             mPrompt.mView.mPaintFocal.setAntiAlias(true);
 
             mPrompt.mView.mPaintBackground = new Paint();
             mPrompt.mView.mPaintBackground.setColor(mBackgroundColour);
-            mPrompt.mView.mPaintBackground.setAlpha(mBackgroundColourAlpha);
+            mPrompt.mView.mPaintBackground.setAlpha(Color.alpha(mBackgroundColour));
             mPrompt.mView.mPaintBackground.setAntiAlias(true);
 
             mPrompt.mPaintPrimaryText = new TextPaint();

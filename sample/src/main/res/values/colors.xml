@@ -20,6 +20,8 @@
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
 
+    <color name="colorAccentPromptBackground">#F4FF4081</color>
+
     <color name="green_200">#68EFAD</color>
     <color name="orange_200">#FFCC80</color>
 
