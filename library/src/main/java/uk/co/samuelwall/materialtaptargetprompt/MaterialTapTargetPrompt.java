@@ -737,35 +737,34 @@ public class MaterialTapTargetPrompt
 
         if (mInside88dpBounds)
         {
-            mView.mTextLeft = mView.mClipBounds.left;
+            mView.mPrimaryTextLeft = mView.mClipBounds.left;
             final float width = Math.min(textWidth, maxWidth);
             if (mHorizontalTextPositionLeft)
             {
-                mView.mTextLeft = mView.mFocalCentre.x - (width / 2) + m20dp;
+                mView.mPrimaryTextLeft = mView.mFocalCentre.x - width + m20dp;
             }
             else
             {
-                mView.mTextLeft = mView.mFocalCentre.x - (width / 2) - m20dp;
+                mView.mPrimaryTextLeft = mView.mFocalCentre.x - width - m20dp;
             }
-            if (mView.mTextLeft < mView.mClipBounds.left + mTextPadding)
+            if (mView.mPrimaryTextLeft < mView.mClipBounds.left + mTextPadding)
             {
-                mView.mTextLeft = mView.mClipBounds.left + mTextPadding;
+                mView.mPrimaryTextLeft = mView.mClipBounds.left + mTextPadding;
             }
-            else if (mView.mTextLeft + width > mView.mClipBounds.right - mTextPadding)
+            else if (mView.mPrimaryTextLeft + width > mView.mClipBounds.right - mTextPadding)
             {
-                mView.mTextLeft = mView.mClipBounds.right - mTextPadding - width;
+                mView.mPrimaryTextLeft = mView.mClipBounds.right - mTextPadding - width;
             }
         }
         else
         {
             if (mHorizontalTextPositionLeft)
             {
-                mView.mTextLeft = (mView.mClipToBounds ? mView.mClipBounds.right : mParentView.getRight()) - mTextPadding - textWidth;
-
+                mView.mPrimaryTextLeft = (mView.mClipToBounds ? mView.mClipBounds.right : mParentView.getRight()) - mTextPadding - textWidth;
             }
             else
             {
-                mView.mTextLeft = (mView.mClipToBounds ? mView.mClipBounds.left : mParentView.getLeft()) + mTextPadding;
+                mView.mPrimaryTextLeft = (mView.mClipToBounds ? mView.mClipBounds.left : mParentView.getLeft()) + mTextPadding;
             }
         }
 
@@ -790,6 +789,20 @@ public class MaterialTapTargetPrompt
         }
 
         updateBackgroundRadius(textWidth);
+
+        mView.mSecondaryTextLeft = mView.mPrimaryTextLeft;
+        if (mInside88dpBounds)
+        {
+            final float change = maxWidth - textWidth;
+            if (mPrimaryTextAlignment == Layout.Alignment.ALIGN_OPPOSITE)
+            {
+                mView.mPrimaryTextLeft -= change;
+            }
+            if (mSecondaryTextAlignment == Layout.Alignment.ALIGN_OPPOSITE)
+            {
+                mView.mSecondaryTextLeft -= change;
+            }
+        }
     }
 
     /**
@@ -853,7 +866,7 @@ public class MaterialTapTargetPrompt
             {
                 y1 = mView.mFocalCentre.y + mBaseFocalRadius + m20dp + mTextPadding;
                 y2 = mView.mPrimaryTextTop;
-                x2 = mView.mTextLeft - mTextPadding;
+                x2 = mView.mPrimaryTextLeft - mTextPadding;
             }
             else
             {
@@ -864,7 +877,7 @@ public class MaterialTapTargetPrompt
                     baseY2 += mView.mSecondaryTextLayout.getHeight() + mView.mTextSeparation;
                 }
                 y2 = baseY2;
-                x2 = mView.mTextLeft - mTextPadding;
+                x2 = mView.mPrimaryTextLeft - mTextPadding;
             }
 
             final float y3 = y2;
@@ -978,8 +991,9 @@ public class MaterialTapTargetPrompt
         Drawable mIconDrawable;
         float mIconDrawableLeft;
         float mIconDrawableTop;
-        float mTextLeft;
+        float mPrimaryTextLeft;
         float mPrimaryTextTop;
+        float mSecondaryTextLeft;
         float mSecondaryTextOffsetTop;
         Layout mPrimaryTextLayout;
         Layout mSecondaryTextLayout;
@@ -1035,14 +1049,14 @@ public class MaterialTapTargetPrompt
                 }
 
                 //Draw the text
-                canvas.translate(mTextLeft, mPrimaryTextTop);
+                canvas.translate(mPrimaryTextLeft, mPrimaryTextTop);
                 if (mPrimaryTextLayout != null)
                 {
                     mPrimaryTextLayout.draw(canvas);
                 }
                 if (mSecondaryTextLayout != null)
                 {
-                    canvas.translate(0f, mSecondaryTextOffsetTop);
+                    canvas.translate(-mPrimaryTextLeft + mSecondaryTextLeft, mSecondaryTextOffsetTop);
                     mSecondaryTextLayout.draw(canvas);
                 }
             }
