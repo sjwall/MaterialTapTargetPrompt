@@ -1377,17 +1377,6 @@ public class MaterialTapTargetPrompt
         }
 
         /**
-         * Set the primary text colour using the given resource id.
-         *
-         * @return This Builder object to allow for chaining of calls to set methods
-         */
-        public Builder setPrimaryTextColourFromRes(@ColorRes final int resId)
-        {
-            mPrimaryTextColour = getColour(resId);
-            return this;
-        }
-
-        /**
          * Sets the typeface and style used to display the primary text.
          */
         public Builder setPrimaryTextTypeface(final Typeface typeface)
@@ -1457,17 +1446,6 @@ public class MaterialTapTargetPrompt
         public Builder setSecondaryTextColour(@ColorInt final int colour)
         {
             mSecondaryTextColour = colour;
-            return this;
-        }
-
-        /**
-         * Set the secondary text colour using the give resource id.
-         *
-         * @return This Builder object to allow for chaining of calls to set methods
-         */
-        public Builder setSecondaryTextColourFromRes(@ColorRes final int resId)
-        {
-            mSecondaryTextColour = getColour(resId);
             return this;
         }
 
@@ -1658,29 +1636,6 @@ public class MaterialTapTargetPrompt
         }
 
         /**
-         * Sets the colour (from a resource) to use to tint the icon drawable.
-         *
-         * @param id The resource id for the colour to use to tint the icon drawable,
-         *           call {@link #setIconDrawableTintList(ColorStateList)} or
-         *           {@link #setIconDrawableTintMode(PorterDuff.Mode)} with {@code null}
-         *           to remove the tint.
-         * @return This Builder object to allow for chaining of calls to set methods
-         */
-        public Builder setIconDrawableColourFilterFromRes(@ColorRes final int id)
-        {
-            final int colour;
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
-            {
-                colour = mActivity.getColor(id);
-            }
-            else
-            {
-                colour = mActivity.getResources().getColor(id);
-            }
-            return setIconDrawableColourFilter(colour);
-        }
-
-        /**
          * Set the listener to listen for when the prompt is touched.
          *
          * @return This Builder object to allow for chaining of calls to set methods
@@ -1739,17 +1694,6 @@ public class MaterialTapTargetPrompt
         }
 
         /**
-         * Set the background colour using the given resource id.
-         *
-         * @return This Builder object to allow for chaining of calls to set methods
-         */
-        public Builder setBackgroundColourFromRes(@ColorRes final int resId)
-        {
-            mBackgroundColour = getColour(resId);
-            return this;
-        }
-
-        /**
          * Set the focal point colour.
          *
          * @return This Builder object to allow for chaining of calls to set methods
@@ -1757,17 +1701,6 @@ public class MaterialTapTargetPrompt
         public Builder setFocalColour(@ColorInt final int colour)
         {
             mFocalColour = colour;
-            return this;
-        }
-
-        /**
-         * Set the focal point colour using the given resource id.
-         *
-         * @return This Builder object to allow for chaining of calls to set methods
-         */
-        public Builder setFocalColourFromRes(@ColorRes final int resId)
-        {
-            mFocalColour = getColour(resId);
             return this;
         }
 
@@ -2041,21 +1974,6 @@ public class MaterialTapTargetPrompt
                 mPrompt.show();
             }
             return mPrompt;
-        }
-
-        private int getColour(final int resId)
-        {
-            final int colour;
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
-            {
-                colour = mActivity.getColor(resId);
-            }
-            else
-            {
-                //noinspection deprecation
-                colour = mActivity.getResources().getColor(resId);
-            }
-            return colour;
         }
 
         /**
