@@ -1274,6 +1274,7 @@ public class MaterialTapTargetPrompt
         /**
          * Set the view for the prompt to focus on using the given resource id.
          *
+         * @param target The view that the prompt will highlight.
          * @return This Builder object to allow for chaining of calls to set methods
          */
         public Builder setTarget(@IdRes final int target)
@@ -1324,6 +1325,7 @@ public class MaterialTapTargetPrompt
         /**
          * Set the primary text using the given resource id.
          *
+         * @param resId The string resource id for the primary text
          * @return This Builder object to allow for chaining of calls to set methods
          */
         public Builder setPrimaryText(@StringRes final int resId)
@@ -1335,6 +1337,7 @@ public class MaterialTapTargetPrompt
         /**
          * Set the primary text to the given string
          *
+         * @param text The primary text
          * @return This Builder object to allow for chaining of calls to set methods
          */
         public Builder setPrimaryText(final String text)
@@ -1346,6 +1349,7 @@ public class MaterialTapTargetPrompt
         /**
          * Set the primary text font size using the given resource id.
          *
+         * @param resId The resource id for the primary text size
          * @return This Builder object to allow for chaining of calls to set methods
          */
         public Builder setPrimaryTextSize(@DimenRes final int resId)
@@ -1357,6 +1361,7 @@ public class MaterialTapTargetPrompt
         /**
          * Set the primary text font size.
          *
+         * @param size The primary text font size
          * @return This Builder object to allow for chaining of calls to set methods
          */
         public Builder setPrimaryTextSize(final float size)
@@ -1368,6 +1373,7 @@ public class MaterialTapTargetPrompt
         /**
          * Set the primary text colour.
          *
+         * @param colour The primary text colour resource id
          * @return This Builder object to allow for chaining of calls to set methods
          */
         public Builder setPrimaryTextColour(@ColorInt final int colour)
@@ -1378,6 +1384,9 @@ public class MaterialTapTargetPrompt
 
         /**
          * Sets the typeface and style used to display the primary text.
+         *
+         * @param typeface The primary text typeface
+         * @return This Builder object to allow for chaining of calls to set methods
          */
         public Builder setPrimaryTextTypeface(final Typeface typeface)
         {
@@ -1386,6 +1395,10 @@ public class MaterialTapTargetPrompt
 
         /**
          * Sets the typeface used to display the primary text.
+         *
+         * @param typeface The primary text typeface
+         * @param style The typeface style
+         * @return This Builder object to allow for chaining of calls to set methods
          */
         public Builder setPrimaryTextTypeface(final Typeface typeface, final int style)
         {
@@ -1397,6 +1410,7 @@ public class MaterialTapTargetPrompt
         /**
          * Set the secondary text using the given resource id.
          *
+         * @param resId The secondary text resource id
          * @return This Builder object to allow for chaining of calls to set methods
          */
         public Builder setSecondaryText(@StringRes final int resId)
@@ -1408,6 +1422,7 @@ public class MaterialTapTargetPrompt
         /**
          * Set the secondary text.
          *
+         * @param text The secondary text
          * @return This Builder object to allow for chaining of calls to set methods
          */
         public Builder setSecondaryText(final String text)
@@ -1419,6 +1434,7 @@ public class MaterialTapTargetPrompt
         /**
          * Set the secondary text font size using the give resource id.
          *
+         * @param resId The secondary text string resource id
          * @return This Builder object to allow for chaining of calls to set methods
          */
         public Builder setSecondaryTextSize(@DimenRes final int resId)
@@ -1430,6 +1446,7 @@ public class MaterialTapTargetPrompt
         /**
          * Set the secondary text font size.
          *
+         * @param size The secondary text font size
          * @return This Builder object to allow for chaining of calls to set methods
          */
         public Builder setSecondaryTextSize(final float size)
@@ -1441,6 +1458,7 @@ public class MaterialTapTargetPrompt
         /**
          * Set the secondary text colour.
          *
+         * @param colour The secondary text colour resource id
          * @return This Builder object to allow for chaining of calls to set methods
          */
         public Builder setSecondaryTextColour(@ColorInt final int colour)
@@ -1451,6 +1469,9 @@ public class MaterialTapTargetPrompt
 
         /**
          * Sets the typeface used to display the secondary text.
+         *
+         * @param typeface The secondary text typeface
+         * @return This Builder object to allow for chaining of calls to set methods
          */
         public Builder setSecondaryTextTypeface(final Typeface typeface)
         {
@@ -1459,6 +1480,10 @@ public class MaterialTapTargetPrompt
 
         /**
          * Sets the typeface and style used to display the secondary text.
+         *
+         * @param typeface The secondary text typeface
+         * @param style The typeface style
+         * @return This Builder object to allow for chaining of calls to set methods
          */
         public Builder setSecondaryTextTypeface(final Typeface typeface, final int style)
         {
@@ -1470,6 +1495,7 @@ public class MaterialTapTargetPrompt
         /**
          * Set the text left and right padding.
          *
+         * @param padding The padding on the text left and right
          * @return This Builder object to allow for chaining of calls to set methods
          */
         public Builder setTextPadding(final float padding)
@@ -1481,6 +1507,7 @@ public class MaterialTapTargetPrompt
         /**
          * Set the text left and right padding using the given resource id.
          *
+         * @param resId The text padding dimension resource id
          * @return This Builder object to allow for chaining of calls to set methods
          */
         public Builder setTextPadding(@DimenRes final int resId)
@@ -1492,6 +1519,7 @@ public class MaterialTapTargetPrompt
         /**
          * Set the distance between the primary and secondary text.
          *
+         * @param separation The distance separation between the primary and secondary text
          * @return This Builder object to allow for chaining of calls to set methods
          */
         public Builder setTextSeparation(final float separation)
@@ -1504,6 +1532,7 @@ public class MaterialTapTargetPrompt
          * Set the distance between the primary and secondary text using the given
          * resource id.
          *
+         * @param resId The dimension resource id for the text separation
          * @return This Builder object to allow for chaining of calls to set methods
          */
         public Builder setTextSeparation(@DimenRes final int resId)
@@ -1515,6 +1544,7 @@ public class MaterialTapTargetPrompt
         /**
          * Set the padding between the text and the focal point.
          *
+         * @param padding The distance between the text and focal
          * @return This Builder object to allow for chaining of calls to set methods
          */
         public Builder setFocalToTextPadding(final float padding)
@@ -1527,6 +1557,7 @@ public class MaterialTapTargetPrompt
          * Set the padding between the text and the focal point using the given
          * resource id.
          *
+         * @param resId The dimension resource id for the focal to text distance
          * @return This Builder object to allow for chaining of calls to set methods
          */
         public Builder setFocalToTextPadding(@DimenRes final int resId)
@@ -1538,6 +1569,7 @@ public class MaterialTapTargetPrompt
         /**
          * Set the interpolator to use in animations.
          *
+         * @param interpolator The animation interpolator to use
          * @return This Builder object to allow for chaining of calls to set methods
          */
         public Builder setAnimationInterpolator(final Interpolator interpolator)
@@ -1550,6 +1582,7 @@ public class MaterialTapTargetPrompt
          * Enable/disable animation above target.
          * true by default
          *
+         * @param enabled Idle animation enabled
          * @return This Builder object to allow for chaining of calls to set methods
          */
         public Builder setIdleAnimationEnabled(final boolean enabled)
@@ -1561,6 +1594,7 @@ public class MaterialTapTargetPrompt
         /**
          * Set the icon to draw in the focal point using the given resource id.
          *
+         * @param resId The drawable resource id for the icon
          * @return This Builder object to allow for chaining of calls to set methods
          */
         public Builder setIcon(@DrawableRes final int resId)
@@ -1580,6 +1614,7 @@ public class MaterialTapTargetPrompt
         /**
          * Set the icon to draw in the focal point.
          *
+         * @param drawable The drawable for the icon
          * @return This Builder object to allow for chaining of calls to set methods
          */
         public Builder setIconDrawable(final Drawable drawable)
@@ -1638,6 +1673,7 @@ public class MaterialTapTargetPrompt
         /**
          * Set the listener to listen for when the prompt is touched.
          *
+         * @param listener The listener to use
          * @return This Builder object to allow for chaining of calls to set methods
          */
         public Builder setOnHidePromptListener(final OnHidePromptListener listener)
@@ -1650,6 +1686,7 @@ public class MaterialTapTargetPrompt
          * Set if the prompt should stop touch events on the focal point from passing
          * to underlying views. Default is false.
          *
+         * @param captureTouchEvent True to capture touch events in the prompt
          * @return This Builder object to allow for chaining of calls to set methods
          */
         public Builder setCaptureTouchEventOnFocal(final boolean captureTouchEvent)
@@ -1661,6 +1698,7 @@ public class MaterialTapTargetPrompt
         /**
          * Set the max width that the primary and secondary text can be.
          *
+         * @param width The max width that the text can reach
          * @return This Builder object to allow for chaining of calls to set methods
          */
         public Builder setMaxTextWidth(final float width)
@@ -1673,6 +1711,7 @@ public class MaterialTapTargetPrompt
          * Set the max width that the primary and secondary text can be using the given
          * resource id.
          *
+         * @param resId The dimension resource id for the max width that the text can reach
          * @return This Builder object to allow for chaining of calls to set methods
          */
         public Builder setMaxTextWidth(@DimenRes final int resId)
@@ -1685,6 +1724,7 @@ public class MaterialTapTargetPrompt
          * Set the background colour.
          * The Material Design Guidelines specify that this should be 244 or hex F4.
          *
+         * @param colour The background colour colour resource id
          * @return This Builder object to allow for chaining of calls to set methods
          */
         public Builder setBackgroundColour(@ColorInt final int colour)
@@ -1696,6 +1736,7 @@ public class MaterialTapTargetPrompt
         /**
          * Set the focal point colour.
          *
+         * @param colour The focal colour colour resource id
          * @return This Builder object to allow for chaining of calls to set methods
          */
         public Builder setFocalColour(@ColorInt final int colour)
@@ -1707,6 +1748,7 @@ public class MaterialTapTargetPrompt
         /**
          * Set the focal point radius.
          *
+         * @param radius The focal radius
          * @return This Builder object to allow for chaining of calls to set methods
          */
         public Builder setFocalRadius(final float radius)
@@ -1718,6 +1760,7 @@ public class MaterialTapTargetPrompt
         /**
          * Set the focal point radius using the given resource id.
          *
+         * @param resId The focal radius dimension resource id
          * @return This Builder object to allow for chaining of calls to set methods
          */
         public Builder setFocalRadius(@DimenRes final int resId)
@@ -1756,6 +1799,7 @@ public class MaterialTapTargetPrompt
          * Set if the prompt should stop touch events outside the prompt from passing
          * to underlying views. Default is false.
          *
+         * @param captureTouchEventOutsidePrompt True to capture touch events out side the prompt
          * @return This Builder object to allow for chaining of calls to set methods
          */
         public Builder setCaptureTouchEventOutsidePrompt(final boolean captureTouchEventOutsidePrompt)
@@ -1831,6 +1875,8 @@ public class MaterialTapTargetPrompt
          * Will return {@link null} if a valid target has not been set or the primary text is {@link null}.
          * To check that a valid target has been set call {@link #isTargetSet()}.
          * </p>
+         *
+         * @return The created builder or null if no target
          */
         public MaterialTapTargetPrompt create()
         {
@@ -1965,6 +2011,8 @@ public class MaterialTapTargetPrompt
          * Will return {@link null} if a valid target has not been set or the primary text is {@link null}.
          * To check that a valid target has been set call {@link #isTargetSet()}.
          * </p>
+         *
+         * @return The created builder or null if no target
          */
         public MaterialTapTargetPrompt show()
         {
