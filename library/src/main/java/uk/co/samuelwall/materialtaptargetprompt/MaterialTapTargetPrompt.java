@@ -53,6 +53,8 @@ import android.view.ViewTreeObserver;
 import android.view.animation.AccelerateDecelerateInterpolator;
 import android.view.animation.Interpolator;
 
+import java.text.Bidi;
+
 /**
  * A Material Design tap target onboarding implementation.
  *
@@ -822,7 +824,14 @@ public class MaterialTapTargetPrompt
                 // If the first character is a right to left character
                 final boolean textIsRtl = layout.isRtlCharAt(0);
                 // If the text and result are right to left then false otherwise use the textIsRtl value
-                result = !(textIsRtl && result) && textIsRtl;
+                result = !(textIsRtl && result) && result;
+                if (!result && layout.getAlignment() == Layout.Alignment.ALIGN_NORMAL
+                        && Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1)
+                {
+                    // If the layout and text are right to left and the alignment is normal then rtl
+                    result = textIsRtl && mActivity.getResources().getConfiguration()
+                                                .getLayoutDirection() == View.LAYOUT_DIRECTION_RTL;
+                }
             }
         }
         return result;
@@ -1160,7 +1169,7 @@ public class MaterialTapTargetPrompt
         /**
          * The containing activity.
          */
-        private Activity mActivity;
+        Activity mActivity;
 
         private boolean mTargetSet;
 
@@ -2060,7 +2069,7 @@ public class MaterialTapTargetPrompt
             mPrompt.mPaintPrimaryText.setAntiAlias(true);
             mPrompt.mPaintPrimaryText.setTextSize(mPrimaryTextSize);
             setTypeface(mPrompt.mPaintPrimaryText, mPrimaryTextTypeface, mPrimaryTextTypefaceStyle);
-            mPrompt.mPrimaryTextAlignment = getTextAlignment(mPrimaryTextGravity);
+            mPrompt.mPrimaryTextAlignment = getTextAlignment(mPrimaryTextGravity, mPrimaryText);
 
             mPrompt.mPaintSecondaryText = new TextPaint();
             mPrompt.mPaintSecondaryText.setColor(mSecondaryTextColour);
@@ -2068,7 +2077,7 @@ public class MaterialTapTargetPrompt
             mPrompt.mPaintSecondaryText.setAntiAlias(true);
             mPrompt.mPaintSecondaryText.setTextSize(mSecondaryTextSize);
             setTypeface(mPrompt.mPaintSecondaryText, mSecondaryTextTypeface, mSecondaryTextTypefaceStyle);
-            mPrompt.mSecondaryTextAlignment = getTextAlignment(mSecondaryTextGravity);
+            mPrompt.mSecondaryTextAlignment = getTextAlignment(mSecondaryTextGravity, mSecondaryText);
 
             mPrompt.mAutoDismiss = mAutoDismiss;
             mPrompt.mAutoFinish = mAutoFinish;
@@ -2216,13 +2225,27 @@ public class MaterialTapTargetPrompt
          * @param gravity The gravity to convert to absolute values
          * @return absolute layout direction
          */
-        Layout.Alignment getTextAlignment(final int gravity)
+        Layout.Alignment getTextAlignment(final int gravity, final String text)
         {
             final int absoluteGravity;
             if (isVersionAfterJellyBeanMR1())
             {
-                absoluteGravity = Gravity.getAbsoluteGravity(gravity,
-                                mActivity.getResources().getConfiguration().getLayoutDirection());
+                int realGravity = gravity;
+                final int layoutDirection =
+                        mActivity.getResources().getConfiguration().getLayoutDirection();
+                if (layoutDirection == View.LAYOUT_DIRECTION_RTL
+                        && new Bidi(text, Bidi.DIRECTION_DEFAULT_LEFT_TO_RIGHT).isRightToLeft())
+                {
+                    if (gravity == Gravity.START)
+                    {
+                        realGravity = Gravity.END;
+                    }
+                    else if (gravity == Gravity.END)
+                    {
+                        realGravity = Gravity.START;
+                    }
+                }
+                absoluteGravity = Gravity.getAbsoluteGravity(realGravity, layoutDirection);
             }
             else
             {
