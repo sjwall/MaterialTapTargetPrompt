@@ -751,7 +751,7 @@ public class MaterialTapTargetPrompt
             {
                 mView.mPrimaryTextLeft = mView.mClipBounds.left + mTextPadding;
             }
-            else if (mView.mPrimaryTextLeft + width > mView.mClipBounds.right - mTextPadding)
+            if (mView.mPrimaryTextLeft + width > mView.mClipBounds.right - mTextPadding)
             {
                 mView.mPrimaryTextLeft = mView.mClipBounds.right - mTextPadding - width;
             }
@@ -791,18 +791,41 @@ public class MaterialTapTargetPrompt
         updateBackgroundRadius(textWidth);
 
         mView.mSecondaryTextLeft = mView.mPrimaryTextLeft;
-        if (mInside88dpBounds)
+        mView.mPrimaryTextLeftChange = 0;
+        mView.mSecondaryTextLeftChange = 0;
+        final float change = maxWidth - textWidth;
+        if (isRtlText(mView.mPrimaryTextLayout))
         {
-            final float change = maxWidth - textWidth;
-            if (mPrimaryTextAlignment == Layout.Alignment.ALIGN_OPPOSITE)
+            mView.mPrimaryTextLeftChange = change;
+        }
+        if (isRtlText(mView.mSecondaryTextLayout))
+        {
+            mView.mSecondaryTextLeftChange = change;
+        }
+    }
+
+    /**
+     * Determines if the text in the supplied layout is displayed right to left.
+     *
+     * @param layout The layout to check.
+     * @return True if the text in the supplied layout is displayed right to left. False otherwise.
+     */
+    private boolean isRtlText(final Layout layout)
+    {
+        boolean result = false;
+        if (layout != null)
+        {
+            // Treat align opposite as right to left by default
+            result = layout.getAlignment() == Layout.Alignment.ALIGN_OPPOSITE;
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH)
             {
-                mView.mPrimaryTextLeft -= change;
-            }
-            if (mSecondaryTextAlignment == Layout.Alignment.ALIGN_OPPOSITE)
-            {
-                mView.mSecondaryTextLeft -= change;
+                // If the first character is a right to left character
+                final boolean textIsRtl = layout.isRtlCharAt(0);
+                // If the text and result are right to left then false otherwise use the textIsRtl value
+                result = !(textIsRtl && result) && textIsRtl;
             }
         }
+        return result;
     }
 
     /**
@@ -992,8 +1015,10 @@ public class MaterialTapTargetPrompt
         float mIconDrawableLeft;
         float mIconDrawableTop;
         float mPrimaryTextLeft;
+        float mPrimaryTextLeftChange;
         float mPrimaryTextTop;
         float mSecondaryTextLeft;
+        float mSecondaryTextLeftChange;
         float mSecondaryTextOffsetTop;
         Layout mPrimaryTextLayout;
         Layout mSecondaryTextLayout;
@@ -1049,14 +1074,15 @@ public class MaterialTapTargetPrompt
                 }
 
                 //Draw the text
-                canvas.translate(mPrimaryTextLeft, mPrimaryTextTop);
+                canvas.translate(mPrimaryTextLeft - mPrimaryTextLeftChange, mPrimaryTextTop);
                 if (mPrimaryTextLayout != null)
                 {
                     mPrimaryTextLayout.draw(canvas);
                 }
                 if (mSecondaryTextLayout != null)
                 {
-                    canvas.translate(-mPrimaryTextLeft + mSecondaryTextLeft, mSecondaryTextOffsetTop);
+                    canvas.translate(-(mPrimaryTextLeft - mPrimaryTextLeftChange)
+                        + mSecondaryTextLeft - mSecondaryTextLeftChange, mSecondaryTextOffsetTop);
                     mSecondaryTextLayout.draw(canvas);
                 }
             }
