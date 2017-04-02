@@ -271,11 +271,6 @@ public class MaterialTapTargetPrompt
     float m88dp;
 
     /**
-     * 20dp pixel value;
-     */
-    float m20dp;
-
-    /**
      * The background colour alpha value.
      */
     int mBaseBackgroundColourAlpha;
@@ -743,11 +738,11 @@ public class MaterialTapTargetPrompt
             final float width = Math.min(textWidth, maxWidth);
             if (mHorizontalTextPositionLeft)
             {
-                mView.mPrimaryTextLeft = mView.mFocalCentre.x - width + m20dp;
+                mView.mPrimaryTextLeft = mView.mFocalCentre.x - width + mFocalToTextPadding;
             }
             else
             {
-                mView.mPrimaryTextLeft = mView.mFocalCentre.x - width - m20dp;
+                mView.mPrimaryTextLeft = mView.mFocalCentre.x - width - mFocalToTextPadding;
             }
             if (mView.mPrimaryTextLeft < mView.mClipBounds.left + mTextPadding)
             {
@@ -893,31 +888,57 @@ public class MaterialTapTargetPrompt
      */
     void updateBackgroundRadius(final float maxTextWidth)
     {
-        final float length = maxTextWidth + mTextPadding;
+        mView.textWidth = (int) maxTextWidth;
+        mView.padding = (int) mTextPadding;
         if (mInside88dpBounds)
         {
-            final float x1 = mView.mFocalCentre.x;
-            float y1,x2, y2;
+            float x1 = mView.mFocalCentre.x;
+            float x2 = mView.mPrimaryTextLeft - mTextPadding;
+            float y1, y2;
             if (mVerticalTextPositionAbove)
             {
-                y1 = mView.mFocalCentre.y + mBaseFocalRadius + m20dp + mTextPadding;
+                y1 = mView.mFocalCentre.y + mBaseFocalRadius + mTextPadding;
                 y2 = mView.mPrimaryTextTop;
-                x2 = mView.mPrimaryTextLeft - mTextPadding;
             }
             else
             {
-                y1 = mView.mFocalCentre.y - (mBaseFocalRadius + m20dp + mTextPadding);
+                y1 = mView.mFocalCentre.y - (mBaseFocalRadius + mFocalToTextPadding + mTextPadding);
                 float baseY2 = mView.mPrimaryTextTop + mView.mPrimaryTextLayout.getHeight();
                 if (mView.mSecondaryTextLayout != null)
                 {
                     baseY2 += mView.mSecondaryTextLayout.getHeight() + mView.mTextSeparation;
                 }
                 y2 = baseY2;
-                x2 = mView.mPrimaryTextLeft - mTextPadding;
             }
 
             final float y3 = y2;
-            final float x3 = x2 + maxTextWidth + mTextPadding + mTextPadding;
+            float x3 = x2 + maxTextWidth + mTextPadding + mTextPadding;
+
+            final float focalLeft = mView.mFocalCentre.x - mBaseFocalRadius - mFocalToTextPadding;
+            final float focalRight = mView.mFocalCentre.x + mBaseFocalRadius + mFocalToTextPadding;
+            if (x2 > focalLeft && x2 < focalRight)
+            {
+                if (mVerticalTextPositionAbove)
+                {
+                    x1 -= mBaseFocalRadius - mFocalToTextPadding;
+                }
+                else
+                {
+                    x2 -= mBaseFocalRadius - mFocalToTextPadding;
+                }
+            }
+            else if (x3 > focalLeft && x3 < focalRight)
+            {
+                if (mVerticalTextPositionAbove)
+                {
+                    x1 += mBaseFocalRadius + mFocalToTextPadding;
+                }
+                else
+                {
+                    x3 += mBaseFocalRadius + mFocalToTextPadding;
+                }
+            }
+
             final double offset = Math.pow(x2,2) + Math.pow(y2,2);
             final double bc = (Math.pow(x1,2) + Math.pow(y1,2) - offset )/2.0;
             final double cd = (offset - Math.pow(x3, 2) - Math.pow(y3, 2))/2.0;
@@ -931,8 +952,11 @@ public class MaterialTapTargetPrompt
         else
         {
             mBaseBackgroundPosition.set(mView.mFocalCentre.x, mView.mFocalCentre.y);
-            float height = mBaseFocalRadius + mFocalToTextPadding + mTextPadding
-                    + mView.mPrimaryTextLayout.getHeight();
+            final float length = Math.abs(mView.mPrimaryTextLeft
+                        + (mHorizontalTextPositionLeft ? 0 : maxTextWidth)
+                        - mView.mFocalCentre.x) + mTextPadding;
+            float height = mBaseFocalRadius + mFocalToTextPadding
+                            + mView.mPrimaryTextLayout.getHeight();
             //Check if secondary text should be included with text separation
             if (mView.mSecondaryTextLayout != null)
             {
@@ -1225,7 +1249,7 @@ public class MaterialTapTargetPrompt
         private boolean mIdleAnimationEnabled = true;
         private int mPrimaryTextGravity = Gravity.START, mSecondaryTextGravity = Gravity.START;
         private View mClipToView;
-        private final float m88dp, m20dp;
+        private final float m88dp;
 
         /**
          * Creates a builder for a tap target prompt that uses the default
@@ -1264,7 +1288,6 @@ public class MaterialTapTargetPrompt
 
             final float density = activity.getResources().getDisplayMetrics().density;
             m88dp = 88 * density;
-            m20dp = 20 * density;
             final TypedArray a = mActivity.obtainStyledAttributes(themeResId, R.styleable.PromptView);
             mPrimaryTextColour = a.getColor(R.styleable.PromptView_primaryTextColour, Color.WHITE);
             mSecondaryTextColour = a.getColor(R.styleable.PromptView_secondaryTextColour, Color.argb(179, 255, 255, 255));
@@ -2011,7 +2034,6 @@ public class MaterialTapTargetPrompt
             mPrompt.mFocalToTextPadding = mFocalToTextPadding;
             mPrompt.mBaseFocalRippleAlpha = 150;
             mPrompt.m88dp = m88dp;
-            mPrompt.m20dp = m20dp;
             mPrompt.mBaseBackgroundColourAlpha = mBackgroundColourAlpha;
             mPrompt.mBaseFocalColourAlpha = mFocalColourAlpha;
 
