@@ -35,6 +35,16 @@
         android:layout_height="match_parent"
         android:layout_gravity="start"
         android:fitsSystemWindows="true"
-        app:headerLayout="@layout/nav_header_main" />
+        app:headerLayout="@layout/nav_header_main">
+
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/navfab"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_margin="@dimen/fab_margin"
+            android:src="@android:drawable/ic_dialog_dialer"
+            android:onClick="showNavPrompt"/>
+    </android.support.design.widget.NavigationView>
 
 </android.support.v4.widget.DrawerLayout>

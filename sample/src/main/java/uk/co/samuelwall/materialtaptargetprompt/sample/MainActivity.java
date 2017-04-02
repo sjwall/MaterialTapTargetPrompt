@@ -104,6 +104,17 @@ public class MainActivity extends AppCompatActivity
         mFabPrompt.show();
     }
 
+    public void showNavPrompt(View view)
+    {
+        new MaterialTapTargetPrompt.Builder(this)
+                .setTarget(R.id.navfab)
+                .setPrimaryText(R.string.example_fab_title)
+                .setSecondaryText(R.string.example_fab_description)
+                .setAnimationInterpolator(new FastOutSlowInInterpolator())
+                .setMaxTextWidth(R.dimen.tap_target_menu_max_width)
+                .show();
+    }
+
     public void showSideNavigationPrompt(View view)
     {
         final MaterialTapTargetPrompt.Builder tapTargetPromptBuilder = new MaterialTapTargetPrompt.Builder(this)
