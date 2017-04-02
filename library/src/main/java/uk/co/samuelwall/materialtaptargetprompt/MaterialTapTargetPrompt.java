@@ -888,8 +888,8 @@ public class MaterialTapTargetPrompt
      */
     void updateBackgroundRadius(final float maxTextWidth)
     {
-        mView.textWidth = (int) maxTextWidth;
-        mView.padding = (int) mTextPadding;
+        /*mView.textWidth = (int) maxTextWidth;
+        mView.padding = (int) mTextPadding;*/
         if (mInside88dpBounds)
         {
             float x1 = mView.mFocalCentre.x;
@@ -948,6 +948,9 @@ public class MaterialTapTargetPrompt
                                                 (float) ((cd * (x1 - x2) - bc * (x2 - x3)) * idet));
             mBaseBackgroundRadius = (float) Math.sqrt(Math.pow(x2 - mBaseBackgroundPosition.x, 2)
                             + Math.pow(y2 - mBaseBackgroundPosition.y, 2));
+            /*mView.point1.set(x1, y1);
+            mView.point2.set(x2, y2);
+            mView.point3.set(x3, y3);*/
         }
         else
         {
@@ -963,6 +966,8 @@ public class MaterialTapTargetPrompt
                 height += mView.mSecondaryTextLayout.getHeight() + mView.mTextSeparation;
             }
             mBaseBackgroundRadius = (float) Math.sqrt(Math.pow(length, 2) + Math.pow(height, 2));
+            /*mView.point1.set(mView.mFocalCentre.x + (mHorizontalTextPositionLeft ? -length : length),
+                            mView.mFocalCentre.y + (mVerticalTextPositionAbove ? - height : height));*/
         }
         mView.mBackgroundPosition.set(mBaseBackgroundPosition);
         mView.mBackgroundRadius = mBaseBackgroundRadius * mRevealedAmount;
@@ -1042,6 +1047,12 @@ public class MaterialTapTargetPrompt
      */
     static class PromptView extends View
     {
+        /*int padding, textWidth;
+        Paint paddingPaint = new Paint();
+        Paint itemPaint = new Paint();
+        PointF point1 = new PointF();
+        PointF point2 = new PointF();
+        PointF point3 = new PointF();*/
         PointF mFocalCentre = new PointF();
         PointF mBackgroundPosition = new PointF();
         Paint mPaintBackground, mPaintFocal;
@@ -1071,6 +1082,10 @@ public class MaterialTapTargetPrompt
         public PromptView(final Context context)
         {
             super(context);
+            /*paddingPaint.setColor(Color.GREEN);
+            paddingPaint.setAlpha(100);
+            itemPaint.setColor(Color.BLUE);
+            itemPaint.setAlpha(100);*/
         }
 
         @Override
@@ -1096,6 +1111,10 @@ public class MaterialTapTargetPrompt
                 //Draw the focal
                 canvas.drawCircle(mFocalCentre.x, mFocalCentre.y, mFocalRadius, mPaintFocal);
 
+                /*canvas.drawRect(mPrimaryTextLeft - padding, mPrimaryTextTop, mPrimaryTextLeft, mPrimaryTextTop + mSecondaryTextOffsetTop + mSecondaryTextLayout.getHeight(), paddingPaint);
+                canvas.drawRect(mPrimaryTextLeft, mPrimaryTextTop, mPrimaryTextLeft + textWidth, mPrimaryTextTop + mSecondaryTextOffsetTop + mSecondaryTextLayout.getHeight(), itemPaint);
+                canvas.drawRect(mPrimaryTextLeft + textWidth, mPrimaryTextTop, mPrimaryTextLeft + textWidth + padding, mPrimaryTextTop + mSecondaryTextOffsetTop + mSecondaryTextLayout.getHeight(), paddingPaint);*/
+
                 //Draw the icon
                 if (mIconDrawable != null)
                 {
@@ -1109,6 +1128,10 @@ public class MaterialTapTargetPrompt
                     mTargetRenderView.draw(canvas);
                     canvas.translate(-mIconDrawableLeft, -mIconDrawableTop);
                 }
+
+                /*canvas.drawCircle(point1.x, point1.y, 50, mPaintFocal);
+                canvas.drawCircle(point2.x, point2.y, 50, mPaintFocal);
+                canvas.drawCircle(point3.x, point3.y, 50, mPaintFocal);*/
 
                 //Draw the text
                 canvas.translate(mPrimaryTextLeft - mPrimaryTextLeftChange, mPrimaryTextTop);
