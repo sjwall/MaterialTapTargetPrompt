@@ -2,6 +2,18 @@
 
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## v1.9.4 (2017-03-28)
+
+### Bug Fixes
+
+* Fixed right to left text positioning
+
+### Other
+
+* Improved text and background positioning calculations
+* Added side nav target example
+
+
 ## v1.9.3 (2017-02-26)
 
 ### Bug Fixes
