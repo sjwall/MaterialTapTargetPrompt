@@ -824,13 +824,17 @@ public class MaterialTapTargetPrompt
                 // If the first character is a right to left character
                 final boolean textIsRtl = layout.isRtlCharAt(0);
                 // If the text and result are right to left then false otherwise use the textIsRtl value
-                result = !(textIsRtl && result) && result;
+                result = (!(result && textIsRtl) && !(!result && !textIsRtl)) || textIsRtl;
                 if (!result && layout.getAlignment() == Layout.Alignment.ALIGN_NORMAL
                         && Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1)
                 {
                     // If the layout and text are right to left and the alignment is normal then rtl
                     result = textIsRtl && mActivity.getResources().getConfiguration()
                                                 .getLayoutDirection() == View.LAYOUT_DIRECTION_RTL;
+                }
+                else if (layout.getAlignment() == Layout.Alignment.ALIGN_OPPOSITE && textIsRtl)
+                {
+                    result = false;
                 }
             }
         }
