@@ -2,6 +2,12 @@
 
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## v1.9.5 (2017-04-03)
+
+### Bug Fixes
+
+* Fixed null text causing crash when layout direction is right to left
+
 ## v1.9.4 (2017-04-02)
 
 ### Bug Fixes
