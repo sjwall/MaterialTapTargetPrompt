@@ -2280,9 +2280,8 @@ public class MaterialTapTargetPrompt
             if (isVersionAfterJellyBeanMR1())
             {
                 int realGravity = gravity;
-                final int layoutDirection =
-                        mActivity.getResources().getConfiguration().getLayoutDirection();
-                if (layoutDirection == View.LAYOUT_DIRECTION_RTL
+                final int layoutDirection = getLayoutDirection();
+                if (text != null && layoutDirection == View.LAYOUT_DIRECTION_RTL
                         && new Bidi(text, Bidi.DIRECTION_DEFAULT_LEFT_TO_RIGHT).isRightToLeft())
                 {
                     if (gravity == Gravity.START)
@@ -2325,6 +2324,18 @@ public class MaterialTapTargetPrompt
                     break;
             }
             return alignment;
+        }
+
+        /**
+         * Return the layout direction. Will be either {@link View#LAYOUT_DIRECTION_LTR} or
+         * {@link View#LAYOUT_DIRECTION_RTL}.
+         *
+         * @return Returns {@link View#LAYOUT_DIRECTION_RTL} if the configuration
+         * is {@link android.content.res.Configuration#SCREENLAYOUT_LAYOUTDIR_RTL}, otherwise {@link View#LAYOUT_DIRECTION_LTR}.
+         */
+        int getLayoutDirection()
+        {
+            return mActivity.getResources().getConfiguration().getLayoutDirection();
         }
 
         boolean isVersionAfterJellyBeanMR1()

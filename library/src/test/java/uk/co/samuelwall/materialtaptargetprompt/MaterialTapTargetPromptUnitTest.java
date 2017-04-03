@@ -153,6 +153,39 @@ public class MaterialTapTargetPromptUnitTest
     }
 
     @Test
+    public void promptCreatedWhenSecondaryTextNotSetRTL()
+    {
+        MaterialTapTargetPrompt.Builder builder = createBuilder(SCREEN_WIDTH, SCREEN_HEIGHT, 340)
+                .setTarget(50, 40)
+                .setPrimaryText("Primary text");
+        Mockito.doAnswer(new Answer<Integer>()
+        {
+            @Override
+            public Integer answer(InvocationOnMock invocation) throws Throwable
+            {
+                int rtl = 1;
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1)
+                {
+                    rtl = View.LAYOUT_DIRECTION_RTL;
+                }
+                return rtl;
+            }
+        }).when(builder).getLayoutDirection();
+        MaterialTapTargetPrompt prompt = builder.create();
+        assertNotNull(prompt);
+        prompt.show();
+
+        assertNull(prompt.mView.mSecondaryTextLayout);
+
+        prompt.finish();
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB)
+        {
+            prompt.mAnimationCurrent.end();
+        }
+        assertNull(prompt.mView.getParent());
+    }
+
+    @Test
     public void promptAnimationCancel()
     {
         MaterialTapTargetPrompt prompt = createBuilder(SCREEN_WIDTH, SCREEN_HEIGHT, 340)
