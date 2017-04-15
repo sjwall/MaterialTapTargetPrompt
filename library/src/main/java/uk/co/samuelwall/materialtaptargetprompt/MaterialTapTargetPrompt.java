@@ -1082,6 +1082,7 @@ public class MaterialTapTargetPrompt
         public PromptView(final Context context)
         {
             super(context);
+            setId(R.id.material_target_prompt_view);
             /*paddingPaint.setColor(Color.GREEN);
             paddingPaint.setAlpha(100);
             itemPaint.setColor(Color.BLUE);
