@@ -2,6 +2,12 @@
 
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## v1.10.0 (2017-04-15)
+
+### Features
+
+* Added id to prompt view
+
 ## v1.9.5 (2017-04-03)
 
 ### Bug Fixes
