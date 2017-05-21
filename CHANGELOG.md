@@ -2,6 +2,30 @@
 
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## v1.10.0 (2017-04-15)
+
+### Features
+
+* Added id to prompt view
+
+## v1.9.5 (2017-04-03)
+
+### Bug Fixes
+
+* Fixed null text causing crash when layout direction is right to left
+
+## v1.9.4 (2017-04-02)
+
+### Bug Fixes
+
+* Fixed right to left text positioning
+
+### Other
+
+* Improved text and background positioning calculations
+* Added side nav target example
+
+
 ## v1.9.3 (2017-02-26)
 
 ### Bug Fixes

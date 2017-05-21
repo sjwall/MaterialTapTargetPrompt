@@ -53,6 +53,8 @@ import android.view.ViewTreeObserver;
 import android.view.animation.AccelerateDecelerateInterpolator;
 import android.view.animation.Interpolator;
 
+import java.text.Bidi;
+
 /**
  * A Material Design tap target onboarding implementation.
  *
@@ -267,11 +269,6 @@ public class MaterialTapTargetPrompt
      * 88dp pixel value.
      */
     float m88dp;
-
-    /**
-     * 20dp pixel value;
-     */
-    float m20dp;
 
     /**
      * The background colour alpha value.
@@ -741,17 +738,17 @@ public class MaterialTapTargetPrompt
             final float width = Math.min(textWidth, maxWidth);
             if (mHorizontalTextPositionLeft)
             {
-                mView.mPrimaryTextLeft = mView.mFocalCentre.x - width + m20dp;
+                mView.mPrimaryTextLeft = mView.mFocalCentre.x - width + mFocalToTextPadding;
             }
             else
             {
-                mView.mPrimaryTextLeft = mView.mFocalCentre.x - width - m20dp;
+                mView.mPrimaryTextLeft = mView.mFocalCentre.x - width - mFocalToTextPadding;
             }
             if (mView.mPrimaryTextLeft < mView.mClipBounds.left + mTextPadding)
             {
                 mView.mPrimaryTextLeft = mView.mClipBounds.left + mTextPadding;
             }
-            else if (mView.mPrimaryTextLeft + width > mView.mClipBounds.right - mTextPadding)
+            if (mView.mPrimaryTextLeft + width > mView.mClipBounds.right - mTextPadding)
             {
                 mView.mPrimaryTextLeft = mView.mClipBounds.right - mTextPadding - width;
             }
@@ -791,18 +788,52 @@ public class MaterialTapTargetPrompt
         updateBackgroundRadius(textWidth);
 
         mView.mSecondaryTextLeft = mView.mPrimaryTextLeft;
-        if (mInside88dpBounds)
+        mView.mPrimaryTextLeftChange = 0;
+        mView.mSecondaryTextLeftChange = 0;
+        final float change = maxWidth - textWidth;
+        if (isRtlText(mView.mPrimaryTextLayout))
         {
-            final float change = maxWidth - textWidth;
-            if (mPrimaryTextAlignment == Layout.Alignment.ALIGN_OPPOSITE)
+            mView.mPrimaryTextLeftChange = change;
+        }
+        if (isRtlText(mView.mSecondaryTextLayout))
+        {
+            mView.mSecondaryTextLeftChange = change;
+        }
+    }
+
+    /**
+     * Determines if the text in the supplied layout is displayed right to left.
+     *
+     * @param layout The layout to check.
+     * @return True if the text in the supplied layout is displayed right to left. False otherwise.
+     */
+    private boolean isRtlText(final Layout layout)
+    {
+        boolean result = false;
+        if (layout != null)
+        {
+            // Treat align opposite as right to left by default
+            result = layout.getAlignment() == Layout.Alignment.ALIGN_OPPOSITE;
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH)
             {
-                mView.mPrimaryTextLeft -= change;
-            }
-            if (mSecondaryTextAlignment == Layout.Alignment.ALIGN_OPPOSITE)
-            {
-                mView.mSecondaryTextLeft -= change;
+                // If the first character is a right to left character
+                final boolean textIsRtl = layout.isRtlCharAt(0);
+                // If the text and result are right to left then false otherwise use the textIsRtl value
+                result = (!(result && textIsRtl) && !(!result && !textIsRtl)) || textIsRtl;
+                if (!result && layout.getAlignment() == Layout.Alignment.ALIGN_NORMAL
+                        && Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1)
+                {
+                    // If the layout and text are right to left and the alignment is normal then rtl
+                    result = textIsRtl && mActivity.getResources().getConfiguration()
+                                                .getLayoutDirection() == View.LAYOUT_DIRECTION_RTL;
+                }
+                else if (layout.getAlignment() == Layout.Alignment.ALIGN_OPPOSITE && textIsRtl)
+                {
+                    result = false;
+                }
             }
         }
+        return result;
     }
 
     /**
@@ -857,31 +888,57 @@ public class MaterialTapTargetPrompt
      */
     void updateBackgroundRadius(final float maxTextWidth)
     {
-        final float length = maxTextWidth + mTextPadding;
+        /*mView.textWidth = (int) maxTextWidth;
+        mView.padding = (int) mTextPadding;*/
         if (mInside88dpBounds)
         {
-            final float x1 = mView.mFocalCentre.x;
-            float y1,x2, y2;
+            float x1 = mView.mFocalCentre.x;
+            float x2 = mView.mPrimaryTextLeft - mTextPadding;
+            float y1, y2;
             if (mVerticalTextPositionAbove)
             {
-                y1 = mView.mFocalCentre.y + mBaseFocalRadius + m20dp + mTextPadding;
+                y1 = mView.mFocalCentre.y + mBaseFocalRadius + mTextPadding;
                 y2 = mView.mPrimaryTextTop;
-                x2 = mView.mPrimaryTextLeft - mTextPadding;
             }
             else
             {
-                y1 = mView.mFocalCentre.y - (mBaseFocalRadius + m20dp + mTextPadding);
+                y1 = mView.mFocalCentre.y - (mBaseFocalRadius + mFocalToTextPadding + mTextPadding);
                 float baseY2 = mView.mPrimaryTextTop + mView.mPrimaryTextLayout.getHeight();
                 if (mView.mSecondaryTextLayout != null)
                 {
                     baseY2 += mView.mSecondaryTextLayout.getHeight() + mView.mTextSeparation;
                 }
                 y2 = baseY2;
-                x2 = mView.mPrimaryTextLeft - mTextPadding;
             }
 
             final float y3 = y2;
-            final float x3 = x2 + maxTextWidth + mTextPadding + mTextPadding;
+            float x3 = x2 + maxTextWidth + mTextPadding + mTextPadding;
+
+            final float focalLeft = mView.mFocalCentre.x - mBaseFocalRadius - mFocalToTextPadding;
+            final float focalRight = mView.mFocalCentre.x + mBaseFocalRadius + mFocalToTextPadding;
+            if (x2 > focalLeft && x2 < focalRight)
+            {
+                if (mVerticalTextPositionAbove)
+                {
+                    x1 -= mBaseFocalRadius - mFocalToTextPadding;
+                }
+                else
+                {
+                    x2 -= mBaseFocalRadius - mFocalToTextPadding;
+                }
+            }
+            else if (x3 > focalLeft && x3 < focalRight)
+            {
+                if (mVerticalTextPositionAbove)
+                {
+                    x1 += mBaseFocalRadius + mFocalToTextPadding;
+                }
+                else
+                {
+                    x3 += mBaseFocalRadius + mFocalToTextPadding;
+                }
+            }
+
             final double offset = Math.pow(x2,2) + Math.pow(y2,2);
             final double bc = (Math.pow(x1,2) + Math.pow(y1,2) - offset )/2.0;
             final double cd = (offset - Math.pow(x3, 2) - Math.pow(y3, 2))/2.0;
@@ -891,18 +948,26 @@ public class MaterialTapTargetPrompt
                                                 (float) ((cd * (x1 - x2) - bc * (x2 - x3)) * idet));
             mBaseBackgroundRadius = (float) Math.sqrt(Math.pow(x2 - mBaseBackgroundPosition.x, 2)
                             + Math.pow(y2 - mBaseBackgroundPosition.y, 2));
+            /*mView.point1.set(x1, y1);
+            mView.point2.set(x2, y2);
+            mView.point3.set(x3, y3);*/
         }
         else
         {
             mBaseBackgroundPosition.set(mView.mFocalCentre.x, mView.mFocalCentre.y);
-            float height = mBaseFocalRadius + mFocalToTextPadding + mTextPadding
-                    + mView.mPrimaryTextLayout.getHeight();
+            final float length = Math.abs(mView.mPrimaryTextLeft
+                        + (mHorizontalTextPositionLeft ? 0 : maxTextWidth)
+                        - mView.mFocalCentre.x) + mTextPadding;
+            float height = mBaseFocalRadius + mFocalToTextPadding
+                            + mView.mPrimaryTextLayout.getHeight();
             //Check if secondary text should be included with text separation
             if (mView.mSecondaryTextLayout != null)
             {
                 height += mView.mSecondaryTextLayout.getHeight() + mView.mTextSeparation;
             }
             mBaseBackgroundRadius = (float) Math.sqrt(Math.pow(length, 2) + Math.pow(height, 2));
+            /*mView.point1.set(mView.mFocalCentre.x + (mHorizontalTextPositionLeft ? -length : length),
+                            mView.mFocalCentre.y + (mVerticalTextPositionAbove ? - height : height));*/
         }
         mView.mBackgroundPosition.set(mBaseBackgroundPosition);
         mView.mBackgroundRadius = mBaseBackgroundRadius * mRevealedAmount;
@@ -982,6 +1047,12 @@ public class MaterialTapTargetPrompt
      */
     static class PromptView extends View
     {
+        /*int padding, textWidth;
+        Paint paddingPaint = new Paint();
+        Paint itemPaint = new Paint();
+        PointF point1 = new PointF();
+        PointF point2 = new PointF();
+        PointF point3 = new PointF();*/
         PointF mFocalCentre = new PointF();
         PointF mBackgroundPosition = new PointF();
         Paint mPaintBackground, mPaintFocal;
@@ -992,8 +1063,10 @@ public class MaterialTapTargetPrompt
         float mIconDrawableLeft;
         float mIconDrawableTop;
         float mPrimaryTextLeft;
+        float mPrimaryTextLeftChange;
         float mPrimaryTextTop;
         float mSecondaryTextLeft;
+        float mSecondaryTextLeftChange;
         float mSecondaryTextOffsetTop;
         Layout mPrimaryTextLayout;
         Layout mSecondaryTextLayout;
@@ -1009,6 +1082,11 @@ public class MaterialTapTargetPrompt
         public PromptView(final Context context)
         {
             super(context);
+            setId(R.id.material_target_prompt_view);
+            /*paddingPaint.setColor(Color.GREEN);
+            paddingPaint.setAlpha(100);
+            itemPaint.setColor(Color.BLUE);
+            itemPaint.setAlpha(100);*/
         }
 
         @Override
@@ -1034,6 +1112,10 @@ public class MaterialTapTargetPrompt
                 //Draw the focal
                 canvas.drawCircle(mFocalCentre.x, mFocalCentre.y, mFocalRadius, mPaintFocal);
 
+                /*canvas.drawRect(mPrimaryTextLeft - padding, mPrimaryTextTop, mPrimaryTextLeft, mPrimaryTextTop + mSecondaryTextOffsetTop + mSecondaryTextLayout.getHeight(), paddingPaint);
+                canvas.drawRect(mPrimaryTextLeft, mPrimaryTextTop, mPrimaryTextLeft + textWidth, mPrimaryTextTop + mSecondaryTextOffsetTop + mSecondaryTextLayout.getHeight(), itemPaint);
+                canvas.drawRect(mPrimaryTextLeft + textWidth, mPrimaryTextTop, mPrimaryTextLeft + textWidth + padding, mPrimaryTextTop + mSecondaryTextOffsetTop + mSecondaryTextLayout.getHeight(), paddingPaint);*/
+
                 //Draw the icon
                 if (mIconDrawable != null)
                 {
@@ -1048,15 +1130,20 @@ public class MaterialTapTargetPrompt
                     canvas.translate(-mIconDrawableLeft, -mIconDrawableTop);
                 }
 
+                /*canvas.drawCircle(point1.x, point1.y, 50, mPaintFocal);
+                canvas.drawCircle(point2.x, point2.y, 50, mPaintFocal);
+                canvas.drawCircle(point3.x, point3.y, 50, mPaintFocal);*/
+
                 //Draw the text
-                canvas.translate(mPrimaryTextLeft, mPrimaryTextTop);
+                canvas.translate(mPrimaryTextLeft - mPrimaryTextLeftChange, mPrimaryTextTop);
                 if (mPrimaryTextLayout != null)
                 {
                     mPrimaryTextLayout.draw(canvas);
                 }
                 if (mSecondaryTextLayout != null)
                 {
-                    canvas.translate(-mPrimaryTextLeft + mSecondaryTextLeft, mSecondaryTextOffsetTop);
+                    canvas.translate(-(mPrimaryTextLeft - mPrimaryTextLeftChange)
+                        + mSecondaryTextLeft - mSecondaryTextLeftChange, mSecondaryTextOffsetTop);
                     mSecondaryTextLayout.draw(canvas);
                 }
             }
@@ -1134,7 +1221,7 @@ public class MaterialTapTargetPrompt
         /**
          * The containing activity.
          */
-        private Activity mActivity;
+        Activity mActivity;
 
         private boolean mTargetSet;
 
@@ -1176,7 +1263,7 @@ public class MaterialTapTargetPrompt
         private boolean mIdleAnimationEnabled = true;
         private int mPrimaryTextGravity = Gravity.START, mSecondaryTextGravity = Gravity.START;
         private View mClipToView;
-        private final float m88dp, m20dp;
+        private final float m88dp;
 
         /**
          * Creates a builder for a tap target prompt that uses the default
@@ -1215,7 +1302,6 @@ public class MaterialTapTargetPrompt
 
             final float density = activity.getResources().getDisplayMetrics().density;
             m88dp = 88 * density;
-            m20dp = 20 * density;
             final TypedArray a = mActivity.obtainStyledAttributes(themeResId, R.styleable.PromptView);
             mPrimaryTextColour = a.getColor(R.styleable.PromptView_primaryTextColour, Color.WHITE);
             mSecondaryTextColour = a.getColor(R.styleable.PromptView_secondaryTextColour, Color.argb(179, 255, 255, 255));
@@ -1908,7 +1994,6 @@ public class MaterialTapTargetPrompt
             mPrompt.mFocalToTextPadding = mFocalToTextPadding;
             mPrompt.mBaseFocalRippleAlpha = 150;
             mPrompt.m88dp = m88dp;
-            mPrompt.m20dp = m20dp;
             mPrompt.mBaseBackgroundColourAlpha = Color.alpha(mBackgroundColour);
             mPrompt.mBaseFocalColourAlpha = Color.alpha(mFocalColour);
 
@@ -1970,7 +2055,7 @@ public class MaterialTapTargetPrompt
             mPrompt.mPaintPrimaryText.setAntiAlias(true);
             mPrompt.mPaintPrimaryText.setTextSize(mPrimaryTextSize);
             setTypeface(mPrompt.mPaintPrimaryText, mPrimaryTextTypeface, mPrimaryTextTypefaceStyle);
-            mPrompt.mPrimaryTextAlignment = getTextAlignment(mPrimaryTextGravity);
+            mPrompt.mPrimaryTextAlignment = getTextAlignment(mPrimaryTextGravity, mPrimaryText);
 
             mPrompt.mPaintSecondaryText = new TextPaint();
             mPrompt.mPaintSecondaryText.setColor(mSecondaryTextColour);
@@ -1978,7 +2063,7 @@ public class MaterialTapTargetPrompt
             mPrompt.mPaintSecondaryText.setAntiAlias(true);
             mPrompt.mPaintSecondaryText.setTextSize(mSecondaryTextSize);
             setTypeface(mPrompt.mPaintSecondaryText, mSecondaryTextTypeface, mSecondaryTextTypefaceStyle);
-            mPrompt.mSecondaryTextAlignment = getTextAlignment(mSecondaryTextGravity);
+            mPrompt.mSecondaryTextAlignment = getTextAlignment(mSecondaryTextGravity, mSecondaryText);
 
             mPrompt.mAutoDismiss = mAutoDismiss;
             mPrompt.mAutoFinish = mAutoFinish;
@@ -2113,13 +2198,26 @@ public class MaterialTapTargetPrompt
          * @param gravity The gravity to convert to absolute values
          * @return absolute layout direction
          */
-        Layout.Alignment getTextAlignment(final int gravity)
+        Layout.Alignment getTextAlignment(final int gravity, final String text)
         {
             final int absoluteGravity;
             if (isVersionAfterJellyBeanMR1())
             {
-                absoluteGravity = Gravity.getAbsoluteGravity(gravity,
-                                mActivity.getResources().getConfiguration().getLayoutDirection());
+                int realGravity = gravity;
+                final int layoutDirection = getLayoutDirection();
+                if (text != null && layoutDirection == View.LAYOUT_DIRECTION_RTL
+                        && new Bidi(text, Bidi.DIRECTION_DEFAULT_LEFT_TO_RIGHT).isRightToLeft())
+                {
+                    if (gravity == Gravity.START)
+                    {
+                        realGravity = Gravity.END;
+                    }
+                    else if (gravity == Gravity.END)
+                    {
+                        realGravity = Gravity.START;
+                    }
+                }
+                absoluteGravity = Gravity.getAbsoluteGravity(realGravity, layoutDirection);
             }
             else
             {
@@ -2150,6 +2248,18 @@ public class MaterialTapTargetPrompt
                     break;
             }
             return alignment;
+        }
+
+        /**
+         * Return the layout direction. Will be either {@link View#LAYOUT_DIRECTION_LTR} or
+         * {@link View#LAYOUT_DIRECTION_RTL}.
+         *
+         * @return Returns {@link View#LAYOUT_DIRECTION_RTL} if the configuration
+         * is {@link android.content.res.Configuration#SCREENLAYOUT_LAYOUTDIR_RTL}, otherwise {@link View#LAYOUT_DIRECTION_LTR}.
+         */
+        int getLayoutDirection()
+        {
+            return mActivity.getResources().getConfiguration().getLayoutDirection();
         }
 
         boolean isVersionAfterJellyBeanMR1()

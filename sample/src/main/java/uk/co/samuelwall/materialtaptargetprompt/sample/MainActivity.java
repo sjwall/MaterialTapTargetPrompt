@@ -82,6 +82,7 @@ public class MainActivity extends AppCompatActivity
         }
         mFabPrompt = new MaterialTapTargetPrompt.Builder(MainActivity.this)
                 .setTarget(findViewById(R.id.fab))
+                .setFocalToTextPadding(R.dimen.dp40)
                 .setPrimaryText("Send your first email")
                 .setSecondaryText("Tap the envelop to start composing your first email")
                 .setAnimationInterpolator(new FastOutSlowInInterpolator())
@@ -104,11 +105,23 @@ public class MainActivity extends AppCompatActivity
         mFabPrompt.show();
     }
 
+    public void showNavPrompt(View view)
+    {
+        new MaterialTapTargetPrompt.Builder(this)
+                .setTarget(R.id.navfab)
+                .setPrimaryText(R.string.example_fab_title)
+                .setSecondaryText(R.string.example_fab_description)
+                .setAnimationInterpolator(new FastOutSlowInInterpolator())
+                .setMaxTextWidth(R.dimen.tap_target_menu_max_width)
+                .show();
+    }
+
     public void showSideNavigationPrompt(View view)
     {
         final MaterialTapTargetPrompt.Builder tapTargetPromptBuilder = new MaterialTapTargetPrompt.Builder(this)
                 .setPrimaryText(R.string.menu_prompt_title)
                 .setSecondaryText(R.string.menu_prompt_description)
+                .setFocalToTextPadding(R.dimen.dp40)
                 .setAnimationInterpolator(new FastOutSlowInInterpolator())
                 .setMaxTextWidth(R.dimen.tap_target_menu_max_width)
                 .setIcon(R.drawable.ic_menu);
@@ -195,6 +208,7 @@ public class MainActivity extends AppCompatActivity
         new MaterialTapTargetPrompt.Builder(MainActivity.this)
                 .setPrimaryText(R.string.action_mode_prompt_title)
                 .setSecondaryText(R.string.action_mode_prompt_description)
+                .setFocalToTextPadding(R.dimen.dp40)
                 .setAnimationInterpolator(new FastOutSlowInInterpolator())
                 .setMaxTextWidth(R.dimen.tap_target_menu_max_width)
                 .setTarget(findViewById(android.support.v7.appcompat.R.id.action_mode_close_button))

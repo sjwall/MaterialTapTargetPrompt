@@ -17,7 +17,10 @@
 package uk.co.samuelwall.materialtaptargetprompt;
 
 import android.annotation.SuppressLint;
+import android.annotation.TargetApi;
 import android.app.Activity;
+import android.content.res.Configuration;
+import android.content.res.Resources;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.os.Build;
@@ -38,6 +41,8 @@ import org.mockito.stubbing.Answer;
 import org.robolectric.Robolectric;
 import org.robolectric.RobolectricTestRunner;
 import org.robolectric.annotation.Config;
+
+import java.text.Bidi;
 
 import static junit.framework.Assert.assertFalse;
 import static junit.framework.Assert.assertNotNull;
@@ -133,6 +138,39 @@ public class MaterialTapTargetPromptUnitTest
         MaterialTapTargetPrompt.Builder builder = createBuilder(SCREEN_WIDTH, SCREEN_HEIGHT, 340)
                 .setTarget(50, 40)
                 .setPrimaryText("Primary text");
+        MaterialTapTargetPrompt prompt = builder.create();
+        assertNotNull(prompt);
+        prompt.show();
+
+        assertNull(prompt.mView.mSecondaryTextLayout);
+
+        prompt.finish();
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB)
+        {
+            prompt.mAnimationCurrent.end();
+        }
+        assertNull(prompt.mView.getParent());
+    }
+
+    @Test
+    public void promptCreatedWhenSecondaryTextNotSetRTL()
+    {
+        MaterialTapTargetPrompt.Builder builder = createBuilder(SCREEN_WIDTH, SCREEN_HEIGHT, 340)
+                .setTarget(50, 40)
+                .setPrimaryText("Primary text");
+        Mockito.doAnswer(new Answer<Integer>()
+        {
+            @Override
+            public Integer answer(InvocationOnMock invocation) throws Throwable
+            {
+                int rtl = 1;
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1)
+                {
+                    rtl = View.LAYOUT_DIRECTION_RTL;
+                }
+                return rtl;
+            }
+        }).when(builder).getLayoutDirection();
         MaterialTapTargetPrompt prompt = builder.create();
         assertNotNull(prompt);
         prompt.show();
@@ -312,23 +350,100 @@ public class MaterialTapTargetPromptUnitTest
     public void testGetTextAlignment()
     {
         final MaterialTapTargetPrompt.Builder builder = createBuilder(SCREEN_WIDTH, SCREEN_HEIGHT, 340);
-        assertEquals(Layout.Alignment.ALIGN_NORMAL, builder.getTextAlignment(Gravity.START));
-        assertEquals(Layout.Alignment.ALIGN_NORMAL, builder.getTextAlignment(Gravity.LEFT));
+        assertEquals(Layout.Alignment.ALIGN_NORMAL, builder.getTextAlignment(Gravity.START, "abc"));
+        assertEquals(Layout.Alignment.ALIGN_NORMAL, builder.getTextAlignment(Gravity.LEFT, "abc"));
 
-        assertEquals(Layout.Alignment.ALIGN_OPPOSITE, builder.getTextAlignment(Gravity.END));
-        assertEquals(Layout.Alignment.ALIGN_OPPOSITE, builder.getTextAlignment(Gravity.RIGHT));
+        assertEquals(Layout.Alignment.ALIGN_OPPOSITE, builder.getTextAlignment(Gravity.END, "abc"));
+        assertEquals(Layout.Alignment.ALIGN_OPPOSITE, builder.getTextAlignment(Gravity.RIGHT, "abc"));
 
-        assertEquals(Layout.Alignment.ALIGN_CENTER, builder.getTextAlignment(Gravity.CENTER_HORIZONTAL));
+        assertEquals(Layout.Alignment.ALIGN_CENTER, builder.getTextAlignment(Gravity.CENTER_HORIZONTAL, "abc"));
+
+        assertEquals(Layout.Alignment.ALIGN_NORMAL, builder.getTextAlignment(Gravity.START, "جبا"));
+        assertEquals(Layout.Alignment.ALIGN_NORMAL, builder.getTextAlignment(Gravity.LEFT, "جبا"));
+
+        assertEquals(Layout.Alignment.ALIGN_OPPOSITE, builder.getTextAlignment(Gravity.END, "جبا"));
+        assertEquals(Layout.Alignment.ALIGN_OPPOSITE, builder.getTextAlignment(Gravity.RIGHT, "جبا"));
+
+        assertEquals(Layout.Alignment.ALIGN_CENTER, builder.getTextAlignment(Gravity.CENTER_HORIZONTAL, "جبا"));
 
         Mockito.when(builder.isVersionAfterJellyBeanMR1()).thenReturn(false);
 
-        assertEquals(Layout.Alignment.ALIGN_NORMAL, builder.getTextAlignment(Gravity.START));
-        assertEquals(Layout.Alignment.ALIGN_NORMAL, builder.getTextAlignment(Gravity.LEFT));
+        assertEquals(Layout.Alignment.ALIGN_NORMAL, builder.getTextAlignment(Gravity.START, "abc"));
+        assertEquals(Layout.Alignment.ALIGN_NORMAL, builder.getTextAlignment(Gravity.LEFT, "abc"));
 
-        assertEquals(Layout.Alignment.ALIGN_OPPOSITE, builder.getTextAlignment(Gravity.END));
-        assertEquals(Layout.Alignment.ALIGN_OPPOSITE, builder.getTextAlignment(Gravity.RIGHT));
+        assertEquals(Layout.Alignment.ALIGN_OPPOSITE, builder.getTextAlignment(Gravity.END, "abc"));
+        assertEquals(Layout.Alignment.ALIGN_OPPOSITE, builder.getTextAlignment(Gravity.RIGHT, "abc"));
 
-        assertEquals(Layout.Alignment.ALIGN_CENTER, builder.getTextAlignment(Gravity.CENTER_HORIZONTAL));
+        assertEquals(Layout.Alignment.ALIGN_CENTER, builder.getTextAlignment(Gravity.CENTER_HORIZONTAL, "abc"));
+
+        assertEquals(Layout.Alignment.ALIGN_NORMAL, builder.getTextAlignment(Gravity.START, "جبا"));
+        assertEquals(Layout.Alignment.ALIGN_NORMAL, builder.getTextAlignment(Gravity.LEFT, "جبا"));
+
+        assertEquals(Layout.Alignment.ALIGN_OPPOSITE, builder.getTextAlignment(Gravity.END, "جبا"));
+        assertEquals(Layout.Alignment.ALIGN_OPPOSITE, builder.getTextAlignment(Gravity.RIGHT, "جبا"));
+
+        assertEquals(Layout.Alignment.ALIGN_CENTER, builder.getTextAlignment(Gravity.CENTER_HORIZONTAL, "جبا"));
+    }
+
+    @TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR1)
+    @SuppressLint("RtlHardcoded")
+    @Test
+    public void testGetTextAlignmentRtl()
+    {
+        final MaterialTapTargetPrompt.Builder builder = createBuilder(SCREEN_WIDTH, SCREEN_HEIGHT, 340);
+        Mockito.doAnswer(new Answer<Resources>()
+        {
+            @Override
+            public Resources answer(InvocationOnMock invocation) throws Throwable
+            {
+                final Resources resources = Mockito.spy((Resources) invocation.callRealMethod());
+                Mockito.doAnswer(new Answer<Configuration>()
+                {
+                    @Override
+                    public Configuration answer(InvocationOnMock invocation) throws Throwable
+                    {
+                        final Configuration configuration = Mockito.spy((Configuration) invocation.callRealMethod());
+                        Mockito.when(configuration.getLayoutDirection()).thenReturn(View.LAYOUT_DIRECTION_RTL);
+                        return configuration;
+                    }
+                }).when(resources).getConfiguration();
+                return resources;
+            }
+        }).when(builder.mActivity).getResources();
+
+        assertEquals(Layout.Alignment.ALIGN_OPPOSITE, builder.getTextAlignment(Gravity.START, "abc"));
+        assertEquals(Layout.Alignment.ALIGN_NORMAL, builder.getTextAlignment(Gravity.LEFT, "abc"));
+
+        assertEquals(Layout.Alignment.ALIGN_NORMAL, builder.getTextAlignment(Gravity.END, "abc"));
+        assertEquals(Layout.Alignment.ALIGN_OPPOSITE, builder.getTextAlignment(Gravity.RIGHT, "abc"));
+
+        assertEquals(Layout.Alignment.ALIGN_CENTER, builder.getTextAlignment(Gravity.CENTER_HORIZONTAL, "abc"));
+
+        assertEquals(Layout.Alignment.ALIGN_NORMAL, builder.getTextAlignment(Gravity.START, "جبا"));
+        assertEquals(Layout.Alignment.ALIGN_NORMAL, builder.getTextAlignment(Gravity.LEFT, "جبا"));
+
+        assertEquals(Layout.Alignment.ALIGN_OPPOSITE, builder.getTextAlignment(Gravity.END, "جبا"));
+        assertEquals(Layout.Alignment.ALIGN_OPPOSITE, builder.getTextAlignment(Gravity.RIGHT, "جبا"));
+
+        assertEquals(Layout.Alignment.ALIGN_CENTER, builder.getTextAlignment(Gravity.CENTER_HORIZONTAL, "جبا"));
+
+        Mockito.when(builder.isVersionAfterJellyBeanMR1()).thenReturn(false);
+
+        assertEquals(Layout.Alignment.ALIGN_NORMAL, builder.getTextAlignment(Gravity.START, "abc"));
+        assertEquals(Layout.Alignment.ALIGN_NORMAL, builder.getTextAlignment(Gravity.LEFT, "abc"));
+
+        assertEquals(Layout.Alignment.ALIGN_OPPOSITE, builder.getTextAlignment(Gravity.END, "abc"));
+        assertEquals(Layout.Alignment.ALIGN_OPPOSITE, builder.getTextAlignment(Gravity.RIGHT, "abc"));
+
+        assertEquals(Layout.Alignment.ALIGN_CENTER, builder.getTextAlignment(Gravity.CENTER_HORIZONTAL, "abc"));
+
+        assertEquals(Layout.Alignment.ALIGN_NORMAL, builder.getTextAlignment(Gravity.START, "جبا"));
+        assertEquals(Layout.Alignment.ALIGN_NORMAL, builder.getTextAlignment(Gravity.LEFT, "جبا"));
+
+        assertEquals(Layout.Alignment.ALIGN_OPPOSITE, builder.getTextAlignment(Gravity.END, "جبا"));
+        assertEquals(Layout.Alignment.ALIGN_OPPOSITE, builder.getTextAlignment(Gravity.RIGHT, "جبا"));
+
+        assertEquals(Layout.Alignment.ALIGN_CENTER, builder.getTextAlignment(Gravity.CENTER_HORIZONTAL, "جبا"));
     }
 
     @Test
@@ -353,7 +468,7 @@ public class MaterialTapTargetPromptUnitTest
     private MaterialTapTargetPrompt.Builder createBuilder(final int screenWidth,
                                               final int screenHeight, final float primaryTextWidth)
     {
-        final Activity activity = Robolectric.buildActivity(Activity.class).create().get();
+        final Activity activity = Mockito.spy(Robolectric.buildActivity(Activity.class).create().get());
         final FrameLayout layout = Mockito.spy(new FrameLayout(activity));
         activity.setContentView(layout);
         setViewBounds(layout, screenWidth, screenHeight);

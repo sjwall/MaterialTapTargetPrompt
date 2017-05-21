@@ -27,4 +27,5 @@
     <dimen name="example_item_top_padding">8dp</dimen>
     <dimen name="max_prompt_width">300dp</dimen>
     <dimen name="centre_example_padding">90dp</dimen>
+    <dimen name="dp40">40dp</dimen>
 </resources>
