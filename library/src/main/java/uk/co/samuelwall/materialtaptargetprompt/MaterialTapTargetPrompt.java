@@ -35,7 +35,6 @@ import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.support.annotation.ColorInt;
-import android.support.annotation.ColorRes;
 import android.support.annotation.DimenRes;
 import android.support.annotation.DrawableRes;
 import android.support.annotation.IdRes;
@@ -419,8 +418,14 @@ public class MaterialTapTargetPrompt
                     mView.mFocalRadius = mBaseFocalRadius * mRevealedAmount;
                     mView.mPaintFocal.setAlpha((int) (mBaseFocalColourAlpha * value));
                     mView.mPaintBackground.setAlpha((int) (mBaseBackgroundColourAlpha * value));
-                    mPaintSecondaryText.setAlpha((int) (mSecondaryTextColourAlpha * value));
-                    mPaintPrimaryText.setAlpha((int) (mPrimaryTextColourAlpha * value));
+                    if (mPaintSecondaryText != null)
+                    {
+                        mPaintSecondaryText.setAlpha((int) (mSecondaryTextColourAlpha * value));
+                    }
+                    if (mPaintPrimaryText != null)
+                    {
+                        mPaintPrimaryText.setAlpha((int) (mPrimaryTextColourAlpha * value));
+                    }
                     if (mView.mIconDrawable != null)
                     {
                         mView.mIconDrawable.setAlpha(mView.mPaintBackground.getAlpha());
@@ -492,8 +497,14 @@ public class MaterialTapTargetPrompt
                     mView.mFocalRadius = mBaseFocalRadius * mRevealedAmount;
                     mView.mPaintBackground.setAlpha((int) (mBaseBackgroundColourAlpha * mRevealedAmount));
                     mView.mPaintFocal.setAlpha((int) (mBaseFocalColourAlpha * mRevealedAmount));
-                    mPaintSecondaryText.setAlpha((int) (mSecondaryTextColourAlpha * mRevealedAmount));
-                    mPaintPrimaryText.setAlpha((int) (mPrimaryTextColourAlpha * mRevealedAmount));
+                    if (mPaintSecondaryText != null)
+                    {
+                        mPaintSecondaryText.setAlpha((int) (mSecondaryTextColourAlpha * mRevealedAmount));
+                    }
+                    if (mPaintPrimaryText != null)
+                    {
+                        mPaintPrimaryText.setAlpha((int) (mPrimaryTextColourAlpha * mRevealedAmount));
+                    }
                     if (mView.mIconDrawable != null)
                     {
                         mView.mIconDrawable.setAlpha(mView.mPaintBackground.getAlpha());
@@ -549,8 +560,14 @@ public class MaterialTapTargetPrompt
     @TargetApi(11)
     void startRevealAnimation()
     {
-        mPaintSecondaryText.setAlpha(0);
-        mPaintPrimaryText.setAlpha(0);
+        if (mPaintSecondaryText != null)
+        {
+            mPaintSecondaryText.setAlpha(0);
+        }
+        if (mPaintPrimaryText != null)
+        {
+            mPaintPrimaryText.setAlpha(0);
+        }
         mView.mPaintBackground.setAlpha(0);
         mView.mPaintFocal.setAlpha(0);
         mView.mFocalRadius = 0;
@@ -575,8 +592,14 @@ public class MaterialTapTargetPrompt
                 mView.mFocalRadius = mBaseFocalRadius * mRevealedAmount;
                 mView.mPaintFocal.setAlpha((int) (mBaseFocalColourAlpha * mRevealedAmount));
                 mView.mPaintBackground.setAlpha((int) (mBaseBackgroundColourAlpha * mRevealedAmount));
-                mPaintSecondaryText.setAlpha((int) (mSecondaryTextColourAlpha * mRevealedAmount));
-                mPaintPrimaryText.setAlpha((int) (mPrimaryTextColourAlpha * mRevealedAmount));
+                if (mPaintSecondaryText != null)
+                {
+                    mPaintSecondaryText.setAlpha((int) (mSecondaryTextColourAlpha * mRevealedAmount));
+                }
+                if (mPaintPrimaryText != null)
+                {
+                    mPaintPrimaryText.setAlpha((int) (mPrimaryTextColourAlpha * mRevealedAmount));
+                }
                 if (mView.mIconDrawable != null)
                 {
                     mView.mIconDrawable.setAlpha(mView.mPaintBackground.getAlpha());
@@ -718,7 +741,15 @@ public class MaterialTapTargetPrompt
     void updateTextPositioning()
     {
         final float maxWidth = Math.max(80, Math.min(mMaxTextWidth, (mView.mClipToBounds ? mView.mClipBounds.right - mView.mClipBounds.left : mParentView.getWidth()) - (mTextPadding * 2)));
-        mView.mPrimaryTextLayout = createStaticTextLayout(mPrimaryText, mPaintPrimaryText, (int) maxWidth, mPrimaryTextAlignment);
+        if (mPrimaryText != null)
+        {
+            mView.mPrimaryTextLayout = createStaticTextLayout(mPrimaryText, mPaintPrimaryText,
+                    (int) maxWidth, mPrimaryTextAlignment);
+        }
+        else
+        {
+            mView.mPrimaryTextLayout = null;
+        }
         if (mSecondaryText != null)
         {
             mView.mSecondaryTextLayout = createStaticTextLayout(mSecondaryText, mPaintSecondaryText, (int) maxWidth, mSecondaryTextAlignment);
@@ -768,7 +799,11 @@ public class MaterialTapTargetPrompt
         mView.mPrimaryTextTop = mView.mFocalCentre.y;
         if (mVerticalTextPositionAbove)
         {
-            mView.mPrimaryTextTop = mView.mPrimaryTextTop - mBaseFocalRadius - mFocalToTextPadding - mView.mPrimaryTextLayout.getHeight();
+            mView.mPrimaryTextTop = mView.mPrimaryTextTop - mBaseFocalRadius - mFocalToTextPadding;
+            if (mView.mPrimaryTextLayout != null)
+            {
+                mView.mPrimaryTextTop -= mView.mPrimaryTextLayout.getHeight();
+            }
         }
         else
         {
@@ -782,7 +817,10 @@ public class MaterialTapTargetPrompt
                 mView.mPrimaryTextTop =  mView.mPrimaryTextTop - mView.mTextSeparation - mView.mSecondaryTextLayout.getHeight();
             }
 
-            mView.mSecondaryTextOffsetTop = mView.mPrimaryTextLayout.getHeight() + mView.mTextSeparation;
+            if (mView.mPrimaryTextLayout != null)
+            {
+                mView.mSecondaryTextOffsetTop = mView.mPrimaryTextLayout.getHeight() + mView.mTextSeparation;
+            }
         }
 
         updateBackgroundRadius(textWidth);
@@ -958,8 +996,11 @@ public class MaterialTapTargetPrompt
             final float length = Math.abs(mView.mPrimaryTextLeft
                         + (mHorizontalTextPositionLeft ? 0 : maxTextWidth)
                         - mView.mFocalCentre.x) + mTextPadding;
-            float height = mBaseFocalRadius + mFocalToTextPadding
-                            + mView.mPrimaryTextLayout.getHeight();
+            float height = mBaseFocalRadius + mFocalToTextPadding;
+            if (mView.mPrimaryTextLayout != null)
+            {
+                height += mView.mPrimaryTextLayout.getHeight();
+            }
             //Check if secondary text should be included with text separation
             if (mView.mSecondaryTextLayout != null)
             {
@@ -1966,7 +2007,7 @@ public class MaterialTapTargetPrompt
          */
         public MaterialTapTargetPrompt create()
         {
-            if (!mTargetSet || mPrimaryText == null)
+            if (!mTargetSet || (mPrimaryText == null && mSecondaryText == null))
             {
                 return null;
             }
@@ -2049,21 +2090,27 @@ public class MaterialTapTargetPrompt
             mPrompt.mView.mPaintBackground.setAlpha(Color.alpha(mBackgroundColour));
             mPrompt.mView.mPaintBackground.setAntiAlias(true);
 
-            mPrompt.mPaintPrimaryText = new TextPaint();
-            mPrompt.mPaintPrimaryText.setColor(mPrimaryTextColour);
-            mPrompt.mPaintPrimaryText.setAlpha(Color.alpha(mPrimaryTextColour));
-            mPrompt.mPaintPrimaryText.setAntiAlias(true);
-            mPrompt.mPaintPrimaryText.setTextSize(mPrimaryTextSize);
-            setTypeface(mPrompt.mPaintPrimaryText, mPrimaryTextTypeface, mPrimaryTextTypefaceStyle);
-            mPrompt.mPrimaryTextAlignment = getTextAlignment(mPrimaryTextGravity, mPrimaryText);
+            if (mPrimaryText != null)
+            {
+                mPrompt.mPaintPrimaryText = new TextPaint();
+                mPrompt.mPaintPrimaryText.setColor(mPrimaryTextColour);
+                mPrompt.mPaintPrimaryText.setAlpha(Color.alpha(mPrimaryTextColour));
+                mPrompt.mPaintPrimaryText.setAntiAlias(true);
+                mPrompt.mPaintPrimaryText.setTextSize(mPrimaryTextSize);
+                setTypeface(mPrompt.mPaintPrimaryText, mPrimaryTextTypeface, mPrimaryTextTypefaceStyle);
+                mPrompt.mPrimaryTextAlignment = getTextAlignment(mPrimaryTextGravity, mPrimaryText);
+            }
 
-            mPrompt.mPaintSecondaryText = new TextPaint();
-            mPrompt.mPaintSecondaryText.setColor(mSecondaryTextColour);
-            mPrompt.mPaintSecondaryText.setAlpha(Color.alpha(mSecondaryTextColour));
-            mPrompt.mPaintSecondaryText.setAntiAlias(true);
-            mPrompt.mPaintSecondaryText.setTextSize(mSecondaryTextSize);
-            setTypeface(mPrompt.mPaintSecondaryText, mSecondaryTextTypeface, mSecondaryTextTypefaceStyle);
-            mPrompt.mSecondaryTextAlignment = getTextAlignment(mSecondaryTextGravity, mSecondaryText);
+            if (mSecondaryText != null)
+            {
+                mPrompt.mPaintSecondaryText = new TextPaint();
+                mPrompt.mPaintSecondaryText.setColor(mSecondaryTextColour);
+                mPrompt.mPaintSecondaryText.setAlpha(Color.alpha(mSecondaryTextColour));
+                mPrompt.mPaintSecondaryText.setAntiAlias(true);
+                mPrompt.mPaintSecondaryText.setTextSize(mSecondaryTextSize);
+                setTypeface(mPrompt.mPaintSecondaryText, mSecondaryTextTypeface, mSecondaryTextTypefaceStyle);
+                mPrompt.mSecondaryTextAlignment = getTextAlignment(mSecondaryTextGravity, mSecondaryText);
+            }
 
             mPrompt.mAutoDismiss = mAutoDismiss;
             mPrompt.mAutoFinish = mAutoFinish;

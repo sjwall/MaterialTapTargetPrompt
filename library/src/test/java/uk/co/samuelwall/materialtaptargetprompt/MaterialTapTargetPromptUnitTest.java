@@ -42,8 +42,6 @@ import org.robolectric.Robolectric;
 import org.robolectric.RobolectricTestRunner;
 import org.robolectric.annotation.Config;
 
-import java.text.Bidi;
-
 import static junit.framework.Assert.assertFalse;
 import static junit.framework.Assert.assertNotNull;
 import static junit.framework.Assert.assertTrue;
@@ -124,12 +122,31 @@ public class MaterialTapTargetPromptUnitTest
     }
 
     @Test
-    public void promptNotCreatedWhenPrimaryTextNotSet()
+    public void promptNotCreatedWhenTextNotSet()
+    {
+        MaterialTapTargetPrompt.Builder builder = createBuilder(SCREEN_WIDTH, SCREEN_HEIGHT, 340)
+                .setTarget(50, 40);
+        assertNull(builder.create());
+    }
+
+    @Test
+    public void promptCreatedWhenPrimaryTextNotSet()
     {
         MaterialTapTargetPrompt.Builder builder = createBuilder(SCREEN_WIDTH, SCREEN_HEIGHT, 340)
                 .setTarget(50, 40)
                 .setSecondaryText("Secondary text");
-        assertNull(builder.create());
+        MaterialTapTargetPrompt prompt = builder.create();
+        assertNotNull(prompt);
+        prompt.show();
+
+        assertNull(prompt.mView.mPrimaryTextLayout);
+
+        prompt.finish();
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB)
+        {
+            prompt.mAnimationCurrent.end();
+        }
+        assertNull(prompt.mView.getParent());
     }
 
     @Test
@@ -529,8 +546,14 @@ public class MaterialTapTargetPromptUnitTest
                                     prompt.mView.mFocalRadius = prompt.mBaseFocalRadius;
                                     prompt.mView.mPaintFocal.setAlpha(255);
                                     prompt.mView.mPaintBackground.setAlpha(244);
-                                    prompt.mPaintSecondaryText.setAlpha(prompt.mSecondaryTextColourAlpha);
-                                    prompt.mPaintPrimaryText.setAlpha(prompt.mPrimaryTextColourAlpha);
+                                    if (prompt.mPaintSecondaryText != null)
+                                    {
+                                        prompt.mPaintSecondaryText.setAlpha(prompt.mSecondaryTextColourAlpha);
+                                    }
+                                    if (prompt.mPaintPrimaryText != null)
+                                    {
+                                        prompt.mPaintPrimaryText.setAlpha(prompt.mPrimaryTextColourAlpha);
+                                    }
                                 }
                                 return null;
                             }

@@ -51,6 +51,13 @@ new MaterialTapTargetPrompt.Builder(MainActivity.this)
         .show();
 ```
 
+If a target is not set or both the primary and secondary text are `null` then `builder.show` and `builder.create` will return `null`.
+
+# Notable changes between v1 and v2
+
+* Methods to set colours using resource ids have been removed.
+
+
 # License
     Copyright (C) 2016 Samuel Wall
 
