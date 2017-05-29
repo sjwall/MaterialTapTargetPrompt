@@ -18,6 +18,8 @@ package uk.co.samuelwall.materialtaptargetprompt.sample;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.design.widget.BottomNavigationView;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
@@ -299,6 +301,23 @@ public class MainActivity extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+
+        ((BottomNavigationView) findViewById(R.id.bottom_nav)).setOnNavigationItemSelectedListener(
+                new BottomNavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item)
+            {
+                new MaterialTapTargetPrompt.Builder(MainActivity.this)
+                        .setPrimaryText(R.string.search_prompt_title)
+                        .setSecondaryText(R.string.search_prompt_description)
+                        .setAnimationInterpolator(new FastOutSlowInInterpolator())
+                        .setMaxTextWidth(R.dimen.tap_target_menu_max_width)
+                        .setIcon(R.drawable.ic_search)
+                        .setTarget(item.getItemId())
+                        .show();
+                return true;
+            }
+        });
     }
 
     @Override
