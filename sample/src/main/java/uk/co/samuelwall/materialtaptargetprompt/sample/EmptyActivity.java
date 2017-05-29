@@ -17,6 +17,8 @@
 package uk.co.samuelwall.materialtaptargetprompt.sample;
 
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.design.widget.BottomNavigationView;
 import android.support.v4.view.animation.FastOutSlowInInterpolator;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.view.ActionMode;
@@ -79,6 +81,23 @@ public class EmptyActivity extends AppCompatActivity
         final Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        ((BottomNavigationView) findViewById(R.id.bottom_nav)).setOnNavigationItemSelectedListener(
+            new BottomNavigationView.OnNavigationItemSelectedListener() {
+                @Override
+                public boolean onNavigationItemSelected(@NonNull MenuItem item)
+                {
+                    new MaterialTapTargetPrompt.Builder(EmptyActivity.this)
+                            .setPrimaryText(R.string.search_prompt_title)
+                            .setSecondaryText(R.string.search_prompt_description)
+                            .setAnimationInterpolator(new FastOutSlowInInterpolator())
+                            .setMaxTextWidth(R.dimen.tap_target_menu_max_width)
+                            .setIcon(R.drawable.ic_search)
+                            .setTarget(item.getItemId())
+                            .show();
+                    return true;
+                }
+            });
     }
 
     public void showFabPrompt(View view)
@@ -171,6 +190,15 @@ public class EmptyActivity extends AppCompatActivity
                 .setIcon(R.drawable.ic_search)
                 .setTarget(R.id.action_search)
                 .show();
+    }
+
+    public void showBottomSheetDialogPrompt(View view)
+    {
+        final BottomSheetDialogFragmentExample bottomSheetDialogFragmentExample =
+                new BottomSheetDialogFragmentExample();
+
+        bottomSheetDialogFragmentExample.show(getSupportFragmentManager(),
+                bottomSheetDialogFragmentExample.getTag());
     }
 
     public void showStylePrompt(View view)

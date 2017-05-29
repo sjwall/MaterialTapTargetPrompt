@@ -181,6 +181,15 @@ public class MainActivity extends AppCompatActivity
                 .show();
     }
 
+    public void showBottomSheetDialogPrompt(View view)
+    {
+        final BottomSheetDialogFragmentExample bottomSheetDialogFragmentExample =
+                new BottomSheetDialogFragmentExample();
+
+        bottomSheetDialogFragmentExample.show(getSupportFragmentManager(),
+                bottomSheetDialogFragmentExample.getTag());
+    }
+
     public void showStylePrompt(View view)
     {
         final MaterialTapTargetPrompt.Builder builder = new MaterialTapTargetPrompt.Builder(this, R.style.MaterialTapTargetPromptTheme_FabTarget);

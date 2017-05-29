@@ -426,7 +426,7 @@ public class MaterialTapTargetPromptUnitTest
                 }).when(resources).getConfiguration();
                 return resources;
             }
-        }).when(builder.mActivity).getResources();
+        }).when(builder.mResourceFinder).getResources();
 
         assertEquals(Layout.Alignment.ALIGN_OPPOSITE, builder.getTextAlignment(Gravity.START, "abc"));
         assertEquals(Layout.Alignment.ALIGN_NORMAL, builder.getTextAlignment(Gravity.LEFT, "abc"));
@@ -487,9 +487,10 @@ public class MaterialTapTargetPromptUnitTest
     {
         final Activity activity = Mockito.spy(Robolectric.buildActivity(Activity.class).create().get());
         final FrameLayout layout = Mockito.spy(new FrameLayout(activity));
+        final ResourceFinder resourceFinder = Mockito.spy(new ActivityResourceFinder(activity));
         activity.setContentView(layout);
         setViewBounds(layout, screenWidth, screenHeight);
-        final MaterialTapTargetPrompt.Builder builder = Mockito.spy(new MaterialTapTargetPrompt.Builder(activity));
+        final MaterialTapTargetPrompt.Builder builder = Mockito.spy(new MaterialTapTargetPrompt.Builder(resourceFinder, 0));
         Mockito.doAnswer(new Answer<MaterialTapTargetPrompt>()
             {
                 @Override

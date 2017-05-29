@@ -91,4 +91,7 @@
 
     <string name="example_card_card_title">Card example</string>
     <string name="example_card_card_description">Clipped to card bounds</string>
+
+    <string name="example_bottom_sheet_title">Bottom Sheet Dialog</string>
+    <string name="example_bottom_sheet_description">Displays prompt over a bottom sheet dialog</string>
 </resources>

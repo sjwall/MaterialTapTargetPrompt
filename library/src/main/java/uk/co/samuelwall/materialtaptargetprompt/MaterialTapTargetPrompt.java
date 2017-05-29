@@ -18,8 +18,10 @@ package uk.co.samuelwall.materialtaptargetprompt;
 
 import android.animation.Animator;
 import android.animation.ValueAnimator;
+import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.app.Activity;
+import android.app.Dialog;
 import android.content.Context;
 import android.content.res.ColorStateList;
 import android.content.res.TypedArray;
@@ -39,7 +41,10 @@ import android.support.annotation.DimenRes;
 import android.support.annotation.DrawableRes;
 import android.support.annotation.IdRes;
 import android.support.annotation.Nullable;
+import android.support.annotation.RequiresApi;
 import android.support.annotation.StringRes;
+import android.support.v4.app.DialogFragment;
+import android.support.v4.app.Fragment;
 import android.text.Layout;
 import android.text.StaticLayout;
 import android.text.TextPaint;
@@ -67,10 +72,10 @@ import java.text.Bidi;
 public class MaterialTapTargetPrompt
 {
     /**
-     * The activity that contains the view.
+     * The {@link ResourceFinder} used to find views and resources.
      */
-    Activity mActivity;
-
+    ResourceFinder mResourceFinder;
+    
     /**
      * The view that renders the prompt.
      */
@@ -282,12 +287,12 @@ public class MaterialTapTargetPrompt
     /**
      * Default constructor.
      *
-     * @param activity The activity that contains the target view.
+     * @param resourceFinder The {@link ResourceFinder} used to find views and resources.
      */
-    MaterialTapTargetPrompt(final Activity activity)
+    MaterialTapTargetPrompt(final ResourceFinder resourceFinder)
     {
-        mActivity = activity;
-        mView = new PromptView(activity);
+        mResourceFinder = resourceFinder;
+        mView = new PromptView(mResourceFinder.getContext());
         mView.mOnPromptTouchedListener = new PromptView.OnPromptTouchedListener()
             {
                 @Override
@@ -315,7 +320,7 @@ public class MaterialTapTargetPrompt
             };
 
         Rect rect = new Rect();
-        mActivity.getWindow().getDecorView().getWindowVisibleDisplayFrame(rect);
+        mResourceFinder.getPromptParentView().getWindowVisibleDisplayFrame(rect);
         mStatusBarHeight = rect.top;
 
         mGlobalLayoutListener = new ViewTreeObserver.OnGlobalLayoutListener()
@@ -862,7 +867,7 @@ public class MaterialTapTargetPrompt
                         && Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1)
                 {
                     // If the layout and text are right to left and the alignment is normal then rtl
-                    result = textIsRtl && mActivity.getResources().getConfiguration()
+                    result = textIsRtl && mResourceFinder.getResources().getConfiguration()
                                                 .getLayoutDirection() == View.LAYOUT_DIRECTION_RTL;
                 }
                 else if (layout.getAlignment() == Layout.Alignment.ALIGN_OPPOSITE && textIsRtl)
@@ -1056,7 +1061,7 @@ public class MaterialTapTargetPrompt
         }
         else
         {
-            final View contentView = mActivity.findViewById(android.R.id.content);
+            final View contentView = mResourceFinder.findViewById(android.R.id.content);
             if (contentView != null)
             {
                 contentView.getGlobalVisibleRect(mView.mClipBounds, new Point());
@@ -1260,10 +1265,13 @@ public class MaterialTapTargetPrompt
     public static class Builder
     {
         /**
-         * The containing activity.
+         * Used to find the required resources to display the prompt.
          */
-        Activity mActivity;
+        final ResourceFinder mResourceFinder;
 
+        /**
+         * Has the target been set successfully.
+         */
         private boolean mTargetSet;
 
         /**
@@ -1304,7 +1312,156 @@ public class MaterialTapTargetPrompt
         private boolean mIdleAnimationEnabled = true;
         private int mPrimaryTextGravity = Gravity.START, mSecondaryTextGravity = Gravity.START;
         private View mClipToView;
-        private final float m88dp;
+        private float m88dp;
+
+        /**
+         * Creates a builder for a tap target prompt that uses the default
+         * tap target prompt theme.
+         *
+         * @param fragment the fragment to show the prompt within.
+         */
+        public Builder(final Fragment fragment)
+        {
+            this(fragment.getActivity(), 0);
+        }
+
+        /**
+         * Creates a builder for a material tap target prompt that uses an explicit theme
+         * resource.
+         * <p>
+         * The {@code themeResId} may be specified as {@code 0}
+         * to use the parent {@code context}'s resolved value for
+         * {@link R.attr#MaterialTapTargetPromptTheme}.
+         *
+         * @param fragment   the fragment to show the prompt within.
+         * @param themeResId the resource ID of the theme against which to inflate
+         *                   this dialog, or {@code 0} to use the parent
+         *                   {@code context}'s default material tap target prompt theme
+         */
+        public Builder(final Fragment fragment, int themeResId)
+        {
+            this(fragment.getActivity(), themeResId);
+        }
+
+        /**
+         * Creates a builder for a tap target prompt that uses the default
+         * tap target prompt theme.
+         *
+         * @param fragment the fragment to show the prompt within.
+         */
+        @RequiresApi(api = Build.VERSION_CODES.HONEYCOMB)
+        public Builder(final android.app.Fragment fragment)
+        {
+            this(fragment.getActivity(), 0);
+        }
+
+        /**
+         * Creates a builder for a material tap target prompt that uses an explicit theme
+         * resource.
+         * <p>
+         * The {@code themeResId} may be specified as {@code 0}
+         * to use the parent {@code context}'s resolved value for
+         * {@link R.attr#MaterialTapTargetPromptTheme}.
+         *
+         * @param fragment   the fragment to show the prompt within.
+         * @param themeResId the resource ID of the theme against which to inflate
+         *                   this dialog, or {@code 0} to use the parent
+         *                   {@code context}'s default material tap target prompt theme
+         */
+        @RequiresApi(api = Build.VERSION_CODES.HONEYCOMB)
+        public Builder(final android.app.Fragment fragment, int themeResId)
+        {
+            this(fragment.getActivity(), themeResId);
+        }
+
+        /**
+         * Creates a builder for a tap target prompt that uses the default
+         * tap target prompt theme.
+         *
+         * @param dialogFragment the dialog fragment to show the prompt within.
+         */
+        public Builder(final DialogFragment dialogFragment)
+        {
+            this(dialogFragment, 0);
+        }
+
+        /**
+         * Creates a builder for a material tap target prompt that uses an explicit theme
+         * resource.
+         * <p>
+         * The {@code themeResId} may be specified as {@code 0}
+         * to use the parent {@code context}'s resolved value for
+         * {@link R.attr#MaterialTapTargetPromptTheme}.
+         *
+         * @param dialogFragment the dialog fragment to show the prompt within.
+         * @param themeResId     the resource ID of the theme against which to inflate
+         *                       this dialog, or {@code 0} to use the parent
+         *                       {@code context}'s default material tap target prompt theme
+         */
+        public Builder(final DialogFragment dialogFragment, int themeResId)
+        {
+            this(dialogFragment.getDialog(), themeResId);
+        }
+
+        /**
+         * Creates a builder for a tap target prompt that uses the default
+         * tap target prompt theme.
+         *
+         * @param dialogFragment the dialog fragment to show the prompt within.
+         */
+        @RequiresApi(api = Build.VERSION_CODES.HONEYCOMB)
+        public Builder(final android.app.DialogFragment dialogFragment)
+        {
+            this(dialogFragment, 0);
+        }
+
+        /**
+         * Creates a builder for a material tap target prompt that uses an explicit theme
+         * resource.
+         * <p>
+         * The {@code themeResId} may be specified as {@code 0}
+         * to use the parent {@code context}'s resolved value for
+         * {@link R.attr#MaterialTapTargetPromptTheme}.
+         *
+         * @param dialogFragment the dialog fragment to show the prompt within.
+         * @param themeResId     the resource ID of the theme against which to inflate
+         *                       this dialog, or {@code 0} to use the parent
+         *                       {@code context}'s default material tap target prompt theme
+         */
+        @RequiresApi(api = Build.VERSION_CODES.HONEYCOMB)
+        public Builder(final android.app.DialogFragment dialogFragment, int themeResId)
+        {
+            this(dialogFragment.getDialog(), themeResId);
+        }
+
+        /**
+         * Creates a builder for a tap target prompt that uses the default
+         * tap target prompt theme.
+         *
+         * @param dialog the dialog to show the prompt within.
+         */
+        public Builder(final Dialog dialog)
+        {
+            this(dialog, 0);
+        }
+
+        /**
+         * Creates a builder for a material tap target prompt that uses an explicit theme
+         * resource.
+         * <p>
+         * The {@code themeResId} may be specified as {@code 0}
+         * to use the parent {@code context}'s resolved value for
+         * {@link R.attr#MaterialTapTargetPromptTheme}.
+         *
+         * @param dialog   the dialog to show the prompt within.
+         * @param themeResId the resource ID of the theme against which to inflate
+         *                   this dialog, or {@code 0} to use the parent
+         *                   {@code context}'s default material tap target prompt theme
+         */
+        public Builder(final Dialog dialog, int themeResId)
+        {
+            this(new DialogResourceFinder(dialog), themeResId);
+        }
 
         /**
          * Creates a builder for a tap target prompt that uses the default
@@ -1320,30 +1477,48 @@ public class MaterialTapTargetPrompt
         /**
          * Creates a builder for a material tap target prompt that uses an explicit theme
          * resource.
-         *
+         * <p>
          * The {@code themeResId} may be specified as {@code 0}
          * to use the parent {@code context}'s resolved value for
          * {@link R.attr#MaterialTapTargetPromptTheme}.
          *
-         * @param activity the activity to show the prompt within.
+         * @param activity   the activity to show the prompt within.
          * @param themeResId the resource ID of the theme against which to inflate
          *                   this dialog, or {@code 0} to use the parent
          *                   {@code context}'s default material tap target prompt theme
          */
         public Builder(final Activity activity, int themeResId)
         {
-            mActivity = activity;
+            this(new ActivityResourceFinder(activity), themeResId);
+        }
+
+        /**
+         * Creates a builder for a material tap target prompt that uses an explicit theme
+         * resource.
+         *
+         * The {@code themeResId} may be specified as {@code 0}
+         * to use the parent {@code context}'s resolved value for
+         * {@link R.attr#MaterialTapTargetPromptTheme}.
+         *
+         * @param resourceFinder The {@link ResourceFinder} used to find views and resources.
+         * @param themeResId the resource ID of the theme against which to inflate
+         *                   this dialog, or {@code 0} to use the parent
+         *                   {@code context}'s default material tap target prompt theme
+         */
+        public Builder(final ResourceFinder resourceFinder, int themeResId)
+        {
+            mResourceFinder = resourceFinder;
             //Attempt to load the theme from the activity theme
             if (themeResId == 0)
             {
                 final TypedValue outValue = new TypedValue();
-                activity.getTheme().resolveAttribute(R.attr.MaterialTapTargetPromptTheme, outValue, true);
+                mResourceFinder.getTheme().resolveAttribute(R.attr.MaterialTapTargetPromptTheme, outValue, true);
                 themeResId = outValue.resourceId;
             }
 
-            final float density = activity.getResources().getDisplayMetrics().density;
+            final float density = mResourceFinder.getResources().getDisplayMetrics().density;
             m88dp = 88 * density;
-            final TypedArray a = mActivity.obtainStyledAttributes(themeResId, R.styleable.PromptView);
+            final TypedArray a = mResourceFinder.obtainStyledAttributes(themeResId, R.styleable.PromptView);
             mPrimaryTextColour = a.getColor(R.styleable.PromptView_primaryTextColour, Color.WHITE);
             mSecondaryTextColour = a.getColor(R.styleable.PromptView_secondaryTextColour, Color.argb(179, 255, 255, 255));
             mPrimaryText = a.getString(R.styleable.PromptView_primaryText);
@@ -1376,14 +1551,14 @@ public class MaterialTapTargetPrompt
 
             if (targetId != 0)
             {
-                mTargetView = mActivity.findViewById(targetId);
+                mTargetView = mResourceFinder.findViewById(targetId);
                 if (mTargetView != null)
                 {
                     mTargetSet = true;
                 }
             }
 
-            mClipToView = mActivity.findViewById(android.R.id.content);
+            mClipToView = mResourceFinder.findViewById(android.R.id.content);
         }
 
         /**
@@ -1406,7 +1581,7 @@ public class MaterialTapTargetPrompt
          */
         public Builder setTarget(@IdRes final int target)
         {
-            mTargetView = mActivity.findViewById(target);
+            mTargetView = mResourceFinder.findViewById(target);
             mTargetPosition = null;
             mTargetSet = mTargetView != null;
             return this;
@@ -1457,7 +1632,7 @@ public class MaterialTapTargetPrompt
          */
         public Builder setPrimaryText(@StringRes final int resId)
         {
-            mPrimaryText = mActivity.getString(resId);
+            mPrimaryText = mResourceFinder.getString(resId);
             return this;
         }
 
@@ -1481,7 +1656,7 @@ public class MaterialTapTargetPrompt
          */
         public Builder setPrimaryTextSize(@DimenRes final int resId)
         {
-            mPrimaryTextSize = mActivity.getResources().getDimension(resId);
+            mPrimaryTextSize = mResourceFinder.getResources().getDimension(resId);
             return this;
         }
 
@@ -1542,7 +1717,7 @@ public class MaterialTapTargetPrompt
          */
         public Builder setSecondaryText(@StringRes final int resId)
         {
-            mSecondaryText = mActivity.getString(resId);
+            mSecondaryText = mResourceFinder.getString(resId);
             return this;
         }
 
@@ -1566,7 +1741,7 @@ public class MaterialTapTargetPrompt
          */
         public Builder setSecondaryTextSize(@DimenRes final int resId)
         {
-            mSecondaryTextSize = mActivity.getResources().getDimension(resId);
+            mSecondaryTextSize = mResourceFinder.getResources().getDimension(resId);
             return this;
         }
 
@@ -1639,7 +1814,7 @@ public class MaterialTapTargetPrompt
          */
         public Builder setTextPadding(@DimenRes final int resId)
         {
-            mTextPadding = mActivity.getResources().getDimension(resId);
+            mTextPadding = mResourceFinder.getResources().getDimension(resId);
             return this;
         }
 
@@ -1664,7 +1839,7 @@ public class MaterialTapTargetPrompt
          */
         public Builder setTextSeparation(@DimenRes final int resId)
         {
-            mTextSeparation = mActivity.getResources().getDimension(resId);
+            mTextSeparation = mResourceFinder.getResources().getDimension(resId);
             return this;
         }
 
@@ -1689,7 +1864,7 @@ public class MaterialTapTargetPrompt
          */
         public Builder setFocalToTextPadding(@DimenRes final int resId)
         {
-            mFocalToTextPadding = mActivity.getResources().getDimension(resId);
+            mFocalToTextPadding = mResourceFinder.getResources().getDimension(resId);
             return this;
         }
 
@@ -1726,15 +1901,7 @@ public class MaterialTapTargetPrompt
          */
         public Builder setIcon(@DrawableRes final int resId)
         {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
-            {
-                mIconDrawable = mActivity.getDrawable(resId);
-            }
-            else
-            {
-                //noinspection deprecation
-                mIconDrawable = mActivity.getResources().getDrawable(resId);
-            }
+            mIconDrawable = mResourceFinder.getDrawable(resId);
             return this;
         }
 
@@ -1843,7 +2010,7 @@ public class MaterialTapTargetPrompt
          */
         public Builder setMaxTextWidth(@DimenRes final int resId)
         {
-            mMaxTextWidth = mActivity.getResources().getDimension(resId);
+            mMaxTextWidth = mResourceFinder.getResources().getDimension(resId);
             return this;
         }
 
@@ -1892,7 +2059,7 @@ public class MaterialTapTargetPrompt
          */
         public Builder setFocalRadius(@DimenRes final int resId)
         {
-            mFocalRadius = mActivity.getResources().getDimension(resId);
+            mFocalRadius = mResourceFinder.getResources().getDimension(resId);
             return this;
         }
 
@@ -2011,7 +2178,7 @@ public class MaterialTapTargetPrompt
             {
                 return null;
             }
-            final MaterialTapTargetPrompt mPrompt = new MaterialTapTargetPrompt(mActivity);
+            final MaterialTapTargetPrompt mPrompt = new MaterialTapTargetPrompt(mResourceFinder);
             if (mTargetView != null)
             {
                 mPrompt.mTargetView = mTargetView;
@@ -2021,7 +2188,7 @@ public class MaterialTapTargetPrompt
             {
                 mPrompt.mTargetPosition = mTargetPosition;
             }
-            mPrompt.mParentView = (ViewGroup) mActivity.getWindow().getDecorView();
+            mPrompt.mParentView = mResourceFinder.getPromptParentView();
             mPrompt.mView.mDrawRipple = Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB && mIdleAnimationEnabled;
             mPrompt.mIdleAnimationEnabled = mIdleAnimationEnabled;
             mPrompt.mClipToView = mClipToView;
@@ -2245,6 +2412,7 @@ public class MaterialTapTargetPrompt
          * @param gravity The gravity to convert to absolute values
          * @return absolute layout direction
          */
+        @SuppressLint("RtlHardcoded")
         Layout.Alignment getTextAlignment(final int gravity, final String text)
         {
             final int absoluteGravity;
@@ -2304,9 +2472,10 @@ public class MaterialTapTargetPrompt
          * @return Returns {@link View#LAYOUT_DIRECTION_RTL} if the configuration
          * is {@link android.content.res.Configuration#SCREENLAYOUT_LAYOUTDIR_RTL}, otherwise {@link View#LAYOUT_DIRECTION_LTR}.
          */
+        @TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR1)
         int getLayoutDirection()
         {
-            return mActivity.getResources().getConfiguration().getLayoutDirection();
+            return mResourceFinder.getResources().getConfiguration().getLayoutDirection();
         }
 
         boolean isVersionAfterJellyBeanMR1()
