@@ -193,6 +193,7 @@ public class MaterialTapTargetPrompt
      */
     public void show(boolean animate)
     {
+        mDismissing = false;
         mAnimateIn = animate;
         final ViewGroup parent = getParentView();
         // If the content view is a drawer layout then that is the parent so
@@ -375,13 +376,13 @@ public class MaterialTapTargetPrompt
      */
     public void dismiss(boolean animate)
     {
+        if (mDismissing)
+        {
+            return;
+        }
+        mDismissing = true;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB)
         {
-            if (mDismissing)
-            {
-                return;
-            }
-            mDismissing = true;
             if (mAnimationCurrent != null)
             {
                 mAnimationCurrent.removeAllListeners();
@@ -444,7 +445,6 @@ public class MaterialTapTargetPrompt
 
     private void cleanup()
     {
-
         removeGlobalLayoutListener();
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB_MR1 && mAttachListener != null) {
             if (mTargetView != null) {
@@ -460,7 +460,6 @@ public class MaterialTapTargetPrompt
                 mAnimationCurrent = null;
             }
         }
-        mDismissing = false;
         mParentView = null;
     }
 
@@ -643,10 +642,16 @@ public class MaterialTapTargetPrompt
                 public void onViewDetachedFromWindow(View v)
                 {
                     mTargetView = null;
+                    if (mDismissing) {
+                        return;
+                    }
                     mHandler.post(new Runnable()
                     {
                         public void run()
                         {
+                            if (mDismissing) {
+                                return;
+                            }
                             refreshTargetView();
                             if (mTargetView == null)
                             {
