@@ -6,6 +6,9 @@ android:
       - build-tools-25.0.2
       - android-25
       - extra
+      - extra-android-support
+  licenses:
+    - android-sdk-license-.+
 script:
   - ./gradlew build :material-tap-target-prompt:jacocoTestReport
 after_success:
