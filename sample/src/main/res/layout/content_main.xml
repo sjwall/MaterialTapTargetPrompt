@@ -95,7 +95,8 @@
                     android:layout_height="wrap_content"
                     android:width="@dimen/example_button_width"
                     android:text="@string/example_fab_title"
-                    android:onClick="showFabPrompt"/>
+                    android:onClick="showFabPrompt"
+                    android:id="@+id/button_fab_prompt"/>
 
                 <TextView
                     android:layout_width="wrap_content"

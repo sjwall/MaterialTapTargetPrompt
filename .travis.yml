@@ -7,6 +7,6 @@ android:
       - android-25
       - extra
 script:
-  - ./gradlew build jacocoTestReport
+  - ./gradlew build :material-tap-target-prompt:jacocoTestReport
 after_success:
   - bash <(curl -s https://codecov.io/bash)

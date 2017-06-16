@@ -26,6 +26,7 @@ version rootProject.versionName
 android {
     compileSdkVersion rootProject.compileSdkVersion
     buildToolsVersion rootProject.buildToolsVersion
+    publishNonDefault true
 
     defaultConfig {
         minSdkVersion rootProject.minSdkVersion
@@ -42,13 +43,42 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+    productFlavors {
+        library {}
+        librarytools {}
+    }
     lintOptions {
         abortOnError false
+    }
+    testOptions {
+        unitTests.all {
+            jacoco {
+                includeNoLocationClasses = true
+            }
+        }
+    }
+    sourceSets {
+        main {
+            manifest.srcFile 'src/main/AndroidManifest.xml'
+            java.srcDirs = ['src/main/java']
+            res.srcDirs = ['src/main/res']
+        }
+        library {
+            manifest.srcFile 'src/main/AndroidManifest.xml'
+            java.srcDirs = ['src/main/java']
+            res.srcDirs = ['src/main/res']
+        }
+        librarytools {
+            manifest.srcFile 'src/main/AndroidManifest.xml'
+            java.srcDirs = ['src/main/java', 'src/librarytools/java']
+            res.srcDirs = ['src/main/res']
+        }
     }
 }
 
 configurations {
     javadocCompile
+    librarytoolsRelease
 }
 
 dependencies {
@@ -56,11 +86,16 @@ dependencies {
     compile 'com.android.support:support-annotations:' + rootProject.supportLibVersion
     compile 'com.android.support:appcompat-v7:' + rootProject.supportLibVersion
 
+    librarytoolsCompile 'com.android.support.test.espresso:espresso-core:2.2.2', {
+        exclude module: 'support-annotations'
+    }
+
     testCompile 'com.android.support:support-annotations:' + rootProject.supportLibVersion
     testCompile 'junit:junit:4.12'
     testCompile "org.robolectric:robolectric:3.2.2"
     testCompile 'org.mockito:mockito-core:2.7.12'
 
+    javadocCompile 'com.android.support:appcompat-v7:' + rootProject.supportLibVersion
     javadocCompile 'com.android.support:support-annotations:' + rootProject.supportLibVersion
 }
 
@@ -152,7 +187,7 @@ jacoco {
 }
 
 //gradlew clean jacocoTestReport
-task jacocoTestReport(type: JacocoReport, dependsOn: 'testDebugUnitTest') {
+task jacocoTestReport(type: JacocoReport, dependsOn: 'testLibraryDebugUnitTest') {
 
     reports {
         xml.enabled = true
@@ -161,11 +196,11 @@ task jacocoTestReport(type: JacocoReport, dependsOn: 'testDebugUnitTest') {
 
 
     def fileFilter = ['**/R.class', '**/R$*.class', '**/BuildConfig.*', '**/Manifest*.*', '**/*Test*.*', 'android/**/*.*']
-    def debugTree = fileTree(dir: "${buildDir}/intermediates/classes/debug", excludes: fileFilter)
+    def debugTree = fileTree(dir: "${buildDir}/intermediates/classes/library/debug", excludes: fileFilter)
     def mainSrc = "${project.projectDir}/src/main/java"
 
     additionalSourceDirs = files([mainSrc])
     sourceDirectories = files([mainSrc])
     classDirectories = files([debugTree])
-    executionData = files("${buildDir}/jacoco/testDebugUnitTest.exec")
+    executionData = files("${buildDir}/jacoco/testLibraryDebugUnitTest.exec")
 }
