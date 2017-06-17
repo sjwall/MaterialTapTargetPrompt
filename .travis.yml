@@ -6,8 +6,8 @@ android:
       - build-tools-25.0.2
       - android-25
       - extra
-      - extra-android-support
       - extra-android-m2repository
+      - extra-google-m2repository
   licenses:
     - android-sdk-license-.+
 script:
