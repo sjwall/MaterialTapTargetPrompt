@@ -27,7 +27,6 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Toast;
 
@@ -111,19 +110,17 @@ public class EmptyActivity extends AppCompatActivity
                 .setPrimaryText("Send your first email")
                 .setSecondaryText("Tap the envelop to start composing your first email")
                 .setAnimationInterpolator(new FastOutSlowInInterpolator())
-                .setOnHidePromptListener(new MaterialTapTargetPrompt.OnHidePromptListener()
+                .setPromptStateChangeListener(new MaterialTapTargetPrompt.PromptStateChangeListener()
                 {
                     @Override
-                    public void onHidePrompt(MotionEvent event, boolean tappedTarget)
+                    public void onPromptStateChanged(MaterialTapTargetPrompt prompt, int state)
                     {
-                        mFabPrompt = null;
-                        //Do something such as storing a value so that this prompt is never shown again
-                    }
-
-                    @Override
-                    public void onHidePromptComplete()
-                    {
-
+                        if (state == MaterialTapTargetPrompt.STATE_FOCAL_PRESSED
+                                || state == MaterialTapTargetPrompt.STATE_DISMISSING)
+                        {
+                            mFabPrompt = null;
+                            //Do something such as storing a value so that this prompt is never shown again
+                        }
                     }
                 })
                 .create();
@@ -141,18 +138,15 @@ public class EmptyActivity extends AppCompatActivity
         final Toolbar tb = (Toolbar) this.findViewById(R.id.toolbar);
         tapTargetPromptBuilder.setTarget(tb.getChildAt(1));
 
-        tapTargetPromptBuilder.setOnHidePromptListener(new MaterialTapTargetPrompt.OnHidePromptListener()
+        tapTargetPromptBuilder.setPromptStateChangeListener(new MaterialTapTargetPrompt.PromptStateChangeListener()
         {
             @Override
-            public void onHidePrompt(MotionEvent event, boolean tappedTarget)
+            public void onPromptStateChanged(MaterialTapTargetPrompt prompt, int state)
             {
-                //Do something such as storing a value so that this prompt is never shown again
-            }
-
-            @Override
-            public void onHidePromptComplete()
-            {
-
+                if (state == MaterialTapTargetPrompt.STATE_FOCAL_PRESSED)
+                {
+                    //Do something such as storing a value so that this prompt is never shown again
+                }
             }
         });
         tapTargetPromptBuilder.show();
@@ -224,22 +218,20 @@ public class EmptyActivity extends AppCompatActivity
                 .setAutoDismiss(false)
                 .setAutoFinish(false)
                 .setCaptureTouchEventOutsidePrompt(true)
-                .setOnHidePromptListener(new MaterialTapTargetPrompt.OnHidePromptListener()
+                .setPromptStateChangeListener(new MaterialTapTargetPrompt.PromptStateChangeListener()
                 {
                     @Override
-                    public void onHidePrompt(MotionEvent event, boolean tappedTarget)
+                    public void onPromptStateChanged(MaterialTapTargetPrompt prompt, int state)
                     {
-                        if (tappedTarget)
+                        if (state == MaterialTapTargetPrompt.STATE_FOCAL_PRESSED)
                         {
                             mFabPrompt.finish();
                             mFabPrompt = null;
                         }
-                    }
+                        else if (state == MaterialTapTargetPrompt.STATE_DISMISSING)
+                        {
 
-                    @Override
-                    public void onHidePromptComplete()
-                    {
-
+                        }
                     }
                 })
                 .show();

@@ -71,6 +71,39 @@ import java.text.Bidi;
  */
 public class MaterialTapTargetPrompt
 {
+
+    /**
+     * Prompt is reveal animation is running.
+     */
+    public static final int STATE_REVEALING = 1;
+
+    /**
+     * Prompt reveal animation has finished and the prompt is displayed.
+     */
+    public static final int STATE_REVEALED = 2;
+
+    /**
+     * The prompt has been pressed in the focal area.
+     */
+    public static final int STATE_FOCAL_PRESSED = 3;
+
+    /**
+     * The prompt has been removed from view after the prompt has been pressed in the focal area.
+     */
+    public static final int STATE_FINISHED = 4;
+
+    /**
+     * The prompt has been pressed somewhere outside the focal area or the system back button has
+     * been pressed.
+     */
+    public static final int STATE_DISMISSING = 5;
+
+    /**
+     * The prompt has been removed from view after the prompt has either been pressed somewhere
+     * outside the focal area or the system back button has been pressed.
+     */
+    public static final int STATE_DISMISSED = 6;
+
     /**
      * The {@link ResourceFinder} used to find views and resources.
      */
@@ -209,13 +242,28 @@ public class MaterialTapTargetPrompt
     /**
      * The listener for prompt events.
      * Can be null.
+     * @deprecated Replaced by {@link #mPromptStateChangeListener}.
      */
+    @Deprecated
     OnHidePromptListener mOnHidePromptListener;
+
+    /**
+     * The listener for prompt events.
+     * Can be null.
+     */
+    PromptStateChangeListener mPromptStateChangeListener;
 
     /**
      * Is the prompt currently being removed from view.
      */
     boolean mDismissing;
+
+    /**
+     * Is the prompt currently being removed, old style.
+     * @deprecated Replaced with {@link #mDismissing}
+     */
+    @Deprecated
+    boolean mIsDismissingOld;
 
     /**
      * The view group which contains the target view.
@@ -293,19 +341,19 @@ public class MaterialTapTargetPrompt
     {
         mResourceFinder = resourceFinder;
         mView = new PromptView(mResourceFinder.getContext());
-        mView.mOnPromptTouchedListener = new PromptView.OnPromptTouchedListener()
+        mView.mPromptTouchedListener = new PromptView.PromptTouchedListener()
             {
                 @Override
                 public void onPromptTouched(MotionEvent event, boolean tappedTarget)
                 {
-                    if (!mDismissing)
+                    if (!mIsDismissingOld)
                     {
-                        MaterialTapTargetPrompt.this.onHidePrompt(event, tappedTarget);
                         if (tappedTarget)
                         {
                             if (mAutoFinish)
                             {
                                 finish();
+                                mIsDismissingOld = true;
                             }
                         }
                         else
@@ -313,8 +361,36 @@ public class MaterialTapTargetPrompt
                             if (mAutoDismiss)
                             {
                                 dismiss();
+                                mIsDismissingOld = true;
                             }
                         }
+                        MaterialTapTargetPrompt.this.onHidePrompt(event, tappedTarget);
+                    }
+                }
+
+                @Override
+                public void onFocalPressed()
+                {
+                    if (!mDismissing)
+                    {
+                        if (mAutoFinish)
+                        {
+                            finish();
+                        }
+                        onPromptStateChanged(STATE_FOCAL_PRESSED);
+                    }
+                }
+
+                @Override
+                public void onNonFocalPressed()
+                {
+                    if (!mDismissing)
+                    {
+                        if (mAutoDismiss)
+                        {
+                            dismiss();
+                        }
+                        onPromptStateChanged(STATE_DISMISSING);
                     }
                 }
             };
@@ -340,6 +416,7 @@ public class MaterialTapTargetPrompt
     {
         mParentView.addView(mView);
         addGlobalLayoutListener();
+        onPromptStateChanged(STATE_REVEALING);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB)
         {
             startRevealAnimation();
@@ -353,6 +430,7 @@ public class MaterialTapTargetPrompt
             mView.mPaintBackground.setAlpha(mBaseBackgroundColourAlpha);
             mPaintSecondaryText.setAlpha(mSecondaryTextColourAlpha);
             mPaintPrimaryText.setAlpha(mPrimaryTextColourAlpha);
+            onPromptStateChanged(STATE_REVEALED);
         }
     }
 
@@ -397,7 +475,7 @@ public class MaterialTapTargetPrompt
     {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB)
         {
-            if (mDismissing)
+            if (mDismissing || mIsDismissingOld)
             {
                 return;
             }
@@ -444,27 +522,21 @@ public class MaterialTapTargetPrompt
                 @Override
                 public void onAnimationEnd(Animator animation)
                 {
-                    mAnimationCurrent.removeAllListeners();
-                    mAnimationCurrent = null;
-                    cleanUpPrompt();
-                    mDismissing = false;
+                    cleanUpPrompt(STATE_FINISHED);
                 }
 
                 @TargetApi(Build.VERSION_CODES.HONEYCOMB)
                 @Override
                 public void onAnimationCancel(Animator animation)
                 {
-                    mAnimationCurrent.removeAllListeners();
-                    mAnimationCurrent = null;
-                    cleanUpPrompt();
-                    mDismissing = false;
+                    cleanUpPrompt(STATE_FINISHED);
                 }
             });
             mAnimationCurrent.start();
         }
         else
         {
-            cleanUpPrompt();
+            cleanUpPrompt(STATE_FINISHED);
         }
     }
 
@@ -477,7 +549,7 @@ public class MaterialTapTargetPrompt
     {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB)
         {
-            if (mDismissing)
+            if (mDismissing || mIsDismissingOld)
             {
                 return;
             }
@@ -525,40 +597,42 @@ public class MaterialTapTargetPrompt
                 @Override
                 public void onAnimationEnd(Animator animation)
                 {
-                    mAnimationCurrent.removeAllListeners();
-                    mAnimationCurrent = null;
-                    cleanUpPrompt();
-                    mDismissing = false;
+                    cleanUpPrompt(STATE_DISMISSED);
                 }
 
                 @TargetApi(Build.VERSION_CODES.HONEYCOMB)
                 @Override
                 public void onAnimationCancel(Animator animation)
                 {
-                    mAnimationCurrent.removeAllListeners();
-                    mAnimationCurrent = null;
-                    cleanUpPrompt();
-                    mDismissing = false;
+                    cleanUpPrompt(STATE_DISMISSED);
                 }
             });
             mAnimationCurrent.start();
         }
         else
         {
-            cleanUpPrompt();
+            cleanUpPrompt(STATE_DISMISSED);
         }
     }
 
     /**
      * Removes the prompt from view and triggers the {@link #onHidePromptComplete()} event.
      */
-    void cleanUpPrompt()
+    void cleanUpPrompt(final int state)
     {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB && mAnimationCurrent != null)
+        {
+            mAnimationCurrent.removeAllUpdateListeners();
+            mAnimationCurrent = null;
+        }
         removeGlobalLayoutListener();
         mParentView.removeView(mView);
-        if (mDismissing)
+        if (mDismissing || mIsDismissingOld)
         {
             onHidePromptComplete();
+            onPromptStateChanged(state);
+            mDismissing = false;
+            mIsDismissingOld = false;
         }
     }
 
@@ -628,6 +702,7 @@ public class MaterialTapTargetPrompt
                 {
                     startIdleAnimations();
                 }
+                onPromptStateChanged(STATE_REVEALED);
             }
 
             @TargetApi(Build.VERSION_CODES.HONEYCOMB)
@@ -1072,7 +1147,21 @@ public class MaterialTapTargetPrompt
         }
     }
 
-    protected void onHidePrompt(final MotionEvent event, final boolean targetTapped)
+    /**
+     * Handles emitting the prompt state changed events.
+     *
+     * @param state The state that the prompt is now in.
+     */
+    protected void onPromptStateChanged(final int state)
+    {
+        if (mPromptStateChangeListener != null)
+        {
+            mPromptStateChangeListener.onPromptStateChanged(this, state);
+        }
+    }
+
+    @Deprecated
+    protected void onHidePrompt(@Nullable final MotionEvent event, final boolean targetTapped)
     {
         if (mOnHidePromptListener != null)
         {
@@ -1080,6 +1169,7 @@ public class MaterialTapTargetPrompt
         }
     }
 
+    @Deprecated
     protected void onHidePromptComplete()
     {
         if (mOnHidePromptListener != null)
@@ -1117,7 +1207,7 @@ public class MaterialTapTargetPrompt
         Layout mPrimaryTextLayout;
         Layout mSecondaryTextLayout;
         boolean mDrawRipple = Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB;
-        OnPromptTouchedListener mOnPromptTouchedListener;
+        PromptTouchedListener mPromptTouchedListener;
         boolean mCaptureTouchEventOnFocal;
         Rect mClipBounds = new Rect();
         View mTargetView, mTargetRenderView;
@@ -1138,7 +1228,7 @@ public class MaterialTapTargetPrompt
         @Override
         public void onDraw(final Canvas canvas)
         {
-            if (this.mBackgroundRadius > 0)
+            if (mBackgroundRadius > 0)
             {
                 if (mClipToBounds)
                 {
@@ -1208,7 +1298,11 @@ public class MaterialTapTargetPrompt
             {
                 //Override allowing the touch event to pass through the view with the user defined value
                 captureEvent = mCaptureTouchEventOnFocal;
-                onPromptTouched(event, true);
+                if (mPromptTouchedListener != null)
+                {
+                    mPromptTouchedListener.onFocalPressed();
+                    mPromptTouchedListener.onPromptTouched(event, true);
+                }
             }
             else
             {
@@ -1217,7 +1311,11 @@ public class MaterialTapTargetPrompt
                 {
                     captureEvent = mCaptureTouchEventOutsidePrompt;
                 }
-                onPromptTouched(event, false);
+                if (mPromptTouchedListener != null)
+                {
+                    mPromptTouchedListener.onNonFocalPressed();
+                    mPromptTouchedListener.onPromptTouched(event, false);
+                }
             }
             return captureEvent;
         }
@@ -1236,26 +1334,32 @@ public class MaterialTapTargetPrompt
             return Math.pow(x - circleCentre.x, 2) + Math.pow(y - circleCentre.y, 2) < Math.pow(radius, 2);
         }
 
-        protected void onPromptTouched(final MotionEvent event, final boolean targetTapped)
-        {
-            if (mOnPromptTouchedListener != null)
-            {
-                mOnPromptTouchedListener.onPromptTouched(event, targetTapped);
-            }
-        }
-
         /**
          * Interface definition for a callback to be invoked when a {@link PromptView} is touched.
          */
-        public interface OnPromptTouchedListener
+        public interface PromptTouchedListener
         {
             /**
              * Called when a touch event occurs in the prompt view.
+             * {@literal event} can be null when system back button is pressed.
              *
              * @param event The touch event that triggered the dismiss or finish.
              * @param tappedTarget True if the prompt focal point was touched.
+             * @deprecated Use either {@link #onFocalPressed()} or {@link #onNonFocalPressed()}.
              */
-            void onPromptTouched(final MotionEvent event, final boolean tappedTarget);
+            @Deprecated
+            void onPromptTouched(@Nullable final MotionEvent event, final boolean tappedTarget);
+
+            /**
+             * Called when the focal is pressed.
+             */
+            void onFocalPressed();
+
+            /**
+             * Called when anywhere outside the focal is pressed
+             * or the system back button is pressed.
+             */
+            void onNonFocalPressed();
         }
     }
 
@@ -1297,7 +1401,19 @@ public class MaterialTapTargetPrompt
         private float mFocalToTextPadding;
         private Interpolator mAnimationInterpolator;
         private Drawable mIconDrawable;
+
+        /**
+         * Listener for when the prompt is hidden.
+         * @deprecated Replaced my {@link #mPromptStateChangeListener}.
+         */
+        @Deprecated
         private OnHidePromptListener mOnHidePromptListener;
+
+        /**
+         * Listener for when the prompt state changes.
+         */
+        private PromptStateChangeListener mPromptStateChangeListener;
+
         private boolean mCaptureTouchEventOnFocal;
         private float mTextSeparation;
         private boolean mAutoDismiss, mAutoFinish;
@@ -1849,7 +1965,7 @@ public class MaterialTapTargetPrompt
          * @param padding The distance between the text and focal
          * @return This Builder object to allow for chaining of calls to set methods
          */
-        public Builder setFocalToTextPadding(final float padding)
+        public Builder setFocalPadding(final float padding)
         {
             mFocalToTextPadding = padding;
             return this;
@@ -1862,7 +1978,7 @@ public class MaterialTapTargetPrompt
          * @param resId The dimension resource id for the focal to text distance
          * @return This Builder object to allow for chaining of calls to set methods
          */
-        public Builder setFocalToTextPadding(@DimenRes final int resId)
+        public Builder setFocalPadding(@DimenRes final int resId)
         {
             mFocalToTextPadding = mResourceFinder.getResources().getDimension(resId);
             return this;
@@ -1970,9 +2086,22 @@ public class MaterialTapTargetPrompt
          * @param listener The listener to use
          * @return This Builder object to allow for chaining of calls to set methods
          */
+        @Deprecated
         public Builder setOnHidePromptListener(final OnHidePromptListener listener)
         {
             mOnHidePromptListener = listener;
+            return this;
+        }
+
+        /**
+         * Set the listener to listen for when the prompt state changes.
+         *
+         * @param listener The listener to use
+         * @return This Builder object to allow for chaining of calls to set methods
+         */
+        public Builder setPromptStateChangeListener(final PromptStateChangeListener listener)
+        {
+            mPromptStateChangeListener = listener;
             return this;
         }
 
@@ -2208,6 +2337,7 @@ public class MaterialTapTargetPrompt
             mPrompt.mView.mTextSeparation = mTextSeparation;
 
             mPrompt.mOnHidePromptListener = mOnHidePromptListener;
+            mPrompt.mPromptStateChangeListener = mPromptStateChangeListener;
             mPrompt.mView.mCaptureTouchEventOnFocal = mCaptureTouchEventOnFocal;
 
             if (mAnimationInterpolator != null)
@@ -2487,21 +2617,38 @@ public class MaterialTapTargetPrompt
     /**
      * Interface definition for a callback to be invoked when a {@link MaterialTapTargetPrompt} is removed from view.
      */
+    @Deprecated
     public interface OnHidePromptListener
     {
         /**
          * Called when the use touches the prompt view,
          * but before the prompt is removed from view.
+         * {@literal event} can be null if the system back button is pressed.
          *
          * @param event The touch event that triggered the dismiss or finish.
          * @param tappedTarget True if the prompt focal point was touched.
+         * @deprecated Use {@link PromptStateChangeListener#onPromptStateChanged(int)} and check for
+         * the state being either {@link #STATE_DISMISSING} or {@link #STATE_FOCAL_PRESSED}.
          */
-        void onHidePrompt(final MotionEvent event, final boolean tappedTarget);
+        @Deprecated
+        void onHidePrompt(@Nullable final MotionEvent event, final boolean tappedTarget);
 
         /**
          * Called after the prompt has been removed from view.
+         * @deprecated Use {@link PromptStateChangeListener#onPromptStateChanged(int)} and check for
+         * the state being either {@link #STATE_DISMISSED} or {@link #STATE_FINISHED}.
          */
+        @Deprecated
         void onHidePromptComplete();
+    }
+
+    /**
+     * Interface definition for a callback to be invoked when a prompts state changes.
+     */
+    public interface PromptStateChangeListener
+    {
+
+        void onPromptStateChanged(final MaterialTapTargetPrompt prompt, final int state);
     }
 
     @TargetApi(Build.VERSION_CODES.HONEYCOMB)

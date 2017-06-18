@@ -32,6 +32,9 @@ import android.view.ViewParent;
 import android.view.animation.LinearInterpolator;
 import android.widget.FrameLayout;
 
+import junit.framework.Assert;
+
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -45,6 +48,7 @@ import org.robolectric.annotation.Config;
 import static junit.framework.Assert.assertFalse;
 import static junit.framework.Assert.assertNotNull;
 import static junit.framework.Assert.assertTrue;
+import static junit.framework.Assert.fail;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 
@@ -55,10 +59,22 @@ public class MaterialTapTargetPromptUnitTest
     private static int SCREEN_WIDTH = 1080;
     private static int SCREEN_HEIGHT = 1920;
 
+    private int stateProgress;
+
     @Before
     public void setup()
     {
         
+    }
+
+    @After
+    public void after()
+    {
+        if (stateProgress > 0)
+        {
+            Assert.assertEquals(4, stateProgress);
+        }
+        stateProgress = -1;
     }
 
     @Test
@@ -79,7 +95,7 @@ public class MaterialTapTargetPromptUnitTest
             .setSecondaryTextSize(20f)
             .setPrimaryTextColour(Color.CYAN)
             .setSecondaryTextColour(Color.GRAY)
-            .setFocalToTextPadding(30f)
+            .setFocalPadding(30f)
             .setAnimationInterpolator(interpolator);
 
         assertTrue(builder.isTargetSet());
@@ -230,6 +246,14 @@ public class MaterialTapTargetPromptUnitTest
         MaterialTapTargetPrompt prompt = createBuilder(SCREEN_WIDTH, SCREEN_HEIGHT, 340)
                 .setTarget(10, 10)
                 .setPrimaryText("Primary text")
+                .setPromptStateChangeListener(new MaterialTapTargetPrompt.PromptStateChangeListener()
+                {
+                    @Override
+                    public void onPromptStateChanged(final MaterialTapTargetPrompt prompt, final int state)
+                    {
+
+                    }
+                })
                 .setOnHidePromptListener(new MaterialTapTargetPrompt.OnHidePromptListener()
                 {
                     @Override
@@ -259,9 +283,46 @@ public class MaterialTapTargetPromptUnitTest
     @Test
     public void promptTouchEventFocal()
     {
-        MaterialTapTargetPrompt prompt = createBuilder(SCREEN_WIDTH, SCREEN_HEIGHT, 340)
+        stateProgress = 0;
+        final MaterialTapTargetPrompt prompt = createBuilder(SCREEN_WIDTH, SCREEN_HEIGHT, 340)
                 .setTarget(10, 10)
                 .setPrimaryText("Primary text")
+                .setPromptStateChangeListener(new MaterialTapTargetPrompt.PromptStateChangeListener()
+                {
+                    @Override
+                    public void onPromptStateChanged(final MaterialTapTargetPrompt prompt, final int state)
+                    {
+                        if (stateProgress == 0)
+                        {
+                            assertEquals(MaterialTapTargetPrompt.STATE_REVEALING, state);
+                            stateProgress++;
+                        }
+                        else if (stateProgress == 1)
+                        {
+                            assertEquals(MaterialTapTargetPrompt.STATE_REVEALED, state);
+                            stateProgress++;
+                        }
+                        else if (stateProgress == 2)
+                        {
+                            assertEquals(MaterialTapTargetPrompt.STATE_FOCAL_PRESSED, state);
+                            stateProgress++;
+                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB
+                                    && prompt.mAnimationCurrent != null)
+                            {
+                                prompt.mAnimationCurrent.end();
+                            }
+                        }
+                        else if (stateProgress == 3)
+                        {
+                            assertEquals(MaterialTapTargetPrompt.STATE_FINISHED, state);
+                            stateProgress++;
+                        }
+                        else
+                        {
+                            fail();
+                        }
+                    }
+                })
                 .setOnHidePromptListener(new MaterialTapTargetPrompt.OnHidePromptListener()
                 {
                     @Override
@@ -283,10 +344,47 @@ public class MaterialTapTargetPromptUnitTest
     @Test
     public void promptTouchEventFocalCaptureEvent()
     {
+        stateProgress = 0;
         MaterialTapTargetPrompt prompt = createBuilder(SCREEN_WIDTH, SCREEN_HEIGHT, 340)
                 .setTarget(10, 10)
                 .setPrimaryText("Primary text")
                 .setCaptureTouchEventOnFocal(true)
+                .setPromptStateChangeListener(new MaterialTapTargetPrompt.PromptStateChangeListener()
+                {
+                    @Override
+                    public void onPromptStateChanged(final MaterialTapTargetPrompt prompt, final int state)
+                    {
+                        if (stateProgress == 0)
+                        {
+                            assertEquals(MaterialTapTargetPrompt.STATE_REVEALING, state);
+                            stateProgress++;
+                        }
+                        else if (stateProgress == 1)
+                        {
+                            assertEquals(MaterialTapTargetPrompt.STATE_REVEALED, state);
+                            stateProgress++;
+                        }
+                        else if (stateProgress == 2)
+                        {
+                            assertEquals(MaterialTapTargetPrompt.STATE_FOCAL_PRESSED, state);
+                            stateProgress++;
+                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB
+                                    && prompt.mAnimationCurrent != null)
+                            {
+                                prompt.mAnimationCurrent.end();
+                            }
+                        }
+                        else if (stateProgress == 3)
+                        {
+                            assertEquals(MaterialTapTargetPrompt.STATE_FINISHED, state);
+                            stateProgress++;
+                        }
+                        else
+                        {
+                            fail();
+                        }
+                    }
+                })
                 .setOnHidePromptListener(new MaterialTapTargetPrompt.OnHidePromptListener()
                 {
                     @Override
@@ -319,9 +417,46 @@ public class MaterialTapTargetPromptUnitTest
     @Test
     public void promptTouchEventBackground()
     {
+        stateProgress = 0;
         MaterialTapTargetPrompt prompt = createBuilder(SCREEN_WIDTH, SCREEN_HEIGHT, 340)
                 .setTarget(10, 10)
                 .setPrimaryText("Primary text")
+                .setPromptStateChangeListener(new MaterialTapTargetPrompt.PromptStateChangeListener()
+                {
+                    @Override
+                    public void onPromptStateChanged(final MaterialTapTargetPrompt prompt, final int state)
+                    {
+                        if (stateProgress == 0)
+                        {
+                            assertEquals(MaterialTapTargetPrompt.STATE_REVEALING, state);
+                            stateProgress++;
+                        }
+                        else if (stateProgress == 1)
+                        {
+                            assertEquals(MaterialTapTargetPrompt.STATE_REVEALED, state);
+                            stateProgress++;
+                        }
+                        else if (stateProgress == 2)
+                        {
+                            assertEquals(MaterialTapTargetPrompt.STATE_DISMISSING, state);
+                            stateProgress++;
+                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB
+                                    && prompt.mAnimationCurrent != null)
+                            {
+                                prompt.mAnimationCurrent.end();
+                            }
+                        }
+                        else if (stateProgress == 3)
+                        {
+                            assertEquals(MaterialTapTargetPrompt.STATE_DISMISSED, state);
+                            stateProgress++;
+                        }
+                        else
+                        {
+                            fail();
+                        }
+                    }
+                })
                 .setOnHidePromptListener(new MaterialTapTargetPrompt.OnHidePromptListener()
                 {
                     @Override
