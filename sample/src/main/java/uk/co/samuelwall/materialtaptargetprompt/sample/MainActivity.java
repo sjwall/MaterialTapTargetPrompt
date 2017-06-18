@@ -86,6 +86,7 @@ public class MainActivity extends AppCompatActivity
                 .setFocalPadding(R.dimen.dp40)
                 .setPrimaryText("Send your first email")
                 .setSecondaryText("Tap the envelop to start composing your first email")
+                .setBackButtonDismissEnabled(true)
                 .setAnimationInterpolator(new FastOutSlowInInterpolator())
                 .setPromptStateChangeListener(new MaterialTapTargetPrompt.PromptStateChangeListener()
                 {

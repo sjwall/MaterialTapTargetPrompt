@@ -26,6 +26,7 @@ import android.graphics.PorterDuff;
 import android.os.Build;
 import android.text.Layout;
 import android.view.Gravity;
+import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewParent;
@@ -476,6 +477,80 @@ public class MaterialTapTargetPromptUnitTest
     }
 
     @Test
+    public void testPromptBackButtonDismiss()
+    {
+        stateProgress = 0;
+        MaterialTapTargetPrompt prompt = createBuilder(SCREEN_WIDTH, SCREEN_HEIGHT, 340)
+                .setTarget(10, 10)
+                .setPrimaryText("Primary text")
+                .setBackButtonDismissEnabled(true)
+                .setPromptStateChangeListener(new MaterialTapTargetPrompt.PromptStateChangeListener()
+                {
+                    @Override
+                    public void onPromptStateChanged(final MaterialTapTargetPrompt prompt, final int state)
+                    {
+                        if (stateProgress == 0)
+                        {
+                            assertEquals(MaterialTapTargetPrompt.STATE_REVEALING, state);
+                            stateProgress++;
+                        }
+                        else if (stateProgress == 1)
+                        {
+                            assertEquals(MaterialTapTargetPrompt.STATE_REVEALED, state);
+                            stateProgress++;
+                        }
+                        else if (stateProgress == 2)
+                        {
+                            assertEquals(MaterialTapTargetPrompt.STATE_DISMISSING, state);
+                            stateProgress++;
+                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB
+                                    && prompt.mAnimationCurrent != null)
+                            {
+                                prompt.mAnimationCurrent.end();
+                            }
+                        }
+                        else if (stateProgress == 3)
+                        {
+                            assertEquals(MaterialTapTargetPrompt.STATE_DISMISSED, state);
+                            stateProgress++;
+                        }
+                        else
+                        {
+                            fail();
+                        }
+                    }
+                })
+                .setOnHidePromptListener(new MaterialTapTargetPrompt.OnHidePromptListener()
+                {
+                    @Override
+                    public void onHidePrompt(MotionEvent event, boolean tappedTarget)
+                    {
+                        assertFalse(tappedTarget);
+                    }
+
+                    @Override
+                    public void onHidePromptComplete()
+                    {
+
+                    }
+                })
+                .show();
+        final KeyEvent.DispatcherState dispatchState = new KeyEvent.DispatcherState();
+        Mockito.doAnswer(new Answer<KeyEvent.DispatcherState>()
+        {
+            @Override
+            public KeyEvent.DispatcherState answer(final InvocationOnMock invocation)
+                    throws Throwable
+            {
+                return dispatchState;
+            }
+        })
+        .when(prompt.mView).getKeyDispatcherState();
+        assertTrue(prompt.mView.dispatchKeyEventPreIme(new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_BACK)));
+        assertTrue(prompt.mView.dispatchKeyEventPreIme(new KeyEvent(KeyEvent.ACTION_UP, KeyEvent.KEYCODE_BACK)));
+    }
+
+    @Test
     public void promptCentreLeft()
     {
         final MaterialTapTargetPrompt prompt = createBuilder(SCREEN_WIDTH, SCREEN_HEIGHT, 300)
@@ -636,6 +711,7 @@ public class MaterialTapTargetPromptUnitTest
                     if (basePrompt != null)
                     {
                         final MaterialTapTargetPrompt prompt = Mockito.spy(basePrompt);
+                        prompt.mView = Mockito.spy(prompt.mView);
                         Mockito.when(prompt.calculateMaxTextWidth(prompt.mView.mPrimaryTextLayout))
                                 .thenReturn(primaryTextWidth);
 

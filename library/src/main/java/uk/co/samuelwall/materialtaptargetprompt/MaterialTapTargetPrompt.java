@@ -50,6 +50,7 @@ import android.text.StaticLayout;
 import android.text.TextPaint;
 import android.util.TypedValue;
 import android.view.Gravity;
+import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -1214,11 +1215,18 @@ public class MaterialTapTargetPrompt
         float mTextSeparation;
         boolean mClipToBounds;
         boolean mCaptureTouchEventOutsidePrompt;
+        
+        /**
+         * Should the back button press dismiss the prompt.
+         */
+        boolean mBackButtonDismissEnabled;
 
         public PromptView(final Context context)
         {
             super(context);
             setId(R.id.material_target_prompt_view);
+            setFocusableInTouchMode(true);
+            requestFocus();
             /*paddingPaint.setColor(Color.GREEN);
             paddingPaint.setAlpha(100);
             itemPaint.setColor(Color.BLUE);
@@ -1320,6 +1328,35 @@ public class MaterialTapTargetPrompt
             return captureEvent;
         }
 
+        @Override
+        public boolean dispatchKeyEventPreIme(KeyEvent event)
+        {
+            if (mBackButtonDismissEnabled && event.getKeyCode() == KeyEvent.KEYCODE_BACK)
+            {
+                KeyEvent.DispatcherState state = getKeyDispatcherState();
+                if (state != null)
+                {
+                    if (event.getAction() == KeyEvent.ACTION_DOWN
+                            && event.getRepeatCount() == 0)
+                    {
+                        state.startTracking(event, this);
+                        return true;
+                    } else if (event.getAction() == KeyEvent.ACTION_UP
+                            && !event.isCanceled() && state.isTracking(event))
+                    {
+                        if (mPromptTouchedListener != null)
+                        {
+                            mPromptTouchedListener.onNonFocalPressed();
+                            mPromptTouchedListener.onPromptTouched(null, false);
+                        }
+                        return true;
+                    }
+                }
+            }
+
+            return super.dispatchKeyEventPreIme(event);
+        }
+
         /**
          * Determines if a point is in the centre of a circle with a radius from the point ({@link #mFocalCentre , {@link #mFocalCentre.y}}.
          *
@@ -1401,6 +1438,11 @@ public class MaterialTapTargetPrompt
         private float mFocalToTextPadding;
         private Interpolator mAnimationInterpolator;
         private Drawable mIconDrawable;
+
+        /**
+         * Should the back button press dismiss the prompt.
+         */
+        private boolean mBackButtonDismissEnabled;
 
         /**
          * Listener for when the prompt is hidden.
@@ -2287,6 +2329,19 @@ public class MaterialTapTargetPrompt
         }
 
         /**
+         *
+         * Default: {@link false}
+         *
+         * @param enabled
+         * @return This Builder object to allow for chaining of calls to set methods
+         */
+        public Builder setBackButtonDismissEnabled(final boolean enabled)
+        {
+            mBackButtonDismissEnabled = enabled;
+            return this;
+        }
+
+        /**
          * Creates an {@link MaterialTapTargetPrompt} with the arguments supplied to this
          * builder.
          * <p>
@@ -2375,6 +2430,7 @@ public class MaterialTapTargetPrompt
                 }
             }
 
+            mPrompt.mView.mBackButtonDismissEnabled = mBackButtonDismissEnabled;
             mPrompt.mView.mIconDrawable = mIconDrawable;
 
             mPrompt.mView.mPaintFocal = new Paint();
