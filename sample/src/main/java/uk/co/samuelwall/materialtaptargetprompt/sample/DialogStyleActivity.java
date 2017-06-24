@@ -23,7 +23,6 @@ import android.support.v7.widget.ActionMenuView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Toast;
 
@@ -66,18 +65,15 @@ public class DialogStyleActivity extends AppCompatActivity
         final Toolbar tb = (Toolbar) this.findViewById(R.id.toolbar);
         tapTargetPromptBuilder.setTarget(tb.getChildAt(1));
 
-        tapTargetPromptBuilder.setOnHidePromptListener(new MaterialTapTargetPrompt.OnHidePromptListener()
+        tapTargetPromptBuilder.setPromptStateChangeListener(new MaterialTapTargetPrompt.PromptStateChangeListener()
         {
             @Override
-            public void onHidePrompt(MotionEvent event, boolean tappedTarget)
+            public void onPromptStateChanged(MaterialTapTargetPrompt prompt, int state)
             {
-                //Do something such as storing a value so that this prompt is never shown again
-            }
-
-            @Override
-            public void onHidePromptComplete()
-            {
-
+                if (state == MaterialTapTargetPrompt.STATE_FOCAL_PRESSED)
+                {
+                    //Do something such as storing a value so that this prompt is never shown again
+                }
             }
         });
         tapTargetPromptBuilder.show();

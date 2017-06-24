@@ -57,8 +57,8 @@ dependencies {
 
     testCompile 'com.android.support:support-annotations:' + rootProject.supportLibVersion
     testCompile 'junit:junit:4.12'
-    testCompile "org.robolectric:robolectric:3.1"
-    testCompile 'org.mockito:mockito-core:1.10.19'
+    testCompile "org.robolectric:robolectric:3.2.2"
+    testCompile 'org.mockito:mockito-core:2.7.12'
 
     javadocCompile 'com.android.support:support-annotations:' + rootProject.supportLibVersion
 }

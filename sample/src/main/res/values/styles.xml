@@ -55,7 +55,7 @@
 
     <!-- This style is an example of what can be changed and not necessarily what should be changed! -->
     <style name="MaterialTapTargetPromptTheme.FabTarget" parent="MaterialTapTargetPromptTheme">
-        <item name="backgroundColour">@color/colorAccent</item>
+        <item name="backgroundColour">@color/colorAccentPromptBackground</item>
         <item name="focalColour">@color/colorPrimary</item>
         <item name="primaryText">@string/FabTarget.primaryText</item>
         <item name="secondaryText">@string/FabTarget.secondaryText</item>

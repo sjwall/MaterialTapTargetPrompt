@@ -51,6 +51,8 @@ new MaterialTapTargetPrompt.Builder(MainActivity.this)
         .show();
 ```
 
+If a target is not set or both the primary and secondary text are `null` then `builder.show` and `builder.create` will return `null`.
+
 # License
     Copyright (C) 2016 Samuel Wall
 

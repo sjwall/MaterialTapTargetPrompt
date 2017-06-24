@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-  ~ Copyright (C) 2016 Samuel Wall
+  ~ Copyright (C) 2017 Samuel Wall
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
   ~ you may not use this file except in compliance with the License.
@@ -15,15 +15,15 @@
   ~ limitations under the License.
   -->
 
-<resources>
-    <color name="colorPrimary">#3F51B5</color>
-    <color name="colorPrimaryDark">#303F9F</color>
-    <color name="colorAccent">#FF4081</color>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="vertical"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent">
 
-    <color name="colorAccentPromptBackground">#F4FF4081</color>
-
-    <color name="green_200">#68EFAD</color>
-    <color name="orange_200">#FFCC80</color>
-
-    <color name="gray_300">#E0E0E0</color>
-</resources>
+    <ImageButton
+        android:id="@+id/bs_search"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/colorAccent"
+        android:src="@drawable/ic_search"/>
+</LinearLayout>
