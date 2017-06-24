@@ -2806,7 +2806,14 @@ public class MaterialTapTargetPrompt
      */
     public interface PromptStateChangeListener
     {
-
+        /**
+         * Called when the prompts state changes.
+         *
+         * @param prompt The prompt which state has changed.
+         * @param state can be either {@link #STATE_REVEALING}, {@link #STATE_REVEALED},
+         * {@link #STATE_FOCAL_PRESSED}, {@link #STATE_FINISHED}, {@link #STATE_DISMISSING},
+         * {@link #STATE_DISMISSED}
+         */
         void onPromptStateChanged(final MaterialTapTargetPrompt prompt, final int state);
     }
 
