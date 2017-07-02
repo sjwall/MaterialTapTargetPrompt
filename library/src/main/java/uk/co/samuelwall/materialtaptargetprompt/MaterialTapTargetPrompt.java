@@ -72,7 +72,7 @@ public class MaterialTapTargetPrompt
 {
 
     /**
-     * Prompt is reveal animation is running.
+     * Prompt reveal animation is running.
      */
     public static final int STATE_REVEALING = 1;
 
@@ -82,24 +82,24 @@ public class MaterialTapTargetPrompt
     public static final int STATE_REVEALED = 2;
 
     /**
-     * The prompt has been pressed in the focal area.
+     * The prompt target has been pressed.
      */
     public static final int STATE_FOCAL_PRESSED = 3;
 
     /**
-     * The prompt has been removed from view after the prompt has been pressed in the focal area.
+     * The prompt has been removed from view after the prompt target has been pressed.
      */
     public static final int STATE_FINISHED = 4;
 
     /**
-     * The prompt has been pressed somewhere outside the focal area or the system back button has
-     * been pressed.
+     * The prompt has been pressed somewhere other than the prompt target
+     * or the system back button has been pressed.
      */
     public static final int STATE_DISMISSING = 5;
 
     /**
      * The prompt has been removed from view after the prompt has either been pressed somewhere
-     * outside the focal area or the system back button has been pressed.
+     * other than the prompt target or the system back button has been pressed.
      */
     public static final int STATE_DISMISSED = 6;
 
