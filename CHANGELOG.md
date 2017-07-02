@@ -2,6 +2,43 @@
 
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## v1.11.0 (2017-07-02)
+
+### Features
+
+* Added `setBackButtonDismissEnabled(boolean)` to allow the system back button to dismiss the prompt.
+* Added bottom sheet dialog fragment example.
+* Added `PromptStateChangeListener` to listen for prompt being shown and hidden. Possible states are:
+ * `STATE_REVEALING` - Prompt reveal animation is running.
+ * `STATE_REVEALED` - Prompt reveal animation has finished and the prompt is displayed.
+ * `STATE_FOCAL_PRESSED` - The prompt target has been pressed.
+ * `STATE_FINISHED` - The prompt has been removed from view after the prompt target has been pressed.
+ * `STATE_DISMISSING` - The prompt has been pressed somewhere other than the prompt target or the system back button has been pressed.
+ * `STATE_DISMISSED` - The prompt has been removed from view after the prompt has either been pressed somewhere other than the prompt target or the system back button has been pressed.
+* Replaced dependency on `Activity` with `ResourceFinder` interface. Now uses `ActivityResourceFinder` or `DialogResourceFinder`.
+* Primary text is no longer required, either primary or secondary text must be set.
+
+### Bug Fixes
+
+* Fixed prompt not working correctly with dialogs by using `DialogResourceFinder`.
+
+### Deprecated
+
+* `OnHidePromptListener` - Replaced with `PromptStateChangeListener`.
+* `OnHidePromptListener.onHidePrompt` - Replaced with `PromptStateChangeListener(MaterialTapTargetPrompt prompt, boolean state)` where the state is either `MaterialTapTargetPrompt.STATE_DISMISSING` or `MaterialTapTargetPrompt.STATE_FOCAL_PRESSED`.
+* `OnHidePromptListener.onHidePromptComplete` - Replaced with `PromptStateChangeListener(MaterialTapTargetPrompt prompt, boolean state)` where the state is either `MaterialTapTargetPrompt.STATE_DISMISSED` or `MaterialTapTargetPrompt.STATE_FINISHED`.
+*
+* `builder.setBackgroundColourAlpha` - Alpha value will be taken from `builder.setBackgroundColour(int)` in v2.0.0
+* `builder.setBackgroundColourFromRes(int)` - Will be removed in v2.0.0, use a constructor with a theme for example `Builder(Activity, int)`
+* `builder.setFocalColourAlpha(int)` - Alpha value will be taken from `builder.setFocalColour(int)` in v2.0.0
+* `builder.setFocalColourFromRes(int)` - Will be removed in v2.0.0, use a constructor with a theme for example `Builder(Activity, int)`
+* `builder.setFocalToTextPadding(float)` - Renamed to `setFocalPadding(float)`
+* `builder.setFocalToTextPadding(int)` - Rename to `setFocalPadding(int)`
+* `builder.setIconDrawableColourFilterFromRes(int)` - Will be removed in v2.0.0, use a constructor with a theme for example `Builder(Activity, int)`
+* `builder.setOnHidePromptListener(MaterialTapTargetPrompt.OnHidePromptListener` - Replaced with `builder.setPromptStateChangeListener(PromptStateChangeListener)`
+* `builder.setPrimaryTextColourFromRes(int)` - Will be removed in v2.0.0, use a constructor with a theme for example `Builder(Activity, int)`
+* `builder.setSecondaryTextColourFromRes(int)` - Will be removed in v2.0.0, use a constructor with a theme for example `Builder(Activity, int)`
+
 ## v1.10.0 (2017-04-15)
 
 ### Features
