@@ -34,18 +34,15 @@ new MaterialTapTargetPrompt.Builder(MainActivity.this)
         .setTarget(findViewById(R.id.fab))
         .setPrimaryText("Send your first email")
         .setSecondaryText("Tap the envelop to start composing your first email")
-        .setOnHidePromptListener(new MaterialTapTargetPrompt.OnHidePromptListener()
+        .setPromptStateChangeListener(new MaterialTapTargetPrompt.PromptStateChangeListener()
         {
             @Override
-            public void onHidePrompt(MotionEvent event, boolean tappedTarget)
+            public void onPromptStateChanged(MaterialTapTargetPrompt prompt, int state)
             {
-                //Do something such as storing a value so that this prompt is never shown again
-            }
-
-            @Override
-            public void onHidePromptComplete()
-            {
-
+                if (state == MaterialTapTargetPrompt.STATE_FOCAL_PRESSED)
+                {
+                    // User has pressed the prompt target
+                }
             }
         })
         .show();
