@@ -70,7 +70,7 @@ public class CardActivity extends AppCompatActivity
                 .setTarget(fab)
                 .setPrimaryText(R.string.example_card_fab_title)
                 .setSecondaryText(R.string.example_card_fab_description)
-                .setBackgroundColourFromRes(R.color.colorAccent)
+                .setBackgroundColour(getResources().getColor(R.color.colorAccent))
                 .setAnimationInterpolator(new FastOutSlowInInterpolator())
                 .show();
 

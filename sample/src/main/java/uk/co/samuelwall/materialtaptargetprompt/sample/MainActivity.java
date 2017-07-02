@@ -32,7 +32,6 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Toast;
 
@@ -82,23 +81,22 @@ public class MainActivity extends AppCompatActivity
         }
         mFabPrompt = new MaterialTapTargetPrompt.Builder(MainActivity.this)
                 .setTarget(findViewById(R.id.fab))
-                .setFocalToTextPadding(R.dimen.dp40)
+                .setFocalPadding(R.dimen.dp40)
                 .setPrimaryText("Send your first email")
                 .setSecondaryText("Tap the envelop to start composing your first email")
+                .setBackButtonDismissEnabled(true)
                 .setAnimationInterpolator(new FastOutSlowInInterpolator())
-                .setOnHidePromptListener(new MaterialTapTargetPrompt.OnHidePromptListener()
+                .setPromptStateChangeListener(new MaterialTapTargetPrompt.PromptStateChangeListener()
                 {
                     @Override
-                    public void onHidePrompt(MotionEvent event, boolean tappedTarget)
+                    public void onPromptStateChanged(MaterialTapTargetPrompt prompt, int state)
                     {
-                        mFabPrompt = null;
-                        //Do something such as storing a value so that this prompt is never shown again
-                    }
-
-                    @Override
-                    public void onHidePromptComplete()
-                    {
-
+                        if (state == MaterialTapTargetPrompt.STATE_FOCAL_PRESSED
+                                || state == MaterialTapTargetPrompt.STATE_DISMISSING)
+                        {
+                            mFabPrompt = null;
+                            //Do something such as storing a value so that this prompt is never shown again
+                        }
                     }
                 })
                 .create();
@@ -121,25 +119,22 @@ public class MainActivity extends AppCompatActivity
         final MaterialTapTargetPrompt.Builder tapTargetPromptBuilder = new MaterialTapTargetPrompt.Builder(this)
                 .setPrimaryText(R.string.menu_prompt_title)
                 .setSecondaryText(R.string.menu_prompt_description)
-                .setFocalToTextPadding(R.dimen.dp40)
+                .setFocalPadding(R.dimen.dp40)
                 .setAnimationInterpolator(new FastOutSlowInInterpolator())
                 .setMaxTextWidth(R.dimen.tap_target_menu_max_width)
                 .setIcon(R.drawable.ic_menu);
         final Toolbar tb = (Toolbar) this.findViewById(R.id.toolbar);
         tapTargetPromptBuilder.setTarget(tb.getChildAt(1));
 
-        tapTargetPromptBuilder.setOnHidePromptListener(new MaterialTapTargetPrompt.OnHidePromptListener()
+        tapTargetPromptBuilder.setPromptStateChangeListener(new MaterialTapTargetPrompt.PromptStateChangeListener()
         {
             @Override
-            public void onHidePrompt(MotionEvent event, boolean tappedTarget)
+            public void onPromptStateChanged(MaterialTapTargetPrompt prompt, int state)
             {
-                //Do something such as storing a value so that this prompt is never shown again
-            }
-
-            @Override
-            public void onHidePromptComplete()
-            {
-
+                if (state == MaterialTapTargetPrompt.STATE_FOCAL_PRESSED)
+                {
+                    //Do something such as storing a value so that this prompt is never shown again
+                }
             }
         });
         tapTargetPromptBuilder.show();
@@ -179,6 +174,15 @@ public class MainActivity extends AppCompatActivity
                 .show();
     }
 
+    public void showBottomSheetDialogPrompt(View view)
+    {
+        final BottomSheetDialogFragmentExample bottomSheetDialogFragmentExample =
+                new BottomSheetDialogFragmentExample();
+
+        bottomSheetDialogFragmentExample.show(getSupportFragmentManager(),
+                bottomSheetDialogFragmentExample.getTag());
+    }
+
     public void showStylePrompt(View view)
     {
         final MaterialTapTargetPrompt.Builder builder = new MaterialTapTargetPrompt.Builder(this, R.style.MaterialTapTargetPromptTheme_FabTarget);
@@ -208,7 +212,7 @@ public class MainActivity extends AppCompatActivity
         new MaterialTapTargetPrompt.Builder(MainActivity.this)
                 .setPrimaryText(R.string.action_mode_prompt_title)
                 .setSecondaryText(R.string.action_mode_prompt_description)
-                .setFocalToTextPadding(R.dimen.dp40)
+                .setFocalPadding(R.dimen.dp40)
                 .setAnimationInterpolator(new FastOutSlowInInterpolator())
                 .setMaxTextWidth(R.dimen.tap_target_menu_max_width)
                 .setTarget(findViewById(android.support.v7.appcompat.R.id.action_mode_close_button))
@@ -246,22 +250,20 @@ public class MainActivity extends AppCompatActivity
                 .setAutoDismiss(false)
                 .setAutoFinish(false)
                 .setCaptureTouchEventOutsidePrompt(true)
-                .setOnHidePromptListener(new MaterialTapTargetPrompt.OnHidePromptListener()
+                .setPromptStateChangeListener(new MaterialTapTargetPrompt.PromptStateChangeListener()
                 {
                     @Override
-                    public void onHidePrompt(MotionEvent event, boolean tappedTarget)
+                    public void onPromptStateChanged(MaterialTapTargetPrompt prompt, int state)
                     {
-                        if (tappedTarget)
+                        if (state == MaterialTapTargetPrompt.STATE_FOCAL_PRESSED)
                         {
                             mFabPrompt.finish();
                             mFabPrompt = null;
                         }
-                    }
-
-                    @Override
-                    public void onHidePromptComplete()
-                    {
-
+                        else if (state == MaterialTapTargetPrompt.STATE_DISMISSING)
+                        {
+                            mFabPrompt = null;
+                        }
                     }
                 })
                 .show();
