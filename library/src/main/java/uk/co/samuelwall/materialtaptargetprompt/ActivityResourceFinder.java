@@ -53,13 +53,13 @@ public class ActivityResourceFinder implements ResourceFinder
     @Override
     public Window getWindow()
     {
-        return mActivity.getWindow();
+        return null;
     }
 
     @Override
     public ViewGroup getPromptParentView()
     {
-        return (ViewGroup) getWindow().getDecorView();
+        return (ViewGroup) mActivity.getWindow().getDecorView();
     }
 
     @Override

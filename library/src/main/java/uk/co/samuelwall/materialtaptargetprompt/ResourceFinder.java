@@ -17,7 +17,6 @@
 package uk.co.samuelwall.materialtaptargetprompt;
 
 import android.content.Context;
-import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.content.res.TypedArray;
 import android.graphics.drawable.Drawable;
@@ -54,7 +53,9 @@ public interface ResourceFinder
      *
      * @return Window The current window, or null if the activity is not
      *         visual.
+     * @deprecated Library no longer requires access to the Window object.
      */
+    @Deprecated
     Window getWindow();
 
     /**

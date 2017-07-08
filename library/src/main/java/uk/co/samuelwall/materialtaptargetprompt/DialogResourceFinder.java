@@ -20,6 +20,7 @@ import android.app.Dialog;
 import android.content.Context;
 import android.support.annotation.IdRes;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.Window;
 
 /**
@@ -44,7 +45,13 @@ public class DialogResourceFinder extends ActivityResourceFinder
     @Override
     public Window getWindow()
     {
-        return mDialog.getWindow();
+        return null;
+    }
+
+    @Override
+    public ViewGroup getPromptParentView()
+    {
+        return (ViewGroup) mDialog.getWindow().getDecorView();
     }
 
     @Override
