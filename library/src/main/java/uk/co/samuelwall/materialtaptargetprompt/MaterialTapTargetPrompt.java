@@ -55,6 +55,7 @@ import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.view.animation.AccelerateDecelerateInterpolator;
 import android.view.animation.Interpolator;
+import android.widget.PopupWindow;
 
 import java.text.Bidi;
 
@@ -408,13 +409,19 @@ public class MaterialTapTargetPrompt
             };
     }
 
+    PopupWindow pw;
+
     /**
      * Displays the prompt.
      */
     public void show()
     {
-        mParentView.addView(mView);
+        pw = new PopupWindow(mView, mResourceFinder.getResources().getDisplayMetrics().widthPixels, mResourceFinder.getResources().getDisplayMetrics().heightPixels, true);
+        // display the popup in the center
+        pw.showAtLocation(mTargetView, Gravity.START, 0,0);
+        //mParentView.addView(mView);
         addGlobalLayoutListener();
+        updateFocalCentrePosition();
         onPromptStateChanged(STATE_REVEALING);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB)
         {
@@ -633,6 +640,11 @@ public class MaterialTapTargetPrompt
             mDismissing = false;
             mIsDismissingOld = false;
         }
+        if (pw != null)
+        {
+            pw.dismiss();
+            pw = null;
+        }
     }
 
     @TargetApi(11)
@@ -797,8 +809,10 @@ public class MaterialTapTargetPrompt
         {
             final int[] viewPosition = new int[2];
             mView.getLocationInWindow(viewPosition);
+            //viewPosition[1] -= mStatusBarHeight;
             final int[] targetPosition = new int[2];
             mTargetView.getLocationInWindow(targetPosition);
+            targetPosition[1] -= mStatusBarHeight;
 
             mView.mFocalCentre.x = targetPosition[0] - viewPosition[0] + (mTargetView.getWidth() / 2);
             mView.mFocalCentre.y = targetPosition[1] - viewPosition[1] + (mTargetView.getHeight() / 2);
@@ -811,7 +825,14 @@ public class MaterialTapTargetPrompt
 
         mVerticalTextPositionAbove = mView.mFocalCentre.y > mView.mClipBounds.centerY();
         mHorizontalTextPositionLeft = mView.mFocalCentre.x > mView.mClipBounds.centerX();
-        mInside88dpBounds = (mView.mFocalCentre.x > mClipViewBoundsInset88dp.left && mView.mFocalCentre.x < mClipViewBoundsInset88dp.right) || (mView.mFocalCentre.y > mClipViewBoundsInset88dp.top && mView.mFocalCentre.y < mClipViewBoundsInset88dp.bottom);
+        if (mClipViewBoundsInset88dp != null)
+        {
+            mInside88dpBounds = (mView.mFocalCentre.x > mClipViewBoundsInset88dp.left && mView.mFocalCentre.x < mClipViewBoundsInset88dp.right) || (mView.mFocalCentre.y > mClipViewBoundsInset88dp.top && mView.mFocalCentre.y < mClipViewBoundsInset88dp.bottom);
+        }
+        else
+        {
+            mInside88dpBounds = false;
+        }
 
         updateTextPositioning();
         updateIconPosition();
@@ -1106,6 +1127,7 @@ public class MaterialTapTargetPrompt
             mView.getLocationInWindow(viewPosition);
             final int[] targetPosition = new int[2];
             mView.mTargetRenderView.getLocationInWindow(targetPosition);
+            targetPosition[1] -= mStatusBarHeight;
 
             mView.mIconDrawableLeft = targetPosition[0] - viewPosition[0];
             mView.mIconDrawableTop = targetPosition[1] - viewPosition[1];
@@ -1125,10 +1147,10 @@ public class MaterialTapTargetPrompt
             final Point offset = new Point();
             mClipToView.getGlobalVisibleRect(mView.mClipBounds, offset);
 
-            if (offset.y == 0)
-            {
-                mView.mClipBounds.top += mStatusBarHeight;
-            }
+            //if (offset.y == 0)
+            //{
+                //mView.mClipBounds.top -= mStatusBarHeight;
+            //}
 
             mClipViewBoundsInset88dp = new RectF(mView.mClipBounds);
             mClipViewBoundsInset88dp.inset(m88dp,  m88dp);

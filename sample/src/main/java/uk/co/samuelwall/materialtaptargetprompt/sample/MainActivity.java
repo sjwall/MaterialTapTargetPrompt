@@ -16,6 +16,7 @@
 
 package uk.co.samuelwall.materialtaptargetprompt.sample;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -29,13 +30,18 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.view.ActionMode;
 import android.support.v7.widget.ActionMenuView;
 import android.support.v7.widget.Toolbar;
+import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.PopupWindow;
 import android.widget.Toast;
 
 import uk.co.samuelwall.materialtaptargetprompt.MaterialTapTargetPrompt;
+import uk.co.samuelwall.materialtaptargetprompt.PopupWindowResourceFinder;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener
@@ -267,6 +273,33 @@ public class MainActivity extends AppCompatActivity
                     }
                 })
                 .show();
+    }
+
+    public void showPopupWindow(View view)
+    {
+        try {
+            //We need to get the instance of the LayoutInflater, use the context of this activity
+            LayoutInflater inflater = (LayoutInflater) this
+                    .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            //Inflate the view from a predefined XML layout
+            View layout = inflater.inflate(R.layout.fragment_bottom_sheet, null);
+            // create a 300px width and 470px height PopupWindow
+            PopupWindow pw = new PopupWindow(layout, 300, 470, true);
+            // display the popup in the center
+            pw.showAtLocation(view, Gravity.CENTER, 0, 0);
+
+            MaterialTapTargetPrompt prompt = new MaterialTapTargetPrompt.Builder(new PopupWindowResourceFinder(pw, getWindow()), 0)
+                    .setTarget(R.id.bs_search)
+                    .setPrimaryText("Popup window")
+                    .setSecondaryText("Popup window example")
+                    .setAnimationInterpolator(new FastOutSlowInInterpolator())
+                    .setCaptureTouchEventOutsidePrompt(true)
+                    .create();
+            prompt.show();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
