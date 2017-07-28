@@ -2,6 +2,16 @@
 
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## v1.12.0 (2017-07-28)
+
+### Bug Fixes
+
+* Fixed incorrect positioning of prompt when target view gets removed from window.
+
+### Deprecated
+
+* `ResourceFinder.getWindow()` no longer required, will be removed in v2.0.0
+
 ## v1.11.0 (2017-07-02)
 
 ### Features
