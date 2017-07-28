@@ -403,6 +403,22 @@ public class MaterialTapTargetPrompt
                 @Override
                 public void onGlobalLayout()
                 {
+                    if(mTargetView != null)
+                    {
+                        final boolean isTargetAttachedFromWindow;
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT)
+                        {
+                            isTargetAttachedFromWindow = mTargetView.isAttachedToWindow();
+                        }
+                        else
+                        {
+                            isTargetAttachedFromWindow = mTargetView.getWindowToken() != null;
+                        }
+                        if(!isTargetAttachedFromWindow)
+                        {
+                            return;
+                        }
+                    }
                     updateFocalCentrePosition();
                 }
             };
