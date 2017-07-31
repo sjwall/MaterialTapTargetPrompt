@@ -70,13 +70,11 @@ public class EmptyActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.app_bar_main);
+        setContentView(R.layout.app_bar_empty);
         findViewById(R.id.other_examples_activity).setVisibility(View.GONE);
         findViewById(R.id.other_examples_dialog).setVisibility(View.GONE);
         findViewById(R.id.other_examples_centre).setVisibility(View.GONE);
         findViewById(R.id.other_examples_card).setVisibility(View.GONE);
-        final Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
