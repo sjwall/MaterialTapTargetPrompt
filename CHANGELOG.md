@@ -2,6 +2,12 @@
 
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## v1.12.1 (2017-07-05)
+
+### Bug Fixes
+
+* Fixed prompt not working with window app bar
+
 ## v1.12.0 (2017-07-28)
 
 ### Bug Fixes
