@@ -43,7 +43,7 @@
         </activity>
         <activity
             android:name=".EmptyActivity"
-            android:theme="@style/AppTheme.NoActionBar">
+            android:theme="@style/AppTheme">
         </activity>
         <activity
             android:name=".CentrePositionActivity"

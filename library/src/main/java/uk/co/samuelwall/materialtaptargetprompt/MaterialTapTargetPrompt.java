@@ -1684,7 +1684,7 @@ public class MaterialTapTargetPrompt
                 }
             }
 
-            mClipToView = mResourceFinder.findViewById(android.R.id.content);
+            mClipToView = (View) mResourceFinder.findViewById(android.R.id.content).getParent();
         }
 
         /**
