@@ -114,7 +114,7 @@ public class EmptyActivity extends AppCompatActivity
                 .setAnimationInterpolator(new FastOutSlowInInterpolator())
                 .setMaxTextWidth(R.dimen.tap_target_menu_max_width)
                 .setIcon(R.drawable.ic_back);
-        final Toolbar tb = (Toolbar) this.findViewById(R.id.toolbar);
+        final Toolbar tb = (Toolbar) this.findViewById(android.support.v7.appcompat.R.id.action_bar);
         tapTargetPromptBuilder.setTarget(tb.getChildAt(1));
 
         tapTargetPromptBuilder.setPromptStateChangeListener(new MaterialTapTargetPrompt.PromptStateChangeListener()
@@ -139,7 +139,7 @@ public class EmptyActivity extends AppCompatActivity
                 .setAnimationInterpolator(new FastOutSlowInInterpolator())
                 .setMaxTextWidth(R.dimen.tap_target_menu_max_width)
                 .setIcon(R.drawable.ic_more_vert);
-        final Toolbar tb = (Toolbar) this.findViewById(R.id.toolbar);
+        final Toolbar tb = (Toolbar) this.findViewById(android.support.v7.appcompat.R.id.action_bar);
         final View child = tb.getChildAt(2);
         if (child instanceof ActionMenuView)
         {
