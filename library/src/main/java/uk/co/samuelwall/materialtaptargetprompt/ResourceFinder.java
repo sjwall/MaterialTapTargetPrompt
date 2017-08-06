@@ -17,7 +17,6 @@
 package uk.co.samuelwall.materialtaptargetprompt;
 
 import android.content.Context;
-import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.content.res.TypedArray;
 import android.graphics.drawable.Drawable;
@@ -30,7 +29,6 @@ import android.support.annotation.StyleRes;
 import android.support.annotation.StyleableRes;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.Window;
 
 /**
  * Interface used to find resources required by {@link MaterialTapTargetPrompt}.
@@ -46,16 +44,6 @@ public interface ResourceFinder
      */
     @Nullable
     View findViewById(@IdRes int resId);
-
-    /**
-     * Retrieve the current Window for the prompt.  This can be used to
-     * directly access parts of the Window API that are not available
-     * through Activity/Screen.
-     *
-     * @return Window The current window, or null if the activity is not
-     *         visual.
-     */
-    Window getWindow();
 
     /**
      * Get the view to add the prompt to.

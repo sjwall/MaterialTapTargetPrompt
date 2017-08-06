@@ -237,20 +237,6 @@ public class MaterialTapTargetPromptUnitTest
 
                     }
                 })
-                .setOnHidePromptListener(new MaterialTapTargetPrompt.OnHidePromptListener()
-                {
-                    @Override
-                    public void onHidePrompt(MotionEvent event, boolean tappedTarget)
-                    {
-
-                    }
-
-                    @Override
-                    public void onHidePromptComplete()
-                    {
-
-                    }
-                })
                 .show();
 
         prompt.finish();
@@ -302,20 +288,6 @@ public class MaterialTapTargetPromptUnitTest
                         }
                     }
                 })
-                .setOnHidePromptListener(new MaterialTapTargetPrompt.OnHidePromptListener()
-                {
-                    @Override
-                    public void onHidePrompt(MotionEvent event, boolean tappedTarget)
-                    {
-                        assertTrue(tappedTarget);
-                    }
-
-                    @Override
-                    public void onHidePromptComplete()
-                    {
-
-                    }
-                })
                 .show();
         assertFalse(prompt.mView.onTouchEvent(MotionEvent.obtain(0, 0, MotionEvent.ACTION_DOWN, 10, 10, 0)));
     }
@@ -361,20 +333,6 @@ public class MaterialTapTargetPromptUnitTest
                         {
                             fail();
                         }
-                    }
-                })
-                .setOnHidePromptListener(new MaterialTapTargetPrompt.OnHidePromptListener()
-                {
-                    @Override
-                    public void onHidePrompt(MotionEvent event, boolean tappedTarget)
-                    {
-                        assertTrue(tappedTarget);
-                    }
-
-                    @Override
-                    public void onHidePromptComplete()
-                    {
-
                     }
                 })
                 .show();
@@ -434,20 +392,6 @@ public class MaterialTapTargetPromptUnitTest
                         }
                     }
                 })
-                .setOnHidePromptListener(new MaterialTapTargetPrompt.OnHidePromptListener()
-                {
-                    @Override
-                    public void onHidePrompt(MotionEvent event, boolean tappedTarget)
-                    {
-                        assertFalse(tappedTarget);
-                    }
-
-                    @Override
-                    public void onHidePromptComplete()
-                    {
-
-                    }
-                })
                 .show();
         assertTrue(prompt.mView.onTouchEvent(MotionEvent.obtain(0, 0, MotionEvent.ACTION_DOWN, 60, 60, 0)));
     }
@@ -493,20 +437,6 @@ public class MaterialTapTargetPromptUnitTest
                         {
                             fail();
                         }
-                    }
-                })
-                .setOnHidePromptListener(new MaterialTapTargetPrompt.OnHidePromptListener()
-                {
-                    @Override
-                    public void onHidePrompt(MotionEvent event, boolean tappedTarget)
-                    {
-                        assertFalse(tappedTarget);
-                    }
-
-                    @Override
-                    public void onHidePromptComplete()
-                    {
-
                     }
                 })
                 .show();

@@ -41,7 +41,6 @@ import android.support.annotation.DimenRes;
 import android.support.annotation.DrawableRes;
 import android.support.annotation.IdRes;
 import android.support.annotation.Nullable;
-import android.support.annotation.RequiresApi;
 import android.support.annotation.StringRes;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
@@ -243,14 +242,6 @@ public class MaterialTapTargetPrompt
     /**
      * The listener for prompt events.
      * Can be null.
-     * @deprecated Replaced by {@link #mPromptStateChangeListener}.
-     */
-    @Deprecated
-    OnHidePromptListener mOnHidePromptListener;
-
-    /**
-     * The listener for prompt events.
-     * Can be null.
      */
     PromptStateChangeListener mPromptStateChangeListener;
 
@@ -258,13 +249,6 @@ public class MaterialTapTargetPrompt
      * Is the prompt currently being removed from view.
      */
     boolean mDismissing;
-
-    /**
-     * Is the prompt currently being removed, old style.
-     * @deprecated Replaced with {@link #mDismissing}
-     */
-    @Deprecated
-    boolean mIsDismissingOld;
 
     /**
      * The view group which contains the target view.
@@ -344,31 +328,6 @@ public class MaterialTapTargetPrompt
         mView = new PromptView(mResourceFinder.getContext());
         mView.mPromptTouchedListener = new PromptView.PromptTouchedListener()
             {
-                @Override
-                public void onPromptTouched(MotionEvent event, boolean tappedTarget)
-                {
-                    if (!mIsDismissingOld)
-                    {
-                        if (tappedTarget)
-                        {
-                            if (mAutoFinish)
-                            {
-                                finish();
-                                mIsDismissingOld = true;
-                            }
-                        }
-                        else
-                        {
-                            if (mAutoDismiss)
-                            {
-                                dismiss();
-                                mIsDismissingOld = true;
-                            }
-                        }
-                        MaterialTapTargetPrompt.this.onHidePrompt(event, tappedTarget);
-                    }
-                }
-
                 @Override
                 public void onFocalPressed()
                 {
@@ -460,7 +419,7 @@ public class MaterialTapTargetPrompt
      */
     public void finish()
     {
-        if (mDismissing || mIsDismissingOld)
+        if (mDismissing)
         {
             return;
         }
@@ -524,7 +483,7 @@ public class MaterialTapTargetPrompt
      */
     public void dismiss()
     {
-        if (mDismissing || mIsDismissingOld)
+        if (mDismissing)
         {
             return;
         }
@@ -583,7 +542,7 @@ public class MaterialTapTargetPrompt
     }
 
     /**
-     * Removes the prompt from view and triggers the {@link #onHidePromptComplete()} event.
+     * Removes the prompt from view and triggers the {@link #onPromptStateChanged(int)} event.
      */
     void cleanUpPrompt(final int state)
     {
@@ -594,16 +553,13 @@ public class MaterialTapTargetPrompt
         }
         removeGlobalLayoutListener();
         mParentView.removeView(mView);
-        if (mDismissing || mIsDismissingOld)
+        if (mDismissing)
         {
-            onHidePromptComplete();
             onPromptStateChanged(state);
             mDismissing = false;
-            mIsDismissingOld = false;
         }
     }
 
-    @TargetApi(11)
     void startRevealAnimation()
     {
         if (mPaintSecondaryText != null)
@@ -682,7 +638,6 @@ public class MaterialTapTargetPrompt
         mAnimationCurrent.start();
     }
 
-    @TargetApi(11)
     void startIdleAnimations()
     {
         if (mAnimationCurrent != null)
@@ -1113,24 +1068,6 @@ public class MaterialTapTargetPrompt
         }
     }
 
-    @Deprecated
-    protected void onHidePrompt(@Nullable final MotionEvent event, final boolean targetTapped)
-    {
-        if (mOnHidePromptListener != null)
-        {
-            mOnHidePromptListener.onHidePrompt(event, targetTapped);
-        }
-    }
-
-    @Deprecated
-    protected void onHidePromptComplete()
-    {
-        if (mOnHidePromptListener != null)
-        {
-            mOnHidePromptListener.onHidePromptComplete();
-        }
-    }
-
     /**
      * View used to render the tap target.
      */
@@ -1261,7 +1198,6 @@ public class MaterialTapTargetPrompt
                 if (mPromptTouchedListener != null)
                 {
                     mPromptTouchedListener.onFocalPressed();
-                    mPromptTouchedListener.onPromptTouched(event, true);
                 }
             }
             else
@@ -1274,7 +1210,6 @@ public class MaterialTapTargetPrompt
                 if (mPromptTouchedListener != null)
                 {
                     mPromptTouchedListener.onNonFocalPressed();
-                    mPromptTouchedListener.onPromptTouched(event, false);
                 }
             }
             return captureEvent;
@@ -1299,7 +1234,6 @@ public class MaterialTapTargetPrompt
                         if (mPromptTouchedListener != null)
                         {
                             mPromptTouchedListener.onNonFocalPressed();
-                            mPromptTouchedListener.onPromptTouched(null, false);
                         }
                         return true;
                     }
@@ -1328,17 +1262,6 @@ public class MaterialTapTargetPrompt
          */
         public interface PromptTouchedListener
         {
-            /**
-             * Called when a touch event occurs in the prompt view.
-             * {@literal event} can be null when system back button is pressed.
-             *
-             * @param event The touch event that triggered the dismiss or finish.
-             * @param tappedTarget True if the prompt focal point was touched.
-             * @deprecated Use either {@link #onFocalPressed()} or {@link #onNonFocalPressed()}.
-             */
-            @Deprecated
-            void onPromptTouched(@Nullable final MotionEvent event, final boolean tappedTarget);
-
             /**
              * Called when the focal is pressed.
              */
@@ -1395,13 +1318,6 @@ public class MaterialTapTargetPrompt
          * Should the back button press dismiss the prompt.
          */
         private boolean mBackButtonDismissEnabled;
-
-        /**
-         * Listener for when the prompt is hidden.
-         * @deprecated Replaced my {@link #mPromptStateChangeListener}.
-         */
-        @Deprecated
-        private OnHidePromptListener mOnHidePromptListener;
 
         /**
          * Listener for when the prompt state changes.
@@ -2071,19 +1987,6 @@ public class MaterialTapTargetPrompt
         }
 
         /**
-         * Set the listener to listen for when the prompt is touched.
-         *
-         * @param listener The listener to use
-         * @return This Builder object to allow for chaining of calls to set methods
-         */
-        @Deprecated
-        public Builder setOnHidePromptListener(final OnHidePromptListener listener)
-        {
-            mOnHidePromptListener = listener;
-            return this;
-        }
-
-        /**
          * Set the listener to listen for when the prompt state changes.
          *
          * @param listener The listener to use
@@ -2339,7 +2242,6 @@ public class MaterialTapTargetPrompt
 
             mPrompt.mView.mTextSeparation = mTextSeparation;
 
-            mPrompt.mOnHidePromptListener = mOnHidePromptListener;
             mPrompt.mPromptStateChangeListener = mPromptStateChangeListener;
             mPrompt.mView.mCaptureTouchEventOnFocal = mCaptureTouchEventOnFocal;
 
@@ -2614,34 +2516,6 @@ public class MaterialTapTargetPrompt
         {
             return Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1;
         }
-    }
-
-    /**
-     * Interface definition for a callback to be invoked when a {@link MaterialTapTargetPrompt} is removed from view.
-     */
-    @Deprecated
-    public interface OnHidePromptListener
-    {
-        /**
-         * Called when the use touches the prompt view,
-         * but before the prompt is removed from view.
-         * {@literal event} can be null if the system back button is pressed.
-         *
-         * @param event The touch event that triggered the dismiss or finish.
-         * @param tappedTarget True if the prompt focal point was touched.
-         * @deprecated Use {@link PromptStateChangeListener#onPromptStateChanged(int)} and check for
-         * the state being either {@link #STATE_DISMISSING} or {@link #STATE_FOCAL_PRESSED}.
-         */
-        @Deprecated
-        void onHidePrompt(@Nullable final MotionEvent event, final boolean tappedTarget);
-
-        /**
-         * Called after the prompt has been removed from view.
-         * @deprecated Use {@link PromptStateChangeListener#onPromptStateChanged(int)} and check for
-         * the state being either {@link #STATE_DISMISSED} or {@link #STATE_FINISHED}.
-         */
-        @Deprecated
-        void onHidePromptComplete();
     }
 
     /**

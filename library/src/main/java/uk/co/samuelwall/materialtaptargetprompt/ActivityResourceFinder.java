@@ -30,7 +30,6 @@ import android.support.annotation.StyleRes;
 import android.support.annotation.StyleableRes;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.Window;
 
 /**
  * {@link ResourceFinder} implementation for {@link Activity}.
@@ -51,15 +50,9 @@ public class ActivityResourceFinder implements ResourceFinder
     }
 
     @Override
-    public Window getWindow()
-    {
-        return mActivity.getWindow();
-    }
-
-    @Override
     public ViewGroup getPromptParentView()
     {
-        return (ViewGroup) getWindow().getDecorView();
+        return (ViewGroup) mActivity.getWindow().getDecorView();
     }
 
     @Override
