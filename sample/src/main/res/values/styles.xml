@@ -55,24 +55,24 @@
 
     <!-- This style is an example of what can be changed and not necessarily what should be changed! -->
     <style name="MaterialTapTargetPromptTheme.FabTarget" parent="MaterialTapTargetPromptTheme">
-        <item name="backgroundColour">@color/colorAccentPromptBackground</item>
-        <item name="focalColour">@color/colorPrimary</item>
-        <item name="primaryText">@string/FabTarget.primaryText</item>
-        <item name="secondaryText">@string/FabTarget.secondaryText</item>
-        <item name="primaryTextColour">@color/green_200</item>
-        <item name="secondaryTextColour">@color/orange_200</item>
-        <item name="target">@id/fab</item>
-        <item name="focalRadius">88dp</item>
-        <item name="primaryTextSize">10sp</item>
-        <item name="secondaryTextSize">22sp</item>
-        <item name="maxTextWidth">600dp</item>
-        <item name="textPadding">80dp</item>
-        <item name="focalToTextPadding">8dp</item>
-        <item name="textSeparation">0dp</item>
-        <item name="primaryTextTypeface">serif</item>
-        <item name="secondaryTextTypeface">monospace</item>
-        <item name="secondaryTextStyle">italic</item>
-        <item name="iconColourFilter">@color/green_200</item>
+        <item name="mttp_backgroundColour">@color/colorAccentPromptBackground</item>
+        <item name="mttp_focalColour">@color/colorPrimary</item>
+        <item name="mttp_primaryText">@string/FabTarget.primaryText</item>
+        <item name="mttp_secondaryText">@string/FabTarget.secondaryText</item>
+        <item name="mttp_primaryTextColour">@color/green_200</item>
+        <item name="mttp_secondaryTextColour">@color/orange_200</item>
+        <item name="mttp_target">@id/fab</item>
+        <item name="mttp_focalRadius">88dp</item>
+        <item name="mttp_primaryTextSize">10sp</item>
+        <item name="mttp_secondaryTextSize">22sp</item>
+        <item name="mttp_maxTextWidth">600dp</item>
+        <item name="mttp_textPadding">80dp</item>
+        <item name="mttp_focalToTextPadding">8dp</item>
+        <item name="mttp_textSeparation">0dp</item>
+        <item name="mttp_primaryTextTypeface">serif</item>
+        <item name="mttp_secondaryTextTypeface">monospace</item>
+        <item name="mttp_secondaryTextStyle">italic</item>
+        <item name="mttp_iconColourFilter">@color/green_200</item>
     </style>
 
 </resources>
