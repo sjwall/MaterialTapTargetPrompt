@@ -2,6 +2,33 @@
 
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## v2.0.0 (2017-07-07)
+
+* Minimum sdk is now 14.
+* Back button dismiss is now enabled by default.
+
+### Bug Fixes
+
+* Attributes are prefixed with mttp to be compatible with API 26.
+ 
+### Removed
+
+* `ResourceFinder.getWindow()`
+* `OnHidePromptListener` - Replaced with `PromptStateChangeListener`.
+* `OnHidePromptListener.onHidePrompt` - Replaced with `PromptStateChangeListener(MaterialTapTargetPrompt prompt, boolean state)` where the state is either `MaterialTapTargetPrompt.STATE_DISMISSING` or `MaterialTapTargetPrompt.STATE_FOCAL_PRESSED`.
+* `OnHidePromptListener.onHidePromptComplete` - Replaced with `PromptStateChangeListener(MaterialTapTargetPrompt prompt, boolean state)` where the state is either `MaterialTapTargetPrompt.STATE_DISMISSED` or `MaterialTapTargetPrompt.STATE_FINISHED`.
+*
+* `builder.setBackgroundColourAlpha` - Alpha is taken from `builder.setBackgroundColour(int)`
+* `builder.setBackgroundColourFromRes(int)` - Use a constructor with a theme for example `Builder(Activity, int)`
+* `builder.setFocalColourAlpha(int)` - Alpha value is taken from `builder.setFocalColour(int)`
+* `builder.setFocalColourFromRes(int)` - Use a constructor with a theme for example `Builder(Activity, int)`
+* `builder.setFocalToTextPadding(float)` - Renamed to `setFocalPadding(float)`
+* `builder.setFocalToTextPadding(int)` - Rename to `setFocalPadding(int)`
+* `builder.setIconDrawableColourFilterFromRes(int)` - Use a constructor with a theme for example `Builder(Activity, int)`
+* `builder.setOnHidePromptListener(MaterialTapTargetPrompt.OnHidePromptListener` - Replaced with `builder.setPromptStateChangeListener(PromptStateChangeListener)`
+* `builder.setPrimaryTextColourFromRes(int)` - Use a constructor with a theme for example `Builder(Activity, int)`
+* `builder.setSecondaryTextColourFromRes(int)` - Use a constructor with a theme for example `Builder(Activity, int)`
+
 ## v1.12.1 (2017-07-05)
 
 ### Bug Fixes
