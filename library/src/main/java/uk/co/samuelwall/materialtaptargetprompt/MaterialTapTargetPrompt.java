@@ -1125,6 +1125,10 @@ public class MaterialTapTargetPrompt
          * Should the back button press dismiss the prompt.
          */
         boolean mBackButtonDismissEnabled;
+        /**
+         * @see MaterialTapTargetPrompt#mAutoDismiss
+         */
+        boolean mAutoDismiss;
 
         public PromptView(final Context context)
         {
@@ -1251,7 +1255,7 @@ public class MaterialTapTargetPrompt
                         {
                             mPromptTouchedListener.onNonFocalPressed();
                         }
-                        return true;
+                        return mAutoDismiss || super.dispatchKeyEventPreIme(event);
                     }
                 }
             }
@@ -2237,6 +2241,7 @@ public class MaterialTapTargetPrompt
             }
 
             mPrompt.mView.mBackButtonDismissEnabled = mBackButtonDismissEnabled;
+            mPrompt.mView.mAutoDismiss = mAutoDismiss;
             mPrompt.mView.mIconDrawable = mIconDrawable;
 
             mPrompt.mView.mPaintFocal = new Paint();
