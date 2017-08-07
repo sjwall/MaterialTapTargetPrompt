@@ -3,9 +3,13 @@ jdk: oraclejdk8
 android:
   components:
       - tools
-      - build-tools-23.0.3
-      - android-23
+      - build-tools-26.0.1
+      - android-26
       - extra
+      - extra-android-m2repository
+      - extra-google-m2repository
+licenses:
+      - android-sdk-license-.+
 script:
   - ./gradlew build jacocoTestReport
 after_success:
