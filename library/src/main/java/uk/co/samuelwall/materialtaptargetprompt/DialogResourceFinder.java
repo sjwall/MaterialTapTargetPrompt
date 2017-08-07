@@ -21,7 +21,6 @@ import android.content.Context;
 import android.support.annotation.IdRes;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.Window;
 
 /**
  * {@link ResourceFinder} implementation for {@link Dialog}.
@@ -40,12 +39,6 @@ public class DialogResourceFinder extends ActivityResourceFinder
     public View findViewById(@IdRes int resId)
     {
         return this.mDialog.findViewById(resId);
-    }
-
-    @Override
-    public Window getWindow()
-    {
-        return null;
     }
 
     @Override

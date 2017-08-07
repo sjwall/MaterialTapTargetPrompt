@@ -17,52 +17,50 @@
 
 <resources>
     <attr name="MaterialTapTargetPromptTheme" format="reference"/>
-    <attr name="target" format="reference"/>
-    <attr name="primaryText" format="string"/>
-    <attr name="secondaryText" format="string"/>
-    <attr name="primaryTextColour" format="color"/>
-    <attr name="secondaryTextColour" format="color"/>
-    <attr name="backgroundColour" format="color"/>
-    <attr name="backgroundColourAlpha" format="integer"/>
-    <attr name="focalColour" format="color"/>
-    <attr name="focalColourAlpha" format="integer"/>
-    <attr name="focalRadius" format="dimension"/>
-    <attr name="primaryTextSize" format="dimension"/>
-    <attr name="secondaryTextSize" format="dimension"/>
-    <attr name="maxTextWidth" format="dimension"/>
-    <attr name="textPadding" format="dimension"/>
-    <attr name="focalToTextPadding" format="dimension"/>
-    <attr name="textSeparation" format="dimension"/>
-    <attr name="autoDismiss" format="boolean"/>
-    <attr name="autoFinish" format="boolean"/>
-    <attr name="captureTouchEventOutsidePrompt" format="boolean"/>
-    <attr name="captureTouchEventOnFocal" format="boolean"/>
-    <attr name="primaryTextFontFamily" format="string"/>
-    <attr name="secondaryTextFontFamily" format="string"/>
-    <attr name="primaryTextStyle" format="enum">
+    <attr name="mttp_target" format="reference"/>
+    <attr name="mttp_primaryText" format="string"/>
+    <attr name="mttp_secondaryText" format="string"/>
+    <attr name="mttp_primaryTextColour" format="color"/>
+    <attr name="mttp_secondaryTextColour" format="color"/>
+    <attr name="mttp_backgroundColour" format="color"/>
+    <attr name="mttp_focalColour" format="color"/>
+    <attr name="mttp_focalRadius" format="dimension"/>
+    <attr name="mttp_primaryTextSize" format="dimension"/>
+    <attr name="mttp_secondaryTextSize" format="dimension"/>
+    <attr name="mttp_maxTextWidth" format="dimension"/>
+    <attr name="mttp_textPadding" format="dimension"/>
+    <attr name="mttp_focalToTextPadding" format="dimension"/>
+    <attr name="mttp_textSeparation" format="dimension"/>
+    <attr name="mttp_autoDismiss" format="boolean"/>
+    <attr name="mttp_autoFinish" format="boolean"/>
+    <attr name="mttp_captureTouchEventOutsidePrompt" format="boolean"/>
+    <attr name="mttp_captureTouchEventOnFocal" format="boolean"/>
+    <attr name="mttp_primaryTextFontFamily" format="string"/>
+    <attr name="mttp_secondaryTextFontFamily" format="string"/>
+    <attr name="mttp_primaryTextStyle" format="enum">
         <enum name="normal" value="0"/>
         <enum name="bold" value="1"/>
         <enum name="italic" value="2"/>
     </attr>
-    <attr name="secondaryTextStyle" format="enum">
+    <attr name="mttp_secondaryTextStyle" format="enum">
         <enum name="normal" value="0"/>
         <enum name="bold" value="1"/>
         <enum name="italic" value="2"/>
     </attr>
-    <attr name="primaryTextTypeface" format="enum">
+    <attr name="mttp_primaryTextTypeface" format="enum">
         <enum name="normal" value="0" />
         <enum name="sans" value="1" />
         <enum name="serif" value="2" />
         <enum name="monospace" value="3" />
     </attr>
-    <attr name="secondaryTextTypeface" format="enum">
+    <attr name="mttp_secondaryTextTypeface" format="enum">
         <enum name="normal" value="0" />
         <enum name="sans" value="1" />
         <enum name="serif" value="2" />
         <enum name="monospace" value="3" />
     </attr>
-    <attr name="iconTint" format="reference"/>
-    <attr name="iconTintMode" format="enum">
+    <attr name="mttp_iconTint" format="reference"/>
+    <attr name="mttp_iconTintMode" format="enum">
         <enum name="SRC_OVER" value="3" />
         <enum name="SRC_IN" value="5" />
         <enum name="SRC_ATOP" value="9" />
@@ -70,36 +68,34 @@
         <enum name="SCREEN" value="15" />
         <enum name="ADD" value="16" />
     </attr>
-    <attr name="iconColourFilter" format="color"/>
+    <attr name="mttp_iconColourFilter" format="color"/>
     <declare-styleable name="PromptView">
-        <attr name="target"/>
-        <attr name="primaryText"/>
-        <attr name="secondaryText"/>
-        <attr name="primaryTextColour"/>
-        <attr name="secondaryTextColour"/>
-        <attr name="backgroundColour"/>
-        <attr name="backgroundColourAlpha"/>
-        <attr name="focalColour"/>
-        <attr name="focalColourAlpha"/>
-        <attr name="focalRadius"/>
-        <attr name="primaryTextSize"/>
-        <attr name="secondaryTextSize"/>
-        <attr name="maxTextWidth"/>
-        <attr name="textPadding"/>
-        <attr name="focalToTextPadding"/>
-        <attr name="textSeparation"/>
-        <attr name="autoDismiss"/>
-        <attr name="autoFinish"/>
-        <attr name="captureTouchEventOutsidePrompt"/>
-        <attr name="captureTouchEventOnFocal"/>
-        <attr name="primaryTextFontFamily"/>
-        <attr name="secondaryTextFontFamily"/>
-        <attr name="primaryTextStyle"/>
-        <attr name="secondaryTextStyle"/>
-        <attr name="primaryTextTypeface"/>
-        <attr name="secondaryTextTypeface"/>
-        <attr name="iconTint"/>
-        <attr name="iconTintMode"/>
-        <attr name="iconColourFilter"/>
+        <attr name="mttp_target"/>
+        <attr name="mttp_primaryText"/>
+        <attr name="mttp_secondaryText"/>
+        <attr name="mttp_primaryTextColour"/>
+        <attr name="mttp_secondaryTextColour"/>
+        <attr name="mttp_backgroundColour"/>
+        <attr name="mttp_focalColour"/>
+        <attr name="mttp_focalRadius"/>
+        <attr name="mttp_primaryTextSize"/>
+        <attr name="mttp_secondaryTextSize"/>
+        <attr name="mttp_maxTextWidth"/>
+        <attr name="mttp_textPadding"/>
+        <attr name="mttp_focalToTextPadding"/>
+        <attr name="mttp_textSeparation"/>
+        <attr name="mttp_autoDismiss"/>
+        <attr name="mttp_autoFinish"/>
+        <attr name="mttp_captureTouchEventOutsidePrompt"/>
+        <attr name="mttp_captureTouchEventOnFocal"/>
+        <attr name="mttp_primaryTextFontFamily"/>
+        <attr name="mttp_secondaryTextFontFamily"/>
+        <attr name="mttp_primaryTextStyle"/>
+        <attr name="mttp_secondaryTextStyle"/>
+        <attr name="mttp_primaryTextTypeface"/>
+        <attr name="mttp_secondaryTextTypeface"/>
+        <attr name="mttp_iconTint"/>
+        <attr name="mttp_iconTintMode"/>
+        <attr name="mttp_iconColourFilter"/>
     </declare-styleable>
 </resources>

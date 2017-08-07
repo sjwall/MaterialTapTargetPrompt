@@ -122,10 +122,7 @@ public class MaterialTapTargetPromptUnitTest
         assertEquals(22f, prompt.mView.mTextSeparation, 0.0f);
 
         prompt.dismiss();
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB)
-        {
-            prompt.mAnimationCurrent.end();
-        }
+        prompt.mAnimationCurrent.end();
         assertNull(prompt.mView.getParent());
     }
 
@@ -159,10 +156,7 @@ public class MaterialTapTargetPromptUnitTest
         assertNull(prompt.mView.mPrimaryTextLayout);
 
         prompt.finish();
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB)
-        {
-            prompt.mAnimationCurrent.end();
-        }
+        prompt.mAnimationCurrent.end();
         assertNull(prompt.mView.getParent());
     }
 
@@ -179,10 +173,7 @@ public class MaterialTapTargetPromptUnitTest
         assertNull(prompt.mView.mSecondaryTextLayout);
 
         prompt.finish();
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB)
-        {
-            prompt.mAnimationCurrent.end();
-        }
+        prompt.mAnimationCurrent.end();
         assertNull(prompt.mView.getParent());
     }
 
@@ -212,10 +203,7 @@ public class MaterialTapTargetPromptUnitTest
         assertNull(prompt.mView.mSecondaryTextLayout);
 
         prompt.finish();
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB)
-        {
-            prompt.mAnimationCurrent.end();
-        }
+        prompt.mAnimationCurrent.end();
         assertNull(prompt.mView.getParent());
     }
 
@@ -226,18 +214,12 @@ public class MaterialTapTargetPromptUnitTest
                 .setTarget(10, 10)
                 .setPrimaryText("Primary text")
                 .show();
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB)
-        {
-            prompt.mAnimationCurrent.cancel();
-        }
+        prompt.mAnimationCurrent.cancel();
         assertEquals(1f, prompt.mRevealedAmount, 0f);
 
         prompt.dismiss();
         assertNotNull(prompt.mAnimationCurrent);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB)
-        {
-            prompt.mAnimationCurrent.cancel();
-        }
+        prompt.mAnimationCurrent.cancel();
         assertNull(prompt.mView.getParent());
     }
 
@@ -255,28 +237,11 @@ public class MaterialTapTargetPromptUnitTest
 
                     }
                 })
-                .setOnHidePromptListener(new MaterialTapTargetPrompt.OnHidePromptListener()
-                {
-                    @Override
-                    public void onHidePrompt(MotionEvent event, boolean tappedTarget)
-                    {
-
-                    }
-
-                    @Override
-                    public void onHidePromptComplete()
-                    {
-
-                    }
-                })
                 .show();
 
         prompt.finish();
         assertNotNull(prompt.mAnimationCurrent);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB)
-        {
-            prompt.mAnimationCurrent.cancel();
-        }
+        prompt.mAnimationCurrent.cancel();
         assertNull(prompt.mAnimationCurrent);
         assertNull(prompt.mView.getParent());
     }
@@ -307,8 +272,7 @@ public class MaterialTapTargetPromptUnitTest
                         {
                             assertEquals(MaterialTapTargetPrompt.STATE_FOCAL_PRESSED, state);
                             stateProgress++;
-                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB
-                                    && prompt.mAnimationCurrent != null)
+                            if (prompt.mAnimationCurrent != null)
                             {
                                 prompt.mAnimationCurrent.end();
                             }
@@ -322,20 +286,6 @@ public class MaterialTapTargetPromptUnitTest
                         {
                             fail();
                         }
-                    }
-                })
-                .setOnHidePromptListener(new MaterialTapTargetPrompt.OnHidePromptListener()
-                {
-                    @Override
-                    public void onHidePrompt(MotionEvent event, boolean tappedTarget)
-                    {
-                        assertTrue(tappedTarget);
-                    }
-
-                    @Override
-                    public void onHidePromptComplete()
-                    {
-
                     }
                 })
                 .show();
@@ -369,8 +319,7 @@ public class MaterialTapTargetPromptUnitTest
                         {
                             assertEquals(MaterialTapTargetPrompt.STATE_FOCAL_PRESSED, state);
                             stateProgress++;
-                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB
-                                    && prompt.mAnimationCurrent != null)
+                            if (prompt.mAnimationCurrent != null)
                             {
                                 prompt.mAnimationCurrent.end();
                             }
@@ -384,20 +333,6 @@ public class MaterialTapTargetPromptUnitTest
                         {
                             fail();
                         }
-                    }
-                })
-                .setOnHidePromptListener(new MaterialTapTargetPrompt.OnHidePromptListener()
-                {
-                    @Override
-                    public void onHidePrompt(MotionEvent event, boolean tappedTarget)
-                    {
-                        assertTrue(tappedTarget);
-                    }
-
-                    @Override
-                    public void onHidePromptComplete()
-                    {
-
                     }
                 })
                 .show();
@@ -441,8 +376,7 @@ public class MaterialTapTargetPromptUnitTest
                         {
                             assertEquals(MaterialTapTargetPrompt.STATE_DISMISSING, state);
                             stateProgress++;
-                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB
-                                    && prompt.mAnimationCurrent != null)
+                            if (prompt.mAnimationCurrent != null)
                             {
                                 prompt.mAnimationCurrent.end();
                             }
@@ -456,20 +390,6 @@ public class MaterialTapTargetPromptUnitTest
                         {
                             fail();
                         }
-                    }
-                })
-                .setOnHidePromptListener(new MaterialTapTargetPrompt.OnHidePromptListener()
-                {
-                    @Override
-                    public void onHidePrompt(MotionEvent event, boolean tappedTarget)
-                    {
-                        assertFalse(tappedTarget);
-                    }
-
-                    @Override
-                    public void onHidePromptComplete()
-                    {
-
                     }
                 })
                 .show();
@@ -503,8 +423,7 @@ public class MaterialTapTargetPromptUnitTest
                         {
                             assertEquals(MaterialTapTargetPrompt.STATE_DISMISSING, state);
                             stateProgress++;
-                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB
-                                    && prompt.mAnimationCurrent != null)
+                            if (prompt.mAnimationCurrent != null)
                             {
                                 prompt.mAnimationCurrent.end();
                             }
@@ -518,20 +437,6 @@ public class MaterialTapTargetPromptUnitTest
                         {
                             fail();
                         }
-                    }
-                })
-                .setOnHidePromptListener(new MaterialTapTargetPrompt.OnHidePromptListener()
-                {
-                    @Override
-                    public void onHidePrompt(MotionEvent event, boolean tappedTarget)
-                    {
-                        assertFalse(tappedTarget);
-                    }
-
-                    @Override
-                    public void onHidePromptComplete()
-                    {
-
                     }
                 })
                 .show();
@@ -557,7 +462,7 @@ public class MaterialTapTargetPromptUnitTest
                 .setPrimaryText("Primary text")
                 .setTarget(90, 90)
                 .show();
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB && prompt.mAnimationCurrent != null)
+        if (prompt.mAnimationCurrent != null)
         {
             prompt.mAnimationCurrent.end();
         }
@@ -682,14 +587,7 @@ public class MaterialTapTargetPromptUnitTest
         builder.parseTintMode(9, PorterDuff.Mode.SRC_ATOP);
         builder.parseTintMode(14, PorterDuff.Mode.MULTIPLY);
         builder.parseTintMode(15, PorterDuff.Mode.SCREEN);
-        if (Build.VERSION.SDK_INT >= 11)
-        {
-            builder.parseTintMode(16, PorterDuff.Mode.ADD);
-        }
-        else
-        {
-            builder.parseTintMode(16, PorterDuff.Mode.valueOf("ADD"));
-        }
+        builder.parseTintMode(16, PorterDuff.Mode.ADD);
     }
 
     private MaterialTapTargetPrompt.Builder createBuilder(final int screenWidth,
@@ -750,22 +648,19 @@ public class MaterialTapTargetPromptUnitTest
                                     throwable.printStackTrace();
                                 }
                                 prompt.updateFocalCentrePosition();
-                                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB)
+                                //End the animation
+                                prompt.mAnimationCurrent.end();
+                                prompt.mView.mBackgroundRadius = prompt.mBaseBackgroundRadius;
+                                prompt.mView.mFocalRadius = prompt.mBaseFocalRadius;
+                                prompt.mView.mPaintFocal.setAlpha(255);
+                                prompt.mView.mPaintBackground.setAlpha(244);
+                                if (prompt.mPaintSecondaryText != null)
                                 {
-                                    //End the animation
-                                    prompt.mAnimationCurrent.end();
-                                    prompt.mView.mBackgroundRadius = prompt.mBaseBackgroundRadius;
-                                    prompt.mView.mFocalRadius = prompt.mBaseFocalRadius;
-                                    prompt.mView.mPaintFocal.setAlpha(255);
-                                    prompt.mView.mPaintBackground.setAlpha(244);
-                                    if (prompt.mPaintSecondaryText != null)
-                                    {
-                                        prompt.mPaintSecondaryText.setAlpha(prompt.mSecondaryTextColourAlpha);
-                                    }
-                                    if (prompt.mPaintPrimaryText != null)
-                                    {
-                                        prompt.mPaintPrimaryText.setAlpha(prompt.mPrimaryTextColourAlpha);
-                                    }
+                                    prompt.mPaintSecondaryText.setAlpha(prompt.mSecondaryTextColourAlpha);
+                                }
+                                if (prompt.mPaintPrimaryText != null)
+                                {
+                                    prompt.mPaintPrimaryText.setAlpha(prompt.mPrimaryTextColourAlpha);
                                 }
                                 return null;
                             }
@@ -781,17 +676,14 @@ public class MaterialTapTargetPromptUnitTest
     private void setViewBounds(final View view, final int width, final int height)
     {
         //TODO make this work for all versions
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB)
+        view.setLeft(0);
+        view.setRight(0);
+        view.setRight(width);
+        view.setBottom(height);
+        final ViewParent parent = view.getParent();
+        if (parent != null && ((View) parent).getRight() != 0 && ((View) parent).getBottom() != 0)
         {
-            view.setLeft(0);
-            view.setRight(0);
-            view.setRight(width);
-            view.setBottom(height);
-            final ViewParent parent = view.getParent();
-            if (parent != null && ((View) parent).getRight() != 0 && ((View) parent).getBottom() != 0)
-            {
-                setViewBounds(((View) parent), width, height);
-            }
+            setViewBounds(((View) parent), width, height);
         }
     }
 }

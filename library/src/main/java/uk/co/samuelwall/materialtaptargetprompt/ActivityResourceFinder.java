@@ -30,7 +30,6 @@ import android.support.annotation.StyleRes;
 import android.support.annotation.StyleableRes;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.Window;
 
 /**
  * {@link ResourceFinder} implementation for {@link Activity}.
@@ -48,12 +47,6 @@ public class ActivityResourceFinder implements ResourceFinder
     public View findViewById(@IdRes int resId)
     {
         return this.mActivity.findViewById(resId);
-    }
-
-    @Override
-    public Window getWindow()
-    {
-        return null;
     }
 
     @Override

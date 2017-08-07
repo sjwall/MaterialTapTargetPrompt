@@ -25,7 +25,8 @@ dependencies {
     compile 'uk.co.samuelwall:material-tap-target-prompt:1.12.1'
 }
 ```
-Supports minSdkVersion 7
+Supports minSdkVersion 14
+
 # Usage
 Basic usage is shown below with more [examples](https://github.com/sjwall/MaterialTapTargetPrompt/tree/master/sample/src/main/java/uk/co/samuelwall/materialtaptargetprompt/sample) in the sample app:
 
