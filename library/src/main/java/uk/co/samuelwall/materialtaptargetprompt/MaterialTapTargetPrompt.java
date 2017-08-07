@@ -1333,7 +1333,7 @@ public class MaterialTapTargetPrompt
         /**
          * Should the back button press dismiss the prompt.
          */
-        private boolean mBackButtonDismissEnabled;
+        private boolean mBackButtonDismissEnabled = true;
 
         /**
          * Listener for when the prompt state changes.
@@ -2136,10 +2136,10 @@ public class MaterialTapTargetPrompt
         }
 
         /**
+         * Back button can be used to dismiss the prompt.
+         * Default: {@link true}
          *
-         * Default: {@link false}
-         *
-         * @param enabled
+         * @param enabled True for back button dismiss enabled
          * @return This Builder object to allow for chaining of calls to set methods
          */
         public Builder setBackButtonDismissEnabled(final boolean enabled)
