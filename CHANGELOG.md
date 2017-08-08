@@ -2,6 +2,12 @@
 
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## v2.0.1 (2017-07-08)
+
+### Bug Fixes
+
+* Fix user being unable to leave Activity with back button if setAutoDismiss(false) #81
+
 ## v2.0.0 (2017-07-07)
 
 * Minimum sdk is now 14.
