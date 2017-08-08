@@ -61,7 +61,7 @@ import java.text.Bidi;
 
 /**
  * A Material Design tap target onboarding implementation.
- *
+ * <p>
  * <div class="special reference">
  * <h3>Onboarding</h3>
  * <p>For more information about onboarding and tap targets, read the
@@ -93,8 +93,8 @@ public class MaterialTapTargetPrompt
     public static final int STATE_FINISHED = 4;
 
     /**
-     * The prompt has been pressed somewhere outside the focal area
-     * or the system back button has been pressed.
+     * The prompt has been pressed somewhere outside the focal area or the system back button has
+     * been pressed.
      */
     public static final int STATE_DISMISSING = 5;
 
@@ -327,62 +327,62 @@ public class MaterialTapTargetPrompt
         mResourceFinder = resourceFinder;
         mView = new PromptView(mResourceFinder.getContext());
         mView.mPromptTouchedListener = new PromptView.PromptTouchedListener()
+        {
+            @Override
+            public void onFocalPressed()
             {
-                @Override
-                public void onFocalPressed()
+                if (!mDismissing)
                 {
-                    if (!mDismissing)
+                    if (mAutoFinish)
                     {
-                        if (mAutoFinish)
-                        {
-                            finish();
-                        }
-                        onPromptStateChanged(STATE_FOCAL_PRESSED);
+                        finish();
                     }
+                    onPromptStateChanged(STATE_FOCAL_PRESSED);
                 }
+            }
 
-                @Override
-                public void onNonFocalPressed()
+            @Override
+            public void onNonFocalPressed()
+            {
+                if (!mDismissing)
                 {
-                    if (!mDismissing)
+                    if (mAutoDismiss)
                     {
-                        if (mAutoDismiss)
-                        {
-                            dismiss();
-                        }
-                        onPromptStateChanged(STATE_DISMISSING);
+                        dismiss();
                     }
+                    onPromptStateChanged(STATE_DISMISSING);
                 }
-            };
+            }
+        };
 
         Rect rect = new Rect();
         mResourceFinder.getPromptParentView().getWindowVisibleDisplayFrame(rect);
         mStatusBarHeight = rect.top;
 
         mGlobalLayoutListener = new ViewTreeObserver.OnGlobalLayoutListener()
+        {
+            @Override
+            public void onGlobalLayout()
             {
-                @Override
-                public void onGlobalLayout()
+                if (mTargetView != null)
                 {
-                    if(mTargetView != null)
+                    final boolean isTargetAttachedToWindow;
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT)
                     {
-                        final boolean isTargetAttachedToWindow;
-                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT)
-                        {
-                            isTargetAttachedToWindow = mTargetView.isAttachedToWindow();
-                        }
-                        else
-                        {
-                            isTargetAttachedToWindow = mTargetView.getWindowToken() != null;
-                        }
-                        if(!isTargetAttachedToWindow)
-                        {
-                            return;
-                        }
+                        isTargetAttachedToWindow = mTargetView.isAttachedToWindow();
                     }
-                    updateFocalCentrePosition();
+                    else
+                    {
+                        isTargetAttachedToWindow = mTargetView.getWindowToken() != null;
+                    }
+                    if (!isTargetAttachedToWindow)
+                    {
+                        return;
+                    }
                 }
-            };
+                updateFocalCentrePosition();
+            }
+        };
     }
 
     /**
@@ -430,7 +430,7 @@ public class MaterialTapTargetPrompt
 
     /**
      * Removes the prompt from view, using a expand and fade animation.
-     *
+     * <p>
      * This is treated as if the user has touched the target focal point.
      */
     public void finish()
@@ -494,7 +494,7 @@ public class MaterialTapTargetPrompt
 
     /**
      * Removes the prompt from view, using a contract and fade animation.
-     *
+     * <p>
      * This is treated as if the user has touched outside the target focal point.
      */
     public void dismiss()
@@ -670,6 +670,7 @@ public class MaterialTapTargetPrompt
         mAnimationCurrent.addUpdateListener(new ValueAnimator.AnimatorUpdateListener()
         {
             boolean direction = true;
+
             @Override
             public void onAnimationUpdate(ValueAnimator animation)
             {
@@ -765,7 +766,7 @@ public class MaterialTapTargetPrompt
 
         final float primaryTextWidth = calculateMaxTextWidth(mView.mPrimaryTextLayout);
         final float secondaryTextWidth = calculateMaxTextWidth(mView.mSecondaryTextLayout);
-        final float textWidth  = Math.max(primaryTextWidth, secondaryTextWidth);
+        final float textWidth = Math.max(primaryTextWidth, secondaryTextWidth);
 
         if (mInside88dpBounds)
         {
@@ -818,7 +819,7 @@ public class MaterialTapTargetPrompt
         {
             if (mVerticalTextPositionAbove)
             {
-                mView.mPrimaryTextTop =  mView.mPrimaryTextTop - mView.mTextSeparation - mView.mSecondaryTextLayout.getHeight();
+                mView.mPrimaryTextTop = mView.mPrimaryTextTop - mView.mTextSeparation - mView.mSecondaryTextLayout.getHeight();
             }
 
             if (mView.mPrimaryTextLayout != null)
@@ -867,7 +868,7 @@ public class MaterialTapTargetPrompt
                 {
                     // If the layout and text are right to left and the alignment is normal then rtl
                     result = textIsRtl && mResourceFinder.getResources().getConfiguration()
-                                                .getLayoutDirection() == View.LAYOUT_DIRECTION_RTL;
+                            .getLayoutDirection() == View.LAYOUT_DIRECTION_RTL;
                 }
                 else if (layout.getAlignment() == Layout.Alignment.ALIGN_OPPOSITE && textIsRtl)
                 {
@@ -879,16 +880,18 @@ public class MaterialTapTargetPrompt
     }
 
     /**
-     * Creates a static text layout. Uses the {@link android.text.StaticLayout.Builder} if available.
+     * Creates a static text layout. Uses the {@link android.text.StaticLayout.Builder} if
+     * available.
      *
-     * @param text The text to be laid out, optionally with spans
-     * @param paint The base paint used for layout
-     * @param maxTextWidth The width in pixels
+     * @param text          The text to be laid out, optionally with spans
+     * @param paint         The base paint used for layout
+     * @param maxTextWidth  The width in pixels
      * @param textAlignment Alignment for the resulting {@link StaticLayout}
      * @return the newly constructed {@link StaticLayout} object
      */
     private StaticLayout createStaticTextLayout(final String text, final TextPaint paint,
-                                    final int maxTextWidth, final Layout.Alignment textAlignment)
+                                                final int maxTextWidth,
+                                                final Layout.Alignment textAlignment)
     {
         final StaticLayout layout;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
@@ -981,15 +984,15 @@ public class MaterialTapTargetPrompt
                 }
             }
 
-            final double offset = Math.pow(x2,2) + Math.pow(y2,2);
-            final double bc = (Math.pow(x1,2) + Math.pow(y1,2) - offset )/2.0;
-            final double cd = (offset - Math.pow(x3, 2) - Math.pow(y3, 2))/2.0;
-            final double det = (x1 - x2) * (y2 - y3) - (x2 - x3)* (y1 - y2);
-            final double idet = 1/det;
+            final double offset = Math.pow(x2, 2) + Math.pow(y2, 2);
+            final double bc = (Math.pow(x1, 2) + Math.pow(y1, 2) - offset) / 2.0;
+            final double cd = (offset - Math.pow(x3, 2) - Math.pow(y3, 2)) / 2.0;
+            final double det = (x1 - x2) * (y2 - y3) - (x2 - x3) * (y1 - y2);
+            final double idet = 1 / det;
             mBaseBackgroundPosition.set((float) ((bc * (y2 - y3) - cd * (y1 - y2)) * idet),
-                                                (float) ((cd * (x1 - x2) - bc * (x2 - x3)) * idet));
+                    (float) ((cd * (x1 - x2) - bc * (x2 - x3)) * idet));
             mBaseBackgroundRadius = (float) Math.sqrt(Math.pow(x2 - mBaseBackgroundPosition.x, 2)
-                            + Math.pow(y2 - mBaseBackgroundPosition.y, 2));
+                    + Math.pow(y2 - mBaseBackgroundPosition.y, 2));
             /*mView.point1.set(x1, y1);
             mView.point2.set(x2, y2);
             mView.point3.set(x3, y3);*/
@@ -998,8 +1001,8 @@ public class MaterialTapTargetPrompt
         {
             mBaseBackgroundPosition.set(mView.mFocalCentre.x, mView.mFocalCentre.y);
             final float length = Math.abs(mView.mPrimaryTextLeft
-                        + (mHorizontalTextPositionLeft ? 0 : maxTextWidth)
-                        - mView.mFocalCentre.x) + mTextPadding;
+                    + (mHorizontalTextPositionLeft ? 0 : maxTextWidth)
+                    - mView.mFocalCentre.x) + mTextPadding;
             float height = mBaseFocalRadius + mFocalToTextPadding;
             if (mView.mPrimaryTextLayout != null)
             {
@@ -1056,7 +1059,7 @@ public class MaterialTapTargetPrompt
             }
 
             mClipViewBoundsInset88dp = new RectF(mView.mClipBounds);
-            mClipViewBoundsInset88dp.inset(m88dp,  m88dp);
+            mClipViewBoundsInset88dp.inset(m88dp, m88dp);
         }
         else
         {
@@ -1065,7 +1068,7 @@ public class MaterialTapTargetPrompt
             {
                 contentView.getGlobalVisibleRect(mView.mClipBounds, new Point());
                 mClipViewBoundsInset88dp = new RectF(mView.mClipBounds);
-                mClipViewBoundsInset88dp.inset(m88dp,  m88dp);
+                mClipViewBoundsInset88dp.inset(m88dp, m88dp);
             }
             mView.mClipToBounds = false;
         }
@@ -1192,7 +1195,7 @@ public class MaterialTapTargetPrompt
                 if (mSecondaryTextLayout != null)
                 {
                     canvas.translate(-(mPrimaryTextLeft - mPrimaryTextLeftChange)
-                        + mSecondaryTextLeft - mSecondaryTextLeftChange, mSecondaryTextOffsetTop);
+                            + mSecondaryTextLeft - mSecondaryTextLeftChange, mSecondaryTextOffsetTop);
                     mSecondaryTextLayout.draw(canvas);
                 }
             }
@@ -1205,7 +1208,7 @@ public class MaterialTapTargetPrompt
             final float y = event.getY();
             //If the touch point is within the prompt background stop the event from passing through it
             boolean captureEvent = (!mClipToBounds || mClipBounds.contains((int) x, (int) y))
-                                    && pointInCircle(x, y, mBackgroundPosition, mBackgroundRadius);
+                    && pointInCircle(x, y, mBackgroundPosition, mBackgroundRadius);
             //If the touch event was at least in the background and in the focal
             if (captureEvent && pointInCircle(x, y, mFocalCentre, mFocalRadius))
             {
@@ -1244,7 +1247,8 @@ public class MaterialTapTargetPrompt
                     {
                         state.startTracking(event, this);
                         return true;
-                    } else if (event.getAction() == KeyEvent.ACTION_UP
+                    }
+                    else if (event.getAction() == KeyEvent.ACTION_UP
                             && !event.isCanceled() && state.isTracking(event))
                     {
                         if (mPromptTouchedListener != null)
@@ -1260,15 +1264,17 @@ public class MaterialTapTargetPrompt
         }
 
         /**
-         * Determines if a point is in the centre of a circle with a radius from the point ({@link #mFocalCentre , {@link #mFocalCentre.y}}.
+         * Determines if a point is in the centre of a circle with a radius from the point ({@link
+         * #mFocalCentre , {@link #mFocalCentre.y}}.
          *
-         * @param x The x position in the view.
-         * @param y The y position in the view.
+         * @param x            The x position in the view.
+         * @param y            The y position in the view.
          * @param circleCentre The circle centre position
-         * @param radius The radius of the circle.
+         * @param radius       The radius of the circle.
          * @return True if the point (x, y) is in the circle.
          */
-        boolean pointInCircle(final float x, final float y, final PointF circleCentre, final float radius)
+        boolean pointInCircle(final float x, final float y, final PointF circleCentre,
+                              final float radius)
         {
             return Math.pow(x - circleCentre.x, 2) + Math.pow(y - circleCentre.y, 2) < Math.pow(radius, 2);
         }
@@ -1284,8 +1290,8 @@ public class MaterialTapTargetPrompt
             void onFocalPressed();
 
             /**
-             * Called when anywhere outside the focal is pressed
-             * or the system back button is pressed.
+             * Called when anywhere outside the focal is pressed or the system back button is
+             * pressed.
              */
             void onNonFocalPressed();
         }
@@ -1357,8 +1363,7 @@ public class MaterialTapTargetPrompt
         private float m88dp;
 
         /**
-         * Creates a builder for a tap target prompt that uses the default
-         * tap target prompt theme.
+         * Creates a builder for a tap target prompt that uses the default tap target prompt theme.
          *
          * @param fragment the fragment to show the prompt within.
          */
@@ -1368,17 +1373,15 @@ public class MaterialTapTargetPrompt
         }
 
         /**
-         * Creates a builder for a material tap target prompt that uses an explicit theme
-         * resource.
+         * Creates a builder for a material tap target prompt that uses an explicit theme resource.
          * <p>
-         * The {@code themeResId} may be specified as {@code 0}
-         * to use the parent {@code context}'s resolved value for
-         * {@link R.attr#MaterialTapTargetPromptTheme}.
+         * The {@code themeResId} may be specified as {@code 0} to use the parent {@code context}'s
+         * resolved value for {@link R.attr#MaterialTapTargetPromptTheme}.
          *
          * @param fragment   the fragment to show the prompt within.
-         * @param themeResId the resource ID of the theme against which to inflate
-         *                   this dialog, or {@code 0} to use the parent
-         *                   {@code context}'s default material tap target prompt theme
+         * @param themeResId the resource ID of the theme against which to inflate this dialog, or
+         *                   {@code 0} to use the parent {@code context}'s default material tap
+         *                   target prompt theme
          */
         public Builder(final Fragment fragment, int themeResId)
         {
@@ -1386,8 +1389,7 @@ public class MaterialTapTargetPrompt
         }
 
         /**
-         * Creates a builder for a tap target prompt that uses the default
-         * tap target prompt theme.
+         * Creates a builder for a tap target prompt that uses the default tap target prompt theme.
          *
          * @param dialogFragment the dialog fragment to show the prompt within.
          */
@@ -1397,17 +1399,15 @@ public class MaterialTapTargetPrompt
         }
 
         /**
-         * Creates a builder for a material tap target prompt that uses an explicit theme
-         * resource.
+         * Creates a builder for a material tap target prompt that uses an explicit theme resource.
          * <p>
-         * The {@code themeResId} may be specified as {@code 0}
-         * to use the parent {@code context}'s resolved value for
-         * {@link R.attr#MaterialTapTargetPromptTheme}.
+         * The {@code themeResId} may be specified as {@code 0} to use the parent {@code context}'s
+         * resolved value for {@link R.attr#MaterialTapTargetPromptTheme}.
          *
          * @param dialogFragment the dialog fragment to show the prompt within.
-         * @param themeResId     the resource ID of the theme against which to inflate
-         *                       this dialog, or {@code 0} to use the parent
-         *                       {@code context}'s default material tap target prompt theme
+         * @param themeResId     the resource ID of the theme against which to inflate this dialog,
+         *                       or {@code 0} to use the parent {@code context}'s default material
+         *                       tap target prompt theme
          */
         public Builder(final DialogFragment dialogFragment, int themeResId)
         {
@@ -1415,8 +1415,7 @@ public class MaterialTapTargetPrompt
         }
 
         /**
-         * Creates a builder for a tap target prompt that uses the default
-         * tap target prompt theme.
+         * Creates a builder for a tap target prompt that uses the default tap target prompt theme.
          *
          * @param dialog the dialog to show the prompt within.
          */
@@ -1426,17 +1425,15 @@ public class MaterialTapTargetPrompt
         }
 
         /**
-         * Creates a builder for a material tap target prompt that uses an explicit theme
-         * resource.
+         * Creates a builder for a material tap target prompt that uses an explicit theme resource.
          * <p>
-         * The {@code themeResId} may be specified as {@code 0}
-         * to use the parent {@code context}'s resolved value for
-         * {@link R.attr#MaterialTapTargetPromptTheme}.
+         * The {@code themeResId} may be specified as {@code 0} to use the parent {@code context}'s
+         * resolved value for {@link R.attr#MaterialTapTargetPromptTheme}.
          *
-         * @param dialog   the dialog to show the prompt within.
-         * @param themeResId the resource ID of the theme against which to inflate
-         *                   this dialog, or {@code 0} to use the parent
-         *                   {@code context}'s default material tap target prompt theme
+         * @param dialog     the dialog to show the prompt within.
+         * @param themeResId the resource ID of the theme against which to inflate this dialog, or
+         *                   {@code 0} to use the parent {@code context}'s default material tap
+         *                   target prompt theme
          */
         public Builder(final Dialog dialog, int themeResId)
         {
@@ -1444,8 +1441,7 @@ public class MaterialTapTargetPrompt
         }
 
         /**
-         * Creates a builder for a tap target prompt that uses the default
-         * tap target prompt theme.
+         * Creates a builder for a tap target prompt that uses the default tap target prompt theme.
          *
          * @param activity the activity to show the prompt within.
          */
@@ -1455,17 +1451,15 @@ public class MaterialTapTargetPrompt
         }
 
         /**
-         * Creates a builder for a material tap target prompt that uses an explicit theme
-         * resource.
+         * Creates a builder for a material tap target prompt that uses an explicit theme resource.
          * <p>
-         * The {@code themeResId} may be specified as {@code 0}
-         * to use the parent {@code context}'s resolved value for
-         * {@link R.attr#MaterialTapTargetPromptTheme}.
+         * The {@code themeResId} may be specified as {@code 0} to use the parent {@code context}'s
+         * resolved value for {@link R.attr#MaterialTapTargetPromptTheme}.
          *
          * @param activity   the activity to show the prompt within.
-         * @param themeResId the resource ID of the theme against which to inflate
-         *                   this dialog, or {@code 0} to use the parent
-         *                   {@code context}'s default material tap target prompt theme
+         * @param themeResId the resource ID of the theme against which to inflate this dialog, or
+         *                   {@code 0} to use the parent {@code context}'s default material tap
+         *                   target prompt theme
          */
         public Builder(final Activity activity, int themeResId)
         {
@@ -1473,17 +1467,15 @@ public class MaterialTapTargetPrompt
         }
 
         /**
-         * Creates a builder for a material tap target prompt that uses an explicit theme
-         * resource.
-         *
-         * The {@code themeResId} may be specified as {@code 0}
-         * to use the parent {@code context}'s resolved value for
-         * {@link R.attr#MaterialTapTargetPromptTheme}.
+         * Creates a builder for a material tap target prompt that uses an explicit theme resource.
+         * <p>
+         * The {@code themeResId} may be specified as {@code 0} to use the parent {@code context}'s
+         * resolved value for {@link R.attr#MaterialTapTargetPromptTheme}.
          *
          * @param resourceFinder The {@link ResourceFinder} used to find views and resources.
-         * @param themeResId the resource ID of the theme against which to inflate
-         *                   this dialog, or {@code 0} to use the parent
-         *                   {@code context}'s default material tap target prompt theme
+         * @param themeResId     the resource ID of the theme against which to inflate this dialog,
+         *                       or {@code 0} to use the parent {@code context}'s default material
+         *                       tap target prompt theme
          */
         public Builder(final ResourceFinder resourceFinder, int themeResId)
         {
@@ -1543,6 +1535,7 @@ public class MaterialTapTargetPrompt
 
         /**
          * Set the view for the prompt to focus on.
+         *
          * @param target The view that the prompt will highlight.
          * @return This Builder object to allow for chaining of calls to set methods
          */
@@ -1569,8 +1562,9 @@ public class MaterialTapTargetPrompt
 
         /**
          * Set the centre point as a screen position
+         *
          * @param left Centre point from screen left
-         * @param top Centre point from screen top
+         * @param top  Centre point from screen top
          * @return This Builder object to allow for chaining of calls to set methods
          */
         public Builder setTarget(final float left, final float top)
@@ -1678,7 +1672,7 @@ public class MaterialTapTargetPrompt
          * Sets the typeface used to display the primary text.
          *
          * @param typeface The primary text typeface
-         * @param style The typeface style
+         * @param style    The typeface style
          * @return This Builder object to allow for chaining of calls to set methods
          */
         public Builder setPrimaryTextTypeface(final Typeface typeface, final int style)
@@ -1762,7 +1756,7 @@ public class MaterialTapTargetPrompt
          * Sets the typeface and style used to display the secondary text.
          *
          * @param typeface The secondary text typeface
-         * @param style The typeface style
+         * @param style    The typeface style
          * @return This Builder object to allow for chaining of calls to set methods
          */
         public Builder setSecondaryTextTypeface(final Typeface typeface, final int style)
@@ -1809,8 +1803,7 @@ public class MaterialTapTargetPrompt
         }
 
         /**
-         * Set the distance between the primary and secondary text using the given
-         * resource id.
+         * Set the distance between the primary and secondary text using the given resource id.
          *
          * @param resId The dimension resource id for the text separation
          * @return This Builder object to allow for chaining of calls to set methods
@@ -1834,8 +1827,7 @@ public class MaterialTapTargetPrompt
         }
 
         /**
-         * Set the padding between the text and the focal point using the given
-         * resource id.
+         * Set the padding between the text and the focal point using the given resource id.
          *
          * @param resId The dimension resource id for the focal to text distance
          * @return This Builder object to allow for chaining of calls to set methods
@@ -1911,7 +1903,8 @@ public class MaterialTapTargetPrompt
         /**
          * Sets the PorterDuff mode to use to apply the tint.
          *
-         * @param tintMode the tint mode to use on the icon drawable, {@code null} will remove the tint.
+         * @param tintMode the tint mode to use on the icon drawable, {@code null} will remove the
+         *                 tint.
          * @return This Builder object to allow for chaining of calls to set methods
          */
         public Builder setIconDrawableTintMode(@Nullable PorterDuff.Mode tintMode)
@@ -1928,10 +1921,10 @@ public class MaterialTapTargetPrompt
         /**
          * Sets the colour to use to tint the icon drawable.
          *
-         * @param colour The colour to use to tint the icon drawable, call
-         *          {@link #setIconDrawableTintList(ColorStateList)} or
-         *           {@link #setIconDrawableTintMode(PorterDuff.Mode)} with {@code null}
-         *           to remove the tint.
+         * @param colour The colour to use to tint the icon drawable, call {@link
+         *               #setIconDrawableTintList(ColorStateList)} or {@link
+         *               #setIconDrawableTintMode(PorterDuff.Mode)} with {@code null} to remove the
+         *               tint.
          * @return This Builder object to allow for chaining of calls to set methods
          */
         public Builder setIconDrawableColourFilter(@ColorInt final int colour)
@@ -1955,8 +1948,8 @@ public class MaterialTapTargetPrompt
         }
 
         /**
-         * Set if the prompt should stop touch events on the focal point from passing
-         * to underlying views. Default is false.
+         * Set if the prompt should stop touch events on the focal point from passing to underlying
+         * views. Default is false.
          *
          * @param captureTouchEvent True to capture touch events in the prompt
          * @return This Builder object to allow for chaining of calls to set methods
@@ -1980,8 +1973,8 @@ public class MaterialTapTargetPrompt
         }
 
         /**
-         * Set the max width that the primary and secondary text can be using the given
-         * resource id.
+         * Set the max width that the primary and secondary text can be using the given resource
+         * id.
          *
          * @param resId The dimension resource id for the max width that the text can reach
          * @return This Builder object to allow for chaining of calls to set methods
@@ -2045,7 +2038,8 @@ public class MaterialTapTargetPrompt
          * Set whether the prompt should dismiss itself when a touch event occurs outside the focal.
          * Default is true.
          *
-         * @param autoDismiss True - prompt will dismiss when touched outside the focal, false - no action taken.
+         * @param autoDismiss True - prompt will dismiss when touched outside the focal, false - no
+         *                    action taken.
          * @return This Builder object to allow for chaining of calls to set methods
          */
         public Builder setAutoDismiss(final boolean autoDismiss)
@@ -2058,7 +2052,8 @@ public class MaterialTapTargetPrompt
          * Set whether the prompt should finish itself when a touch event occurs inside the focal.
          * Default is true.
          *
-         * @param autoFinish True - prompt will finish when touched inside the focal, false - no action taken.
+         * @param autoFinish True - prompt will finish when touched inside the focal, false - no
+         *                   action taken.
          * @return This Builder object to allow for chaining of calls to set methods
          */
         public Builder setAutoFinish(final boolean autoFinish)
@@ -2068,13 +2063,14 @@ public class MaterialTapTargetPrompt
         }
 
         /**
-         * Set if the prompt should stop touch events outside the prompt from passing
-         * to underlying views. Default is false.
+         * Set if the prompt should stop touch events outside the prompt from passing to underlying
+         * views. Default is false.
          *
          * @param captureTouchEventOutsidePrompt True to capture touch events out side the prompt
          * @return This Builder object to allow for chaining of calls to set methods
          */
-        public Builder setCaptureTouchEventOutsidePrompt(final boolean captureTouchEventOutsidePrompt)
+        public Builder setCaptureTouchEventOutsidePrompt(
+                final boolean captureTouchEventOutsidePrompt)
         {
             mCaptureTouchEventOutsidePrompt = captureTouchEventOutsidePrompt;
             return this;
@@ -2123,7 +2119,7 @@ public class MaterialTapTargetPrompt
         /**
          * Set the view to clip the prompt to.
          * Default: {@link android.R.id#content}
-         *
+         * <p>
          * Null can be used to stop the prompt being clipped to a view.
          *
          * @param view The view to clip to
@@ -2157,7 +2153,8 @@ public class MaterialTapTargetPrompt
          * create and display the prompt.
          * </p>
          * <p>
-         * Will return {@link null} if a valid target has not been set or the primary text is {@link null}.
+         * Will return {@link null} if a valid target has not been set or the primary text is {@link
+         * null}.
          * To check that a valid target has been set call {@link #isTargetSet()}.
          * </p>
          *
@@ -2299,7 +2296,8 @@ public class MaterialTapTargetPrompt
          *     prompt.show();
          * </pre>
          * <p>
-         * Will return {@link null} if a valid target has not been set or the primary text is {@link null}.
+         * Will return {@link null} if a valid target has not been set or the primary text is {@link
+         * null}.
          * To check that a valid target has been set call {@link #isTargetSet()}.
          * </p>
          *
@@ -2316,8 +2314,8 @@ public class MaterialTapTargetPrompt
         }
 
         /**
-         * Based on setTypeface in android TextView, Copyright (C) 2006 The Android Open Source Project.
-         * https://android.googlesource.com/platform/frameworks/base.git/+/master/core/java/android/widget/TextView.java
+         * Based on setTypeface in android TextView, Copyright (C) 2006 The Android Open Source
+         * Project. https://android.googlesource.com/platform/frameworks/base.git/+/master/core/java/android/widget/TextView.java
          */
         private void setTypeface(TextPaint textPaint, Typeface typeface, int style)
         {
@@ -2346,8 +2344,8 @@ public class MaterialTapTargetPrompt
         }
 
         /**
-         * Based on setTypefaceFromAttrs in android TextView, Copyright (C) 2006 The Android Open Source Project.
-         * https://android.googlesource.com/platform/frameworks/base.git/+/master/core/java/android/widget/TextView.java
+         * Based on setTypefaceFromAttrs in android TextView, Copyright (C) 2006 The Android Open
+         * Source Project. https://android.googlesource.com/platform/frameworks/base.git/+/master/core/java/android/widget/TextView.java
          */
         private Typeface setTypefaceFromAttrs(String familyName, int typefaceIndex, int styleIndex)
         {
@@ -2378,8 +2376,8 @@ public class MaterialTapTargetPrompt
         }
 
         /**
-         * Based on parseTintMode in android appcompat v7 DrawableUtils, Copyright (C) 2014 The Android Open Source Project.
-         * https://android.googlesource.com/platform/frameworks/support.git/+/master/v7/appcompat/src/android/support/v7/widget/DrawableUtils.java
+         * Based on parseTintMode in android appcompat v7 DrawableUtils, Copyright (C) 2014 The
+         * Android Open Source Project. https://android.googlesource.com/platform/frameworks/support.git/+/master/v7/appcompat/src/android/support/v7/widget/DrawableUtils.java
          */
         PorterDuff.Mode parseTintMode(int value, PorterDuff.Mode defaultMode)
         {
@@ -2396,8 +2394,8 @@ public class MaterialTapTargetPrompt
         }
 
         /**
-         * Gets the absolute text alignment value based on the supplied gravity and the activities layout
-         * direction.
+         * Gets the absolute text alignment value based on the supplied gravity and the activities
+         * layout direction.
          *
          * @param gravity The gravity to convert to absolute values
          * @return absolute layout direction
@@ -2456,11 +2454,12 @@ public class MaterialTapTargetPrompt
         }
 
         /**
-         * Return the layout direction. Will be either {@link View#LAYOUT_DIRECTION_LTR} or
-         * {@link View#LAYOUT_DIRECTION_RTL}.
+         * Return the layout direction. Will be either {@link View#LAYOUT_DIRECTION_LTR} or {@link
+         * View#LAYOUT_DIRECTION_RTL}.
          *
-         * @return Returns {@link View#LAYOUT_DIRECTION_RTL} if the configuration
-         * is {@link android.content.res.Configuration#SCREENLAYOUT_LAYOUTDIR_RTL}, otherwise {@link View#LAYOUT_DIRECTION_LTR}.
+         * @return Returns {@link View#LAYOUT_DIRECTION_RTL} if the configuration is {@link
+         * android.content.res.Configuration#SCREENLAYOUT_LAYOUTDIR_RTL}, otherwise {@link
+         * View#LAYOUT_DIRECTION_LTR}.
          */
         @TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR1)
         int getLayoutDirection()
@@ -2483,9 +2482,9 @@ public class MaterialTapTargetPrompt
          * Called when the prompts state changes.
          *
          * @param prompt The prompt which state has changed.
-         * @param state can be either {@link #STATE_REVEALING}, {@link #STATE_REVEALED},
-         * {@link #STATE_FOCAL_PRESSED}, {@link #STATE_FINISHED}, {@link #STATE_DISMISSING},
-         * {@link #STATE_DISMISSED}
+         * @param state  can be either {@link #STATE_REVEALING}, {@link #STATE_REVEALED}, {@link
+         *               #STATE_FOCAL_PRESSED}, {@link #STATE_FINISHED}, {@link #STATE_DISMISSING},
+         *               {@link #STATE_DISMISSED}
          */
         void onPromptStateChanged(final MaterialTapTargetPrompt prompt, final int state);
     }
