@@ -21,6 +21,7 @@ import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.view.animation.FastOutSlowInInterpolator;
 import android.support.v4.widget.DrawerLayout;
@@ -29,6 +30,10 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.view.ActionMode;
 import android.support.v7.widget.ActionMenuView;
 import android.support.v7.widget.Toolbar;
+import android.text.SpannableStringBuilder;
+import android.text.Spanned;
+import android.text.style.BackgroundColorSpan;
+import android.text.style.ForegroundColorSpan;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -79,11 +84,15 @@ public class MainActivity extends AppCompatActivity
         {
             return;
         }
+        SpannableStringBuilder secondaryText = new SpannableStringBuilder("Tap the envelop to start composing your first email");
+        secondaryText.setSpan(new ForegroundColorSpan(ContextCompat.getColor(this, R.color.colorAccent)), 8, 15, Spanned.SPAN_INCLUSIVE_INCLUSIVE);
+        SpannableStringBuilder primaryText = new SpannableStringBuilder("Send your first email");
+        primaryText.setSpan(new BackgroundColorSpan(ContextCompat.getColor(this, R.color.colorAccent)), 0,4, Spanned.SPAN_INCLUSIVE_INCLUSIVE);
         mFabPrompt = new MaterialTapTargetPrompt.Builder(MainActivity.this)
                 .setTarget(findViewById(R.id.fab))
                 .setFocalPadding(R.dimen.dp40)
-                .setPrimaryText("Send your first email")
-                .setSecondaryText("Tap the envelop to start composing your first email")
+                .setPrimaryText(primaryText)
+                .setSecondaryText(secondaryText)
                 .setBackButtonDismissEnabled(true)
                 .setAnimationInterpolator(new FastOutSlowInInterpolator())
                 .setPromptStateChangeListener(new MaterialTapTargetPrompt.PromptStateChangeListener()
