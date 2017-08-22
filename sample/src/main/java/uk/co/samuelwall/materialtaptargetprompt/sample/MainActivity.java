@@ -34,6 +34,7 @@ import android.text.SpannableStringBuilder;
 import android.text.Spanned;
 import android.text.style.BackgroundColorSpan;
 import android.text.style.ForegroundColorSpan;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -271,7 +272,7 @@ public class MainActivity extends AppCompatActivity
                         }
                         else if (state == MaterialTapTargetPrompt.STATE_DISMISSING)
                         {
-                            mFabPrompt = null;
+                            Log.d("MainActivity", "not dismissing");
                         }
                     }
                 })
