@@ -34,7 +34,6 @@ import android.text.SpannableStringBuilder;
 import android.text.Spanned;
 import android.text.style.BackgroundColorSpan;
 import android.text.style.ForegroundColorSpan;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -102,7 +101,7 @@ public class MainActivity extends AppCompatActivity
                     public void onPromptStateChanged(MaterialTapTargetPrompt prompt, int state)
                     {
                         if (state == MaterialTapTargetPrompt.STATE_FOCAL_PRESSED
-                                || state == MaterialTapTargetPrompt.STATE_DISMISSING)
+                                || state == MaterialTapTargetPrompt.STATE_NON_FOCAL_PRESSED)
                         {
                             mFabPrompt = null;
                             //Do something such as storing a value so that this prompt is never shown again
@@ -267,12 +266,12 @@ public class MainActivity extends AppCompatActivity
                     {
                         if (state == MaterialTapTargetPrompt.STATE_FOCAL_PRESSED)
                         {
-                            mFabPrompt.finish();
+                            prompt.finish();
                             mFabPrompt = null;
                         }
-                        else if (state == MaterialTapTargetPrompt.STATE_DISMISSING)
+                        else if (state == MaterialTapTargetPrompt.STATE_NON_FOCAL_PRESSED)
                         {
-                            Log.d("MainActivity", "not dismissing");
+                            mFabPrompt = null;
                         }
                     }
                 })

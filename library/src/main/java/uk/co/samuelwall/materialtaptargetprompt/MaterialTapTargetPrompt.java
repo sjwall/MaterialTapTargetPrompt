@@ -93,8 +93,7 @@ public class MaterialTapTargetPrompt
     public static final int STATE_FINISHED = 4;
 
     /**
-     * The prompt has been pressed somewhere outside the focal area or the system back button has
-     * been pressed.
+     * The {@link #dismiss()} method has been called and the prompt is being removed from view.
      */
     public static final int STATE_DISMISSING = 5;
 
@@ -103,6 +102,16 @@ public class MaterialTapTargetPrompt
      * other than the prompt target or the system back button has been pressed.
      */
     public static final int STATE_DISMISSED = 6;
+
+    /**
+     * The {@link #finish()} method has been called and the prompt is being removed from view.
+     */
+    public static final int STATE_FINISHING = 7;
+
+    /**
+     * The prompt has been pressed outside the focal area.
+     */
+    public static final int STATE_NON_FOCAL_PRESSED = 8;
 
     /**
      * The {@link ResourceFinder} used to find views and resources.
@@ -333,11 +342,11 @@ public class MaterialTapTargetPrompt
             {
                 if (!mDismissing)
                 {
+                    onPromptStateChanged(STATE_FOCAL_PRESSED);
                     if (mAutoFinish)
                     {
                         finish();
                     }
-                    onPromptStateChanged(STATE_FOCAL_PRESSED);
                 }
             }
 
@@ -346,11 +355,11 @@ public class MaterialTapTargetPrompt
             {
                 if (!mDismissing)
                 {
+                    onPromptStateChanged(STATE_NON_FOCAL_PRESSED);
                     if (mAutoDismiss)
                     {
                         dismiss();
                     }
-                    onPromptStateChanged(STATE_DISMISSING);
                 }
             }
         };
@@ -439,6 +448,7 @@ public class MaterialTapTargetPrompt
         {
             return;
         }
+        onPromptStateChanged(STATE_FINISHING);
         mDismissing = true;
         if (mAnimationCurrent != null)
         {
@@ -503,6 +513,7 @@ public class MaterialTapTargetPrompt
         {
             return;
         }
+        onPromptStateChanged(STATE_DISMISSING);
         mDismissing = true;
         if (mAnimationCurrent != null)
         {
@@ -2068,6 +2079,10 @@ public class MaterialTapTargetPrompt
          * Set whether the prompt should dismiss itself when a touch event occurs outside the focal.
          * Default is true.
          *
+         * Listen for the {@link #STATE_NON_FOCAL_PRESSED} event in the
+         * {@link #setPromptStateChangeListener(PromptStateChangeListener)} to handle the prompt
+         * being pressed outside the focal area.
+         *
          * @param autoDismiss True - prompt will dismiss when touched outside the focal, false - no
          *                    action taken.
          * @return This Builder object to allow for chaining of calls to set methods
@@ -2081,6 +2096,10 @@ public class MaterialTapTargetPrompt
         /**
          * Set whether the prompt should finish itself when a touch event occurs inside the focal.
          * Default is true.
+         *
+         * Listen for the {@link #STATE_FOCAL_PRESSED} event in the
+         * {@link #setPromptStateChangeListener(PromptStateChangeListener)} to handle the prompt
+         * target being pressed.
          *
          * @param autoFinish True - prompt will finish when touched inside the focal, false - no
          *                   action taken.

@@ -313,17 +313,14 @@ public class MaterialTapTargetPromptUnitTest
                         if (stateProgress == 0)
                         {
                             assertEquals(MaterialTapTargetPrompt.STATE_REVEALING, state);
-                            stateProgress++;
                         }
                         else if (stateProgress == 1)
                         {
                             assertEquals(MaterialTapTargetPrompt.STATE_REVEALED, state);
-                            stateProgress++;
                         }
                         else if (stateProgress == 2)
                         {
                             assertEquals(MaterialTapTargetPrompt.STATE_FOCAL_PRESSED, state);
-                            stateProgress++;
                             if (prompt.mAnimationCurrent != null)
                             {
                                 prompt.mAnimationCurrent.end();
@@ -331,13 +328,17 @@ public class MaterialTapTargetPromptUnitTest
                         }
                         else if (stateProgress == 3)
                         {
+                            assertEquals(MaterialTapTargetPrompt.STATE_FINISHING, state);
+                        }
+                        else if (stateProgress == 4)
+                        {
                             assertEquals(MaterialTapTargetPrompt.STATE_FINISHED, state);
-                            stateProgress++;
                         }
                         else
                         {
                             fail();
                         }
+                        stateProgress++;
                     }
                 })
                 .show();
@@ -360,17 +361,14 @@ public class MaterialTapTargetPromptUnitTest
                         if (stateProgress == 0)
                         {
                             assertEquals(MaterialTapTargetPrompt.STATE_REVEALING, state);
-                            stateProgress++;
                         }
                         else if (stateProgress == 1)
                         {
                             assertEquals(MaterialTapTargetPrompt.STATE_REVEALED, state);
-                            stateProgress++;
                         }
                         else if (stateProgress == 2)
                         {
                             assertEquals(MaterialTapTargetPrompt.STATE_FOCAL_PRESSED, state);
-                            stateProgress++;
                             if (prompt.mAnimationCurrent != null)
                             {
                                 prompt.mAnimationCurrent.end();
@@ -378,13 +376,17 @@ public class MaterialTapTargetPromptUnitTest
                         }
                         else if (stateProgress == 3)
                         {
+                            assertEquals(MaterialTapTargetPrompt.STATE_FINISHING, state);
+                        }
+                        else if (stateProgress == 4)
+                        {
                             assertEquals(MaterialTapTargetPrompt.STATE_FINISHED, state);
-                            stateProgress++;
                         }
                         else
                         {
                             fail();
                         }
+                        stateProgress++;
                     }
                 })
                 .show();
@@ -417,31 +419,32 @@ public class MaterialTapTargetPromptUnitTest
                         if (stateProgress == 0)
                         {
                             assertEquals(MaterialTapTargetPrompt.STATE_REVEALING, state);
-                            stateProgress++;
                         }
                         else if (stateProgress == 1)
                         {
                             assertEquals(MaterialTapTargetPrompt.STATE_REVEALED, state);
-                            stateProgress++;
                         }
                         else if (stateProgress == 2)
                         {
+                            assertEquals(MaterialTapTargetPrompt.STATE_NON_FOCAL_PRESSED, state);
+                        }
+                        else if (stateProgress == 3)
+                        {
                             assertEquals(MaterialTapTargetPrompt.STATE_DISMISSING, state);
-                            stateProgress++;
                             if (prompt.mAnimationCurrent != null)
                             {
                                 prompt.mAnimationCurrent.end();
                             }
                         }
-                        else if (stateProgress == 3)
+                        else if (stateProgress == 4)
                         {
                             assertEquals(MaterialTapTargetPrompt.STATE_DISMISSED, state);
-                            stateProgress++;
                         }
                         else
                         {
                             fail();
                         }
+                        stateProgress++;
                     }
                 })
                 .show();
@@ -464,31 +467,32 @@ public class MaterialTapTargetPromptUnitTest
                         if (stateProgress == 0)
                         {
                             assertEquals(MaterialTapTargetPrompt.STATE_REVEALING, state);
-                            stateProgress++;
                         }
                         else if (stateProgress == 1)
                         {
                             assertEquals(MaterialTapTargetPrompt.STATE_REVEALED, state);
-                            stateProgress++;
                         }
                         else if (stateProgress == 2)
                         {
+                            assertEquals(MaterialTapTargetPrompt.STATE_NON_FOCAL_PRESSED, state);
+                        }
+                        else if (stateProgress == 3)
+                        {
                             assertEquals(MaterialTapTargetPrompt.STATE_DISMISSING, state);
-                            stateProgress++;
                             if (prompt.mAnimationCurrent != null)
                             {
                                 prompt.mAnimationCurrent.end();
                             }
                         }
-                        else if (stateProgress == 3)
+                        else if (stateProgress == 4)
                         {
                             assertEquals(MaterialTapTargetPrompt.STATE_DISMISSED, state);
-                            stateProgress++;
                         }
                         else
                         {
                             fail();
                         }
+                        stateProgress++;
                     }
                 })
                 .show();
