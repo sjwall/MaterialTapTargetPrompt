@@ -25,6 +25,7 @@ import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.os.Build;
 import android.text.Layout;
+import android.text.SpannableStringBuilder;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
@@ -117,6 +118,57 @@ public class MaterialTapTargetPromptUnitTest
         assertEquals(30f, prompt.mFocalToTextPadding, 0.0f);
 
         assertEquals("Primary text", prompt.mView.mPrimaryTextLayout.getText());
+        assertEquals("Secondary text", prompt.mView.mSecondaryTextLayout.getText());
+        assertEquals(Color.BLUE, prompt.mView.mPaintBackground.getColor());
+        assertEquals(Color.GREEN, prompt.mView.mPaintFocal.getColor());
+        assertEquals(22f, prompt.mView.mTextSeparation, 0.0f);
+
+        prompt.dismiss();
+        prompt.mAnimationCurrent.end();
+        assertNull(prompt.mView.getParent());
+    }
+
+
+    @Test
+    public void promptFromVariablesWithCharSequences()
+    {
+        LinearInterpolator interpolator = new LinearInterpolator();
+        MaterialTapTargetPrompt.Builder builder = createBuilder(SCREEN_WIDTH, SCREEN_HEIGHT, 340)
+                .setTarget(50, 40)
+                .setPrimaryText(new SpannableStringBuilder("Primary text"))
+                .setSecondaryText(new SpannableStringBuilder("Secondary text"))
+                .setMaxTextWidth(600f)
+                .setTextPadding(50f)
+                .setBackgroundColour(Color.BLUE)
+                .setFocalColour(Color.GREEN)
+                .setFocalRadius(55f)
+                .setTextSeparation(22f)
+                .setPrimaryTextSize(30f)
+                .setSecondaryTextSize(20f)
+                .setPrimaryTextColour(Color.CYAN)
+                .setSecondaryTextColour(Color.GRAY)
+                .setFocalPadding(30f)
+                .setAnimationInterpolator(interpolator);
+
+        assertTrue(builder.isTargetSet());
+        MaterialTapTargetPrompt prompt = builder.show();
+
+        assertEquals(600f, prompt.mMaxTextWidth, 0.0f);
+        assertEquals(50f, prompt.mTextPadding, 0.0f);
+        assertEquals(55f, prompt.mBaseFocalRadius, 0.0f);
+        assertEquals(5.5f, prompt.mFocalRadius10Percent, 0.0f);
+        assertNull(prompt.mTargetView);
+        assertEquals(50f, prompt.mTargetPosition.x, 0.0f);
+        assertEquals(40f, prompt.mTargetPosition.y, 0.0f);
+        assertEquals(30f, prompt.mPaintPrimaryText.getTextSize(), 0f);
+        assertEquals(20f, prompt.mPaintSecondaryText.getTextSize(), 0f);
+        assertEquals(Color.CYAN, prompt.mPaintPrimaryText.getColor());
+        assertEquals(Color.GRAY, prompt.mPaintSecondaryText.getColor());
+        assertEquals(interpolator, prompt.mAnimationInterpolator);
+        assertEquals(30f, prompt.mFocalToTextPadding, 0.0f);
+
+        assertEquals("Primary text", prompt.mView.mPrimaryTextLayout.getText().toString());
+        assertEquals("Secondary text", prompt.mView.mSecondaryTextLayout.getText().toString());
         assertEquals(Color.BLUE, prompt.mView.mPaintBackground.getColor());
         assertEquals(Color.GREEN, prompt.mView.mPaintFocal.getColor());
         assertEquals(22f, prompt.mView.mTextSeparation, 0.0f);

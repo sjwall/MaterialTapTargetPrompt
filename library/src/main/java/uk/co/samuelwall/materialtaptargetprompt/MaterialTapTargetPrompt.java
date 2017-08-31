@@ -153,12 +153,12 @@ public class MaterialTapTargetPrompt
     /**
      * The primary text to display.
      */
-    String mPrimaryText;
+    CharSequence mPrimaryText;
 
     /**
      * The secondary text to display.
      */
-    String mSecondaryText;
+    CharSequence mSecondaryText;
 
     /**
      * The maximum width that the displayed text can be.
@@ -889,7 +889,7 @@ public class MaterialTapTargetPrompt
      * @param textAlignment Alignment for the resulting {@link StaticLayout}
      * @return the newly constructed {@link StaticLayout} object
      */
-    private StaticLayout createStaticTextLayout(final String text, final TextPaint paint,
+    private StaticLayout createStaticTextLayout(final CharSequence text, final TextPaint paint,
                                                 final int maxTextWidth,
                                                 final Layout.Alignment textAlignment)
     {
@@ -1329,7 +1329,7 @@ public class MaterialTapTargetPrompt
         /**
          * The text to display.
          */
-        private String mPrimaryText, mSecondaryText;
+        private CharSequence mPrimaryText, mSecondaryText;
         private int mPrimaryTextColour, mSecondaryTextColour, mBackgroundColour, mFocalColour;
 
         private float mFocalRadius;
@@ -1627,6 +1627,19 @@ public class MaterialTapTargetPrompt
         }
 
         /**
+         * Set the primary text to the given CharSequence.
+         * It is recommended that you don't go crazy with custom Spannables.
+         *
+         * @param text The primary text as CharSequence
+         * @return This Builder object to allow for chaining of calls to set methods
+         */
+        public Builder setPrimaryText(final CharSequence text)
+        {
+            mPrimaryText = text;
+            return this;
+        }
+
+        /**
          * Set the primary text font size using the given resource id.
          *
          * @param resId The resource id for the primary text size
@@ -1705,6 +1718,19 @@ public class MaterialTapTargetPrompt
          * @return This Builder object to allow for chaining of calls to set methods
          */
         public Builder setSecondaryText(final String text)
+        {
+            mSecondaryText = text;
+            return this;
+        }
+
+        /**
+         * Set the secondary text.
+         * It is recommended that you don't go crazy with custom Spannables.
+         *
+         * @param text The secondary text as a CharSequence
+         * @return This Builder object to allow for chaining of calls to set methods
+         */
+        public Builder setSecondaryText(final CharSequence text)
         {
             mSecondaryText = text;
             return this;
@@ -2406,7 +2432,7 @@ public class MaterialTapTargetPrompt
          * @return absolute layout direction
          */
         @SuppressLint("RtlHardcoded")
-        Layout.Alignment getTextAlignment(final int gravity, final String text)
+        Layout.Alignment getTextAlignment(final int gravity, final CharSequence text)
         {
             final int absoluteGravity;
             if (isVersionAfterJellyBeanMR1())
@@ -2414,7 +2440,7 @@ public class MaterialTapTargetPrompt
                 int realGravity = gravity;
                 final int layoutDirection = getLayoutDirection();
                 if (text != null && layoutDirection == View.LAYOUT_DIRECTION_RTL
-                        && new Bidi(text, Bidi.DIRECTION_DEFAULT_LEFT_TO_RIGHT).isRightToLeft())
+                        && new Bidi(text.toString(), Bidi.DIRECTION_DEFAULT_LEFT_TO_RIGHT).isRightToLeft())
                 {
                     if (gravity == Gravity.START)
                     {
