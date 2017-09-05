@@ -117,8 +117,8 @@ public class MaterialTapTargetPromptUnitTest
         assertEquals(interpolator, prompt.mAnimationInterpolator);
         assertEquals(30f, prompt.mFocalToTextPadding, 0.0f);
 
-        assertEquals("Primary text", prompt.mView.mPrimaryTextLayout.getText());
-        assertEquals("Secondary text", prompt.mView.mSecondaryTextLayout.getText());
+        assertEquals("Primary text", prompt.mView.mPrimaryTextLayout.getText().toString());
+        assertEquals("Secondary text", prompt.mView.mSecondaryTextLayout.getText().toString());
         assertEquals(Color.BLUE, prompt.mView.mPaintBackground.getColor());
         assertEquals(Color.GREEN, prompt.mView.mPaintFocal.getColor());
         assertEquals(22f, prompt.mView.mTextSeparation, 0.0f);

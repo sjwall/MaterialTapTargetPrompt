@@ -45,8 +45,11 @@ import android.support.annotation.IdRes;
 import android.support.annotation.Nullable;
 import android.support.annotation.StringRes;
 import android.text.Layout;
+import android.text.SpannableStringBuilder;
+import android.text.Spanned;
 import android.text.StaticLayout;
 import android.text.TextPaint;
+import android.text.style.CharacterStyle;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.KeyEvent;
@@ -158,6 +161,12 @@ public class MaterialTapTargetPrompt
      * Any value between 1 to 0 inclusive.
      */
     float mRevealedAmount;
+
+    /**
+     * The multiplication to apply to text alpha values.
+     * Any value between 1 to 0 inclusive.
+     */
+    float mAlphaModifier;
 
     /**
      * The primary text to display.
@@ -465,24 +474,7 @@ public class MaterialTapTargetPrompt
             public void onAnimationUpdate(ValueAnimator animation)
             {
                 final float value = (float) animation.getAnimatedValue();
-                mRevealedAmount = 1f + ((1f - value) / 4);
-                mView.mBackgroundRadius = mBaseBackgroundRadius * mRevealedAmount;
-                mView.mFocalRadius = mBaseFocalRadius * mRevealedAmount;
-                mView.mPaintFocal.setAlpha((int) (mBaseFocalColourAlpha * value));
-                mView.mPaintBackground.setAlpha((int) (mBaseBackgroundColourAlpha * value));
-                if (mPaintSecondaryText != null)
-                {
-                    mPaintSecondaryText.setAlpha((int) (mSecondaryTextColourAlpha * value));
-                }
-                if (mPaintPrimaryText != null)
-                {
-                    mPaintPrimaryText.setAlpha((int) (mPrimaryTextColourAlpha * value));
-                }
-                if (mView.mIconDrawable != null)
-                {
-                    mView.mIconDrawable.setAlpha(mView.mPaintBackground.getAlpha());
-                }
-                mView.invalidate();
+                updateAnimation(1f + ((1f - value) / 4), value);
             }
         });
         mAnimationCurrent.addListener(new AnimatorListener()
@@ -529,26 +521,8 @@ public class MaterialTapTargetPrompt
             @Override
             public void onAnimationUpdate(ValueAnimator animation)
             {
-                mRevealedAmount = (float) animation.getAnimatedValue();
-                mView.mBackgroundRadius = mBaseBackgroundRadius * mRevealedAmount;
-                mView.mFocalRadius = mBaseFocalRadius * mRevealedAmount;
-                mView.mPaintBackground.setAlpha((int) (mBaseBackgroundColourAlpha * mRevealedAmount));
-                mView.mPaintFocal.setAlpha((int) (mBaseFocalColourAlpha * mRevealedAmount));
-                if (mPaintSecondaryText != null)
-                {
-                    mPaintSecondaryText.setAlpha((int) (mSecondaryTextColourAlpha * mRevealedAmount));
-                }
-                if (mPaintPrimaryText != null)
-                {
-                    mPaintPrimaryText.setAlpha((int) (mPrimaryTextColourAlpha * mRevealedAmount));
-                }
-                if (mView.mIconDrawable != null)
-                {
-                    mView.mIconDrawable.setAlpha(mView.mPaintBackground.getAlpha());
-                }
-                mView.mBackgroundPosition.set(mView.mFocalCentre.x + ((mBaseBackgroundPosition.x - mView.mFocalCentre.x) * mRevealedAmount),
-                        mView.mFocalCentre.y + ((mBaseBackgroundPosition.y - mView.mFocalCentre.y) * mRevealedAmount));
-                mView.invalidate();
+                final float value = (float) animation.getAnimatedValue();
+                updateAnimation(value, value);
             }
         });
         mAnimationCurrent.addListener(new AnimatorListener()
@@ -589,24 +563,7 @@ public class MaterialTapTargetPrompt
 
     void startRevealAnimation()
     {
-        if (mPaintSecondaryText != null)
-        {
-            mPaintSecondaryText.setAlpha(0);
-        }
-        if (mPaintPrimaryText != null)
-        {
-            mPaintPrimaryText.setAlpha(0);
-        }
-        mView.mPaintBackground.setAlpha(0);
-        mView.mPaintFocal.setAlpha(0);
-        mView.mFocalRadius = 0;
-        mView.mBackgroundRadius = 0;
-        mView.mBackgroundPosition.set(mView.mFocalCentre);
-        if (mView.mIconDrawable != null)
-        {
-            mView.mIconDrawable.setAlpha(0);
-        }
-        mRevealedAmount = 0f;
+        updateAnimation(0, 0);
         mAnimationCurrent = ValueAnimator.ofFloat(0f, 1f);
         mAnimationCurrent.setInterpolator(mAnimationInterpolator);
         mAnimationCurrent.setDuration(225);
@@ -615,26 +572,8 @@ public class MaterialTapTargetPrompt
             @Override
             public void onAnimationUpdate(ValueAnimator animation)
             {
-                mRevealedAmount = (float) animation.getAnimatedValue();
-                mView.mBackgroundRadius = mBaseBackgroundRadius * mRevealedAmount;
-                mView.mFocalRadius = mBaseFocalRadius * mRevealedAmount;
-                mView.mPaintFocal.setAlpha((int) (mBaseFocalColourAlpha * mRevealedAmount));
-                mView.mPaintBackground.setAlpha((int) (mBaseBackgroundColourAlpha * mRevealedAmount));
-                if (mPaintSecondaryText != null)
-                {
-                    mPaintSecondaryText.setAlpha((int) (mSecondaryTextColourAlpha * mRevealedAmount));
-                }
-                if (mPaintPrimaryText != null)
-                {
-                    mPaintPrimaryText.setAlpha((int) (mPrimaryTextColourAlpha * mRevealedAmount));
-                }
-                if (mView.mIconDrawable != null)
-                {
-                    mView.mIconDrawable.setAlpha(mView.mPaintBackground.getAlpha());
-                }
-                mView.mBackgroundPosition.set(mView.mFocalCentre.x + ((mBaseBackgroundPosition.x - mView.mFocalCentre.x) * mRevealedAmount),
-                        mView.mFocalCentre.y + ((mBaseBackgroundPosition.y - mView.mFocalCentre.y) * mRevealedAmount));
-                mView.invalidate();
+                final float value = (float) animation.getAnimatedValue();
+                updateAnimation(value, value);
             }
         });
         mAnimationCurrent.addListener(new AnimatorListener()
@@ -644,8 +583,7 @@ public class MaterialTapTargetPrompt
             {
                 animation.removeAllListeners();
                 mAnimationCurrent = null;
-                mRevealedAmount = 1;
-                mView.mBackgroundPosition.set(mBaseBackgroundPosition);
+                updateAnimation(1, 1);
                 if (mIdleAnimationEnabled)
                 {
                     startIdleAnimations();
@@ -657,8 +595,7 @@ public class MaterialTapTargetPrompt
             public void onAnimationCancel(Animator animation)
             {
                 animation.removeAllListeners();
-                mRevealedAmount = 1;
-                mView.mBackgroundPosition.set(mBaseBackgroundPosition);
+                updateAnimation(1, 1);
                 mAnimationCurrent = null;
             }
         });
@@ -727,6 +664,30 @@ public class MaterialTapTargetPrompt
         });
     }
 
+    /**
+     * Updates the positioning and alpha values using the animation values.
+     *
+     * @param revealAmount
+     * @param alphaValue
+     */
+    void updateAnimation(final float revealAmount, final float alphaValue)
+    {
+        mRevealedAmount = revealAmount;
+        mAlphaModifier = alphaValue;
+        mView.mBackgroundRadius = mBaseBackgroundRadius * mRevealedAmount;
+        mView.mFocalRadius = mBaseFocalRadius * mRevealedAmount;
+        mView.mPaintFocal.setAlpha((int) (mBaseFocalColourAlpha * mAlphaModifier));
+        mView.mPaintBackground.setAlpha((int) (mBaseBackgroundColourAlpha * mAlphaModifier));
+        createTextLayout(calculateMaxWidth());
+        if (mView.mIconDrawable != null)
+        {
+            mView.mIconDrawable.setAlpha(mView.mPaintBackground.getAlpha());
+        }
+        mView.mBackgroundPosition.set(mView.mFocalCentre.x + ((mBaseBackgroundPosition.x - mView.mFocalCentre.x) * mRevealedAmount),
+                mView.mFocalCentre.y + ((mBaseBackgroundPosition.y - mView.mFocalCentre.y) * mRevealedAmount));
+        mView.invalidate();
+    }
+
     void updateFocalCentrePosition()
     {
         updateClipBounds();
@@ -754,9 +715,23 @@ public class MaterialTapTargetPrompt
         updateIconPosition();
     }
 
-    void updateTextPositioning()
+    /**
+     * Calculates the maximum width that the prompt can be.
+     *
+     * @return Maximum width in pixels that the prompt can be.
+     */
+    float calculateMaxWidth()
     {
-        final float maxWidth = Math.max(80, Math.min(mMaxTextWidth, (mView.mClipToBounds ? mView.mClipBounds.right - mView.mClipBounds.left : mParentView.getWidth()) - (mTextPadding * 2)));
+        return Math.max(80, Math.min(mMaxTextWidth, (mView.mClipToBounds ? mView.mClipBounds.right - mView.mClipBounds.left : mParentView.getWidth()) - (mTextPadding * 2)));
+    }
+
+    /**
+     * Creates the text layouts for the primary and secondary text.
+     *
+     * @param maxWidth The maximum width that the text can be.
+     */
+    void createTextLayout(final float maxWidth)
+    {
         if (mPrimaryText != null)
         {
             mView.mPrimaryTextLayout = createStaticTextLayout(mPrimaryText, mPaintPrimaryText,
@@ -774,7 +749,15 @@ public class MaterialTapTargetPrompt
         {
             mView.mSecondaryTextLayout = null;
         }
+    }
 
+    /**
+     * Recalculates the primary and secondary text positions.
+     */
+    void updateTextPositioning()
+    {
+        final float maxWidth = calculateMaxWidth();
+        createTextLayout(maxWidth);
         final float primaryTextWidth = calculateMaxTextWidth(mView.mPrimaryTextLayout);
         final float secondaryTextWidth = calculateMaxTextWidth(mView.mSecondaryTextLayout);
         final float textWidth = Math.max(primaryTextWidth, secondaryTextWidth);
@@ -904,16 +887,18 @@ public class MaterialTapTargetPrompt
                                                 final int maxTextWidth,
                                                 final Layout.Alignment textAlignment)
     {
+        final SpannableStringBuilder wrappedText = new SpannableStringBuilder(text);
+        wrappedText.setSpan(new AlphaSpan(mAlphaModifier), 0, wrappedText.length(), Spanned.SPAN_INCLUSIVE_INCLUSIVE);
         final StaticLayout layout;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
         {
-            final StaticLayout.Builder builder = StaticLayout.Builder.obtain(text, 0, text.length(), paint, maxTextWidth);
+            final StaticLayout.Builder builder = StaticLayout.Builder.obtain(wrappedText, 0, text.length(), paint, maxTextWidth);
             builder.setAlignment(textAlignment);
             layout = builder.build();
         }
         else
         {
-            layout = new StaticLayout(text, paint, maxTextWidth, textAlignment, 1f, 0f, false);
+            layout = new StaticLayout(wrappedText, paint, maxTextWidth, textAlignment, 1f, 0f, false);
         }
         return layout;
     }
@@ -1095,6 +1080,35 @@ public class MaterialTapTargetPrompt
         if (mPromptStateChangeListener != null)
         {
             mPromptStateChangeListener.onPromptStateChanged(this, state);
+        }
+    }
+
+    /**
+     * {@link CharacterStyle} class the modifies the painted foreground and background alpha values.
+     */
+    private static class AlphaSpan extends CharacterStyle
+    {
+        /**
+         * The alpha modification value between 1 and 0.
+         */
+        private final float mValue;
+
+        /**
+         * Constructor.
+         *
+         * @param value The alpha modification value between 1 and 0.
+         */
+        AlphaSpan(final float value)
+        {
+            mValue = value;
+        }
+
+        @Override
+        public void updateDrawState(TextPaint paint)
+        {
+            paint.setAlpha((int) (paint.getAlpha() * mValue));
+            paint.bgColor = Color.argb((int) (Color.alpha(paint.bgColor) * mValue),
+                    Color.red(paint.bgColor), Color.green(paint.bgColor), Color.blue(paint.bgColor));
         }
     }
 
