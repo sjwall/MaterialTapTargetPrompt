@@ -2,13 +2,25 @@
 
 This project adheres to [Semantic Versioning](http://semver.org/).
 
-## v2.0.1 (2017-07-08)
+## v2.1.0 (2017-09-06)
+
+### Features
+
+* Added support for primary and secondary text being CharSequence. ([#82](https://github.com/sjwall/MaterialTapTargetPrompt/pull/82))
+* Added STATE_FINISHING for state change after the finish method has been called.
+* Added STATE_NON_FOCAL_PRESSED for state change after the user has pressed the prompt somewhere other than the target or the system back button has been pressed.
 
 ### Bug Fixes
 
-* Fix user being unable to leave Activity with back button if setAutoDismiss(false) #81
+* Fixed STATE_DISMISSING state change incorrectly occurring when auto dismiss is disabled. Fixes null pointer exception in sample. ([#82](https://github.com/sjwall/MaterialTapTargetPrompt/pull/82))
 
-## v2.0.0 (2017-07-07)
+## v2.0.1 (2017-08-08)
+
+### Bug Fixes
+
+* Fix user being unable to leave Activity with back button if setAutoDismiss(false) ([#81](https://github.com/sjwall/MaterialTapTargetPrompt/pull/81))
+
+## v2.0.0 (2017-08-07)
 
 * Minimum sdk is now 14.
 * Back button dismiss is now enabled by default.
@@ -35,7 +47,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 * `builder.setPrimaryTextColourFromRes(int)` - Use a constructor with a theme for example `Builder(Activity, int)`
 * `builder.setSecondaryTextColourFromRes(int)` - Use a constructor with a theme for example `Builder(Activity, int)`
 
-## v1.12.1 (2017-07-05)
+## v1.12.1 (2017-08-05)
 
 ### Bug Fixes
 
