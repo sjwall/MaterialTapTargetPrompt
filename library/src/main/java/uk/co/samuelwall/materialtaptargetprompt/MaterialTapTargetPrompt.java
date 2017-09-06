@@ -674,17 +674,14 @@ public class MaterialTapTargetPrompt
     {
         mRevealedAmount = revealAmount;
         mAlphaModifier = alphaValue;
-        mView.mBackgroundRadius = mBaseBackgroundRadius * mRevealedAmount;
         mView.mFocalRadius = mBaseFocalRadius * mRevealedAmount;
         mView.mPaintFocal.setAlpha((int) (mBaseFocalColourAlpha * mAlphaModifier));
-        mView.mPaintBackground.setAlpha((int) (mBaseBackgroundColourAlpha * mAlphaModifier));
         createTextLayout(calculateMaxWidth());
         if (mView.mIconDrawable != null)
         {
-            mView.mIconDrawable.setAlpha(mView.mPaintBackground.getAlpha());
+            mView.mIconDrawable.setAlpha(mView.mPaintFocal.getAlpha());
         }
-        mView.mBackgroundPosition.set(mView.mFocalCentre.x + ((mBaseBackgroundPosition.x - mView.mFocalCentre.x) * mRevealedAmount),
-                mView.mFocalCentre.y + ((mBaseBackgroundPosition.y - mView.mFocalCentre.y) * mRevealedAmount));
+        mView.mBackgroundShape.update(this, revealAmount, alphaValue);
         mView.invalidate();
     }
 
@@ -822,7 +819,7 @@ public class MaterialTapTargetPrompt
             }
         }
 
-        updateBackgroundRadius(textWidth);
+        mView.mBackgroundShape.prepare(this, textWidth);
 
         mView.mSecondaryTextLeft = mView.mPrimaryTextLeft;
         mView.mPrimaryTextLeftChange = 0;
@@ -922,101 +919,6 @@ public class MaterialTapTargetPrompt
         return maxTextWidth;
     }
 
-    /**
-     * Updates the background position and radius.
-     *
-     * @param maxTextWidth The maximum width for the displayed text.
-     */
-    void updateBackgroundRadius(final float maxTextWidth)
-    {
-        /*mView.textWidth = (int) maxTextWidth;
-        mView.padding = (int) mTextPadding;*/
-        if (mInside88dpBounds)
-        {
-            float x1 = mView.mFocalCentre.x;
-            float x2 = mView.mPrimaryTextLeft - mTextPadding;
-            float y1, y2;
-            if (mVerticalTextPositionAbove)
-            {
-                y1 = mView.mFocalCentre.y + mBaseFocalRadius + mTextPadding;
-                y2 = mView.mPrimaryTextTop;
-            }
-            else
-            {
-                y1 = mView.mFocalCentre.y - (mBaseFocalRadius + mFocalToTextPadding + mTextPadding);
-                float baseY2 = mView.mPrimaryTextTop + mView.mPrimaryTextLayout.getHeight();
-                if (mView.mSecondaryTextLayout != null)
-                {
-                    baseY2 += mView.mSecondaryTextLayout.getHeight() + mView.mTextSeparation;
-                }
-                y2 = baseY2;
-            }
-
-            final float y3 = y2;
-            float x3 = x2 + maxTextWidth + mTextPadding + mTextPadding;
-
-            final float focalLeft = mView.mFocalCentre.x - mBaseFocalRadius - mFocalToTextPadding;
-            final float focalRight = mView.mFocalCentre.x + mBaseFocalRadius + mFocalToTextPadding;
-            if (x2 > focalLeft && x2 < focalRight)
-            {
-                if (mVerticalTextPositionAbove)
-                {
-                    x1 -= mBaseFocalRadius - mFocalToTextPadding;
-                }
-                else
-                {
-                    x2 -= mBaseFocalRadius - mFocalToTextPadding;
-                }
-            }
-            else if (x3 > focalLeft && x3 < focalRight)
-            {
-                if (mVerticalTextPositionAbove)
-                {
-                    x1 += mBaseFocalRadius + mFocalToTextPadding;
-                }
-                else
-                {
-                    x3 += mBaseFocalRadius + mFocalToTextPadding;
-                }
-            }
-
-            final double offset = Math.pow(x2, 2) + Math.pow(y2, 2);
-            final double bc = (Math.pow(x1, 2) + Math.pow(y1, 2) - offset) / 2.0;
-            final double cd = (offset - Math.pow(x3, 2) - Math.pow(y3, 2)) / 2.0;
-            final double det = (x1 - x2) * (y2 - y3) - (x2 - x3) * (y1 - y2);
-            final double idet = 1 / det;
-            mBaseBackgroundPosition.set((float) ((bc * (y2 - y3) - cd * (y1 - y2)) * idet),
-                    (float) ((cd * (x1 - x2) - bc * (x2 - x3)) * idet));
-            mBaseBackgroundRadius = (float) Math.sqrt(Math.pow(x2 - mBaseBackgroundPosition.x, 2)
-                    + Math.pow(y2 - mBaseBackgroundPosition.y, 2));
-            /*mView.point1.set(x1, y1);
-            mView.point2.set(x2, y2);
-            mView.point3.set(x3, y3);*/
-        }
-        else
-        {
-            mBaseBackgroundPosition.set(mView.mFocalCentre.x, mView.mFocalCentre.y);
-            final float length = Math.abs(mView.mPrimaryTextLeft
-                    + (mHorizontalTextPositionLeft ? 0 : maxTextWidth)
-                    - mView.mFocalCentre.x) + mTextPadding;
-            float height = mBaseFocalRadius + mFocalToTextPadding;
-            if (mView.mPrimaryTextLayout != null)
-            {
-                height += mView.mPrimaryTextLayout.getHeight();
-            }
-            //Check if secondary text should be included with text separation
-            if (mView.mSecondaryTextLayout != null)
-            {
-                height += mView.mSecondaryTextLayout.getHeight() + mView.mTextSeparation;
-            }
-            mBaseBackgroundRadius = (float) Math.sqrt(Math.pow(length, 2) + Math.pow(height, 2));
-            /*mView.point1.set(mView.mFocalCentre.x + (mHorizontalTextPositionLeft ? -length : length),
-                            mView.mFocalCentre.y + (mVerticalTextPositionAbove ? - height : height));*/
-        }
-        mView.mBackgroundPosition.set(mBaseBackgroundPosition);
-        mView.mBackgroundRadius = mBaseBackgroundRadius * mRevealedAmount;
-    }
-
     void updateIconPosition()
     {
         if (mView.mIconDrawable != null)
@@ -1083,6 +985,11 @@ public class MaterialTapTargetPrompt
         }
     }
 
+    public PointF getFocalCentre()
+    {
+        return new PointF(mView.mFocalCentre.x, mView.mFocalCentre.y);
+    }
+
     /**
      * {@link CharacterStyle} class the modifies the painted foreground and background alpha values.
      */
@@ -1124,9 +1031,8 @@ public class MaterialTapTargetPrompt
         PointF point2 = new PointF();
         PointF point3 = new PointF();*/
         PointF mFocalCentre = new PointF();
-        PointF mBackgroundPosition = new PointF();
-        Paint mPaintBackground, mPaintFocal;
-        float mFocalRadius, mBackgroundRadius;
+        Paint mPaintFocal;
+        float mFocalRadius;
         float mFocalRippleSize;
         int mFocalRippleAlpha;
         Drawable mIconDrawable;
@@ -1158,6 +1064,11 @@ public class MaterialTapTargetPrompt
          */
         boolean mAutoDismiss;
 
+        /**
+         * The shape to render for the prompt background.
+         */
+        BackgroundShape mBackgroundShape;
+
         public PromptView(final Context context)
         {
             super(context);
@@ -1173,7 +1084,7 @@ public class MaterialTapTargetPrompt
         @Override
         public void onDraw(final Canvas canvas)
         {
-            if (mBackgroundRadius > 0)
+            if (mFocalRadius > 0)
             {
                 if (mClipToBounds)
                 {
@@ -1181,7 +1092,8 @@ public class MaterialTapTargetPrompt
                 }
 
                 //Draw the backgrounds
-                canvas.drawCircle(mBackgroundPosition.x, mBackgroundPosition.y, mBackgroundRadius, mPaintBackground);
+                mBackgroundShape.draw(canvas);
+
                 //Draw the ripple
                 if (mDrawRipple)
                 {
@@ -1237,9 +1149,9 @@ public class MaterialTapTargetPrompt
             final float y = event.getY();
             //If the touch point is within the prompt background stop the event from passing through it
             boolean captureEvent = (!mClipToBounds || mClipBounds.contains((int) x, (int) y))
-                    && pointInCircle(x, y, mBackgroundPosition, mBackgroundRadius);
+                    && mBackgroundShape.isPointInShape(x, y);
             //If the touch event was at least in the background and in the focal
-            if (captureEvent && pointInCircle(x, y, mFocalCentre, mFocalRadius))
+            if (captureEvent && PromptUtils.isPointInCircle(x, y, mFocalCentre, mFocalRadius))
             {
                 //Override allowing the touch event to pass through the view with the user defined value
                 captureEvent = mCaptureTouchEventOnFocal;
@@ -1290,22 +1202,6 @@ public class MaterialTapTargetPrompt
             }
 
             return super.dispatchKeyEventPreIme(event);
-        }
-
-        /**
-         * Determines if a point is in the centre of a circle with a radius from the point ({@link
-         * #mFocalCentre , {@link #mFocalCentre.y}}.
-         *
-         * @param x            The x position in the view.
-         * @param y            The y position in the view.
-         * @param circleCentre The circle centre position
-         * @param radius       The radius of the circle.
-         * @return True if the point (x, y) is in the circle.
-         */
-        boolean pointInCircle(final float x, final float y, final PointF circleCentre,
-                              final float radius)
-        {
-            return Math.pow(x - circleCentre.x, 2) + Math.pow(y - circleCentre.y, 2) < Math.pow(radius, 2);
         }
 
         /**
@@ -1390,6 +1286,7 @@ public class MaterialTapTargetPrompt
         private int mPrimaryTextGravity = Gravity.START, mSecondaryTextGravity = Gravity.START;
         private View mClipToView;
         private float m88dp;
+        private BackgroundShape mBackgroundShape;
 
         /**
          * Creates a builder for a tap target prompt that uses the default tap target prompt theme.
@@ -2208,6 +2105,18 @@ public class MaterialTapTargetPrompt
         }
 
         /**
+         * Sets the renderer for the prompt background.
+         *
+         * @param backgroundShape The background shape to use.
+         * @return This Builder object to allow for chaining of calls to set methods
+         */
+        public Builder setBackgroundShape(final BackgroundShape backgroundShape)
+        {
+            this.mBackgroundShape = backgroundShape;
+            return this;
+        }
+
+        /**
          * Creates an {@link MaterialTapTargetPrompt} with the arguments supplied to this
          * builder.
          * <p>
@@ -2305,10 +2214,12 @@ public class MaterialTapTargetPrompt
             mPrompt.mView.mPaintFocal.setAlpha(Color.alpha(mFocalColour));
             mPrompt.mView.mPaintFocal.setAntiAlias(true);
 
-            mPrompt.mView.mPaintBackground = new Paint();
-            mPrompt.mView.mPaintBackground.setColor(mBackgroundColour);
-            mPrompt.mView.mPaintBackground.setAlpha(Color.alpha(mBackgroundColour));
-            mPrompt.mView.mPaintBackground.setAntiAlias(true);
+            if (mBackgroundShape == null)
+            {
+                mBackgroundShape = new CircleBackgroundShape();
+            }
+            mPrompt.mView.mBackgroundShape = mBackgroundShape;
+            mPrompt.mView.mBackgroundShape.setBackgroundColour(mBackgroundColour);
 
             if (mPrimaryText != null)
             {
