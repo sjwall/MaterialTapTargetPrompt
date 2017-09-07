@@ -27,7 +27,7 @@ public class RectanglePromptBackground extends PromptBackground
     private RectF mBounds, mBaseBounds;
     private Paint mPaint;
     private int mBaseColourAlpha;
-    private float rx = 40, ry = 40;
+    private float mRx, mRy;
 
     public RectanglePromptBackground()
     {
@@ -35,6 +35,13 @@ public class RectanglePromptBackground extends PromptBackground
         mPaint.setAntiAlias(true);
         mBounds = new RectF();
         mBaseBounds = new RectF();
+        mRx = mRy = 40;
+    }
+
+    public void setCornerRadius(final float rx, final float ry)
+    {
+        mRx = rx;
+        mRy = ry;
     }
 
     @Override
@@ -84,7 +91,7 @@ public class RectanglePromptBackground extends PromptBackground
     @Override
     public void draw(Canvas canvas)
     {
-        canvas.drawRoundRect(mBounds, rx, ry, mPaint);
+        canvas.drawRoundRect(mBounds, mRx, mRy, mPaint);
     }
 
     @Override
