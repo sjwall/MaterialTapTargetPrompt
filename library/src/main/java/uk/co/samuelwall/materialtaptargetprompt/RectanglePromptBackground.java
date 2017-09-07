@@ -19,7 +19,6 @@ package uk.co.samuelwall.materialtaptargetprompt;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
-import android.graphics.PointF;
 import android.graphics.RectF;
 
 public class RectanglePromptBackground extends PromptBackground
@@ -45,7 +44,7 @@ public class RectanglePromptBackground extends PromptBackground
     }
 
     @Override
-    public void setBackgroundColour(int colour)
+    public void setColour(int colour)
     {
         mPaint.setColor(colour);
         mBaseColourAlpha = Color.alpha(colour);
@@ -55,17 +54,16 @@ public class RectanglePromptBackground extends PromptBackground
     @Override
     public void prepare(MaterialTapTargetPrompt prompt, float maxTextWidth)
     {
-        final PointF focalCentre = prompt.getFocalCentre();
+        final RectF focalBounds = prompt.getPromptFocal().getBounds();
         float x1, x2, y1, y2;
-        final float focalRadius = prompt.mBaseFocalRadius + prompt.mTextPadding;
         if (prompt.mVerticalTextPositionAbove)
         {
             y1 = prompt.mView.mPrimaryTextTop - prompt.mTextPadding;
-            y2 = focalCentre.y + focalRadius;
+            y2 = focalBounds.bottom + prompt.mTextPadding;
         }
         else
         {
-            y1 = focalCentre.y - focalRadius;
+            y1 = focalBounds.top - prompt.mTextPadding;
             y2 = prompt.mView.mPrimaryTextTop + prompt.mView.mPrimaryTextLayout.getHeight();
             if (prompt.mView.mSecondaryTextLayout != null)
             {
@@ -74,9 +72,9 @@ public class RectanglePromptBackground extends PromptBackground
             y2 += prompt.mTextPadding;
         }
         x1 = Math.min(prompt.mView.mPrimaryTextLeft - prompt.mTextPadding,
-                focalCentre.x - focalRadius);
+                focalBounds.left - prompt.mTextPadding);
         x2 = Math.max(prompt.mView.mPrimaryTextLeft + maxTextWidth + prompt.mTextPadding,
-                focalCentre.x + focalRadius);
+                focalBounds.right + prompt.mTextPadding);
         mBaseBounds.set(x1, y1, x2, y2);
     }
 
@@ -95,7 +93,7 @@ public class RectanglePromptBackground extends PromptBackground
     }
 
     @Override
-    public boolean isPointInShape(float x, float y)
+    public boolean contains(float x, float y)
     {
         return mBounds.contains(x, y);
     }

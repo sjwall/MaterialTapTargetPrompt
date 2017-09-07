@@ -29,7 +29,6 @@ import android.content.res.ColorStateList;
 import android.content.res.TypedArray;
 import android.graphics.Canvas;
 import android.graphics.Color;
-import android.graphics.Paint;
 import android.graphics.Point;
 import android.graphics.PointF;
 import android.graphics.PorterDuff;
@@ -42,6 +41,7 @@ import android.support.annotation.ColorInt;
 import android.support.annotation.DimenRes;
 import android.support.annotation.DrawableRes;
 import android.support.annotation.IdRes;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.annotation.StringRes;
 import android.text.Layout;
@@ -137,26 +137,6 @@ public class MaterialTapTargetPrompt
     PointF mTargetPosition;
 
     /**
-     * The focal radius prior to animation changes.
-     */
-    float mBaseFocalRadius;
-
-    /**
-     * The background radius prior to animation changes.
-     */
-    float mBaseBackgroundRadius;
-
-    /**
-     * The background centre position prior to animation changes.
-     */
-    PointF mBaseBackgroundPosition = new PointF();
-
-    /**
-     * The focal radius + 10 percent.
-     */
-    float mFocalRadius10Percent;
-
-    /**
      * The current amount that the prompt has been revealed.
      * Any value between 1 to 0 inclusive.
      */
@@ -243,11 +223,6 @@ public class MaterialTapTargetPrompt
     float mFocalRippleProgress;
 
     /**
-     * The focal ripple alpha value.
-     */
-    int mBaseFocalRippleAlpha;
-
-    /**
      * The paint used to draw the primary text.
      */
     TextPaint mPaintPrimaryText;
@@ -324,16 +299,6 @@ public class MaterialTapTargetPrompt
      * 88dp pixel value.
      */
     float m88dp;
-
-    /**
-     * The background colour alpha value.
-     */
-    int mBaseBackgroundColourAlpha;
-
-    /**
-     * The focal colour alpha value.
-     */
-    int mBaseFocalColourAlpha;
 
     /**
      * Default constructor.
@@ -610,7 +575,7 @@ public class MaterialTapTargetPrompt
             mAnimationCurrent.cancel();
             mAnimationCurrent = null;
         }
-        mAnimationCurrent = ValueAnimator.ofFloat(0, mFocalRadius10Percent, 0);
+        mAnimationCurrent = ValueAnimator.ofFloat(1, 1.1f, 1);
         mAnimationCurrent.setInterpolator(mAnimationInterpolator);
         mAnimationCurrent.setDuration(1000);
         mAnimationCurrent.setStartDelay(225);
@@ -638,7 +603,7 @@ public class MaterialTapTargetPrompt
                 }
                 direction = newDirection;
                 mFocalRippleProgress = newFocalFraction;
-                mView.mFocalRadius = mBaseFocalRadius + mFocalRippleProgress;
+                mView.mPromptFocal.update(MaterialTapTargetPrompt.this, newFocalFraction, 1);
                 mView.invalidate();
             }
         });
@@ -649,8 +614,8 @@ public class MaterialTapTargetPrompt
             mAnimationFocalRipple.cancel();
             mAnimationFocalRipple = null;
         }
-        final float baseRadius = mBaseFocalRadius + mFocalRadius10Percent;
-        mAnimationFocalRipple = ValueAnimator.ofFloat(baseRadius, baseRadius + (mFocalRadius10Percent * 6));
+
+        mAnimationFocalRipple = ValueAnimator.ofFloat(1.1f, 1.6f);
         mAnimationFocalRipple.setInterpolator(mAnimationInterpolator);
         mAnimationFocalRipple.setDuration(500);
         mAnimationFocalRipple.addUpdateListener(new ValueAnimator.AnimatorUpdateListener()
@@ -658,8 +623,8 @@ public class MaterialTapTargetPrompt
             @Override
             public void onAnimationUpdate(ValueAnimator animation)
             {
-                mView.mFocalRippleSize = (float) animation.getAnimatedValue();
-                mView.mFocalRippleAlpha = (int) (mBaseFocalRippleAlpha * (1f - animation.getAnimatedFraction()));
+                final float value = (float) animation.getAnimatedValue();
+                mView.mPromptFocal.updateRipple(value, (1.6f - value) * 2);
             }
         });
     }
@@ -674,13 +639,12 @@ public class MaterialTapTargetPrompt
     {
         mRevealedAmount = revealAmount;
         mAlphaModifier = alphaValue;
-        mView.mFocalRadius = mBaseFocalRadius * mRevealedAmount;
-        mView.mPaintFocal.setAlpha((int) (mBaseFocalColourAlpha * mAlphaModifier));
         createTextLayout(calculateMaxWidth());
         if (mView.mIconDrawable != null)
         {
-            mView.mIconDrawable.setAlpha(mView.mPaintFocal.getAlpha());
+            mView.mIconDrawable.setAlpha((int) (255f * alphaValue));
         }
+        mView.mPromptFocal.update(this, revealAmount, alphaValue);
         mView.mPromptBackground.update(this, revealAmount, alphaValue);
         mView.invalidate();
     }
@@ -690,24 +654,20 @@ public class MaterialTapTargetPrompt
         updateClipBounds();
         if (mTargetView != null)
         {
-            final int[] viewPosition = new int[2];
-            mView.getLocationInWindow(viewPosition);
-            final int[] targetPosition = new int[2];
-            mTargetView.getLocationInWindow(targetPosition);
-
-            mView.mFocalCentre.x = targetPosition[0] - viewPosition[0] + (mTargetView.getWidth() / 2);
-            mView.mFocalCentre.y = targetPosition[1] - viewPosition[1] + (mTargetView.getHeight() / 2);
+            mView.mPromptFocal.prepare(this, mTargetView);
         }
         else
         {
-            mView.mFocalCentre.x = mTargetPosition.x;
-            mView.mFocalCentre.y = mTargetPosition.y;
+            mView.mPromptFocal.prepare(this, mTargetPosition.x, mTargetPosition.y);
         }
 
-        mVerticalTextPositionAbove = mView.mFocalCentre.y > mView.mClipBounds.centerY();
-        mHorizontalTextPositionLeft = mView.mFocalCentre.x > mView.mClipBounds.centerX();
-        mInside88dpBounds = (mView.mFocalCentre.x > mClipViewBoundsInset88dp.left && mView.mFocalCentre.x < mClipViewBoundsInset88dp.right) || (mView.mFocalCentre.y > mClipViewBoundsInset88dp.top && mView.mFocalCentre.y < mClipViewBoundsInset88dp.bottom);
+        final RectF focalBounds = mView.mPromptFocal.getBounds();
+        final float focalCentreX = focalBounds.centerX();
+        final float focalCentreY = focalBounds.centerY();
 
+        mVerticalTextPositionAbove = focalCentreY > mView.mClipBounds.centerY();
+        mHorizontalTextPositionLeft = focalCentreX > mView.mClipBounds.centerX();
+        mInside88dpBounds = (focalCentreX > mClipViewBoundsInset88dp.left && focalCentreX < mClipViewBoundsInset88dp.right) || (focalCentreY > mClipViewBoundsInset88dp.top && focalCentreY < mClipViewBoundsInset88dp.bottom);
         updateTextPositioning();
         updateIconPosition();
     }
@@ -763,13 +723,14 @@ public class MaterialTapTargetPrompt
         {
             mView.mPrimaryTextLeft = mView.mClipBounds.left;
             final float width = Math.min(textWidth, maxWidth);
+            final float focalCentreX = mView.mPromptFocal.getBounds().centerX();
             if (mHorizontalTextPositionLeft)
             {
-                mView.mPrimaryTextLeft = mView.mFocalCentre.x - width + mFocalToTextPadding;
+                mView.mPrimaryTextLeft = focalCentreX - width + mFocalToTextPadding;
             }
             else
             {
-                mView.mPrimaryTextLeft = mView.mFocalCentre.x - width - mFocalToTextPadding;
+                mView.mPrimaryTextLeft = focalCentreX - width - mFocalToTextPadding;
             }
             if (mView.mPrimaryTextLeft < mView.mClipBounds.left + mTextPadding)
             {
@@ -792,10 +753,10 @@ public class MaterialTapTargetPrompt
             }
         }
 
-        mView.mPrimaryTextTop = mView.mFocalCentre.y;
+        final RectF focalBounds = mView.mPromptFocal.getBounds();
         if (mVerticalTextPositionAbove)
         {
-            mView.mPrimaryTextTop = mView.mPrimaryTextTop - mBaseFocalRadius - mFocalToTextPadding;
+            mView.mPrimaryTextTop = focalBounds.top - mFocalToTextPadding;
             if (mView.mPrimaryTextLayout != null)
             {
                 mView.mPrimaryTextTop -= mView.mPrimaryTextLayout.getHeight();
@@ -803,7 +764,7 @@ public class MaterialTapTargetPrompt
         }
         else
         {
-            mView.mPrimaryTextTop += mBaseFocalRadius + mFocalToTextPadding;
+            mView.mPrimaryTextTop = focalBounds.bottom + mFocalToTextPadding;
         }
 
         if (mSecondaryText != null)
@@ -923,8 +884,11 @@ public class MaterialTapTargetPrompt
     {
         if (mView.mIconDrawable != null)
         {
-            mView.mIconDrawableLeft = mView.mFocalCentre.x - (mView.mIconDrawable.getIntrinsicWidth() / 2);
-            mView.mIconDrawableTop = mView.mFocalCentre.y - (mView.mIconDrawable.getIntrinsicHeight() / 2);
+            final RectF mFocalBounds = mView.mPromptFocal.getBounds();
+            mView.mIconDrawableLeft = mFocalBounds.centerX()
+                    - (mView.mIconDrawable.getIntrinsicWidth() / 2);
+            mView.mIconDrawableTop = mFocalBounds.centerY()
+                    - (mView.mIconDrawable.getIntrinsicHeight() / 2);
         }
         else if (mView.mTargetRenderView != null)
         {
@@ -985,9 +949,16 @@ public class MaterialTapTargetPrompt
         }
     }
 
-    public PointF getFocalCentre()
+    public PromptFocal getPromptFocal()
     {
-        return new PointF(mView.mFocalCentre.x, mView.mFocalCentre.y);
+        return mView.mPromptFocal;
+    }
+
+    public int[] getViewWindowPosition()
+    {
+        final int[] viewPosition = new int[2];
+        mView.getLocationInWindow(viewPosition);
+        return viewPosition;
     }
 
     /**
@@ -1030,11 +1001,6 @@ public class MaterialTapTargetPrompt
         PointF point1 = new PointF();
         PointF point2 = new PointF();
         PointF point3 = new PointF();*/
-        PointF mFocalCentre = new PointF();
-        Paint mPaintFocal;
-        float mFocalRadius;
-        float mFocalRippleSize;
-        int mFocalRippleAlpha;
         Drawable mIconDrawable;
         float mIconDrawableLeft;
         float mIconDrawableTop;
@@ -1046,7 +1012,6 @@ public class MaterialTapTargetPrompt
         float mSecondaryTextOffsetTop;
         Layout mPrimaryTextLayout;
         Layout mSecondaryTextLayout;
-        boolean mDrawRipple = true;
         PromptTouchedListener mPromptTouchedListener;
         boolean mCaptureTouchEventOnFocal;
         Rect mClipBounds = new Rect();
@@ -1069,6 +1034,11 @@ public class MaterialTapTargetPrompt
          */
         PromptBackground mPromptBackground;
 
+        /**
+         * The shape to render for the prompt focal.
+         */
+        PromptFocal mPromptFocal;
+
         public PromptView(final Context context)
         {
             super(context);
@@ -1084,61 +1054,50 @@ public class MaterialTapTargetPrompt
         @Override
         public void onDraw(final Canvas canvas)
         {
-            if (mFocalRadius > 0)
+            if (mClipToBounds)
             {
-                if (mClipToBounds)
-                {
-                    canvas.clipRect(mClipBounds);
-                }
+                canvas.clipRect(mClipBounds);
+            }
 
-                //Draw the backgrounds
-                mPromptBackground.draw(canvas);
+            //Draw the backgrounds
+            mPromptBackground.draw(canvas);
 
-                //Draw the ripple
-                if (mDrawRipple)
-                {
-                    final int oldAlpha = mPaintFocal.getAlpha();
-                    mPaintFocal.setAlpha(mFocalRippleAlpha);
-                    canvas.drawCircle(mFocalCentre.x, mFocalCentre.y, mFocalRippleSize, mPaintFocal);
-                    mPaintFocal.setAlpha(oldAlpha);
-                }
-                //Draw the focal
-                canvas.drawCircle(mFocalCentre.x, mFocalCentre.y, mFocalRadius, mPaintFocal);
+            //Draw the focal
+            mPromptFocal.draw(canvas);
 
-                /*canvas.drawRect(mPrimaryTextLeft - padding, mPrimaryTextTop, mPrimaryTextLeft, mPrimaryTextTop + mSecondaryTextOffsetTop + mSecondaryTextLayout.getHeight(), paddingPaint);
-                canvas.drawRect(mPrimaryTextLeft, mPrimaryTextTop, mPrimaryTextLeft + textWidth, mPrimaryTextTop + mSecondaryTextOffsetTop + mSecondaryTextLayout.getHeight(), itemPaint);
-                canvas.drawRect(mPrimaryTextLeft + textWidth, mPrimaryTextTop, mPrimaryTextLeft + textWidth + padding, mPrimaryTextTop + mSecondaryTextOffsetTop + mSecondaryTextLayout.getHeight(), paddingPaint);*/
+            /*canvas.drawRect(mPrimaryTextLeft - padding, mPrimaryTextTop, mPrimaryTextLeft, mPrimaryTextTop + mSecondaryTextOffsetTop + mSecondaryTextLayout.getHeight(), paddingPaint);
+            canvas.drawRect(mPrimaryTextLeft, mPrimaryTextTop, mPrimaryTextLeft + textWidth, mPrimaryTextTop + mSecondaryTextOffsetTop + mSecondaryTextLayout.getHeight(), itemPaint);
+            canvas.drawRect(mPrimaryTextLeft + textWidth, mPrimaryTextTop, mPrimaryTextLeft + textWidth + padding, mPrimaryTextTop + mSecondaryTextOffsetTop + mSecondaryTextLayout.getHeight(), paddingPaint);*/
 
-                //Draw the icon
-                if (mIconDrawable != null)
-                {
-                    canvas.translate(mIconDrawableLeft, mIconDrawableTop);
-                    mIconDrawable.draw(canvas);
-                    canvas.translate(-mIconDrawableLeft, -mIconDrawableTop);
-                }
-                else if (mTargetRenderView != null)
-                {
-                    canvas.translate(mIconDrawableLeft, mIconDrawableTop);
-                    mTargetRenderView.draw(canvas);
-                    canvas.translate(-mIconDrawableLeft, -mIconDrawableTop);
-                }
+            //Draw the icon
+            if (mIconDrawable != null)
+            {
+                canvas.translate(mIconDrawableLeft, mIconDrawableTop);
+                mIconDrawable.draw(canvas);
+                canvas.translate(-mIconDrawableLeft, -mIconDrawableTop);
+            }
+            else if (mTargetRenderView != null)
+            {
+                canvas.translate(mIconDrawableLeft, mIconDrawableTop);
+                mTargetRenderView.draw(canvas);
+                canvas.translate(-mIconDrawableLeft, -mIconDrawableTop);
+            }
 
-                /*canvas.drawCircle(point1.x, point1.y, 50, mPaintFocal);
-                canvas.drawCircle(point2.x, point2.y, 50, mPaintFocal);
-                canvas.drawCircle(point3.x, point3.y, 50, mPaintFocal);*/
+            /*canvas.drawCircle(point1.x, point1.y, 50, mPaintFocal);
+            canvas.drawCircle(point2.x, point2.y, 50, mPaintFocal);
+            canvas.drawCircle(point3.x, point3.y, 50, mPaintFocal);*/
 
-                //Draw the text
-                canvas.translate(mPrimaryTextLeft - mPrimaryTextLeftChange, mPrimaryTextTop);
-                if (mPrimaryTextLayout != null)
-                {
-                    mPrimaryTextLayout.draw(canvas);
-                }
-                if (mSecondaryTextLayout != null)
-                {
-                    canvas.translate(-(mPrimaryTextLeft - mPrimaryTextLeftChange)
-                            + mSecondaryTextLeft - mSecondaryTextLeftChange, mSecondaryTextOffsetTop);
-                    mSecondaryTextLayout.draw(canvas);
-                }
+            //Draw the text
+            canvas.translate(mPrimaryTextLeft - mPrimaryTextLeftChange, mPrimaryTextTop);
+            if (mPrimaryTextLayout != null)
+            {
+                mPrimaryTextLayout.draw(canvas);
+            }
+            if (mSecondaryTextLayout != null)
+            {
+                canvas.translate(-(mPrimaryTextLeft - mPrimaryTextLeftChange)
+                        + mSecondaryTextLeft - mSecondaryTextLeftChange, mSecondaryTextOffsetTop);
+                mSecondaryTextLayout.draw(canvas);
             }
         }
 
@@ -1149,9 +1108,9 @@ public class MaterialTapTargetPrompt
             final float y = event.getY();
             //If the touch point is within the prompt background stop the event from passing through it
             boolean captureEvent = (!mClipToBounds || mClipBounds.contains((int) x, (int) y))
-                    && mPromptBackground.isPointInShape(x, y);
+                    && mPromptBackground.contains(x, y);
             //If the touch event was at least in the background and in the focal
-            if (captureEvent && PromptUtils.isPointInCircle(x, y, mFocalCentre, mFocalRadius))
+            if (captureEvent && mPromptFocal.contains(x, y))
             {
                 //Override allowing the touch event to pass through the view with the user defined value
                 captureEvent = mCaptureTouchEventOnFocal;
@@ -1287,6 +1246,7 @@ public class MaterialTapTargetPrompt
         private View mClipToView;
         private float m88dp;
         private PromptBackground mPromptBackground;
+        private PromptFocal mPromptFocal;
 
         /**
          * Creates a builder for a tap target prompt that uses the default tap target prompt theme.
@@ -1413,6 +1373,9 @@ public class MaterialTapTargetPrompt
                 mResourceFinder.getTheme().resolveAttribute(R.attr.MaterialTapTargetPromptTheme, outValue, true);
                 themeResId = outValue.resourceId;
             }
+
+            mPromptBackground = new CirclePromptBackground();
+            mPromptFocal = new CirclePromptFocal();
 
             final float density = mResourceFinder.getResources().getDisplayMetrics().density;
             m88dp = 88 * density;
@@ -2110,9 +2073,15 @@ public class MaterialTapTargetPrompt
          * @param promptBackground The background shape to use.
          * @return This Builder object to allow for chaining of calls to set methods
          */
-        public Builder setPromptBackground(final PromptBackground promptBackground)
+        public Builder setPromptBackground(@NonNull final PromptBackground promptBackground)
         {
             this.mPromptBackground = promptBackground;
+            return this;
+        }
+
+        public Builder setPromptFocal(@NonNull final PromptFocal promptFocal)
+        {
+            this.mPromptFocal = promptFocal;
             return this;
         }
 
@@ -2149,7 +2118,6 @@ public class MaterialTapTargetPrompt
                 mPrompt.mTargetPosition = mTargetPosition;
             }
             mPrompt.mParentView = mResourceFinder.getPromptParentView();
-            mPrompt.mView.mDrawRipple = mIdleAnimationEnabled;
             mPrompt.mIdleAnimationEnabled = mIdleAnimationEnabled;
             mPrompt.mClipToView = mClipToView;
 
@@ -2160,10 +2128,7 @@ public class MaterialTapTargetPrompt
             mPrompt.mMaxTextWidth = mMaxTextWidth;
             mPrompt.mTextPadding = mTextPadding;
             mPrompt.mFocalToTextPadding = mFocalToTextPadding;
-            mPrompt.mBaseFocalRippleAlpha = 150;
             mPrompt.m88dp = m88dp;
-            mPrompt.mBaseBackgroundColourAlpha = Color.alpha(mBackgroundColour);
-            mPrompt.mBaseFocalColourAlpha = Color.alpha(mFocalColour);
 
             mPrompt.mView.mTextSeparation = mTextSeparation;
 
@@ -2178,11 +2143,6 @@ public class MaterialTapTargetPrompt
             {
                 mPrompt.mAnimationInterpolator = new AccelerateDecelerateInterpolator();
             }
-
-            mPrompt.mBaseFocalRadius = mFocalRadius;
-            //Calculate 10% of the focal radius
-            mPrompt.mFocalRadius10Percent = mFocalRadius / 100 * 10;
-
 
             if (mIconDrawable != null)
             {
@@ -2209,17 +2169,17 @@ public class MaterialTapTargetPrompt
             mPrompt.mView.mAutoDismiss = mAutoDismiss;
             mPrompt.mView.mIconDrawable = mIconDrawable;
 
-            mPrompt.mView.mPaintFocal = new Paint();
-            mPrompt.mView.mPaintFocal.setColor(mFocalColour);
-            mPrompt.mView.mPaintFocal.setAlpha(Color.alpha(mFocalColour));
-            mPrompt.mView.mPaintFocal.setAntiAlias(true);
-
-            if (mPromptBackground == null)
-            {
-                mPromptBackground = new CirclePromptBackground();
-            }
             mPrompt.mView.mPromptBackground = mPromptBackground;
-            mPrompt.mView.mPromptBackground.setBackgroundColour(mBackgroundColour);
+            mPrompt.mView.mPromptBackground.setColour(mBackgroundColour);
+
+            mPrompt.mView.mPromptFocal = mPromptFocal;
+            mPrompt.mView.mPromptFocal.setColour(mFocalColour);
+            mPrompt.mView.mPromptFocal.setRippleAlpha(150);
+            mPrompt.mView.mPromptFocal.setDrawRipple(mIdleAnimationEnabled);
+            if (mPrompt.mView.mPromptFocal instanceof CirclePromptFocal)
+            {
+                ((CirclePromptFocal) mPrompt.mView.mPromptFocal).setRadius(mFocalRadius);
+            }
 
             if (mPrimaryText != null)
             {
