@@ -18,8 +18,6 @@ package uk.co.samuelwall.materialtaptargetprompt;
 
 import android.animation.Animator;
 import android.animation.ValueAnimator;
-import android.annotation.SuppressLint;
-import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.Dialog;
 import android.app.DialogFragment;
@@ -45,11 +43,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.annotation.StringRes;
 import android.text.Layout;
-import android.text.SpannableStringBuilder;
-import android.text.Spanned;
-import android.text.StaticLayout;
 import android.text.TextPaint;
-import android.text.style.CharacterStyle;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.KeyEvent;
@@ -59,8 +53,6 @@ import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.view.animation.AccelerateDecelerateInterpolator;
 import android.view.animation.Interpolator;
-
-import java.text.Bidi;
 
 /**
  * A Material Design tap target onboarding implementation.
@@ -691,8 +683,8 @@ public class MaterialTapTargetPrompt
     {
         if (mPrimaryText != null)
         {
-            mView.mPrimaryTextLayout = createStaticTextLayout(mPrimaryText, mPaintPrimaryText,
-                    (int) maxWidth, mPrimaryTextAlignment);
+            mView.mPrimaryTextLayout = PromptUtils.createStaticTextLayout(mPrimaryText,
+                    mPaintPrimaryText, (int) maxWidth, mPrimaryTextAlignment, mAlphaModifier);
         }
         else
         {
@@ -700,7 +692,8 @@ public class MaterialTapTargetPrompt
         }
         if (mSecondaryText != null)
         {
-            mView.mSecondaryTextLayout = createStaticTextLayout(mSecondaryText, mPaintSecondaryText, (int) maxWidth, mSecondaryTextAlignment);
+            mView.mSecondaryTextLayout = PromptUtils.createStaticTextLayout(mSecondaryText,
+                    mPaintSecondaryText, (int) maxWidth, mSecondaryTextAlignment, mAlphaModifier);
         }
         else
         {
@@ -829,36 +822,6 @@ public class MaterialTapTargetPrompt
             }
         }
         return result;
-    }
-
-    /**
-     * Creates a static text layout. Uses the {@link android.text.StaticLayout.Builder} if
-     * available.
-     *
-     * @param text          The text to be laid out, optionally with spans
-     * @param paint         The base paint used for layout
-     * @param maxTextWidth  The width in pixels
-     * @param textAlignment Alignment for the resulting {@link StaticLayout}
-     * @return the newly constructed {@link StaticLayout} object
-     */
-    private StaticLayout createStaticTextLayout(final CharSequence text, final TextPaint paint,
-                                                final int maxTextWidth,
-                                                final Layout.Alignment textAlignment)
-    {
-        final SpannableStringBuilder wrappedText = new SpannableStringBuilder(text);
-        wrappedText.setSpan(new AlphaSpan(mAlphaModifier), 0, wrappedText.length(), Spanned.SPAN_INCLUSIVE_INCLUSIVE);
-        final StaticLayout layout;
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
-        {
-            final StaticLayout.Builder builder = StaticLayout.Builder.obtain(wrappedText, 0, text.length(), paint, maxTextWidth);
-            builder.setAlignment(textAlignment);
-            layout = builder.build();
-        }
-        else
-        {
-            layout = new StaticLayout(wrappedText, paint, maxTextWidth, textAlignment, 1f, 0f, false);
-        }
-        return layout;
     }
 
     /**
@@ -1370,12 +1333,12 @@ public class MaterialTapTargetPrompt
             mCaptureTouchEventOnFocal = a.getBoolean(R.styleable.PromptView_mttp_captureTouchEventOnFocal, false);
             mPrimaryTextTypefaceStyle = a.getInt(R.styleable.PromptView_mttp_primaryTextStyle, 0);
             mSecondaryTextTypefaceStyle = a.getInt(R.styleable.PromptView_mttp_secondaryTextStyle, 0);
-            mPrimaryTextTypeface = setTypefaceFromAttrs(a.getString(R.styleable.PromptView_mttp_primaryTextFontFamily), a.getInt(R.styleable.PromptView_mttp_primaryTextTypeface, 0), mPrimaryTextTypefaceStyle);
-            mSecondaryTextTypeface = setTypefaceFromAttrs(a.getString(R.styleable.PromptView_mttp_secondaryTextFontFamily), a.getInt(R.styleable.PromptView_mttp_secondaryTextTypeface, 0), mSecondaryTextTypefaceStyle);
+            mPrimaryTextTypeface = PromptUtils.setTypefaceFromAttrs(a.getString(R.styleable.PromptView_mttp_primaryTextFontFamily), a.getInt(R.styleable.PromptView_mttp_primaryTextTypeface, 0), mPrimaryTextTypefaceStyle);
+            mSecondaryTextTypeface = PromptUtils.setTypefaceFromAttrs(a.getString(R.styleable.PromptView_mttp_secondaryTextFontFamily), a.getInt(R.styleable.PromptView_mttp_secondaryTextTypeface, 0), mSecondaryTextTypefaceStyle);
 
             mIconDrawableColourFilter = a.getColor(R.styleable.PromptView_mttp_iconColourFilter, mBackgroundColour);
             mIconDrawableTintList = a.getColorStateList(R.styleable.PromptView_mttp_iconTint);
-            mIconDrawableTintMode = parseTintMode(a.getInt(R.styleable.PromptView_mttp_iconTintMode, -1), PorterDuff.Mode.MULTIPLY);
+            mIconDrawableTintMode = PromptUtils.parseTintMode(a.getInt(R.styleable.PromptView_mttp_iconTintMode, -1), PorterDuff.Mode.MULTIPLY);
             mHasIconDrawableTint = true;
 
             final int targetId = a.getResourceId(R.styleable.PromptView_mttp_target, 0);
@@ -2159,8 +2122,9 @@ public class MaterialTapTargetPrompt
                 mPrompt.mPaintPrimaryText.setAlpha(Color.alpha(mPrimaryTextColour));
                 mPrompt.mPaintPrimaryText.setAntiAlias(true);
                 mPrompt.mPaintPrimaryText.setTextSize(mPrimaryTextSize);
-                setTypeface(mPrompt.mPaintPrimaryText, mPrimaryTextTypeface, mPrimaryTextTypefaceStyle);
-                mPrompt.mPrimaryTextAlignment = getTextAlignment(mPrimaryTextGravity, mPrimaryText);
+                PromptUtils.setTypeface(mPrompt.mPaintPrimaryText, mPrimaryTextTypeface, mPrimaryTextTypefaceStyle);
+                mPrompt.mPrimaryTextAlignment = PromptUtils.getTextAlignment(mResourceFinder,
+                        mPrimaryTextGravity, mPrimaryText);
             }
 
             if (mSecondaryText != null)
@@ -2170,8 +2134,10 @@ public class MaterialTapTargetPrompt
                 mPrompt.mPaintSecondaryText.setAlpha(Color.alpha(mSecondaryTextColour));
                 mPrompt.mPaintSecondaryText.setAntiAlias(true);
                 mPrompt.mPaintSecondaryText.setTextSize(mSecondaryTextSize);
-                setTypeface(mPrompt.mPaintSecondaryText, mSecondaryTextTypeface, mSecondaryTextTypefaceStyle);
-                mPrompt.mSecondaryTextAlignment = getTextAlignment(mSecondaryTextGravity, mSecondaryText);
+                PromptUtils.setTypeface(mPrompt.mPaintSecondaryText, mSecondaryTextTypeface,
+                        mSecondaryTextTypefaceStyle);
+                mPrompt.mSecondaryTextAlignment = PromptUtils.getTextAlignment(mResourceFinder,
+                        mSecondaryTextGravity, mSecondaryText);
             }
 
             mPrompt.mAutoDismiss = mAutoDismiss;
@@ -2217,165 +2183,6 @@ public class MaterialTapTargetPrompt
                 mPrompt.show();
             }
             return mPrompt;
-        }
-
-        /**
-         * Based on setTypeface in android TextView, Copyright (C) 2006 The Android Open Source
-         * Project. https://android.googlesource.com/platform/frameworks/base.git/+/master/core/java/android/widget/TextView.java
-         */
-        private void setTypeface(TextPaint textPaint, Typeface typeface, int style)
-        {
-            if (style > 0)
-            {
-                if (typeface == null)
-                {
-                    typeface = Typeface.defaultFromStyle(style);
-                }
-                else
-                {
-                    typeface = Typeface.create(typeface, style);
-                }
-
-                textPaint.setTypeface(typeface);
-
-                int typefaceStyle = typeface != null ? typeface.getStyle() : 0;
-                int need = style & ~typefaceStyle;
-                textPaint.setFakeBoldText((need & Typeface.BOLD) != 0);
-                textPaint.setTextSkewX((need & Typeface.ITALIC) != 0 ? -0.25f : 0);
-            }
-            else
-            {
-                textPaint.setTypeface(typeface);
-            }
-        }
-
-        /**
-         * Based on setTypefaceFromAttrs in android TextView, Copyright (C) 2006 The Android Open
-         * Source Project. https://android.googlesource.com/platform/frameworks/base.git/+/master/core/java/android/widget/TextView.java
-         */
-        private Typeface setTypefaceFromAttrs(String familyName, int typefaceIndex, int styleIndex)
-        {
-            Typeface tf = null;
-            if (familyName != null)
-            {
-                tf = Typeface.create(familyName, styleIndex);
-                if (tf != null)
-                {
-                    return tf;
-                }
-            }
-            switch (typefaceIndex)
-            {
-                case 1:
-                    tf = Typeface.SANS_SERIF;
-                    break;
-
-                case 2:
-                    tf = Typeface.SERIF;
-                    break;
-
-                case 3:
-                    tf = Typeface.MONOSPACE;
-                    break;
-            }
-            return tf;
-        }
-
-        /**
-         * Based on parseTintMode in android appcompat v7 DrawableUtils, Copyright (C) 2014 The
-         * Android Open Source Project. https://android.googlesource.com/platform/frameworks/support.git/+/master/v7/appcompat/src/android/support/v7/widget/DrawableUtils.java
-         */
-        PorterDuff.Mode parseTintMode(int value, PorterDuff.Mode defaultMode)
-        {
-            switch (value)
-            {
-                case 3: return PorterDuff.Mode.SRC_OVER;
-                case 5: return PorterDuff.Mode.SRC_IN;
-                case 9: return PorterDuff.Mode.SRC_ATOP;
-                case 14: return PorterDuff.Mode.MULTIPLY;
-                case 15: return PorterDuff.Mode.SCREEN;
-                case 16: return PorterDuff.Mode.valueOf("ADD");
-                default: return defaultMode;
-            }
-        }
-
-        /**
-         * Gets the absolute text alignment value based on the supplied gravity and the activities
-         * layout direction.
-         *
-         * @param gravity The gravity to convert to absolute values
-         * @return absolute layout direction
-         */
-        @SuppressLint("RtlHardcoded")
-        Layout.Alignment getTextAlignment(final int gravity, final CharSequence text)
-        {
-            final int absoluteGravity;
-            if (isVersionAfterJellyBeanMR1())
-            {
-                int realGravity = gravity;
-                final int layoutDirection = getLayoutDirection();
-                if (text != null && layoutDirection == View.LAYOUT_DIRECTION_RTL
-                        && new Bidi(text.toString(), Bidi.DIRECTION_DEFAULT_LEFT_TO_RIGHT).isRightToLeft())
-                {
-                    if (gravity == Gravity.START)
-                    {
-                        realGravity = Gravity.END;
-                    }
-                    else if (gravity == Gravity.END)
-                    {
-                        realGravity = Gravity.START;
-                    }
-                }
-                absoluteGravity = Gravity.getAbsoluteGravity(realGravity, layoutDirection);
-            }
-            else
-            {
-                if ((gravity & Gravity.START) == Gravity.START)
-                {
-                    absoluteGravity = Gravity.LEFT;
-                }
-                else if ((gravity & Gravity.END) == Gravity.END)
-                {
-                    absoluteGravity = Gravity.RIGHT;
-                }
-                else
-                {
-                    absoluteGravity = gravity & Gravity.HORIZONTAL_GRAVITY_MASK;
-                }
-            }
-            final Layout.Alignment alignment;
-            switch (absoluteGravity)
-            {
-                case Gravity.RIGHT:
-                    alignment = Layout.Alignment.ALIGN_OPPOSITE;
-                    break;
-                case Gravity.CENTER_HORIZONTAL:
-                    alignment = Layout.Alignment.ALIGN_CENTER;
-                    break;
-                default:
-                    alignment = Layout.Alignment.ALIGN_NORMAL;
-                    break;
-            }
-            return alignment;
-        }
-
-        /**
-         * Return the layout direction. Will be either {@link View#LAYOUT_DIRECTION_LTR} or {@link
-         * View#LAYOUT_DIRECTION_RTL}.
-         *
-         * @return Returns {@link View#LAYOUT_DIRECTION_RTL} if the configuration is {@link
-         * android.content.res.Configuration#SCREENLAYOUT_LAYOUTDIR_RTL}, otherwise {@link
-         * View#LAYOUT_DIRECTION_LTR}.
-         */
-        @TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR1)
-        int getLayoutDirection()
-        {
-            return mResourceFinder.getResources().getConfiguration().getLayoutDirection();
-        }
-
-        boolean isVersionAfterJellyBeanMR1()
-        {
-            return Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1;
         }
     }
 
