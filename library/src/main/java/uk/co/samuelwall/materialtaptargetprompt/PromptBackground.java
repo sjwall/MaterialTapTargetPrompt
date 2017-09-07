@@ -18,11 +18,15 @@ package uk.co.samuelwall.materialtaptargetprompt;
 
 import android.graphics.Canvas;
 
-public interface PromptBackground
+public abstract class PromptBackground
 {
-    void setBackgroundColour(int colour);
-    void prepare(final MaterialTapTargetPrompt prompt, final float maxTextWidth);
-    void update(final MaterialTapTargetPrompt prompt, float revealAmount, float alphaModifier);
-    void draw(Canvas canvas);
-    boolean isPointInShape(float x, float y);
+    abstract void setBackgroundColour(int colour);
+
+    abstract void prepare(final MaterialTapTargetPrompt prompt, final float maxTextWidth);
+
+    abstract void update(final MaterialTapTargetPrompt prompt, float revealAmount, float alphaModifier);
+
+    abstract void draw(Canvas canvas);
+
+    abstract boolean isPointInShape(float x, float y);
 }

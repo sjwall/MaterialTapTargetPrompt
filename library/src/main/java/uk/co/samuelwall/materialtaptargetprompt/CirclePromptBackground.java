@@ -21,7 +21,7 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.PointF;
 
-public class CirclePromptBackground implements PromptBackground
+public class CirclePromptBackground extends PromptBackground
 {
     private PointF mPosition;
     private float mRadius;

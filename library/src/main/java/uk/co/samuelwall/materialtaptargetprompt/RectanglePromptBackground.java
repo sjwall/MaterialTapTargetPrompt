@@ -22,7 +22,7 @@ import android.graphics.Paint;
 import android.graphics.PointF;
 import android.graphics.RectF;
 
-public class RectanglePromptBackground implements PromptBackground
+public class RectanglePromptBackground extends PromptBackground
 {
     private RectF mBounds, mBaseBounds;
     private Paint mPaint;
