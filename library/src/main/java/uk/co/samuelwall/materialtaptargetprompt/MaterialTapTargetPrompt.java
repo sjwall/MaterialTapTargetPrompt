@@ -178,11 +178,6 @@ public class MaterialTapTargetPrompt
     boolean mInside88dpBounds;
 
     /**
-     * The distance between the focal edge and the displayed text.
-     */
-    float mFocalToTextPadding;
-
-    /**
      * The primary text colour alpha value.
      */
     int mPrimaryTextColourAlpha;
@@ -711,6 +706,7 @@ public class MaterialTapTargetPrompt
         final float primaryTextWidth = calculateMaxTextWidth(mView.mPrimaryTextLayout);
         final float secondaryTextWidth = calculateMaxTextWidth(mView.mSecondaryTextLayout);
         final float textWidth = Math.max(primaryTextWidth, secondaryTextWidth);
+        final float focalPadding = mView.mPromptFocal.getPadding();
 
         if (mInside88dpBounds)
         {
@@ -719,11 +715,11 @@ public class MaterialTapTargetPrompt
             final float focalCentreX = mView.mPromptFocal.getBounds().centerX();
             if (mHorizontalTextPositionLeft)
             {
-                mView.mPrimaryTextLeft = focalCentreX - width + mFocalToTextPadding;
+                mView.mPrimaryTextLeft = focalCentreX - width + focalPadding;
             }
             else
             {
-                mView.mPrimaryTextLeft = focalCentreX - width - mFocalToTextPadding;
+                mView.mPrimaryTextLeft = focalCentreX - width - focalPadding;
             }
             if (mView.mPrimaryTextLeft < mView.mClipBounds.left + mTextPadding)
             {
@@ -749,7 +745,7 @@ public class MaterialTapTargetPrompt
         final RectF focalBounds = mView.mPromptFocal.getBounds();
         if (mVerticalTextPositionAbove)
         {
-            mView.mPrimaryTextTop = focalBounds.top - mFocalToTextPadding;
+            mView.mPrimaryTextTop = focalBounds.top - focalPadding;
             if (mView.mPrimaryTextLayout != null)
             {
                 mView.mPrimaryTextTop -= mView.mPrimaryTextLayout.getHeight();
@@ -757,7 +753,7 @@ public class MaterialTapTargetPrompt
         }
         else
         {
-            mView.mPrimaryTextTop = focalBounds.bottom + mFocalToTextPadding;
+            mView.mPrimaryTextTop = focalBounds.bottom + focalPadding;
         }
 
         if (mSecondaryText != null)
@@ -1150,7 +1146,7 @@ public class MaterialTapTargetPrompt
         private float mPrimaryTextSize, mSecondaryTextSize;
         private float mMaxTextWidth;
         private float mTextPadding;
-        private float mFocalToTextPadding;
+        private float mFocalPadding;
         private Interpolator mAnimationInterpolator;
         private Drawable mIconDrawable;
 
@@ -1325,7 +1321,7 @@ public class MaterialTapTargetPrompt
             mSecondaryTextSize = a.getDimension(R.styleable.PromptView_mttp_secondaryTextSize, 18 * density);
             mMaxTextWidth = a.getDimension(R.styleable.PromptView_mttp_maxTextWidth, 400 * density);
             mTextPadding = a.getDimension(R.styleable.PromptView_mttp_textPadding, 40 * density);
-            mFocalToTextPadding = a.getDimension(R.styleable.PromptView_mttp_focalToTextPadding, 20 * density);
+            mFocalPadding = a.getDimension(R.styleable.PromptView_mttp_focalToTextPadding, 20 * density);
             mTextSeparation = a.getDimension(R.styleable.PromptView_mttp_textSeparation, 16 * density);
             mAutoDismiss = a.getBoolean(R.styleable.PromptView_mttp_autoDismiss, true);
             mAutoFinish = a.getBoolean(R.styleable.PromptView_mttp_autoFinish, true);
@@ -1671,7 +1667,7 @@ public class MaterialTapTargetPrompt
          */
         public Builder setFocalPadding(final float padding)
         {
-            mFocalToTextPadding = padding;
+            mFocalPadding = padding;
             return this;
         }
 
@@ -1683,7 +1679,7 @@ public class MaterialTapTargetPrompt
          */
         public Builder setFocalPadding(@DimenRes final int resId)
         {
-            mFocalToTextPadding = mResourceFinder.getResources().getDimension(resId);
+            mFocalPadding = mResourceFinder.getResources().getDimension(resId);
             return this;
         }
 
@@ -2061,7 +2057,6 @@ public class MaterialTapTargetPrompt
             mPrompt.mSecondaryTextColourAlpha = Color.alpha(mSecondaryTextColour);
             mPrompt.mMaxTextWidth = mMaxTextWidth;
             mPrompt.mTextPadding = mTextPadding;
-            mPrompt.mFocalToTextPadding = mFocalToTextPadding;
             mPrompt.m88dp = m88dp;
 
             mPrompt.mView.mTextSeparation = mTextSeparation;
@@ -2110,6 +2105,7 @@ public class MaterialTapTargetPrompt
             mPrompt.mView.mPromptFocal.setColour(mFocalColour);
             mPrompt.mView.mPromptFocal.setRippleAlpha(150);
             mPrompt.mView.mPromptFocal.setDrawRipple(mIdleAnimationEnabled);
+            mPrompt.mView.mPromptFocal.setPadding(mFocalPadding);
             if (mPrompt.mView.mPromptFocal instanceof CirclePromptFocal)
             {
                 ((CirclePromptFocal) mPrompt.mView.mPromptFocal).setRadius(mFocalRadius);

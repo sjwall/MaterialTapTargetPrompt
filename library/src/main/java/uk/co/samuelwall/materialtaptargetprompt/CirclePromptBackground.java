@@ -53,9 +53,11 @@ public class CirclePromptBackground extends PromptBackground
     {
         /*textWidth = (int) maxTextWidth;
         padding = (int) mTextPadding;*/
-        final RectF focalBounds = prompt.getPromptFocal().getBounds();
+        final PromptFocal promptFocal = prompt.getPromptFocal();
+        final RectF focalBounds = promptFocal.getBounds();
         final float focalCentreX = focalBounds.centerX();
         final float focalCentreY = focalBounds.centerY();
+        final float focalPadding = promptFocal.getPadding();
         if (prompt.mInside88dpBounds)
         {
             float x1 = focalCentreX;
@@ -68,7 +70,7 @@ public class CirclePromptBackground extends PromptBackground
             }
             else
             {
-                y1 = focalBounds.top - (prompt.mFocalToTextPadding + prompt.mTextPadding);
+                y1 = focalBounds.top - (focalPadding + prompt.mTextPadding);
                 float baseY2 = prompt.mView.mPrimaryTextTop + prompt.mView.mPrimaryTextLayout.getHeight();
                 if (prompt.mView.mSecondaryTextLayout != null)
                 {
@@ -80,28 +82,28 @@ public class CirclePromptBackground extends PromptBackground
             final float y3 = y2;
             float x3 = x2 + maxTextWidth + prompt.mTextPadding + prompt.mTextPadding;
 
-            final float focalLeft = focalBounds.left - prompt.mFocalToTextPadding;
-            final float focalRight = focalBounds.right + prompt.mFocalToTextPadding;
+            final float focalLeft = focalBounds.left - focalPadding;
+            final float focalRight = focalBounds.right + focalPadding;
             if (x2 > focalLeft && x2 < focalRight)
             {
                 if ( prompt.mVerticalTextPositionAbove)
                 {
-                    x1 = focalBounds.left - prompt.mFocalToTextPadding;
+                    x1 = focalBounds.left - focalPadding;
                 }
                 else
                 {
-                    x2 -= (focalBounds.width() / 2) - prompt.mFocalToTextPadding;
+                    x2 -= (focalBounds.width() / 2) - focalPadding;
                 }
             }
             else if (x3 > focalLeft && x3 < focalRight)
             {
                 if ( prompt.mVerticalTextPositionAbove)
                 {
-                    x1 = focalBounds.right + prompt.mFocalToTextPadding;
+                    x1 = focalBounds.right + focalPadding;
                 }
                 else
                 {
-                    x3 += (focalBounds.width() / 2) + prompt.mFocalToTextPadding;
+                    x3 += (focalBounds.width() / 2) + focalPadding;
                 }
             }
 
@@ -124,7 +126,7 @@ public class CirclePromptBackground extends PromptBackground
             final float length = Math.abs(prompt.mView.mPrimaryTextLeft
                     + (prompt.mHorizontalTextPositionLeft ? 0 : maxTextWidth)
                     - focalCentreX) + prompt.mTextPadding;
-            float height = (focalBounds.height() / 2) + prompt.mFocalToTextPadding;
+            float height = (focalBounds.height() / 2) + focalPadding;
             if (prompt.mView.mPrimaryTextLayout != null)
             {
                 height += prompt.mView.mPrimaryTextLayout.getHeight();

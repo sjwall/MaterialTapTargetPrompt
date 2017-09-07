@@ -23,6 +23,7 @@ public abstract class PromptFocal implements PromptUIElement
 {
     protected boolean mDrawRipple;
     protected int mBaseRippleAlpha;
+    protected float mPadding;
 
     public void setDrawRipple(final boolean drawRipple)
     {
@@ -32,6 +33,16 @@ public abstract class PromptFocal implements PromptUIElement
     public void setRippleAlpha(final int rippleAlpha)
     {
         mBaseRippleAlpha = rippleAlpha;
+    }
+
+    public void setPadding(final float padding)
+    {
+        mPadding = padding;
+    }
+
+    public float getPadding()
+    {
+        return mPadding;
     }
 
     public abstract RectF getBounds();
