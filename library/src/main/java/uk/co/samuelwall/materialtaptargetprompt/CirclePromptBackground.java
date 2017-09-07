@@ -21,7 +21,7 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.PointF;
 
-public class CircleBackgroundShape implements BackgroundShape
+public class CirclePromptBackground implements PromptBackground
 {
     private PointF mPosition;
     private float mRadius;
@@ -30,7 +30,7 @@ public class CircleBackgroundShape implements BackgroundShape
     private Paint mPaint;
     private int mBaseColourAlpha;
 
-    public CircleBackgroundShape()
+    public CirclePromptBackground()
     {
         mPaint = new Paint();
         mPaint.setAntiAlias(true);

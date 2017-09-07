@@ -22,14 +22,14 @@ import android.graphics.Paint;
 import android.graphics.PointF;
 import android.graphics.RectF;
 
-public class RectangleBackgroundShape implements BackgroundShape
+public class RectanglePromptBackground implements PromptBackground
 {
     private RectF mBounds, mBaseBounds;
     private Paint mPaint;
     private int mBaseColourAlpha;
     private float rx = 40, ry = 40;
 
-    public RectangleBackgroundShape()
+    public RectanglePromptBackground()
     {
         mPaint = new Paint();
         mPaint.setAntiAlias(true);

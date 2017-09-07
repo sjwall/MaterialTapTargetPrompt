@@ -18,7 +18,7 @@ package uk.co.samuelwall.materialtaptargetprompt;
 
 import android.graphics.Canvas;
 
-public interface BackgroundShape
+public interface PromptBackground
 {
     void setBackgroundColour(int colour);
     void prepare(final MaterialTapTargetPrompt prompt, final float maxTextWidth);

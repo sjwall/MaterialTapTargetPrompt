@@ -681,7 +681,7 @@ public class MaterialTapTargetPrompt
         {
             mView.mIconDrawable.setAlpha(mView.mPaintFocal.getAlpha());
         }
-        mView.mBackgroundShape.update(this, revealAmount, alphaValue);
+        mView.mPromptBackground.update(this, revealAmount, alphaValue);
         mView.invalidate();
     }
 
@@ -819,7 +819,7 @@ public class MaterialTapTargetPrompt
             }
         }
 
-        mView.mBackgroundShape.prepare(this, textWidth);
+        mView.mPromptBackground.prepare(this, textWidth);
 
         mView.mSecondaryTextLeft = mView.mPrimaryTextLeft;
         mView.mPrimaryTextLeftChange = 0;
@@ -1067,7 +1067,7 @@ public class MaterialTapTargetPrompt
         /**
          * The shape to render for the prompt background.
          */
-        BackgroundShape mBackgroundShape;
+        PromptBackground mPromptBackground;
 
         public PromptView(final Context context)
         {
@@ -1092,7 +1092,7 @@ public class MaterialTapTargetPrompt
                 }
 
                 //Draw the backgrounds
-                mBackgroundShape.draw(canvas);
+                mPromptBackground.draw(canvas);
 
                 //Draw the ripple
                 if (mDrawRipple)
@@ -1149,7 +1149,7 @@ public class MaterialTapTargetPrompt
             final float y = event.getY();
             //If the touch point is within the prompt background stop the event from passing through it
             boolean captureEvent = (!mClipToBounds || mClipBounds.contains((int) x, (int) y))
-                    && mBackgroundShape.isPointInShape(x, y);
+                    && mPromptBackground.isPointInShape(x, y);
             //If the touch event was at least in the background and in the focal
             if (captureEvent && PromptUtils.isPointInCircle(x, y, mFocalCentre, mFocalRadius))
             {
@@ -1286,7 +1286,7 @@ public class MaterialTapTargetPrompt
         private int mPrimaryTextGravity = Gravity.START, mSecondaryTextGravity = Gravity.START;
         private View mClipToView;
         private float m88dp;
-        private BackgroundShape mBackgroundShape;
+        private PromptBackground mPromptBackground;
 
         /**
          * Creates a builder for a tap target prompt that uses the default tap target prompt theme.
@@ -2107,12 +2107,12 @@ public class MaterialTapTargetPrompt
         /**
          * Sets the renderer for the prompt background.
          *
-         * @param backgroundShape The background shape to use.
+         * @param promptBackground The background shape to use.
          * @return This Builder object to allow for chaining of calls to set methods
          */
-        public Builder setBackgroundShape(final BackgroundShape backgroundShape)
+        public Builder setPromptBackground(final PromptBackground promptBackground)
         {
-            this.mBackgroundShape = backgroundShape;
+            this.mPromptBackground = promptBackground;
             return this;
         }
 
@@ -2214,12 +2214,12 @@ public class MaterialTapTargetPrompt
             mPrompt.mView.mPaintFocal.setAlpha(Color.alpha(mFocalColour));
             mPrompt.mView.mPaintFocal.setAntiAlias(true);
 
-            if (mBackgroundShape == null)
+            if (mPromptBackground == null)
             {
-                mBackgroundShape = new CircleBackgroundShape();
+                mPromptBackground = new CirclePromptBackground();
             }
-            mPrompt.mView.mBackgroundShape = mBackgroundShape;
-            mPrompt.mView.mBackgroundShape.setBackgroundColour(mBackgroundColour);
+            mPrompt.mView.mPromptBackground = mPromptBackground;
+            mPrompt.mView.mPromptBackground.setBackgroundColour(mBackgroundColour);
 
             if (mPrimaryText != null)
             {
