@@ -962,35 +962,6 @@ public class MaterialTapTargetPrompt
     }
 
     /**
-     * {@link CharacterStyle} class the modifies the painted foreground and background alpha values.
-     */
-    private static class AlphaSpan extends CharacterStyle
-    {
-        /**
-         * The alpha modification value between 1 and 0.
-         */
-        private final float mValue;
-
-        /**
-         * Constructor.
-         *
-         * @param value The alpha modification value between 1 and 0.
-         */
-        AlphaSpan(final float value)
-        {
-            mValue = value;
-        }
-
-        @Override
-        public void updateDrawState(TextPaint paint)
-        {
-            paint.setAlpha((int) (paint.getAlpha() * mValue));
-            paint.bgColor = Color.argb((int) (Color.alpha(paint.bgColor) * mValue),
-                    Color.red(paint.bgColor), Color.green(paint.bgColor), Color.blue(paint.bgColor));
-        }
-    }
-
-    /**
      * View used to render the tap target.
      */
     static class PromptView extends View
