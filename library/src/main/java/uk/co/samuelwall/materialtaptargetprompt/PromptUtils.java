@@ -17,12 +17,10 @@
 package uk.co.samuelwall.materialtaptargetprompt;
 
 import android.annotation.SuppressLint;
-import android.annotation.TargetApi;
 import android.graphics.PointF;
 import android.graphics.PorterDuff;
 import android.graphics.Typeface;
 import android.os.Build;
-import android.support.annotation.NonNull;
 import android.text.Layout;
 import android.text.SpannableStringBuilder;
 import android.text.Spanned;
@@ -77,9 +75,13 @@ public class PromptUtils
             textPaint.setFakeBoldText((need & Typeface.BOLD) != 0);
             textPaint.setTextSkewX((need & Typeface.ITALIC) != 0 ? -0.25f : 0);
         }
-        else
+        else if (typeface != null)
         {
             textPaint.setTypeface(typeface);
+        }
+        else
+        {
+            textPaint.setTypeface(Typeface.defaultFromStyle(style));
         }
     }
 
