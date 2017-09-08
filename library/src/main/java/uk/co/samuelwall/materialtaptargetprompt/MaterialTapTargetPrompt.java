@@ -411,12 +411,7 @@ public class MaterialTapTargetPrompt
         }
         onPromptStateChanged(STATE_FINISHING);
         mDismissing = true;
-        if (mAnimationCurrent != null)
-        {
-            mAnimationCurrent.removeAllListeners();
-            mAnimationCurrent.cancel();
-            mAnimationCurrent = null;
-        }
+        cleanUpAnimation();
         mAnimationCurrent = ValueAnimator.ofFloat(1f, 0f);
         mAnimationCurrent.setDuration(225);
         mAnimationCurrent.setInterpolator(mAnimationInterpolator);
@@ -459,12 +454,7 @@ public class MaterialTapTargetPrompt
         }
         onPromptStateChanged(STATE_DISMISSING);
         mDismissing = true;
-        if (mAnimationCurrent != null)
-        {
-            mAnimationCurrent.removeAllListeners();
-            mAnimationCurrent.cancel();
-            mAnimationCurrent = null;
-        }
+        cleanUpAnimation();
         mAnimationCurrent = ValueAnimator.ofFloat(1f, 0f);
         mAnimationCurrent.setDuration(225);
         mAnimationCurrent.setInterpolator(mAnimationInterpolator);
@@ -499,11 +489,7 @@ public class MaterialTapTargetPrompt
      */
     void cleanUpPrompt(final int state)
     {
-        if (mAnimationCurrent != null)
-        {
-            mAnimationCurrent.removeAllUpdateListeners();
-            mAnimationCurrent = null;
-        }
+        cleanUpAnimation();
         removeGlobalLayoutListener();
         mParentView.removeView(mView);
         if (mDismissing)
@@ -513,9 +499,30 @@ public class MaterialTapTargetPrompt
         }
     }
 
+    /**
+     * Stops any current animation and removes references to it.
+     */
+    void cleanUpAnimation()
+    {
+        if (mAnimationCurrent != null)
+        {
+            mAnimationCurrent.removeAllUpdateListeners();
+            mAnimationCurrent.removeAllListeners();
+            mAnimationCurrent.cancel();
+            mAnimationCurrent = null;
+        }
+        if (mAnimationFocalRipple != null)
+        {
+            mAnimationFocalRipple.removeAllUpdateListeners();
+            mAnimationFocalRipple.cancel();
+            mAnimationFocalRipple = null;
+        }
+    }
+
     void startRevealAnimation()
     {
         updateAnimation(0, 0);
+        cleanUpAnimation();
         mAnimationCurrent = ValueAnimator.ofFloat(0f, 1f);
         mAnimationCurrent.setInterpolator(mAnimationInterpolator);
         mAnimationCurrent.setDuration(225);
@@ -534,8 +541,8 @@ public class MaterialTapTargetPrompt
             public void onAnimationEnd(Animator animation)
             {
                 animation.removeAllListeners();
-                mAnimationCurrent = null;
                 updateAnimation(1, 1);
+                cleanUpAnimation();
                 if (mIdleAnimationEnabled)
                 {
                     startIdleAnimations();
@@ -548,7 +555,7 @@ public class MaterialTapTargetPrompt
             {
                 animation.removeAllListeners();
                 updateAnimation(1, 1);
-                mAnimationCurrent = null;
+                cleanUpAnimation();
             }
         });
         mAnimationCurrent.start();
@@ -556,12 +563,7 @@ public class MaterialTapTargetPrompt
 
     void startIdleAnimations()
     {
-        if (mAnimationCurrent != null)
-        {
-            mAnimationCurrent.removeAllUpdateListeners();
-            mAnimationCurrent.cancel();
-            mAnimationCurrent = null;
-        }
+        cleanUpAnimation();
         mAnimationCurrent = ValueAnimator.ofFloat(1, 1.1f, 1);
         mAnimationCurrent.setInterpolator(mAnimationInterpolator);
         mAnimationCurrent.setDuration(1000);
@@ -595,12 +597,6 @@ public class MaterialTapTargetPrompt
             }
         });
         mAnimationCurrent.start();
-        if (mAnimationFocalRipple != null)
-        {
-            mAnimationFocalRipple.removeAllUpdateListeners();
-            mAnimationFocalRipple.cancel();
-            mAnimationFocalRipple = null;
-        }
 
         mAnimationFocalRipple = ValueAnimator.ofFloat(1.1f, 1.6f);
         mAnimationFocalRipple.setInterpolator(mAnimationInterpolator);
