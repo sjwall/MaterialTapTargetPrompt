@@ -75,7 +75,7 @@ public class RectanglePromptBackground extends PromptBackground
     }
 
     @Override
-    public void update(MaterialTapTargetPrompt prompt, float revealAmount,
+    public void update(MaterialTapTargetPrompt prompt, float revealModifier,
                        float alphaModifier)
     {
         mPaint.setAlpha((int) (mBaseColourAlpha * alphaModifier));

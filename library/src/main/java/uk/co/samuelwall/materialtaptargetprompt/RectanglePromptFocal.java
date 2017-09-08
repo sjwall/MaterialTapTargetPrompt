@@ -29,7 +29,7 @@ public class RectanglePromptFocal extends PromptFocal
     }
 
     @Override
-    public void update(MaterialTapTargetPrompt prompt, float revealAmount,
+    public void update(MaterialTapTargetPrompt prompt, float revealModifier,
                        float alphaModifier)
     {
 

@@ -21,7 +21,7 @@ import android.graphics.Canvas;
 interface PromptUIElement
 {
     void setColour(int colour);
-    void update(final MaterialTapTargetPrompt prompt, float revealAmount, float alphaModifier);
+    void update(final MaterialTapTargetPrompt prompt, float revealModifier, float alphaModifier);
     void draw(Canvas canvas);
     boolean contains(float x, float y);
 }

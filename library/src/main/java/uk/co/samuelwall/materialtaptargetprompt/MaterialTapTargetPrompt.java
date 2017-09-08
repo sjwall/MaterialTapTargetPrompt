@@ -615,20 +615,20 @@ public class MaterialTapTargetPrompt
     /**
      * Updates the positioning and alpha values using the animation values.
      *
-     * @param revealAmount
-     * @param alphaValue
+     * @param revealModifier The amount to modify the reveal size, between 0 and 1.
+     * @param alphaModifier The amount to modify the alpha value, between 0 and 1.
      */
-    void updateAnimation(final float revealAmount, final float alphaValue)
+    void updateAnimation(final float revealModifier, final float alphaModifier)
     {
-        mRevealedAmount = revealAmount;
-        mAlphaModifier = alphaValue;
+        mRevealedAmount = revealModifier;
+        mAlphaModifier = alphaModifier;
         createTextLayout(calculateMaxWidth());
         if (mView.mIconDrawable != null)
         {
-            mView.mIconDrawable.setAlpha((int) (255f * alphaValue));
+            mView.mIconDrawable.setAlpha((int) (255f * alphaModifier));
         }
-        mView.mPromptFocal.update(this, revealAmount, alphaValue);
-        mView.mPromptBackground.update(this, revealAmount, alphaValue);
+        mView.mPromptFocal.update(this, revealModifier, alphaModifier);
+        mView.mPromptBackground.update(this, revealModifier, alphaModifier);
         mView.invalidate();
     }
 

@@ -133,15 +133,15 @@ public class CirclePromptBackground extends PromptBackground
     }
 
     @Override
-    public void update(final MaterialTapTargetPrompt prompt, float revealAmount, float alphaModifier)
+    public void update(final MaterialTapTargetPrompt prompt, float revealModifier, float alphaModifier)
     {
         final RectF focalBounds = prompt.getPromptFocal().getBounds();
         final float focalCentreX = focalBounds.centerX();
         final float focalCentreY = focalBounds.centerY();
-        mRadius = mBaseRadius * revealAmount;
+        mRadius = mBaseRadius * revealModifier;
         mPaint.setAlpha((int) (mBaseColourAlpha * alphaModifier));
-        mPosition.set(focalCentreX + ((mBasePosition.x - focalCentreX) * revealAmount),
-                focalCentreY + ((mBasePosition.y - focalCentreY) * revealAmount));
+        mPosition.set(focalCentreX + ((mBasePosition.x - focalCentreX) * revealModifier),
+                focalCentreY + ((mBasePosition.y - focalCentreY) * revealModifier));
     }
 
     @Override

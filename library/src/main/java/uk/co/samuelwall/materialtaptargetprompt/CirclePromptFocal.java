@@ -85,11 +85,11 @@ public class CirclePromptFocal extends PromptFocal
     }
 
     @Override
-    public void update(MaterialTapTargetPrompt prompt, float revealAmount,
+    public void update(MaterialTapTargetPrompt prompt, float revealModifier,
                        float alphaModifier)
     {
         mPaint.setAlpha((int) (mBaseAlpha * alphaModifier));
-        mRadius = mBaseRadius * revealAmount;
+        mRadius = mBaseRadius * revealModifier;
     }
 
     @Override
