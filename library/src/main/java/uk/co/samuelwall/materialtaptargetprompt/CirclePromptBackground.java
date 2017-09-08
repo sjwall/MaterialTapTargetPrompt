@@ -24,12 +24,12 @@ import android.graphics.RectF;
 
 public class CirclePromptBackground extends PromptBackground
 {
-    private PointF mPosition;
-    private float mRadius;
-    private PointF mBasePosition;
-    private float mBaseRadius;
-    private Paint mPaint;
-    private int mBaseColourAlpha;
+    PointF mPosition;
+    float mRadius;
+    PointF mBasePosition;
+    float mBaseRadius;
+    Paint mPaint;
+    int mBaseColourAlpha;
 
     public CirclePromptBackground()
     {

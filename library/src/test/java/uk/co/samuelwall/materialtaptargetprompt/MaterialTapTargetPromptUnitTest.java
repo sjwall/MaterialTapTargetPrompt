@@ -46,6 +46,7 @@ import org.mockito.stubbing.Answer;
 import org.robolectric.Robolectric;
 import org.robolectric.RobolectricTestRunner;
 import org.robolectric.annotation.Config;
+import org.robolectric.util.ReflectionHelpers;
 
 import static junit.framework.Assert.assertFalse;
 import static junit.framework.Assert.assertNotNull;
@@ -53,6 +54,8 @@ import static junit.framework.Assert.assertTrue;
 import static junit.framework.Assert.fail;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
+import static org.mockito.Mockito.spy;
+import static org.mockito.Mockito.when;
 
 @RunWith(RobolectricTestRunner.class)
 @Config(constants = uk.co.samuelwall.materialtaptargetprompt.BuildConfig.class, sdk = 22)
@@ -105,8 +108,6 @@ public class MaterialTapTargetPromptUnitTest
 
         assertEquals(600f, prompt.mMaxTextWidth, 0.0f);
         assertEquals(50f, prompt.mTextPadding, 0.0f);
-        assertEquals(55f, prompt.mBaseFocalRadius, 0.0f);
-        assertEquals(5.5f, prompt.mFocalRadius10Percent, 0.0f);
         assertNull(prompt.mTargetView);
         assertEquals(50f, prompt.mTargetPosition.x, 0.0f);
         assertEquals(40f, prompt.mTargetPosition.y, 0.0f);
@@ -115,13 +116,20 @@ public class MaterialTapTargetPromptUnitTest
         assertEquals(Color.CYAN, prompt.mPaintPrimaryText.getColor());
         assertEquals(Color.GRAY, prompt.mPaintSecondaryText.getColor());
         assertEquals(interpolator, prompt.mAnimationInterpolator);
-        assertEquals(30f, prompt.mFocalToTextPadding, 0.0f);
+        assertEquals(30f, prompt.mView.mPromptFocal.getPadding(), 0.0f);
 
         assertEquals("Primary text", prompt.mView.mPrimaryTextLayout.getText().toString());
         assertEquals("Secondary text", prompt.mView.mSecondaryTextLayout.getText().toString());
-        assertEquals(Color.BLUE, prompt.mView.mPaintBackground.getColor());
-        assertEquals(Color.GREEN, prompt.mView.mPaintFocal.getColor());
         assertEquals(22f, prompt.mView.mTextSeparation, 0.0f);
+
+        assertTrue(prompt.mView.mPromptBackground instanceof CirclePromptBackground);
+        CirclePromptBackground promptBackground = (CirclePromptBackground) prompt.mView.mPromptBackground;
+        assertEquals(Color.BLUE, promptBackground.mPaint.getColor());
+
+        assertTrue(prompt.mView.mPromptFocal instanceof CirclePromptFocal);
+        CirclePromptFocal promptFocal = (CirclePromptFocal) prompt.mView.mPromptFocal;
+        assertEquals(Color.GREEN, promptFocal.mPaint.getColor());
+        assertEquals(55f, promptFocal.mBaseRadius, 0.0f);
 
         prompt.dismiss();
         prompt.mAnimationCurrent.end();
@@ -155,8 +163,6 @@ public class MaterialTapTargetPromptUnitTest
 
         assertEquals(600f, prompt.mMaxTextWidth, 0.0f);
         assertEquals(50f, prompt.mTextPadding, 0.0f);
-        assertEquals(55f, prompt.mBaseFocalRadius, 0.0f);
-        assertEquals(5.5f, prompt.mFocalRadius10Percent, 0.0f);
         assertNull(prompt.mTargetView);
         assertEquals(50f, prompt.mTargetPosition.x, 0.0f);
         assertEquals(40f, prompt.mTargetPosition.y, 0.0f);
@@ -165,13 +171,20 @@ public class MaterialTapTargetPromptUnitTest
         assertEquals(Color.CYAN, prompt.mPaintPrimaryText.getColor());
         assertEquals(Color.GRAY, prompt.mPaintSecondaryText.getColor());
         assertEquals(interpolator, prompt.mAnimationInterpolator);
-        assertEquals(30f, prompt.mFocalToTextPadding, 0.0f);
+        assertEquals(30f, prompt.getPromptFocal().getPadding(), 0.0f);
 
         assertEquals("Primary text", prompt.mView.mPrimaryTextLayout.getText().toString());
         assertEquals("Secondary text", prompt.mView.mSecondaryTextLayout.getText().toString());
-        assertEquals(Color.BLUE, prompt.mView.mPaintBackground.getColor());
-        assertEquals(Color.GREEN, prompt.mView.mPaintFocal.getColor());
         assertEquals(22f, prompt.mView.mTextSeparation, 0.0f);
+
+        assertTrue(prompt.mView.mPromptBackground instanceof CirclePromptBackground);
+        CirclePromptBackground promptBackground = (CirclePromptBackground) prompt.mView.mPromptBackground;
+        assertEquals(Color.BLUE, promptBackground.mPaint.getColor());
+
+        assertTrue(prompt.mView.mPromptFocal instanceof CirclePromptFocal);
+        CirclePromptFocal promptFocal = (CirclePromptFocal) prompt.mView.mPromptFocal;
+        assertEquals(Color.GREEN, promptFocal.mPaint.getColor());
+        assertEquals(55f, promptFocal.mBaseRadius, 0.0f);
 
         prompt.dismiss();
         prompt.mAnimationCurrent.end();
@@ -218,36 +231,6 @@ public class MaterialTapTargetPromptUnitTest
         MaterialTapTargetPrompt.Builder builder = createBuilder(SCREEN_WIDTH, SCREEN_HEIGHT, 340)
                 .setTarget(50, 40)
                 .setPrimaryText("Primary text");
-        MaterialTapTargetPrompt prompt = builder.create();
-        assertNotNull(prompt);
-        prompt.show();
-
-        assertNull(prompt.mView.mSecondaryTextLayout);
-
-        prompt.finish();
-        prompt.mAnimationCurrent.end();
-        assertNull(prompt.mView.getParent());
-    }
-
-    @Test
-    public void promptCreatedWhenSecondaryTextNotSetRTL()
-    {
-        MaterialTapTargetPrompt.Builder builder = createBuilder(SCREEN_WIDTH, SCREEN_HEIGHT, 340)
-                .setTarget(50, 40)
-                .setPrimaryText("Primary text");
-        Mockito.doAnswer(new Answer<Integer>()
-        {
-            @Override
-            public Integer answer(InvocationOnMock invocation) throws Throwable
-            {
-                int rtl = 1;
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1)
-                {
-                    rtl = View.LAYOUT_DIRECTION_RTL;
-                }
-                return rtl;
-            }
-        }).when(builder).getLayoutDirection();
         MaterialTapTargetPrompt prompt = builder.create();
         assertNotNull(prompt);
         prompt.show();
@@ -522,15 +505,22 @@ public class MaterialTapTargetPromptUnitTest
         {
             prompt.mAnimationCurrent.end();
         }
-        assertEquals(190, prompt.mBaseBackgroundRadius, 1);
-        assertEquals(44, prompt.mBaseFocalRadius, 0);
-        assertEquals(4.4, prompt.mFocalRadius10Percent, .1);
+
         assertEquals(90, prompt.mTargetPosition.x, 0);
         assertEquals(90, prompt.mTargetPosition.y, 0);
         assertTrue(prompt.mInside88dpBounds);
         assertFalse(prompt.mHorizontalTextPositionLeft);
-        assertEquals(190, prompt.mBaseBackgroundPosition.x, 1);
-        assertEquals(147, prompt.mBaseBackgroundPosition.y, 1);
+
+
+        assertTrue(prompt.mView.mPromptBackground instanceof CirclePromptBackground);
+        CirclePromptBackground promptBackground = (CirclePromptBackground) prompt.mView.mPromptBackground;
+        assertEquals(190, promptBackground.mBaseRadius, 1);
+        assertEquals(190, promptBackground.mBasePosition.x, 1);
+        assertEquals(147, promptBackground.mBasePosition.y, 1);
+
+        assertTrue(prompt.mView.mPromptFocal instanceof CirclePromptFocal);
+        CirclePromptFocal promptFocal = (CirclePromptFocal) prompt.mView.mPromptFocal;
+        assertEquals(44, promptFocal.mBaseRadius, 0);
     }
 
     @SuppressLint("RtlHardcoded")
@@ -538,39 +528,39 @@ public class MaterialTapTargetPromptUnitTest
     public void testGetTextAlignment()
     {
         final MaterialTapTargetPrompt.Builder builder = createBuilder(SCREEN_WIDTH, SCREEN_HEIGHT, 340);
-        assertEquals(Layout.Alignment.ALIGN_NORMAL, builder.getTextAlignment(Gravity.START, "abc"));
-        assertEquals(Layout.Alignment.ALIGN_NORMAL, builder.getTextAlignment(Gravity.LEFT, "abc"));
+        assertEquals(Layout.Alignment.ALIGN_NORMAL, PromptUtils.getTextAlignment(builder.mResourceFinder, Gravity.START, "abc"));
+        assertEquals(Layout.Alignment.ALIGN_NORMAL, PromptUtils.getTextAlignment(builder.mResourceFinder, Gravity.LEFT, "abc"));
 
-        assertEquals(Layout.Alignment.ALIGN_OPPOSITE, builder.getTextAlignment(Gravity.END, "abc"));
-        assertEquals(Layout.Alignment.ALIGN_OPPOSITE, builder.getTextAlignment(Gravity.RIGHT, "abc"));
+        assertEquals(Layout.Alignment.ALIGN_OPPOSITE, PromptUtils.getTextAlignment(builder.mResourceFinder, Gravity.END, "abc"));
+        assertEquals(Layout.Alignment.ALIGN_OPPOSITE, PromptUtils.getTextAlignment(builder.mResourceFinder, Gravity.RIGHT, "abc"));
 
-        assertEquals(Layout.Alignment.ALIGN_CENTER, builder.getTextAlignment(Gravity.CENTER_HORIZONTAL, "abc"));
+        assertEquals(Layout.Alignment.ALIGN_CENTER, PromptUtils.getTextAlignment(builder.mResourceFinder, Gravity.CENTER_HORIZONTAL, "abc"));
 
-        assertEquals(Layout.Alignment.ALIGN_NORMAL, builder.getTextAlignment(Gravity.START, "جبا"));
-        assertEquals(Layout.Alignment.ALIGN_NORMAL, builder.getTextAlignment(Gravity.LEFT, "جبا"));
+        assertEquals(Layout.Alignment.ALIGN_NORMAL, PromptUtils.getTextAlignment(builder.mResourceFinder, Gravity.START, "جبا"));
+        assertEquals(Layout.Alignment.ALIGN_NORMAL, PromptUtils.getTextAlignment(builder.mResourceFinder, Gravity.LEFT, "جبا"));
 
-        assertEquals(Layout.Alignment.ALIGN_OPPOSITE, builder.getTextAlignment(Gravity.END, "جبا"));
-        assertEquals(Layout.Alignment.ALIGN_OPPOSITE, builder.getTextAlignment(Gravity.RIGHT, "جبا"));
+        assertEquals(Layout.Alignment.ALIGN_OPPOSITE, PromptUtils.getTextAlignment(builder.mResourceFinder, Gravity.END, "جبا"));
+        assertEquals(Layout.Alignment.ALIGN_OPPOSITE, PromptUtils.getTextAlignment(builder.mResourceFinder, Gravity.RIGHT, "جبا"));
 
-        assertEquals(Layout.Alignment.ALIGN_CENTER, builder.getTextAlignment(Gravity.CENTER_HORIZONTAL, "جبا"));
+        assertEquals(Layout.Alignment.ALIGN_CENTER, PromptUtils.getTextAlignment(builder.mResourceFinder, Gravity.CENTER_HORIZONTAL, "جبا"));
 
-        Mockito.when(builder.isVersionAfterJellyBeanMR1()).thenReturn(false);
+        ReflectionHelpers.setStaticField(Build.VERSION.class, "SDK_INT", 16);
 
-        assertEquals(Layout.Alignment.ALIGN_NORMAL, builder.getTextAlignment(Gravity.START, "abc"));
-        assertEquals(Layout.Alignment.ALIGN_NORMAL, builder.getTextAlignment(Gravity.LEFT, "abc"));
+        assertEquals(Layout.Alignment.ALIGN_NORMAL, PromptUtils.getTextAlignment(builder.mResourceFinder, Gravity.START, "abc"));
+        assertEquals(Layout.Alignment.ALIGN_NORMAL, PromptUtils.getTextAlignment(builder.mResourceFinder, Gravity.LEFT, "abc"));
 
-        assertEquals(Layout.Alignment.ALIGN_OPPOSITE, builder.getTextAlignment(Gravity.END, "abc"));
-        assertEquals(Layout.Alignment.ALIGN_OPPOSITE, builder.getTextAlignment(Gravity.RIGHT, "abc"));
+        assertEquals(Layout.Alignment.ALIGN_OPPOSITE, PromptUtils.getTextAlignment(builder.mResourceFinder, Gravity.END, "abc"));
+        assertEquals(Layout.Alignment.ALIGN_OPPOSITE, PromptUtils.getTextAlignment(builder.mResourceFinder, Gravity.RIGHT, "abc"));
 
-        assertEquals(Layout.Alignment.ALIGN_CENTER, builder.getTextAlignment(Gravity.CENTER_HORIZONTAL, "abc"));
+        assertEquals(Layout.Alignment.ALIGN_CENTER, PromptUtils.getTextAlignment(builder.mResourceFinder, Gravity.CENTER_HORIZONTAL, "abc"));
 
-        assertEquals(Layout.Alignment.ALIGN_NORMAL, builder.getTextAlignment(Gravity.START, "جبا"));
-        assertEquals(Layout.Alignment.ALIGN_NORMAL, builder.getTextAlignment(Gravity.LEFT, "جبا"));
+        assertEquals(Layout.Alignment.ALIGN_NORMAL, PromptUtils.getTextAlignment(builder.mResourceFinder, Gravity.START, "جبا"));
+        assertEquals(Layout.Alignment.ALIGN_NORMAL, PromptUtils.getTextAlignment(builder.mResourceFinder, Gravity.LEFT, "جبا"));
 
-        assertEquals(Layout.Alignment.ALIGN_OPPOSITE, builder.getTextAlignment(Gravity.END, "جبا"));
-        assertEquals(Layout.Alignment.ALIGN_OPPOSITE, builder.getTextAlignment(Gravity.RIGHT, "جبا"));
+        assertEquals(Layout.Alignment.ALIGN_OPPOSITE, PromptUtils.getTextAlignment(builder.mResourceFinder, Gravity.END, "جبا"));
+        assertEquals(Layout.Alignment.ALIGN_OPPOSITE, PromptUtils.getTextAlignment(builder.mResourceFinder, Gravity.RIGHT, "جبا"));
 
-        assertEquals(Layout.Alignment.ALIGN_CENTER, builder.getTextAlignment(Gravity.CENTER_HORIZONTAL, "جبا"));
+        assertEquals(Layout.Alignment.ALIGN_CENTER, PromptUtils.getTextAlignment(builder.mResourceFinder, Gravity.CENTER_HORIZONTAL, "جبا"));
     }
 
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR1)
@@ -584,14 +574,14 @@ public class MaterialTapTargetPromptUnitTest
             @Override
             public Resources answer(InvocationOnMock invocation) throws Throwable
             {
-                final Resources resources = Mockito.spy((Resources) invocation.callRealMethod());
+                final Resources resources = spy((Resources) invocation.callRealMethod());
                 Mockito.doAnswer(new Answer<Configuration>()
                 {
                     @Override
                     public Configuration answer(InvocationOnMock invocation) throws Throwable
                     {
-                        final Configuration configuration = Mockito.spy((Configuration) invocation.callRealMethod());
-                        Mockito.when(configuration.getLayoutDirection()).thenReturn(View.LAYOUT_DIRECTION_RTL);
+                        final Configuration configuration = spy((Configuration) invocation.callRealMethod());
+                        when(configuration.getLayoutDirection()).thenReturn(View.LAYOUT_DIRECTION_RTL);
                         return configuration;
                     }
                 }).when(resources).getConfiguration();
@@ -599,62 +589,62 @@ public class MaterialTapTargetPromptUnitTest
             }
         }).when(builder.mResourceFinder).getResources();
 
-        assertEquals(Layout.Alignment.ALIGN_OPPOSITE, builder.getTextAlignment(Gravity.START, "abc"));
-        assertEquals(Layout.Alignment.ALIGN_NORMAL, builder.getTextAlignment(Gravity.LEFT, "abc"));
+        assertEquals(Layout.Alignment.ALIGN_OPPOSITE, PromptUtils.getTextAlignment(builder.mResourceFinder, Gravity.START, "abc"));
+        assertEquals(Layout.Alignment.ALIGN_NORMAL, PromptUtils.getTextAlignment(builder.mResourceFinder, Gravity.LEFT, "abc"));
 
-        assertEquals(Layout.Alignment.ALIGN_NORMAL, builder.getTextAlignment(Gravity.END, "abc"));
-        assertEquals(Layout.Alignment.ALIGN_OPPOSITE, builder.getTextAlignment(Gravity.RIGHT, "abc"));
+        assertEquals(Layout.Alignment.ALIGN_NORMAL, PromptUtils.getTextAlignment(builder.mResourceFinder, Gravity.END, "abc"));
+        assertEquals(Layout.Alignment.ALIGN_OPPOSITE, PromptUtils.getTextAlignment(builder.mResourceFinder, Gravity.RIGHT, "abc"));
 
-        assertEquals(Layout.Alignment.ALIGN_CENTER, builder.getTextAlignment(Gravity.CENTER_HORIZONTAL, "abc"));
+        assertEquals(Layout.Alignment.ALIGN_CENTER, PromptUtils.getTextAlignment(builder.mResourceFinder, Gravity.CENTER_HORIZONTAL, "abc"));
 
-        assertEquals(Layout.Alignment.ALIGN_NORMAL, builder.getTextAlignment(Gravity.START, "جبا"));
-        assertEquals(Layout.Alignment.ALIGN_NORMAL, builder.getTextAlignment(Gravity.LEFT, "جبا"));
+        assertEquals(Layout.Alignment.ALIGN_NORMAL, PromptUtils.getTextAlignment(builder.mResourceFinder, Gravity.START, "جبا"));
+        assertEquals(Layout.Alignment.ALIGN_NORMAL, PromptUtils.getTextAlignment(builder.mResourceFinder, Gravity.LEFT, "جبا"));
 
-        assertEquals(Layout.Alignment.ALIGN_OPPOSITE, builder.getTextAlignment(Gravity.END, "جبا"));
-        assertEquals(Layout.Alignment.ALIGN_OPPOSITE, builder.getTextAlignment(Gravity.RIGHT, "جبا"));
+        assertEquals(Layout.Alignment.ALIGN_OPPOSITE, PromptUtils.getTextAlignment(builder.mResourceFinder, Gravity.END, "جبا"));
+        assertEquals(Layout.Alignment.ALIGN_OPPOSITE, PromptUtils.getTextAlignment(builder.mResourceFinder, Gravity.RIGHT, "جبا"));
 
-        assertEquals(Layout.Alignment.ALIGN_CENTER, builder.getTextAlignment(Gravity.CENTER_HORIZONTAL, "جبا"));
+        assertEquals(Layout.Alignment.ALIGN_CENTER, PromptUtils.getTextAlignment(builder.mResourceFinder, Gravity.CENTER_HORIZONTAL, "جبا"));
 
-        Mockito.when(builder.isVersionAfterJellyBeanMR1()).thenReturn(false);
+        ReflectionHelpers.setStaticField(Build.VERSION.class, "SDK_INT", 16);
 
-        assertEquals(Layout.Alignment.ALIGN_NORMAL, builder.getTextAlignment(Gravity.START, "abc"));
-        assertEquals(Layout.Alignment.ALIGN_NORMAL, builder.getTextAlignment(Gravity.LEFT, "abc"));
+        assertEquals(Layout.Alignment.ALIGN_NORMAL, PromptUtils.getTextAlignment(builder.mResourceFinder, Gravity.START, "abc"));
+        assertEquals(Layout.Alignment.ALIGN_NORMAL, PromptUtils.getTextAlignment(builder.mResourceFinder, Gravity.LEFT, "abc"));
 
-        assertEquals(Layout.Alignment.ALIGN_OPPOSITE, builder.getTextAlignment(Gravity.END, "abc"));
-        assertEquals(Layout.Alignment.ALIGN_OPPOSITE, builder.getTextAlignment(Gravity.RIGHT, "abc"));
+        assertEquals(Layout.Alignment.ALIGN_OPPOSITE, PromptUtils.getTextAlignment(builder.mResourceFinder, Gravity.END, "abc"));
+        assertEquals(Layout.Alignment.ALIGN_OPPOSITE, PromptUtils.getTextAlignment(builder.mResourceFinder, Gravity.RIGHT, "abc"));
 
-        assertEquals(Layout.Alignment.ALIGN_CENTER, builder.getTextAlignment(Gravity.CENTER_HORIZONTAL, "abc"));
+        assertEquals(Layout.Alignment.ALIGN_CENTER, PromptUtils.getTextAlignment(builder.mResourceFinder, Gravity.CENTER_HORIZONTAL, "abc"));
 
-        assertEquals(Layout.Alignment.ALIGN_NORMAL, builder.getTextAlignment(Gravity.START, "جبا"));
-        assertEquals(Layout.Alignment.ALIGN_NORMAL, builder.getTextAlignment(Gravity.LEFT, "جبا"));
+        assertEquals(Layout.Alignment.ALIGN_NORMAL, PromptUtils.getTextAlignment(builder.mResourceFinder, Gravity.START, "جبا"));
+        assertEquals(Layout.Alignment.ALIGN_NORMAL, PromptUtils.getTextAlignment(builder.mResourceFinder, Gravity.LEFT, "جبا"));
 
-        assertEquals(Layout.Alignment.ALIGN_OPPOSITE, builder.getTextAlignment(Gravity.END, "جبا"));
-        assertEquals(Layout.Alignment.ALIGN_OPPOSITE, builder.getTextAlignment(Gravity.RIGHT, "جبا"));
+        assertEquals(Layout.Alignment.ALIGN_OPPOSITE, PromptUtils.getTextAlignment(builder.mResourceFinder, Gravity.END, "جبا"));
+        assertEquals(Layout.Alignment.ALIGN_OPPOSITE, PromptUtils.getTextAlignment(builder.mResourceFinder, Gravity.RIGHT, "جبا"));
 
-        assertEquals(Layout.Alignment.ALIGN_CENTER, builder.getTextAlignment(Gravity.CENTER_HORIZONTAL, "جبا"));
+        assertEquals(Layout.Alignment.ALIGN_CENTER, PromptUtils.getTextAlignment(builder.mResourceFinder, Gravity.CENTER_HORIZONTAL, "جبا"));
     }
 
     @Test
     public void testParseTintMode()
     {
-        final MaterialTapTargetPrompt.Builder builder = createBuilder(SCREEN_WIDTH, SCREEN_HEIGHT, 340);
-        builder.parseTintMode(3, PorterDuff.Mode.SRC_OVER);
-        builder.parseTintMode(5, PorterDuff.Mode.SRC_IN);
-        builder.parseTintMode(9, PorterDuff.Mode.SRC_ATOP);
-        builder.parseTintMode(14, PorterDuff.Mode.MULTIPLY);
-        builder.parseTintMode(15, PorterDuff.Mode.SCREEN);
-        builder.parseTintMode(16, PorterDuff.Mode.ADD);
+        assertEquals(PromptUtils.parseTintMode(-1, null), null);
+        assertEquals(PromptUtils.parseTintMode(3, null), PorterDuff.Mode.SRC_OVER);
+        assertEquals(PromptUtils.parseTintMode(5, null), PorterDuff.Mode.SRC_IN);
+        assertEquals(PromptUtils.parseTintMode(9, null), PorterDuff.Mode.SRC_ATOP);
+        assertEquals(PromptUtils.parseTintMode(14, null), PorterDuff.Mode.MULTIPLY);
+        assertEquals(PromptUtils.parseTintMode(15, null), PorterDuff.Mode.SCREEN);
+        assertEquals(PromptUtils.parseTintMode(16, null), PorterDuff.Mode.ADD);
     }
 
     private MaterialTapTargetPrompt.Builder createBuilder(final int screenWidth,
                                               final int screenHeight, final float primaryTextWidth)
     {
-        final Activity activity = Mockito.spy(Robolectric.buildActivity(Activity.class).create().get());
-        final FrameLayout layout = Mockito.spy(new FrameLayout(activity));
-        final ResourceFinder resourceFinder = Mockito.spy(new ActivityResourceFinder(activity));
+        final Activity activity = spy(Robolectric.buildActivity(Activity.class).create().get());
+        final FrameLayout layout = spy(new FrameLayout(activity));
+        final ResourceFinder resourceFinder = spy(new ActivityResourceFinder(activity));
         activity.setContentView(layout);
         setViewBounds(layout, screenWidth, screenHeight);
-        final MaterialTapTargetPrompt.Builder builder = Mockito.spy(new MaterialTapTargetPrompt.Builder(resourceFinder, 0));
+        final MaterialTapTargetPrompt.Builder builder = spy(new MaterialTapTargetPrompt.Builder(resourceFinder, 0));
         Mockito.doAnswer(new Answer<MaterialTapTargetPrompt>()
             {
                 @Override
@@ -664,9 +654,9 @@ public class MaterialTapTargetPromptUnitTest
                     final MaterialTapTargetPrompt basePrompt = (MaterialTapTargetPrompt) invocation.callRealMethod();
                     if (basePrompt != null)
                     {
-                        final MaterialTapTargetPrompt prompt = Mockito.spy(basePrompt);
-                        prompt.mView = Mockito.spy(prompt.mView);
-                        Mockito.when(prompt.calculateMaxTextWidth(prompt.mView.mPrimaryTextLayout))
+                        final MaterialTapTargetPrompt prompt = spy(basePrompt);
+                        prompt.mView = spy(prompt.mView);
+                        when(prompt.calculateMaxTextWidth(prompt.mView.mPrimaryTextLayout))
                                 .thenReturn(primaryTextWidth);
 
                         Mockito.doAnswer(new Answer<Void>()
@@ -706,10 +696,6 @@ public class MaterialTapTargetPromptUnitTest
                                 prompt.updateFocalCentrePosition();
                                 //End the animation
                                 prompt.mAnimationCurrent.end();
-                                prompt.mView.mBackgroundRadius = prompt.mBaseBackgroundRadius;
-                                prompt.mView.mFocalRadius = prompt.mBaseFocalRadius;
-                                prompt.mView.mPaintFocal.setAlpha(255);
-                                prompt.mView.mPaintBackground.setAlpha(244);
                                 if (prompt.mPaintSecondaryText != null)
                                 {
                                     prompt.mPaintSecondaryText.setAlpha(prompt.mSecondaryTextColourAlpha);

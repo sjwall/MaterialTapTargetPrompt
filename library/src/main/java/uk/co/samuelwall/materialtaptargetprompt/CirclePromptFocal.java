@@ -25,14 +25,14 @@ import android.view.View;
 
 public class CirclePromptFocal extends PromptFocal
 {
-    private Paint mPaint;
-    private int mRippleAlpha;
-    private float mRadius;
-    private float mBaseRadius;
-    private float mRippleRadius;
-    private int mBaseAlpha;
-    private PointF mPosition;
-    private RectF mBounds;
+    Paint mPaint;
+    int mRippleAlpha;
+    float mRadius;
+    float mBaseRadius;
+    float mRippleRadius;
+    int mBaseAlpha;
+    PointF mPosition;
+    RectF mBounds;
 
     public CirclePromptFocal()
     {

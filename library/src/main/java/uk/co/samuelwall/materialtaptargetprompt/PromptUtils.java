@@ -148,7 +148,7 @@ public class PromptUtils
         if (isVersionAfterJellyBeanMR1())
         {
             int realGravity = gravity;
-            final int layoutDirection = getLayoutDirection(resourceFinder);
+            final int layoutDirection = resourceFinder.getResources().getConfiguration().getLayoutDirection();
             if (text != null && layoutDirection == View.LAYOUT_DIRECTION_RTL
                     && new Bidi(text.toString(), Bidi.DIRECTION_DEFAULT_LEFT_TO_RIGHT).isRightToLeft())
             {
@@ -192,20 +192,6 @@ public class PromptUtils
                 break;
         }
         return alignment;
-    }
-
-    /**
-     * Return the layout direction. Will be either {@link View#LAYOUT_DIRECTION_LTR} or {@link
-     * View#LAYOUT_DIRECTION_RTL}.
-     *
-     * @return Returns {@link View#LAYOUT_DIRECTION_RTL} if the configuration is {@link
-     * android.content.res.Configuration#SCREENLAYOUT_LAYOUTDIR_RTL}, otherwise {@link
-     * View#LAYOUT_DIRECTION_LTR}.
-     */
-    @TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR1)
-    public static int getLayoutDirection(@NonNull final ResourceFinder resourceFinder)
-    {
-        return resourceFinder.getResources().getConfiguration().getLayoutDirection();
     }
 
     /**
