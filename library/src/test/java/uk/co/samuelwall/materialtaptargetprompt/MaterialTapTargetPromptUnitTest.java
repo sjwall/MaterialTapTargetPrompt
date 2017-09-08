@@ -694,8 +694,9 @@ public class MaterialTapTargetPromptUnitTest
                                     throwable.printStackTrace();
                                 }
                                 prompt.updateFocalCentrePosition();
-                                //End the animation
-                                prompt.mAnimationCurrent.end();
+                                prompt.mView.mPromptFocal.update(prompt, 1, 1);
+                                prompt.mView.mPromptFocal.updateRipple(1, 1);
+                                prompt.mView.mPromptBackground.update(prompt, 1, 1);
                                 if (prompt.mPaintSecondaryText != null)
                                 {
                                     prompt.mPaintSecondaryText.setAlpha(prompt.mSecondaryTextColourAlpha);
