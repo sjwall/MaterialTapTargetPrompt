@@ -114,7 +114,7 @@ public class PromptUtils
                 tf = Typeface.MONOSPACE;
                 break;
         }
-        return tf;
+        return Typeface.create(tf, styleIndex);
     }
 
     /**

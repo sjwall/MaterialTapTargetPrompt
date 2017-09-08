@@ -624,18 +624,6 @@ public class MaterialTapTargetPromptUnitTest
         assertEquals(Layout.Alignment.ALIGN_CENTER, PromptUtils.getTextAlignment(builder.mResourceFinder, Gravity.CENTER_HORIZONTAL, "جبا"));
     }
 
-    @Test
-    public void testParseTintMode()
-    {
-        assertEquals(PromptUtils.parseTintMode(-1, null), null);
-        assertEquals(PromptUtils.parseTintMode(3, null), PorterDuff.Mode.SRC_OVER);
-        assertEquals(PromptUtils.parseTintMode(5, null), PorterDuff.Mode.SRC_IN);
-        assertEquals(PromptUtils.parseTintMode(9, null), PorterDuff.Mode.SRC_ATOP);
-        assertEquals(PromptUtils.parseTintMode(14, null), PorterDuff.Mode.MULTIPLY);
-        assertEquals(PromptUtils.parseTintMode(15, null), PorterDuff.Mode.SCREEN);
-        assertEquals(PromptUtils.parseTintMode(16, null), PorterDuff.Mode.ADD);
-    }
-
     private MaterialTapTargetPrompt.Builder createBuilder(final int screenWidth,
                                               final int screenHeight, final float primaryTextWidth)
     {
