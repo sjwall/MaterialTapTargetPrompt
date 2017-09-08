@@ -14,13 +14,18 @@
  * limitations under the License.
  */
 
-package uk.co.samuelwall.materialtaptargetprompt;
+package uk.co.samuelwall.materialtaptargetprompt.backgrounds;
 
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.PointF;
 import android.graphics.RectF;
+
+import uk.co.samuelwall.materialtaptargetprompt.MaterialTapTargetPrompt;
+import uk.co.samuelwall.materialtaptargetprompt.PromptBackground;
+import uk.co.samuelwall.materialtaptargetprompt.PromptFocal;
+import uk.co.samuelwall.materialtaptargetprompt.PromptUtils;
 
 public class CirclePromptBackground extends PromptBackground
 {
@@ -30,6 +35,10 @@ public class CirclePromptBackground extends PromptBackground
     float mBaseRadius;
     Paint mPaint;
     int mBaseColourAlpha;
+    /*PointF point1 = new PointF();
+    PointF point2 = new PointF();
+    PointF point3 = new PointF();
+    Paint pointPaint = new Paint();*/
 
     public CirclePromptBackground()
     {
@@ -37,6 +46,8 @@ public class CirclePromptBackground extends PromptBackground
         mPaint.setAntiAlias(true);
         mPosition = new PointF();
         mBasePosition = new PointF();
+        /*pointPaint.setColor(Color.RED);
+        pointPaint.setAlpha(100);*/
     }
 
 
@@ -51,8 +62,6 @@ public class CirclePromptBackground extends PromptBackground
     @Override
     public void prepare(final MaterialTapTargetPrompt prompt, final float maxTextWidth)
     {
-        /*textWidth = (int) maxTextWidth;
-        padding = (int) mTextPadding;*/
         final PromptFocal promptFocal = prompt.getPromptFocal();
         final RectF focalBounds = promptFocal.getBounds();
         final float focalCentreX = focalBounds.centerX();
@@ -149,6 +158,10 @@ public class CirclePromptBackground extends PromptBackground
     public void draw(Canvas canvas)
     {
         canvas.drawCircle(mPosition.x, mPosition.y, mRadius, mPaint);
+
+        /*canvas.drawCircle(point1.x, point1.y, 100, pointPaint);
+        canvas.drawCircle(point2.x, point2.y, 100, pointPaint);
+        canvas.drawCircle(point3.x, point3.y, 100, pointPaint);*/
     }
 
     @Override

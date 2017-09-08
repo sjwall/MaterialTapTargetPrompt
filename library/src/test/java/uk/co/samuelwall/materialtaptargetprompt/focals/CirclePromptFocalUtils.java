@@ -14,9 +14,19 @@
  * limitations under the License.
  */
 
-package uk.co.samuelwall.materialtaptargetprompt;
+package uk.co.samuelwall.materialtaptargetprompt.focals;
 
-public abstract class PromptBackground implements PromptUIElement
+public class CirclePromptFocalUtils
 {
-    public abstract void prepare(final MaterialTapTargetPrompt prompt, final float maxTextWidth);
+    private CirclePromptFocalUtils() {}
+
+    public static int getColour(final CirclePromptFocal promptFocal)
+    {
+        return promptFocal.mPaint.getColor();
+    }
+
+    public static float getBaseRadius(final CirclePromptFocal promptFocal)
+    {
+        return promptFocal.mBaseRadius;
+    }
 }

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package uk.co.samuelwall.materialtaptargetprompt;
+package uk.co.samuelwall.materialtaptargetprompt.focals;
 
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -22,6 +22,10 @@ import android.graphics.Paint;
 import android.graphics.PointF;
 import android.graphics.RectF;
 import android.view.View;
+
+import uk.co.samuelwall.materialtaptargetprompt.MaterialTapTargetPrompt;
+import uk.co.samuelwall.materialtaptargetprompt.PromptFocal;
+import uk.co.samuelwall.materialtaptargetprompt.PromptUtils;
 
 public class CirclePromptFocal extends PromptFocal
 {

@@ -22,7 +22,7 @@ import android.app.Activity;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.graphics.Color;
-import android.graphics.PorterDuff;
+import android.graphics.PointF;
 import android.os.Build;
 import android.text.Layout;
 import android.text.SpannableStringBuilder;
@@ -47,6 +47,11 @@ import org.robolectric.Robolectric;
 import org.robolectric.RobolectricTestRunner;
 import org.robolectric.annotation.Config;
 import org.robolectric.util.ReflectionHelpers;
+
+import uk.co.samuelwall.materialtaptargetprompt.backgrounds.CirclePromptBackground;
+import uk.co.samuelwall.materialtaptargetprompt.backgrounds.CirclePromptBackgroundUtils;
+import uk.co.samuelwall.materialtaptargetprompt.focals.CirclePromptFocal;
+import uk.co.samuelwall.materialtaptargetprompt.focals.CirclePromptFocalUtils;
 
 import static junit.framework.Assert.assertFalse;
 import static junit.framework.Assert.assertNotNull;
@@ -124,12 +129,12 @@ public class MaterialTapTargetPromptUnitTest
 
         assertTrue(prompt.mView.mPromptBackground instanceof CirclePromptBackground);
         CirclePromptBackground promptBackground = (CirclePromptBackground) prompt.mView.mPromptBackground;
-        assertEquals(Color.BLUE, promptBackground.mPaint.getColor());
+        assertEquals(Color.BLUE, CirclePromptBackgroundUtils.getColour(promptBackground));
 
         assertTrue(prompt.mView.mPromptFocal instanceof CirclePromptFocal);
         CirclePromptFocal promptFocal = (CirclePromptFocal) prompt.mView.mPromptFocal;
-        assertEquals(Color.GREEN, promptFocal.mPaint.getColor());
-        assertEquals(55f, promptFocal.mBaseRadius, 0.0f);
+        assertEquals(Color.GREEN, CirclePromptFocalUtils.getColour(promptFocal));
+        assertEquals(55f, CirclePromptFocalUtils.getBaseRadius(promptFocal), 0.0f);
 
         prompt.dismiss();
         prompt.mAnimationCurrent.end();
@@ -179,12 +184,12 @@ public class MaterialTapTargetPromptUnitTest
 
         assertTrue(prompt.mView.mPromptBackground instanceof CirclePromptBackground);
         CirclePromptBackground promptBackground = (CirclePromptBackground) prompt.mView.mPromptBackground;
-        assertEquals(Color.BLUE, promptBackground.mPaint.getColor());
+        assertEquals(Color.BLUE, CirclePromptBackgroundUtils.getColour(promptBackground));
 
         assertTrue(prompt.mView.mPromptFocal instanceof CirclePromptFocal);
         CirclePromptFocal promptFocal = (CirclePromptFocal) prompt.mView.mPromptFocal;
-        assertEquals(Color.GREEN, promptFocal.mPaint.getColor());
-        assertEquals(55f, promptFocal.mBaseRadius, 0.0f);
+        assertEquals(Color.GREEN, CirclePromptFocalUtils.getColour(promptFocal));
+        assertEquals(55f, CirclePromptFocalUtils.getBaseRadius(promptFocal), 0.0f);
 
         prompt.dismiss();
         prompt.mAnimationCurrent.end();
@@ -514,13 +519,14 @@ public class MaterialTapTargetPromptUnitTest
 
         assertTrue(prompt.mView.mPromptBackground instanceof CirclePromptBackground);
         CirclePromptBackground promptBackground = (CirclePromptBackground) prompt.mView.mPromptBackground;
-        assertEquals(190, promptBackground.mBaseRadius, 1);
-        assertEquals(190, promptBackground.mBasePosition.x, 1);
-        assertEquals(147, promptBackground.mBasePosition.y, 1);
+        assertEquals(190, CirclePromptBackgroundUtils.getBaseRadius(promptBackground), 1);
+        final PointF basePosition = CirclePromptBackgroundUtils.getBasePosition(promptBackground);
+        assertEquals(190, basePosition.x, 1);
+        assertEquals(147, basePosition.y, 1);
 
         assertTrue(prompt.mView.mPromptFocal instanceof CirclePromptFocal);
         CirclePromptFocal promptFocal = (CirclePromptFocal) prompt.mView.mPromptFocal;
-        assertEquals(44, promptFocal.mBaseRadius, 0);
+        assertEquals(44, CirclePromptFocalUtils.getBaseRadius(promptFocal), 0);
     }
 
     @SuppressLint("RtlHardcoded")
