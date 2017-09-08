@@ -752,20 +752,30 @@ public class MaterialTapTargetPrompt
             mView.mPrimaryTextTop = focalBounds.bottom + focalPadding;
         }
 
+        float primaryTextHeight = 0;
+        if (mView.mPrimaryTextLayout != null)
+        {
+            primaryTextHeight = mView.mPrimaryTextLayout.getHeight();
+        }
+        float textHeight = 0;
         if (mSecondaryText != null)
         {
+            textHeight = mView.mSecondaryTextLayout.getHeight();
             if (mVerticalTextPositionAbove)
             {
-                mView.mPrimaryTextTop = mView.mPrimaryTextTop - mView.mTextSeparation - mView.mSecondaryTextLayout.getHeight();
+                mView.mPrimaryTextTop = mView.mPrimaryTextTop - mView.mTextSeparation - textHeight;
             }
 
             if (mView.mPrimaryTextLayout != null)
             {
-                mView.mSecondaryTextOffsetTop = mView.mPrimaryTextLayout.getHeight() + mView.mTextSeparation;
+                mView.mSecondaryTextOffsetTop = primaryTextHeight + mView.mTextSeparation;
             }
+            textHeight += mView.mSecondaryTextOffsetTop;
         }
-
-        mView.mPromptBackground.prepare(this, textWidth);
+        else
+        {
+            textHeight = primaryTextHeight;
+        }
 
         mView.mSecondaryTextLeft = mView.mPrimaryTextLeft;
         mView.mPrimaryTextLeftChange = 0;
@@ -779,6 +789,12 @@ public class MaterialTapTargetPrompt
         {
             mView.mSecondaryTextLeftChange = change;
         }
+        mView.mTextBounds.left = mView.mPrimaryTextLeft;// - change;
+        mView.mTextBounds.top = mView.mPrimaryTextTop;
+        mView.mTextBounds.right = mView.mTextBounds.left + textWidth;
+        mView.mTextBounds.bottom = mView.mTextBounds.top + textHeight;
+
+        mView.mPromptBackground.prepare(this, textWidth);
     }
 
     /**
@@ -909,6 +925,11 @@ public class MaterialTapTargetPrompt
         return mView.mPromptFocal;
     }
 
+    public RectF getTextBounds()
+    {
+        return mView.mTextBounds;
+    }
+
     public int[] getViewWindowPosition()
     {
         final int[] viewPosition = new int[2];
@@ -945,6 +966,7 @@ public class MaterialTapTargetPrompt
         float mTextSeparation;
         boolean mClipToBounds;
         boolean mCaptureTouchEventOutsidePrompt;
+        RectF mTextBounds;
 
         /**
          * Should the back button press dismiss the prompt.
@@ -971,6 +993,7 @@ public class MaterialTapTargetPrompt
             setId(R.id.material_target_prompt_view);
             setFocusableInTouchMode(true);
             requestFocus();
+            mTextBounds = new RectF();
             /*paddingPaint.setColor(Color.GREEN);
             paddingPaint.setAlpha(100);
             itemPaint.setColor(Color.BLUE);
@@ -992,8 +1015,9 @@ public class MaterialTapTargetPrompt
             mPromptFocal.draw(canvas);
 
             /*canvas.drawRect(mPrimaryTextLeft - padding, mPrimaryTextTop, mPrimaryTextLeft, mPrimaryTextTop + mSecondaryTextOffsetTop + mSecondaryTextLayout.getHeight(), paddingPaint);
-            canvas.drawRect(mPrimaryTextLeft, mPrimaryTextTop, mPrimaryTextLeft + textWidth, mPrimaryTextTop + mSecondaryTextOffsetTop + mSecondaryTextLayout.getHeight(), itemPaint);
-            canvas.drawRect(mPrimaryTextLeft + textWidth, mPrimaryTextTop, mPrimaryTextLeft + textWidth + padding, mPrimaryTextTop + mSecondaryTextOffsetTop + mSecondaryTextLayout.getHeight(), paddingPaint);*/
+            canvas.drawRect(mTextBounds, itemPaint);
+            canvas.drawRect(mTextBounds.right, mPrimaryTextTop, mTextBounds.right + padding, mPrimaryTextTop + mSecondaryTextOffsetTop + mSecondaryTextLayout.getHeight(), paddingPaint);*/
+
 
             //Draw the icon
             if (mIconDrawable != null)

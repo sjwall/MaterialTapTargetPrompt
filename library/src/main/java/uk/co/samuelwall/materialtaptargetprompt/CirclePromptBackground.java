@@ -58,6 +58,7 @@ public class CirclePromptBackground extends PromptBackground
         final float focalCentreX = focalBounds.centerX();
         final float focalCentreY = focalBounds.centerY();
         final float focalPadding = promptFocal.getPadding();
+        final RectF textBounds = prompt.getTextBounds();
         if (prompt.mInside88dpBounds)
         {
             float x1 = focalCentreX;
@@ -66,17 +67,12 @@ public class CirclePromptBackground extends PromptBackground
             if (prompt.mVerticalTextPositionAbove)
             {
                 y1 = focalBounds.bottom + prompt.mTextPadding;
-                y2 = prompt.mView.mPrimaryTextTop;
+                y2 = textBounds.top;
             }
             else
             {
                 y1 = focalBounds.top - (focalPadding + prompt.mTextPadding);
-                float baseY2 = prompt.mView.mPrimaryTextTop + prompt.mView.mPrimaryTextLayout.getHeight();
-                if (prompt.mView.mSecondaryTextLayout != null)
-                {
-                    baseY2 += prompt.mView.mSecondaryTextLayout.getHeight() + prompt.mView.mTextSeparation;
-                }
-                y2 = baseY2;
+                y2 = textBounds.bottom;
             }
 
             final float y3 = y2;
@@ -123,22 +119,15 @@ public class CirclePromptBackground extends PromptBackground
         else
         {
             mBasePosition.set(focalCentreX, focalCentreY);
-            final float length = Math.abs(prompt.mView.mPrimaryTextLeft
-                    + (prompt.mHorizontalTextPositionLeft ? 0 : maxTextWidth)
-                    - focalCentreX) + prompt.mTextPadding;
-            float height = (focalBounds.height() / 2) + focalPadding;
-            if (prompt.mView.mPrimaryTextLayout != null)
-            {
-                height += prompt.mView.mPrimaryTextLayout.getHeight();
-            }
-            //Check if secondary text should be included with text separation
-            if (prompt.mView.mSecondaryTextLayout != null)
-            {
-                height += prompt.mView.mSecondaryTextLayout.getHeight() + prompt.mView.mTextSeparation;
-            }
+            final float length = Math.abs(
+                    (prompt.mHorizontalTextPositionLeft ?
+                            textBounds.left - prompt.mTextPadding
+                            : textBounds.right + prompt.mTextPadding)
+                    - focalCentreX);
+            float height = (focalBounds.height() / 2) + focalPadding + textBounds.height();
             mBaseRadius = (float) Math.sqrt(Math.pow(length, 2) + Math.pow(height, 2));
-            /*point1.set(focalCentreX + (mHorizontalTextPositionLeft ? -length : length),
-                            focalCentreY + (mVerticalTextPositionAbove ? - height : height));*/
+            /*point1.set(focalCentreX + (prompt.mHorizontalTextPositionLeft ? -length : length),
+                            focalCentreY + (prompt.mVerticalTextPositionAbove ? - height : height));*/
         }
         mPosition.set(mBasePosition);
     }

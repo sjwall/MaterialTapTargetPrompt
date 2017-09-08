@@ -55,25 +55,21 @@ public class RectanglePromptBackground extends PromptBackground
     public void prepare(MaterialTapTargetPrompt prompt, float maxTextWidth)
     {
         final RectF focalBounds = prompt.getPromptFocal().getBounds();
+        final RectF textBounds = prompt.getTextBounds();
         float x1, x2, y1, y2;
         if (prompt.mVerticalTextPositionAbove)
         {
-            y1 = prompt.mView.mPrimaryTextTop - prompt.mTextPadding;
+            y1 = textBounds.top - prompt.mTextPadding;
             y2 = focalBounds.bottom + prompt.mTextPadding;
         }
         else
         {
             y1 = focalBounds.top - prompt.mTextPadding;
-            y2 = prompt.mView.mPrimaryTextTop + prompt.mView.mPrimaryTextLayout.getHeight();
-            if (prompt.mView.mSecondaryTextLayout != null)
-            {
-                y2 += prompt.mView.mSecondaryTextLayout.getHeight() + prompt.mView.mTextSeparation;
-            }
-            y2 += prompt.mTextPadding;
+            y2 = textBounds.bottom + prompt.mTextPadding;
         }
-        x1 = Math.min(prompt.mView.mPrimaryTextLeft - prompt.mTextPadding,
+        x1 = Math.min(textBounds.left - prompt.mTextPadding,
                 focalBounds.left - prompt.mTextPadding);
-        x2 = Math.max(prompt.mView.mPrimaryTextLeft + maxTextWidth + prompt.mTextPadding,
+        x2 = Math.max(textBounds.right + prompt.mTextPadding,
                 focalBounds.right + prompt.mTextPadding);
         mBaseBounds.set(x1, y1, x2, y2);
     }
