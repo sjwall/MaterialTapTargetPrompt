@@ -522,6 +522,9 @@ public class MaterialTapTargetPrompt
         }
     }
 
+    /**
+     * Starts the animation to reveal the prompt.
+     */
     void startRevealAnimation()
     {
         updateAnimation(0, 0);
@@ -564,6 +567,9 @@ public class MaterialTapTargetPrompt
         mAnimationCurrent.start();
     }
 
+    /**
+     * Starts the prompt idle animations.
+     */
     void startIdleAnimations()
     {
         cleanUpAnimation();
@@ -635,6 +641,9 @@ public class MaterialTapTargetPrompt
         mView.invalidate();
     }
 
+    /**
+     * Update the focal and text positioning.
+     */
     void updateFocalCentrePosition()
     {
         updateClipBounds();
@@ -796,6 +805,7 @@ public class MaterialTapTargetPrompt
         mView.mTextBounds.top = mView.mPrimaryTextTop;
         mView.mTextBounds.right = mView.mTextBounds.left + textWidth;
         mView.mTextBounds.bottom = mView.mTextBounds.top + textHeight;
+        //mView.padding = (int) mTextPadding;
 
         mView.mPromptBackground.prepare(this, textWidth);
     }
@@ -854,6 +864,9 @@ public class MaterialTapTargetPrompt
         return maxTextWidth;
     }
 
+    /**
+     * Update the icon drawable position or target render view position.
+     */
     void updateIconPosition()
     {
         if (mView.mIconDrawable != null)
@@ -876,6 +889,9 @@ public class MaterialTapTargetPrompt
         }
     }
 
+    /**
+     * Update the bounds that the prompt is clip to.
+     */
     void updateClipBounds()
     {
         if (mClipToView != null)
@@ -923,11 +939,21 @@ public class MaterialTapTargetPrompt
         }
     }
 
+    /**
+     * Get the prompt focal renderer.
+     *
+     * @return The prompt focal instance.
+     */
     public PromptFocal getPromptFocal()
     {
         return mView.mPromptFocal;
     }
 
+    /**
+     * Get the window position for the prompt text.
+     *
+     * @return The prompt text bounds.
+     */
     public RectF getTextBounds()
     {
         return mView.mTextBounds;
@@ -953,6 +979,11 @@ public class MaterialTapTargetPrompt
         return mInside88dpBounds;
     }
 
+    /**
+     * Get the window position for the prompt view.
+     *
+     * @return Prompt view window position in the format [x, y].
+     */
     public int[] getViewWindowPosition()
     {
         final int[] viewPosition = new int[2];
@@ -965,12 +996,9 @@ public class MaterialTapTargetPrompt
      */
     static class PromptView extends View
     {
-        /*int padding, textWidth;
+        /*int padding;
         Paint paddingPaint = new Paint();
-        Paint itemPaint = new Paint();
-        PointF point1 = new PointF();
-        PointF point2 = new PointF();
-        PointF point3 = new PointF();*/
+        Paint itemPaint = new Paint();*/
         Drawable mIconDrawable;
         float mIconDrawableLeft;
         float mIconDrawableTop;
@@ -1010,6 +1038,11 @@ public class MaterialTapTargetPrompt
          */
         PromptFocal mPromptFocal;
 
+        /**
+         * Create a new prompt view.
+         *
+         * @param context The context that the view is created in.
+         */
         public PromptView(final Context context)
         {
             super(context);
@@ -1055,10 +1088,6 @@ public class MaterialTapTargetPrompt
                 mTargetRenderView.draw(canvas);
                 canvas.translate(-mIconDrawableLeft, -mIconDrawableTop);
             }
-
-            /*canvas.drawCircle(point1.x, point1.y, 50, mPaintFocal);
-            canvas.drawCircle(point2.x, point2.y, 50, mPaintFocal);
-            canvas.drawCircle(point3.x, point3.y, 50, mPaintFocal);*/
 
             //Draw the text
             canvas.translate(mPrimaryTextLeft - mPrimaryTextLeftChange, mPrimaryTextTop);
@@ -2052,6 +2081,12 @@ public class MaterialTapTargetPrompt
             return this;
         }
 
+        /**
+         * Sets the renderer for the prompt focal.
+         *
+         * @param promptFocal The focal shape to use.
+         * @return This Builder object to allow for chaining of calls to set methods
+         */
         public Builder setPromptFocal(@NonNull final PromptFocal promptFocal)
         {
             this.mPromptFocal = promptFocal;
