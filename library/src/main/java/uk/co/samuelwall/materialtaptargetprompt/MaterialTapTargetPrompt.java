@@ -930,6 +930,26 @@ public class MaterialTapTargetPrompt
         return mView.mTextBounds;
     }
 
+    public float getTextPadding()
+    {
+        return mTextPadding;
+    }
+
+    public boolean isTextPositionedAbove()
+    {
+        return mVerticalTextPositionAbove;
+    }
+
+    public boolean isTextPositionedLeft()
+    {
+        return mHorizontalTextPositionLeft;
+    }
+
+    public boolean isInside88dpBounds()
+    {
+        return mInside88dpBounds;
+    }
+
     public int[] getViewWindowPosition()
     {
         final int[] viewPosition = new int[2];

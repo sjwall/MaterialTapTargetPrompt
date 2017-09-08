@@ -56,21 +56,22 @@ public class RectanglePromptBackground extends PromptBackground
     {
         final RectF focalBounds = prompt.getPromptFocal().getBounds();
         final RectF textBounds = prompt.getTextBounds();
+        final float textPadding = prompt.getTextPadding();
         float x1, x2, y1, y2;
-        if (prompt.mVerticalTextPositionAbove)
+        if (prompt.isTextPositionedAbove())
         {
-            y1 = textBounds.top - prompt.mTextPadding;
-            y2 = focalBounds.bottom + prompt.mTextPadding;
+            y1 = textBounds.top - textPadding;
+            y2 = focalBounds.bottom + textPadding;
         }
         else
         {
-            y1 = focalBounds.top - prompt.mTextPadding;
-            y2 = textBounds.bottom + prompt.mTextPadding;
+            y1 = focalBounds.top - textPadding;
+            y2 = textBounds.bottom + textPadding;
         }
-        x1 = Math.min(textBounds.left - prompt.mTextPadding,
-                focalBounds.left - prompt.mTextPadding);
-        x2 = Math.max(textBounds.right + prompt.mTextPadding,
-                focalBounds.right + prompt.mTextPadding);
+        x1 = Math.min(textBounds.left - textPadding,
+                focalBounds.left - textPadding);
+        x2 = Math.max(textBounds.right + textPadding,
+                focalBounds.right + textPadding);
         mBaseBounds.set(x1, y1, x2, y2);
     }
 

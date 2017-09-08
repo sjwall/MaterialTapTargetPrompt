@@ -59,30 +59,31 @@ public class CirclePromptBackground extends PromptBackground
         final float focalCentreY = focalBounds.centerY();
         final float focalPadding = promptFocal.getPadding();
         final RectF textBounds = prompt.getTextBounds();
-        if (prompt.mInside88dpBounds)
+        final float textPadding = prompt.getTextPadding();
+        if (prompt.isInside88dpBounds())
         {
             float x1 = focalCentreX;
-            float x2 = prompt.mView.mPrimaryTextLeft - prompt.mTextPadding;
+            float x2 = textBounds.left - textPadding;
             float y1, y2;
-            if (prompt.mVerticalTextPositionAbove)
+            if (prompt.isTextPositionedAbove())
             {
-                y1 = focalBounds.bottom + prompt.mTextPadding;
+                y1 = focalBounds.bottom + textPadding;
                 y2 = textBounds.top;
             }
             else
             {
-                y1 = focalBounds.top - (focalPadding + prompt.mTextPadding);
+                y1 = focalBounds.top - (focalPadding + textPadding);
                 y2 = textBounds.bottom;
             }
 
             final float y3 = y2;
-            float x3 = x2 + maxTextWidth + prompt.mTextPadding + prompt.mTextPadding;
+            float x3 = x2 + maxTextWidth + textPadding + textPadding;
 
             final float focalLeft = focalBounds.left - focalPadding;
             final float focalRight = focalBounds.right + focalPadding;
             if (x2 > focalLeft && x2 < focalRight)
             {
-                if ( prompt.mVerticalTextPositionAbove)
+                if ( prompt.isTextPositionedAbove())
                 {
                     x1 = focalBounds.left - focalPadding;
                 }
@@ -93,7 +94,7 @@ public class CirclePromptBackground extends PromptBackground
             }
             else if (x3 > focalLeft && x3 < focalRight)
             {
-                if ( prompt.mVerticalTextPositionAbove)
+                if ( prompt.isTextPositionedAbove())
                 {
                     x1 = focalBounds.right + focalPadding;
                 }
@@ -120,9 +121,9 @@ public class CirclePromptBackground extends PromptBackground
         {
             mBasePosition.set(focalCentreX, focalCentreY);
             final float length = Math.abs(
-                    (prompt.mHorizontalTextPositionLeft ?
-                            textBounds.left - prompt.mTextPadding
-                            : textBounds.right + prompt.mTextPadding)
+                    (prompt.isTextPositionedLeft() ?
+                            textBounds.left - textPadding
+                            : textBounds.right + textPadding)
                     - focalCentreX);
             float height = (focalBounds.height() / 2) + focalPadding + textBounds.height();
             mBaseRadius = (float) Math.sqrt(Math.pow(length, 2) + Math.pow(height, 2));
