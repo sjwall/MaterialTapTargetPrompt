@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package uk.co.samuelwall.materialtaptargetprompt.focals;
+package uk.co.samuelwall.materialtaptargetprompt.extras.focals;
 
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -24,8 +24,8 @@ import android.graphics.RectF;
 import android.view.View;
 
 import uk.co.samuelwall.materialtaptargetprompt.MaterialTapTargetPrompt;
-import uk.co.samuelwall.materialtaptargetprompt.PromptFocal;
-import uk.co.samuelwall.materialtaptargetprompt.PromptUtils;
+import uk.co.samuelwall.materialtaptargetprompt.extras.PromptFocal;
+import uk.co.samuelwall.materialtaptargetprompt.extras.PromptUtils;
 
 public class CirclePromptFocal extends PromptFocal
 {
@@ -46,11 +46,11 @@ public class CirclePromptFocal extends PromptFocal
         mBounds = new RectF();
     }
 
-    public void setRadius(final float radius)
+    public CirclePromptFocal setRadius(final float radius)
     {
         mBaseRadius = radius;
+        return this;
     }
-
 
     @Override
     public RectF getBounds()

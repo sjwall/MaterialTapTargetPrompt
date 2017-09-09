@@ -14,10 +14,9 @@
  * limitations under the License.
  */
 
-package uk.co.samuelwall.materialtaptargetprompt;
+package uk.co.samuelwall.materialtaptargetprompt.extras;
 
 import android.annotation.SuppressLint;
-import android.graphics.Point;
 import android.graphics.PointF;
 import android.graphics.PorterDuff;
 import android.graphics.RectF;
@@ -32,6 +31,8 @@ import android.view.Gravity;
 import android.view.View;
 
 import java.text.Bidi;
+
+import uk.co.samuelwall.materialtaptargetprompt.ResourceFinder;
 
 public class PromptUtils
 {
@@ -146,7 +147,7 @@ public class PromptUtils
      */
     @SuppressLint("RtlHardcoded")
     public static Layout.Alignment getTextAlignment(final ResourceFinder resourceFinder, final int gravity,
-                                             final CharSequence text)
+                                                    final CharSequence text)
     {
         final int absoluteGravity;
         if (isVersionAfterJellyBeanMR1())

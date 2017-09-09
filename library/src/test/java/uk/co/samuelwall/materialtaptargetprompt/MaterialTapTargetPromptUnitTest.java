@@ -48,10 +48,11 @@ import org.robolectric.RobolectricTestRunner;
 import org.robolectric.annotation.Config;
 import org.robolectric.util.ReflectionHelpers;
 
-import uk.co.samuelwall.materialtaptargetprompt.backgrounds.CirclePromptBackground;
-import uk.co.samuelwall.materialtaptargetprompt.backgrounds.CirclePromptBackgroundUtils;
-import uk.co.samuelwall.materialtaptargetprompt.focals.CirclePromptFocal;
-import uk.co.samuelwall.materialtaptargetprompt.focals.CirclePromptFocalUtils;
+import uk.co.samuelwall.materialtaptargetprompt.extras.PromptUtils;
+import uk.co.samuelwall.materialtaptargetprompt.extras.backgrounds.CirclePromptBackground;
+import uk.co.samuelwall.materialtaptargetprompt.extras.backgrounds.CirclePromptBackgroundUtils;
+import uk.co.samuelwall.materialtaptargetprompt.extras.focals.CirclePromptFocal;
+import uk.co.samuelwall.materialtaptargetprompt.extras.focals.CirclePromptFocalUtils;
 
 import static junit.framework.Assert.assertFalse;
 import static junit.framework.Assert.assertNotNull;

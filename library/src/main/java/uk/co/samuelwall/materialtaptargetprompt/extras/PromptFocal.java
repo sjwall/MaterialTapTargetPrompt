@@ -14,10 +14,12 @@
  * limitations under the License.
  */
 
-package uk.co.samuelwall.materialtaptargetprompt;
+package uk.co.samuelwall.materialtaptargetprompt.extras;
 
 import android.graphics.RectF;
 import android.view.View;
+
+import uk.co.samuelwall.materialtaptargetprompt.MaterialTapTargetPrompt;
 
 public abstract class PromptFocal implements PromptUIElement
 {

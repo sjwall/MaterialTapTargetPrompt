@@ -19,6 +19,8 @@ package uk.co.samuelwall.materialtaptargetprompt;
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 
+import uk.co.samuelwall.materialtaptargetprompt.extras.PromptUtilsUnitTest;
+
 // Runs all unit tests.
 @RunWith(Suite.class)
 @Suite.SuiteClasses({

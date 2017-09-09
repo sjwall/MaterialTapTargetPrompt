@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package uk.co.samuelwall.materialtaptargetprompt.backgrounds;
+package uk.co.samuelwall.materialtaptargetprompt.extras.backgrounds;
 
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -23,8 +23,8 @@ import android.graphics.PointF;
 import android.graphics.RectF;
 
 import uk.co.samuelwall.materialtaptargetprompt.MaterialTapTargetPrompt;
-import uk.co.samuelwall.materialtaptargetprompt.PromptBackground;
-import uk.co.samuelwall.materialtaptargetprompt.PromptUtils;
+import uk.co.samuelwall.materialtaptargetprompt.extras.PromptBackground;
+import uk.co.samuelwall.materialtaptargetprompt.extras.PromptUtils;
 
 public class RectanglePromptBackground extends PromptBackground
 {

@@ -54,8 +54,11 @@ import android.view.ViewTreeObserver;
 import android.view.animation.AccelerateDecelerateInterpolator;
 import android.view.animation.Interpolator;
 
-import uk.co.samuelwall.materialtaptargetprompt.backgrounds.CirclePromptBackground;
-import uk.co.samuelwall.materialtaptargetprompt.focals.CirclePromptFocal;
+import uk.co.samuelwall.materialtaptargetprompt.extras.PromptBackground;
+import uk.co.samuelwall.materialtaptargetprompt.extras.PromptUtils;
+import uk.co.samuelwall.materialtaptargetprompt.extras.backgrounds.CirclePromptBackground;
+import uk.co.samuelwall.materialtaptargetprompt.extras.focals.CirclePromptFocal;
+import uk.co.samuelwall.materialtaptargetprompt.extras.PromptFocal;
 
 /**
  * A Material Design tap target onboarding implementation.

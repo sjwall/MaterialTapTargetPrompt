@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package uk.co.samuelwall.materialtaptargetprompt.focals;
+package uk.co.samuelwall.materialtaptargetprompt.extras.focals;
 
 import android.annotation.TargetApi;
 import android.graphics.Canvas;
@@ -23,13 +23,12 @@ import android.graphics.Paint;
 import android.graphics.PointF;
 import android.graphics.RectF;
 import android.os.Build;
-import android.util.Size;
 import android.util.SizeF;
 import android.view.View;
 
 import uk.co.samuelwall.materialtaptargetprompt.MaterialTapTargetPrompt;
-import uk.co.samuelwall.materialtaptargetprompt.PromptFocal;
-import uk.co.samuelwall.materialtaptargetprompt.PromptUtils;
+import uk.co.samuelwall.materialtaptargetprompt.extras.PromptFocal;
+import uk.co.samuelwall.materialtaptargetprompt.extras.PromptUtils;
 
 public class RectanglePromptFocal extends PromptFocal
 {

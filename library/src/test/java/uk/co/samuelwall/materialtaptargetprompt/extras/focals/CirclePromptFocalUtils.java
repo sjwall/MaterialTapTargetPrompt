@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package uk.co.samuelwall.materialtaptargetprompt.focals;
+package uk.co.samuelwall.materialtaptargetprompt.extras.focals;
 
 public class CirclePromptFocalUtils
 {

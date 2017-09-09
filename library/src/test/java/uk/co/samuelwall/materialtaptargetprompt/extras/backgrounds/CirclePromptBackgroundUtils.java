@@ -14,11 +14,9 @@
  * limitations under the License.
  */
 
-package uk.co.samuelwall.materialtaptargetprompt.backgrounds;
+package uk.co.samuelwall.materialtaptargetprompt.extras.backgrounds;
 
 import android.graphics.PointF;
-
-import uk.co.samuelwall.materialtaptargetprompt.focals.CirclePromptFocal;
 
 /**
  * Created by sam on 09/09/17.

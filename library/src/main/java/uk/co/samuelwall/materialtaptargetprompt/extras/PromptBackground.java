@@ -14,14 +14,11 @@
  * limitations under the License.
  */
 
-package uk.co.samuelwall.materialtaptargetprompt;
+package uk.co.samuelwall.materialtaptargetprompt.extras;
 
-import android.graphics.Canvas;
+import uk.co.samuelwall.materialtaptargetprompt.MaterialTapTargetPrompt;
 
-interface PromptUIElement
+public abstract class PromptBackground implements PromptUIElement
 {
-    void setColour(int colour);
-    void update(final MaterialTapTargetPrompt prompt, float revealModifier, float alphaModifier);
-    void draw(Canvas canvas);
-    boolean contains(float x, float y);
+    public abstract void prepare(final MaterialTapTargetPrompt prompt, final float maxTextWidth);
 }
