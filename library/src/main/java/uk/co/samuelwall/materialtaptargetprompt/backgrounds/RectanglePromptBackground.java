@@ -19,10 +19,12 @@ package uk.co.samuelwall.materialtaptargetprompt.backgrounds;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.PointF;
 import android.graphics.RectF;
 
 import uk.co.samuelwall.materialtaptargetprompt.MaterialTapTargetPrompt;
 import uk.co.samuelwall.materialtaptargetprompt.PromptBackground;
+import uk.co.samuelwall.materialtaptargetprompt.PromptUtils;
 
 public class RectanglePromptBackground extends PromptBackground
 {
@@ -30,6 +32,7 @@ public class RectanglePromptBackground extends PromptBackground
     private Paint mPaint;
     private int mBaseColourAlpha;
     private float mRx, mRy;
+    private PointF mFocalCentre;
 
     public RectanglePromptBackground()
     {
@@ -37,13 +40,15 @@ public class RectanglePromptBackground extends PromptBackground
         mPaint.setAntiAlias(true);
         mBounds = new RectF();
         mBaseBounds = new RectF();
-        mRx = mRy = 40;
+        mFocalCentre = new PointF();
+        mRx = mRy = 20;
     }
 
-    public void setCornerRadius(final float rx, final float ry)
+    public RectanglePromptBackground setCornerRadius(final float rx, final float ry)
     {
         mRx = rx;
         mRy = ry;
+        return this;
     }
 
     @Override
@@ -76,6 +81,8 @@ public class RectanglePromptBackground extends PromptBackground
         x2 = Math.max(textBounds.right + textPadding,
                 focalBounds.right + textPadding);
         mBaseBounds.set(x1, y1, x2, y2);
+        mFocalCentre.x = focalBounds.centerX();
+        mFocalCentre.y = focalBounds.centerY();
     }
 
     @Override
@@ -83,7 +90,7 @@ public class RectanglePromptBackground extends PromptBackground
                        float alphaModifier)
     {
         mPaint.setAlpha((int) (mBaseColourAlpha * alphaModifier));
-        mBounds.set(mBaseBounds);
+        PromptUtils.scale(mFocalCentre, mBaseBounds, mBounds, revealModifier, false);
     }
 
     @Override
