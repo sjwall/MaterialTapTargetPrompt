@@ -687,6 +687,7 @@ public class MaterialTapTargetPromptUnitTest
                                 {
                                     throwable.printStackTrace();
                                 }
+                                prompt.mGlobalLayoutListener.onGlobalLayout();
                                 prompt.updateFocalCentrePosition();
                                 prompt.mView.mPromptFocal.update(prompt, 1, 1);
                                 prompt.mView.mPromptFocal.updateRipple(1, 1);
