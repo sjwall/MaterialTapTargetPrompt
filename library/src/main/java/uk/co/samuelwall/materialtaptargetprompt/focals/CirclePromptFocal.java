@@ -97,9 +97,9 @@ public class CirclePromptFocal extends PromptFocal
     }
 
     @Override
-    public void updateRipple(float value, float alphaModifier)
+    public void updateRipple(float revealModifier, float alphaModifier)
     {
-        mRippleRadius = mBaseRadius * value;
+        mRippleRadius = mBaseRadius * revealModifier;
         mRippleAlpha = (int) (mBaseRippleAlpha * alphaModifier);
     }
 

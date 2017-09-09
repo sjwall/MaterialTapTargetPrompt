@@ -17,8 +17,10 @@
 package uk.co.samuelwall.materialtaptargetprompt;
 
 import android.annotation.SuppressLint;
+import android.graphics.Point;
 import android.graphics.PointF;
 import android.graphics.PorterDuff;
+import android.graphics.RectF;
 import android.graphics.Typeface;
 import android.os.Build;
 import android.text.Layout;
@@ -237,5 +239,34 @@ public class PromptUtils
             layout = new StaticLayout(wrappedText, paint, maxTextWidth, textAlignment, 1f, 0f, false);
         }
         return layout;
+    }
+
+    public static void scale(final PointF origin, final RectF base, final RectF out, final float scale, final boolean even)
+    {
+        if (scale == 1)
+        {
+            out.set(base);
+            return;
+        }
+
+        final float horizontalFromCentre = base.centerX() - base.left;
+        final float verticalFromCentre = base.centerY() - base.top;
+
+        if (even && scale > 1)
+        {
+            final float minChange = Math.min(horizontalFromCentre * scale - horizontalFromCentre,
+                    verticalFromCentre * scale - verticalFromCentre);
+            out.left = base.left - minChange;
+            out.top = base.top - minChange;
+            out.right = base.right + minChange;
+            out.bottom = base.bottom + minChange;
+        }
+        else
+        {
+            out.left = origin.x - horizontalFromCentre * scale * ((origin.x - base.left) / horizontalFromCentre);
+            out.top = origin.y - verticalFromCentre * scale * ((origin.y - base.top) / verticalFromCentre);
+            out.right = origin.x + horizontalFromCentre * scale * ((base.right - origin.x) / horizontalFromCentre);
+            out.bottom = origin.y + verticalFromCentre * scale * ((base.bottom - origin.y) / verticalFromCentre);
+        }
     }
 }

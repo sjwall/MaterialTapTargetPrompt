@@ -48,5 +48,5 @@ public abstract class PromptFocal implements PromptUIElement
     public abstract RectF getBounds();
     public abstract void prepare(MaterialTapTargetPrompt prompt, View target);
     public abstract void prepare(MaterialTapTargetPrompt prompt, float targetX, float targetY);
-    public abstract void updateRipple(float revealAmount, float alphaModifier);
+    public abstract void updateRipple(float revealModifier, float alphaModifier);
 }

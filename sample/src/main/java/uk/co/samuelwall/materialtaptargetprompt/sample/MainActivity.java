@@ -41,6 +41,8 @@ import android.view.View;
 import android.widget.Toast;
 
 import uk.co.samuelwall.materialtaptargetprompt.MaterialTapTargetPrompt;
+import uk.co.samuelwall.materialtaptargetprompt.backgrounds.RectanglePromptBackground;
+import uk.co.samuelwall.materialtaptargetprompt.focals.RectanglePromptFocal;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener
@@ -207,6 +209,16 @@ public class MainActivity extends AppCompatActivity
             Toast.makeText(this, R.string.overflow_unavailable, Toast.LENGTH_SHORT);
         }
         builder.setIcon(R.drawable.ic_more_vert)
+                .show();
+    }
+
+    public void showRectPrompt(View view)
+    {
+        new MaterialTapTargetPrompt.Builder(this)
+                .setTarget(view)
+                .setPrimaryText("Rectangles")
+                .setPromptBackground(new RectanglePromptBackground())
+                .setPromptFocal(new RectanglePromptFocal())
                 .show();
     }
 
