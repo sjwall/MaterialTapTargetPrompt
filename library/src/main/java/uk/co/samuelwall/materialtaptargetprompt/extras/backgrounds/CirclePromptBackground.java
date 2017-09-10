@@ -22,9 +22,10 @@ import android.graphics.Paint;
 import android.graphics.PointF;
 import android.graphics.RectF;
 
-import uk.co.samuelwall.materialtaptargetprompt.MaterialTapTargetPrompt;
 import uk.co.samuelwall.materialtaptargetprompt.extras.PromptBackground;
 import uk.co.samuelwall.materialtaptargetprompt.extras.PromptFocal;
+import uk.co.samuelwall.materialtaptargetprompt.extras.PromptOptions;
+import uk.co.samuelwall.materialtaptargetprompt.extras.PromptText;
 import uk.co.samuelwall.materialtaptargetprompt.extras.PromptUtils;
 
 public class CirclePromptBackground extends PromptBackground
@@ -50,7 +51,6 @@ public class CirclePromptBackground extends PromptBackground
         pointPaint.setAlpha(100);*/
     }
 
-
     @Override
     public void setColour(int colour)
     {
@@ -60,21 +60,26 @@ public class CirclePromptBackground extends PromptBackground
     }
 
     @Override
-    public void prepare(final MaterialTapTargetPrompt prompt, final float maxTextWidth)
+    public void prepare(final PromptOptions options, final RectF clipViewBoundsInset88dp)
     {
-        final PromptFocal promptFocal = prompt.getPromptFocal();
+        final PromptFocal promptFocal = options.getPromptFocal();
+        final PromptText promptText = options.getPromptText();
         final RectF focalBounds = promptFocal.getBounds();
         final float focalCentreX = focalBounds.centerX();
         final float focalCentreY = focalBounds.centerY();
         final float focalPadding = promptFocal.getPadding();
-        final RectF textBounds = prompt.getTextBounds();
-        final float textPadding = prompt.getTextPadding();
-        if (prompt.isInside88dpBounds())
+        final RectF textBounds = promptText.getBounds();
+        final float textPadding = options.getTextPadding();
+        if ((focalCentreX > clipViewBoundsInset88dp.left
+                && focalCentreX < clipViewBoundsInset88dp.right)
+                || (focalCentreY > clipViewBoundsInset88dp.top
+                && focalCentreY < clipViewBoundsInset88dp.bottom))
         {
+            final boolean isTextAboveTarget = textBounds.top < focalBounds.top;
             float x1 = focalCentreX;
             float x2 = textBounds.left - textPadding;
             float y1, y2;
-            if (prompt.isTextPositionedAbove())
+            if (isTextAboveTarget)
             {
                 y1 = focalBounds.bottom + textPadding;
                 y2 = textBounds.top;
@@ -86,13 +91,13 @@ public class CirclePromptBackground extends PromptBackground
             }
 
             final float y3 = y2;
-            float x3 = x2 + maxTextWidth + textPadding + textPadding;
+            float x3 = x2 + promptText.getBounds().right + textPadding + textPadding;
 
             final float focalLeft = focalBounds.left - focalPadding;
             final float focalRight = focalBounds.right + focalPadding;
             if (x2 > focalLeft && x2 < focalRight)
             {
-                if ( prompt.isTextPositionedAbove())
+                if (isTextAboveTarget)
                 {
                     x1 = focalBounds.left - focalPadding;
                 }
@@ -103,7 +108,7 @@ public class CirclePromptBackground extends PromptBackground
             }
             else if (x3 > focalLeft && x3 < focalRight)
             {
-                if ( prompt.isTextPositionedAbove())
+                if (isTextAboveTarget)
                 {
                     x1 = focalBounds.right + focalPadding;
                 }
@@ -130,7 +135,7 @@ public class CirclePromptBackground extends PromptBackground
         {
             mBasePosition.set(focalCentreX, focalCentreY);
             final float length = Math.abs(
-                    (prompt.isTextPositionedLeft() ?
+                    (textBounds.left < focalBounds.left ?
                             textBounds.left - textPadding
                             : textBounds.right + textPadding)
                     - focalCentreX);
@@ -143,9 +148,9 @@ public class CirclePromptBackground extends PromptBackground
     }
 
     @Override
-    public void update(final MaterialTapTargetPrompt prompt, float revealModifier, float alphaModifier)
+    public void update(final PromptOptions options, float revealModifier, float alphaModifier)
     {
-        final RectF focalBounds = prompt.getPromptFocal().getBounds();
+        final RectF focalBounds = options.getPromptFocal().getBounds();
         final float focalCentreX = focalBounds.centerX();
         final float focalCentreY = focalBounds.centerY();
         mRadius = mBaseRadius * revealModifier;

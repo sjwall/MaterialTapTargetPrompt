@@ -19,8 +19,6 @@ package uk.co.samuelwall.materialtaptargetprompt.extras;
 import android.graphics.RectF;
 import android.view.View;
 
-import uk.co.samuelwall.materialtaptargetprompt.MaterialTapTargetPrompt;
-
 public abstract class PromptFocal implements PromptUIElement
 {
     protected boolean mDrawRipple;
@@ -47,8 +45,9 @@ public abstract class PromptFocal implements PromptUIElement
         return mPadding;
     }
 
+    public abstract void setColour(int colour);
     public abstract RectF getBounds();
-    public abstract void prepare(MaterialTapTargetPrompt prompt, View target);
-    public abstract void prepare(MaterialTapTargetPrompt prompt, float targetX, float targetY);
+    public abstract void prepare(final PromptOptions options, View target, final int[] promptViewPosition);
+    public abstract void prepare(final PromptOptions options, float targetX, float targetY);
     public abstract void updateRipple(float revealModifier, float alphaModifier);
 }

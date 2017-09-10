@@ -23,8 +23,8 @@ import android.graphics.PointF;
 import android.graphics.RectF;
 import android.view.View;
 
-import uk.co.samuelwall.materialtaptargetprompt.MaterialTapTargetPrompt;
 import uk.co.samuelwall.materialtaptargetprompt.extras.PromptFocal;
+import uk.co.samuelwall.materialtaptargetprompt.extras.PromptOptions;
 import uk.co.samuelwall.materialtaptargetprompt.extras.PromptUtils;
 
 public class CirclePromptFocal extends PromptFocal
@@ -67,18 +67,17 @@ public class CirclePromptFocal extends PromptFocal
     }
 
     @Override
-    public void prepare(MaterialTapTargetPrompt prompt, View target)
+    public void prepare(PromptOptions options, View target, final int[] promptViewPosition)
     {
-        final int[] viewPosition = prompt.getViewWindowPosition();
         final int[] targetPosition = new int[2];
         target.getLocationInWindow(targetPosition);
 
-        prepare(prompt, targetPosition[0] - viewPosition[0] + (target.getWidth() / 2),
-                targetPosition[1] - viewPosition[1] + (target.getHeight() / 2));
+        prepare(options, targetPosition[0] - promptViewPosition[0] + (target.getWidth() / 2),
+                targetPosition[1] - promptViewPosition[1] + (target.getHeight() / 2));
     }
 
     @Override
-    public void prepare(MaterialTapTargetPrompt prompt, float targetX, float targetY)
+    public void prepare(PromptOptions options, float targetX, float targetY)
     {
         mPosition.x = targetX;
         mPosition.y = targetY;
@@ -89,7 +88,7 @@ public class CirclePromptFocal extends PromptFocal
     }
 
     @Override
-    public void update(MaterialTapTargetPrompt prompt, float revealModifier,
+    public void update(PromptOptions options, float revealModifier,
                        float alphaModifier)
     {
         mPaint.setAlpha((int) (mBaseAlpha * alphaModifier));

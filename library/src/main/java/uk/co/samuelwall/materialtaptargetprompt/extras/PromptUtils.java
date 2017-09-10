@@ -17,11 +17,14 @@
 package uk.co.samuelwall.materialtaptargetprompt.extras;
 
 import android.annotation.SuppressLint;
+import android.content.res.Resources;
 import android.graphics.PointF;
 import android.graphics.PorterDuff;
+import android.graphics.Rect;
 import android.graphics.RectF;
 import android.graphics.Typeface;
 import android.os.Build;
+import android.support.annotation.Nullable;
 import android.text.Layout;
 import android.text.SpannableStringBuilder;
 import android.text.Spanned;
@@ -31,8 +34,6 @@ import android.view.Gravity;
 import android.view.View;
 
 import java.text.Bidi;
-
-import uk.co.samuelwall.materialtaptargetprompt.ResourceFinder;
 
 public class PromptUtils
 {
@@ -146,14 +147,14 @@ public class PromptUtils
      * @return absolute layout direction
      */
     @SuppressLint("RtlHardcoded")
-    public static Layout.Alignment getTextAlignment(final ResourceFinder resourceFinder, final int gravity,
+    public static Layout.Alignment getTextAlignment(final Resources resources, final int gravity,
                                                     final CharSequence text)
     {
         final int absoluteGravity;
         if (isVersionAfterJellyBeanMR1())
         {
             int realGravity = gravity;
-            final int layoutDirection = resourceFinder.getResources().getConfiguration().getLayoutDirection();
+            final int layoutDirection = resources.getConfiguration().getLayoutDirection();
             if (text != null && layoutDirection == View.LAYOUT_DIRECTION_RTL
                     && new Bidi(text.toString(), Bidi.DIRECTION_DEFAULT_LEFT_TO_RIGHT).isRightToLeft())
             {
@@ -269,5 +270,70 @@ public class PromptUtils
             out.right = origin.x + horizontalFromCentre * scale * ((base.right - origin.x) / horizontalFromCentre);
             out.bottom = origin.y + verticalFromCentre * scale * ((base.bottom - origin.y) / verticalFromCentre);
         }
+    }
+
+    /**
+     * Determines if the text in the supplied layout is displayed right to left.
+     *
+     * @param layout The layout to check.
+     * @return True if the text in the supplied layout is displayed right to left. False otherwise.
+     */
+    public static boolean isRtlText(final Layout layout, final Resources resources)
+    {
+        boolean result = false;
+        if (layout != null)
+        {
+            // Treat align opposite as right to left by default
+            result = layout.getAlignment() == Layout.Alignment.ALIGN_OPPOSITE;
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH)
+            {
+                // If the first character is a right to left character
+                final boolean textIsRtl = layout.isRtlCharAt(0);
+                // If the text and result are right to left then false otherwise use the textIsRtl value
+                result = (!(result && textIsRtl) && !(!result && !textIsRtl)) || textIsRtl;
+                if (!result && layout.getAlignment() == Layout.Alignment.ALIGN_NORMAL
+                        && Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1)
+                {
+                    // If the layout and text are right to left and the alignment is normal then rtl
+                    result = textIsRtl && resources.getConfiguration()
+                            .getLayoutDirection() == View.LAYOUT_DIRECTION_RTL;
+                }
+                else if (layout.getAlignment() == Layout.Alignment.ALIGN_OPPOSITE && textIsRtl)
+                {
+                    result = false;
+                }
+            }
+        }
+        return result;
+    }
+
+
+    /**
+     * Calculates the maximum width that the prompt can be.
+     *
+     * @return Maximum width in pixels that the prompt can be.
+     */
+    public static float calculateMaxWidth(final float maxTextWidth, @Nullable final Rect clipBounds, final int parentWidth, final float textPadding)
+    {
+        return Math.max(80, Math.min(maxTextWidth, (clipBounds != null ? clipBounds.right - clipBounds.left : parentWidth) - (textPadding * 2)));
+    }
+
+    /**
+     * Calculates the maximum width line in a text layout.
+     *
+     * @param textLayout The text layout
+     * @return The maximum length line
+     */
+    public static float calculateMaxTextWidth(final Layout textLayout)
+    {
+        float maxTextWidth = 0f;
+        if (textLayout != null)
+        {
+            for (int i = 0, count = textLayout.getLineCount(); i < count; i++)
+            {
+                maxTextWidth = Math.max(maxTextWidth, textLayout.getLineWidth(i));
+            }
+        }
+        return maxTextWidth;
     }
 }

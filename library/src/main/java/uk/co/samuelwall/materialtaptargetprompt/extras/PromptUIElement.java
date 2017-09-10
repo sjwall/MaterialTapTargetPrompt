@@ -18,12 +18,9 @@ package uk.co.samuelwall.materialtaptargetprompt.extras;
 
 import android.graphics.Canvas;
 
-import uk.co.samuelwall.materialtaptargetprompt.MaterialTapTargetPrompt;
-
 interface PromptUIElement
 {
-    void setColour(int colour);
-    void update(final MaterialTapTargetPrompt prompt, float revealModifier, float alphaModifier);
+    void update(final PromptOptions options, float revealModifier, float alphaModifier);
     void draw(Canvas canvas);
     boolean contains(float x, float y);
 }

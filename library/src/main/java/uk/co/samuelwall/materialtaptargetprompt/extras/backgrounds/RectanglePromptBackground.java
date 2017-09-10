@@ -22,8 +22,8 @@ import android.graphics.Paint;
 import android.graphics.PointF;
 import android.graphics.RectF;
 
-import uk.co.samuelwall.materialtaptargetprompt.MaterialTapTargetPrompt;
 import uk.co.samuelwall.materialtaptargetprompt.extras.PromptBackground;
+import uk.co.samuelwall.materialtaptargetprompt.extras.PromptOptions;
 import uk.co.samuelwall.materialtaptargetprompt.extras.PromptUtils;
 
 public class RectanglePromptBackground extends PromptBackground
@@ -60,13 +60,13 @@ public class RectanglePromptBackground extends PromptBackground
     }
 
     @Override
-    public void prepare(MaterialTapTargetPrompt prompt, float maxTextWidth)
+    public void prepare(final PromptOptions options, RectF clipViewBoundsInset88dp)
     {
-        final RectF focalBounds = prompt.getPromptFocal().getBounds();
-        final RectF textBounds = prompt.getTextBounds();
-        final float textPadding = prompt.getTextPadding();
+        final RectF focalBounds = options.getPromptFocal().getBounds();
+        final RectF textBounds = options.getPromptText().getBounds();
+        final float textPadding = options.getTextPadding();
         float x1, x2, y1, y2;
-        if (prompt.isTextPositionedAbove())
+        if (textBounds.top < focalBounds.top)
         {
             y1 = textBounds.top - textPadding;
             y2 = focalBounds.bottom + textPadding;
@@ -86,7 +86,7 @@ public class RectanglePromptBackground extends PromptBackground
     }
 
     @Override
-    public void update(MaterialTapTargetPrompt prompt, float revealModifier,
+    public void update(final PromptOptions prompt, float revealModifier,
                        float alphaModifier)
     {
         mPaint.setAlpha((int) (mBaseColourAlpha * alphaModifier));

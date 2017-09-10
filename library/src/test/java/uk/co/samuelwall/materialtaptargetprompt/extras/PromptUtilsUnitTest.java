@@ -16,21 +16,31 @@
 
 package uk.co.samuelwall.materialtaptargetprompt.extras;
 
+import android.annotation.SuppressLint;
+import android.annotation.TargetApi;
+import android.content.res.Configuration;
+import android.content.res.Resources;
 import android.graphics.PointF;
 import android.graphics.PorterDuff;
 import android.graphics.RectF;
 import android.graphics.Typeface;
+import android.os.Build;
+import android.text.Layout;
 import android.text.TextPaint;
+import android.view.Gravity;
+import android.view.View;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.robolectric.RobolectricTestRunner;
 import org.robolectric.annotation.Config;
-
-import uk.co.samuelwall.materialtaptargetprompt.extras.PromptUtils;
+import org.robolectric.util.ReflectionHelpers;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.spy;
+import static org.mockito.Mockito.when;
 
 @RunWith(RobolectricTestRunner.class)
 @Config(constants = uk.co.samuelwall.materialtaptargetprompt.BuildConfig.class, sdk = 22)
@@ -307,5 +317,91 @@ public class PromptUtilsUnitTest
         assertEquals(expected.top, out.top, 0.1);
         assertEquals(expected.right, out.right, 0.1);
         assertEquals(expected.bottom, out.bottom, 0.1);
+    }
+
+    @SuppressLint("RtlHardcoded")
+    @Test
+    public void testGetTextAlignment()
+    {
+        final Resources resources = Resources.getSystem();
+
+        assertEquals(Layout.Alignment.ALIGN_NORMAL, PromptUtils.getTextAlignment(resources, Gravity.START, "abc"));
+        assertEquals(Layout.Alignment.ALIGN_NORMAL, PromptUtils.getTextAlignment(resources, Gravity.LEFT, "abc"));
+
+        assertEquals(Layout.Alignment.ALIGN_OPPOSITE, PromptUtils.getTextAlignment(resources, Gravity.END, "abc"));
+        assertEquals(Layout.Alignment.ALIGN_OPPOSITE, PromptUtils.getTextAlignment(resources, Gravity.RIGHT, "abc"));
+
+        assertEquals(Layout.Alignment.ALIGN_CENTER, PromptUtils.getTextAlignment(resources, Gravity.CENTER_HORIZONTAL, "abc"));
+
+        assertEquals(Layout.Alignment.ALIGN_NORMAL, PromptUtils.getTextAlignment(resources, Gravity.START, "جبا"));
+        assertEquals(Layout.Alignment.ALIGN_NORMAL, PromptUtils.getTextAlignment(resources, Gravity.LEFT, "جبا"));
+
+        assertEquals(Layout.Alignment.ALIGN_OPPOSITE, PromptUtils.getTextAlignment(resources, Gravity.END, "جبا"));
+        assertEquals(Layout.Alignment.ALIGN_OPPOSITE, PromptUtils.getTextAlignment(resources, Gravity.RIGHT, "جبا"));
+
+        assertEquals(Layout.Alignment.ALIGN_CENTER, PromptUtils.getTextAlignment(resources, Gravity.CENTER_HORIZONTAL, "جبا"));
+
+        ReflectionHelpers.setStaticField(Build.VERSION.class, "SDK_INT", 16);
+
+        assertEquals(Layout.Alignment.ALIGN_NORMAL, PromptUtils.getTextAlignment(resources, Gravity.START, "abc"));
+        assertEquals(Layout.Alignment.ALIGN_NORMAL, PromptUtils.getTextAlignment(resources, Gravity.LEFT, "abc"));
+
+        assertEquals(Layout.Alignment.ALIGN_OPPOSITE, PromptUtils.getTextAlignment(resources, Gravity.END, "abc"));
+        assertEquals(Layout.Alignment.ALIGN_OPPOSITE, PromptUtils.getTextAlignment(resources, Gravity.RIGHT, "abc"));
+
+        assertEquals(Layout.Alignment.ALIGN_CENTER, PromptUtils.getTextAlignment(resources, Gravity.CENTER_HORIZONTAL, "abc"));
+
+        assertEquals(Layout.Alignment.ALIGN_NORMAL, PromptUtils.getTextAlignment(resources, Gravity.START, "جبا"));
+        assertEquals(Layout.Alignment.ALIGN_NORMAL, PromptUtils.getTextAlignment(resources, Gravity.LEFT, "جبا"));
+
+        assertEquals(Layout.Alignment.ALIGN_OPPOSITE, PromptUtils.getTextAlignment(resources, Gravity.END, "جبا"));
+        assertEquals(Layout.Alignment.ALIGN_OPPOSITE, PromptUtils.getTextAlignment(resources, Gravity.RIGHT, "جبا"));
+
+        assertEquals(Layout.Alignment.ALIGN_CENTER, PromptUtils.getTextAlignment(resources, Gravity.CENTER_HORIZONTAL, "جبا"));
+    }
+
+    @TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR1)
+    @SuppressLint("RtlHardcoded")
+    @Test
+    public void testGetTextAlignmentRtl()
+    {
+        final Resources resources = mock(Resources.class);
+        final Configuration configuration = mock(Configuration.class);
+        when(resources.getConfiguration()).thenReturn(configuration);
+        when(configuration.getLayoutDirection()).thenReturn(View.LAYOUT_DIRECTION_RTL);
+
+        assertEquals(Layout.Alignment.ALIGN_OPPOSITE, PromptUtils.getTextAlignment(resources, Gravity.START, "abc"));
+        assertEquals(Layout.Alignment.ALIGN_NORMAL, PromptUtils.getTextAlignment(resources, Gravity.LEFT, "abc"));
+
+        assertEquals(Layout.Alignment.ALIGN_NORMAL, PromptUtils.getTextAlignment(resources, Gravity.END, "abc"));
+        assertEquals(Layout.Alignment.ALIGN_OPPOSITE, PromptUtils.getTextAlignment(resources, Gravity.RIGHT, "abc"));
+
+        assertEquals(Layout.Alignment.ALIGN_CENTER, PromptUtils.getTextAlignment(resources, Gravity.CENTER_HORIZONTAL, "abc"));
+
+        assertEquals(Layout.Alignment.ALIGN_NORMAL, PromptUtils.getTextAlignment(resources, Gravity.START, "جبا"));
+        assertEquals(Layout.Alignment.ALIGN_NORMAL, PromptUtils.getTextAlignment(resources, Gravity.LEFT, "جبا"));
+
+        assertEquals(Layout.Alignment.ALIGN_OPPOSITE, PromptUtils.getTextAlignment(resources, Gravity.END, "جبا"));
+        assertEquals(Layout.Alignment.ALIGN_OPPOSITE, PromptUtils.getTextAlignment(resources, Gravity.RIGHT, "جبا"));
+
+        assertEquals(Layout.Alignment.ALIGN_CENTER, PromptUtils.getTextAlignment(resources, Gravity.CENTER_HORIZONTAL, "جبا"));
+
+        ReflectionHelpers.setStaticField(Build.VERSION.class, "SDK_INT", 16);
+
+        assertEquals(Layout.Alignment.ALIGN_NORMAL, PromptUtils.getTextAlignment(resources, Gravity.START, "abc"));
+        assertEquals(Layout.Alignment.ALIGN_NORMAL, PromptUtils.getTextAlignment(resources, Gravity.LEFT, "abc"));
+
+        assertEquals(Layout.Alignment.ALIGN_OPPOSITE, PromptUtils.getTextAlignment(resources, Gravity.END, "abc"));
+        assertEquals(Layout.Alignment.ALIGN_OPPOSITE, PromptUtils.getTextAlignment(resources, Gravity.RIGHT, "abc"));
+
+        assertEquals(Layout.Alignment.ALIGN_CENTER, PromptUtils.getTextAlignment(resources, Gravity.CENTER_HORIZONTAL, "abc"));
+
+        assertEquals(Layout.Alignment.ALIGN_NORMAL, PromptUtils.getTextAlignment(resources, Gravity.START, "جبا"));
+        assertEquals(Layout.Alignment.ALIGN_NORMAL, PromptUtils.getTextAlignment(resources, Gravity.LEFT, "جبا"));
+
+        assertEquals(Layout.Alignment.ALIGN_OPPOSITE, PromptUtils.getTextAlignment(resources, Gravity.END, "جبا"));
+        assertEquals(Layout.Alignment.ALIGN_OPPOSITE, PromptUtils.getTextAlignment(resources, Gravity.RIGHT, "جبا"));
+
+        assertEquals(Layout.Alignment.ALIGN_CENTER, PromptUtils.getTextAlignment(resources, Gravity.CENTER_HORIZONTAL, "جبا"));
     }
 }

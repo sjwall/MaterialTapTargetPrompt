@@ -16,9 +16,10 @@
 
 package uk.co.samuelwall.materialtaptargetprompt.extras;
 
-import uk.co.samuelwall.materialtaptargetprompt.MaterialTapTargetPrompt;
+import android.graphics.RectF;
 
 public abstract class PromptBackground implements PromptUIElement
 {
-    public abstract void prepare(final MaterialTapTargetPrompt prompt, final float maxTextWidth);
+    public abstract void setColour(int colour);
+    public abstract void prepare(final PromptOptions options, RectF clipViewBoundsInset88dp);
 }

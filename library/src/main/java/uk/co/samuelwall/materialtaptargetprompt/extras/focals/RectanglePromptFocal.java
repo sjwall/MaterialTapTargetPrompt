@@ -26,8 +26,8 @@ import android.os.Build;
 import android.util.SizeF;
 import android.view.View;
 
-import uk.co.samuelwall.materialtaptargetprompt.MaterialTapTargetPrompt;
 import uk.co.samuelwall.materialtaptargetprompt.extras.PromptFocal;
+import uk.co.samuelwall.materialtaptargetprompt.extras.PromptOptions;
 import uk.co.samuelwall.materialtaptargetprompt.extras.PromptUtils;
 
 public class RectanglePromptFocal extends PromptFocal
@@ -103,13 +103,12 @@ public class RectanglePromptFocal extends PromptFocal
     }
 
     @Override
-    public void prepare(MaterialTapTargetPrompt prompt, View target)
+    public void prepare(PromptOptions options, View target, final int[] promptViewPosition)
     {
-        final int[] viewPosition = prompt.getViewWindowPosition();
         final int[] targetPosition = new int[2];
         target.getLocationInWindow(targetPosition);
-        final float left = targetPosition[0] - viewPosition[0];
-        final float top = targetPosition[1] - viewPosition[1];
+        final float left = targetPosition[0] - promptViewPosition[0];
+        final float top = targetPosition[1] - promptViewPosition[1];
         final int width = target.getWidth();
         final int height = target.getHeight();
         if (mSize == null)
@@ -123,12 +122,12 @@ public class RectanglePromptFocal extends PromptFocal
         }
         else
         {
-            prepare(prompt, left + (width / 2), top + (height / 2));
+            prepare(options, left + (width / 2), top + (height / 2));
         }
     }
 
     @Override
-    public void prepare(MaterialTapTargetPrompt prompt, float targetX, float targetY)
+    public void prepare(PromptOptions options, float targetX, float targetY)
     {
         if (mSize != null)
         {
@@ -148,7 +147,7 @@ public class RectanglePromptFocal extends PromptFocal
     }
 
     @Override
-    public void update(MaterialTapTargetPrompt prompt, float revealModifier,
+    public void update(PromptOptions options, float revealModifier,
                        float alphaModifier)
     {
         PromptUtils.scale(mBaseBoundsCentre, mBaseBounds, mBounds, revealModifier, true);
