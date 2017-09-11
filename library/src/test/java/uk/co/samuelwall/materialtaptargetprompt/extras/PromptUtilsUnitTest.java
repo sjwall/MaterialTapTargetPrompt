@@ -22,10 +22,13 @@ import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.graphics.PointF;
 import android.graphics.PorterDuff;
+import android.graphics.Rect;
 import android.graphics.RectF;
 import android.graphics.Typeface;
 import android.os.Build;
+import android.support.annotation.RequiresApi;
 import android.text.Layout;
+import android.text.StaticLayout;
 import android.text.TextPaint;
 import android.view.Gravity;
 import android.view.View;
@@ -37,9 +40,10 @@ import org.robolectric.annotation.Config;
 import org.robolectric.util.ReflectionHelpers;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.when;
 
 @RunWith(RobolectricTestRunner.class)
@@ -173,19 +177,6 @@ public class PromptUtilsUnitTest
         assertNotNull(typeface);
         assertEquals(Typeface.BOLD_ITALIC, typeface.getStyle());
     }
-
-    /*@Test
-    @TargetApi(Build.VERSION_CODES.M)
-    public void testCreateStaticTextLayout()
-    {
-        ReflectionHelpers.setStaticField(Build.VERSION.class, "SDK_INT", Build.VERSION_CODES.M);
-        final TextPaint textPaint = new TextPaint();
-        final StaticLayout layout = PromptUtils.createStaticTextLayout("test", textPaint, 100, Layout.Alignment.ALIGN_CENTER, 1);
-        assertNotNull(layout);
-        assertEquals(Layout.Alignment.ALIGN_CENTER, layout.getAlignment());
-        assertEquals("test", layout.getText());
-        assertEquals(textPaint, layout.getPaint());
-    }*/
 
     @Test
     public void testScaleOriginIsNotCentre()
@@ -404,4 +395,188 @@ public class PromptUtilsUnitTest
 
         assertEquals(Layout.Alignment.ALIGN_CENTER, PromptUtils.getTextAlignment(resources, Gravity.CENTER_HORIZONTAL, "جبا"));
     }
+
+    @Test
+    public void testIsRtlNullLayout()
+    {
+        assertFalse(PromptUtils.isRtlText(null, null));
+    }
+
+    @Test
+    public void testIsRtlPreIceCreamSandwich()
+    {
+        ReflectionHelpers.setStaticField(Build.VERSION.class, "SDK_INT", Build.VERSION_CODES.HONEYCOMB_MR2);
+        final Layout layout = mock(Layout.class);
+        when(layout.getAlignment()).thenReturn(Layout.Alignment.ALIGN_NORMAL);
+        assertFalse(PromptUtils.isRtlText(layout, null));
+    }
+
+    @Test
+    public void testIsRtlPreIceCreamSandwichOpposite()
+    {
+        ReflectionHelpers.setStaticField(Build.VERSION.class, "SDK_INT", Build.VERSION_CODES.HONEYCOMB_MR2);
+        final Layout layout = mock(Layout.class);
+        when(layout.getAlignment()).thenReturn(Layout.Alignment.ALIGN_OPPOSITE);
+        assertTrue(PromptUtils.isRtlText(layout, null));
+    }
+
+    @Test
+    public void testIsRtlPreIceCreamSandwichCentre()
+    {
+        ReflectionHelpers.setStaticField(Build.VERSION.class, "SDK_INT", Build.VERSION_CODES.HONEYCOMB_MR2);
+        final Layout layout = mock(Layout.class);
+        when(layout.getAlignment()).thenReturn(Layout.Alignment.ALIGN_CENTER);
+        assertFalse(PromptUtils.isRtlText(layout, null));
+    }
+
+    @Test
+    public void testIsRtlFirstCharacterRtl()
+    {
+        final Layout layout = mock(Layout.class);
+        when(layout.isRtlCharAt(0)).thenReturn(true);
+        when(layout.getAlignment()).thenReturn(Layout.Alignment.ALIGN_NORMAL);
+        assertTrue(PromptUtils.isRtlText(layout, null));
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN_MR1)
+    @Test
+    public void testIsRtlFirstCharacterNotRtl()
+    {
+        ReflectionHelpers.setStaticField(Build.VERSION.class, "SDK_INT", Build.VERSION_CODES.JELLY_BEAN_MR1);
+        final Resources resources = mock(Resources.class);
+        final Configuration configuration = mock(Configuration.class);
+        when(resources.getConfiguration()).thenReturn(configuration);
+        when(configuration.getLayoutDirection()).thenReturn(View.LAYOUT_DIRECTION_LTR);
+        final Layout layout = mock(Layout.class);
+        when(layout.isRtlCharAt(0)).thenReturn(false);
+        when(layout.getAlignment()).thenReturn(Layout.Alignment.ALIGN_NORMAL);
+        assertFalse(PromptUtils.isRtlText(layout, resources));
+    }
+
+    @Test
+    public void testIsRtlFirstCharacterRtlOpposite()
+    {
+        final Layout layout = mock(Layout.class);
+        when(layout.isRtlCharAt(0)).thenReturn(true);
+        when(layout.getAlignment()).thenReturn(Layout.Alignment.ALIGN_OPPOSITE);
+        assertFalse(PromptUtils.isRtlText(layout, null));
+    }
+
+    @Test
+    public void testIsRtlFirstCharacterNotRtlOpposite()
+    {
+        final Layout layout = mock(Layout.class);
+        when(layout.isRtlCharAt(0)).thenReturn(false);
+        when(layout.getAlignment()).thenReturn(Layout.Alignment.ALIGN_OPPOSITE);
+        assertTrue(PromptUtils.isRtlText(layout, null));
+    }
+
+    @Test
+    public void testIsRtlFirstCharacterNotRtlPreJellyBeanMR1()
+    {
+        ReflectionHelpers.setStaticField(Build.VERSION.class, "SDK_INT", Build.VERSION_CODES.JELLY_BEAN);
+        final Layout layout = mock(Layout.class);
+        when(layout.isRtlCharAt(0)).thenReturn(false);
+        when(layout.getAlignment()).thenReturn(Layout.Alignment.ALIGN_NORMAL);
+        assertFalse(PromptUtils.isRtlText(layout, null));
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN_MR1)
+    @Test
+    public void testIsRtlFirstCharacterRtlOppositePreJellyBeanMR1()
+    {
+        ReflectionHelpers.setStaticField(Build.VERSION.class, "SDK_INT", Build.VERSION_CODES.JELLY_BEAN_MR1);
+        final Resources resources = mock(Resources.class);
+        final Configuration configuration = mock(Configuration.class);
+        when(resources.getConfiguration()).thenReturn(configuration);
+        when(configuration.getLayoutDirection()).thenReturn(View.LAYOUT_DIRECTION_RTL);
+        final Layout layout = mock(Layout.class);
+        when(layout.isRtlCharAt(0)).thenReturn(false);
+        when(layout.getAlignment()).thenReturn(Layout.Alignment.ALIGN_NORMAL);
+        assertTrue(PromptUtils.isRtlText(layout, resources));
+    }
+
+    @Test
+    public void testIsRtlFirstCharacterNotRtlOppositePreJellyBeanMR1()
+    {
+        ReflectionHelpers.setStaticField(Build.VERSION.class, "SDK_INT", Build.VERSION_CODES.JELLY_BEAN_MR1);
+        final Layout layout = mock(Layout.class);
+        when(layout.isRtlCharAt(0)).thenReturn(false);
+        when(layout.getAlignment()).thenReturn(Layout.Alignment.ALIGN_CENTER);
+        assertFalse(PromptUtils.isRtlText(layout, null));
+    }
+
+    @Test
+    public void testIsPointInCircle()
+    {
+        assertTrue(PromptUtils.isPointInCircle(5, 5, new PointF(10, 10), 10));
+    }
+
+    @Test
+    public void testIsPointInCircleOutside()
+    {
+        assertFalse(PromptUtils.isPointInCircle(1, 1, new PointF(10, 10), 10));
+    }
+
+    @Test
+    public void testCalculateMaxTextWidth()
+    {
+        Layout layout = mock(Layout.class);
+        when(layout.getLineCount()).thenReturn(3);
+        when(layout.getLineWidth(0)).thenReturn(10f);
+        when(layout.getLineWidth(1)).thenReturn(100f);
+        when(layout.getLineWidth(2)).thenReturn(50f);
+        assertEquals(100f, PromptUtils.calculateMaxTextWidth(layout), 0);
+    }
+
+    @Test
+    public void testCalculateMaxTextWidthNull()
+    {
+        assertEquals(0, PromptUtils.calculateMaxTextWidth(null), 0);
+    }
+
+    @Test
+    public void testCalculateMaxWidthDefault()
+    {
+        assertEquals(260, PromptUtils.calculateMaxWidth(1000, new Rect(100, 0, 400, 0), 0, 20), 0);
+    }
+
+    @Test
+    public void testCalculateMaxWidthDefaultWidth()
+    {
+        assertEquals(80, PromptUtils.calculateMaxWidth(0, null, 0, 0), 0);
+    }
+
+    @Test
+    public void testCalculateMaxWidthNullBounds()
+    {
+        assertEquals(160, PromptUtils.calculateMaxWidth(1000, null, 200, 20), 0);
+    }
+
+    @Test
+    public void testCreateStaticTextLayout()
+    {
+        final TextPaint paint = new TextPaint();
+        final StaticLayout layout = PromptUtils.createStaticTextLayout("test", paint, 300,
+                Layout.Alignment.ALIGN_CENTER, 0.5f);
+        assertNotNull(layout);
+        assertEquals("test", layout.getText().toString());
+        assertEquals(paint, layout.getPaint());
+        assertEquals(Layout.Alignment.ALIGN_CENTER, layout.getAlignment());
+        assertEquals(300, layout.getWidth());
+    }
+
+    /*@Test
+    @TargetApi(Build.VERSION_CODES.M)
+    public void testCreateStaticTextLayoutMarshmallow()
+    {
+        ReflectionHelpers.setStaticField(Build.VERSION.class, "SDK_INT", Build.VERSION_CODES.M);
+        final TextPaint textPaint = new TextPaint();
+        final StaticLayout layout = PromptUtils.createStaticTextLayout("test", textPaint, 300, Layout.Alignment.ALIGN_CENTER, 1);
+        assertNotNull(layout);
+        assertEquals(Layout.Alignment.ALIGN_CENTER, layout.getAlignment());
+        assertEquals("test", layout.getText().toString());
+        assertEquals(textPaint, layout.getPaint());
+        assertEquals(300, layout.getWidth());
+    }*/
 }
