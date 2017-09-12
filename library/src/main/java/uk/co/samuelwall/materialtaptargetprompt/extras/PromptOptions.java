@@ -191,6 +191,7 @@ public class PromptOptions<T extends PromptOptions>
     public T setTarget(final View target)
     {
         mTargetView = target;
+        mTargetPosition = null;
         mTargetSet = mTargetView != null;
         return (T) this;
     }
