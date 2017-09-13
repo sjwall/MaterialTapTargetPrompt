@@ -184,12 +184,16 @@ public class PromptText implements PromptUIElement
             primaryTextHeight = mPrimaryTextLayout.getHeight();
         }
         float textHeight;
-        if (options.getSecondaryText() != null)
+        if (mSecondaryTextLayout != null)
         {
             textHeight = mSecondaryTextLayout.getHeight();
             if (verticalTextPositionAbove)
             {
-                mPrimaryTextTop = mPrimaryTextTop - options.getTextSeparation() - textHeight;
+                mPrimaryTextTop -= textHeight;
+                if (mPrimaryTextLayout != null)
+                {
+                    mPrimaryTextTop -= options.getTextSeparation();
+                }
             }
 
             if (mPrimaryTextLayout != null)
