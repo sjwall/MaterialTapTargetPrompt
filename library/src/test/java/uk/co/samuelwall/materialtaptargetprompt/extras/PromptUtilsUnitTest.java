@@ -316,6 +316,9 @@ public class PromptUtilsUnitTest
     {
         final Resources resources = Resources.getSystem();
 
+        assertEquals(Layout.Alignment.ALIGN_NORMAL, PromptUtils.getTextAlignment(resources, Gravity.START, null));
+        assertEquals(Layout.Alignment.ALIGN_NORMAL, PromptUtils.getTextAlignment(resources, Gravity.LEFT, null));
+
         assertEquals(Layout.Alignment.ALIGN_NORMAL, PromptUtils.getTextAlignment(resources, Gravity.START, "abc"));
         assertEquals(Layout.Alignment.ALIGN_NORMAL, PromptUtils.getTextAlignment(resources, Gravity.LEFT, "abc"));
 
