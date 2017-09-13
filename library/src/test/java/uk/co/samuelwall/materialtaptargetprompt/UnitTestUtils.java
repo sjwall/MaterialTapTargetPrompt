@@ -45,6 +45,11 @@ public class UnitTestUtils
             resourceFinder = new ActivityResourceFinder(Robolectric.buildActivity(Activity.class)
                     .create().get());
         }
+        return createPromptOptions(resourceFinder);
+    }
+
+    public static PromptOptions createPromptOptions(final ResourceFinder resourceFinder)
+    {
         return new PromptOptions(resourceFinder);
     }
 }

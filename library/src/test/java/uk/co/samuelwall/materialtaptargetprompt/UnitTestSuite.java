@@ -21,6 +21,7 @@ import org.junit.runners.Suite;
 
 import uk.co.samuelwall.materialtaptargetprompt.extras.AlphaSpanUnitTest;
 import uk.co.samuelwall.materialtaptargetprompt.extras.PromptOptionsUnitTest;
+import uk.co.samuelwall.materialtaptargetprompt.extras.PromptTextUnitTest;
 import uk.co.samuelwall.materialtaptargetprompt.extras.PromptUtilsUnitTest;
 
 // Runs all unit tests.
@@ -28,6 +29,7 @@ import uk.co.samuelwall.materialtaptargetprompt.extras.PromptUtilsUnitTest;
 @Suite.SuiteClasses({
     AlphaSpanUnitTest.class,
     PromptOptionsUnitTest.class,
+    PromptTextUnitTest.class,
     PromptUtilsUnitTest.class,
     MaterialTapTargetPromptUnitTest.class
 })

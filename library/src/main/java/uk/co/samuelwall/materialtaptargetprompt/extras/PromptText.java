@@ -26,15 +26,15 @@ import android.text.TextPaint;
 
 public class PromptText implements PromptUIElement
 {
-    private RectF mTextBounds = new RectF();
-    private float mPrimaryTextLeft;
-    private float mPrimaryTextLeftChange;
-    private float mPrimaryTextTop;
-    private float mSecondaryTextLeft;
-    private float mSecondaryTextLeftChange;
-    private float mSecondaryTextOffsetTop;
-    private Layout mPrimaryTextLayout;
-    private Layout mSecondaryTextLayout;
+    RectF mTextBounds = new RectF();
+    float mPrimaryTextLeft;
+    float mPrimaryTextLeftChange;
+    float mPrimaryTextTop;
+    float mSecondaryTextLeft;
+    float mSecondaryTextLeftChange;
+    float mSecondaryTextOffsetTop;
+    Layout mPrimaryTextLayout;
+    Layout mSecondaryTextLayout;
 
     /**
      * The paint used to draw the primary text.
