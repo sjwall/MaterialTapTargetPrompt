@@ -486,7 +486,7 @@ public class PromptUtilsUnitTest
 
     @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN_MR1)
     @Test
-    public void testIsRtlFirstCharacterRtlOppositePreJellyBeanMR1()
+    public void testIsRtlFirstCharacterNotRtlOppositePreJellyBeanMR1()
     {
         ReflectionHelpers.setStaticField(Build.VERSION.class, "SDK_INT", Build.VERSION_CODES.JELLY_BEAN_MR1);
         final Resources resources = mock(Resources.class);
@@ -500,7 +500,7 @@ public class PromptUtilsUnitTest
     }
 
     @Test
-    public void testIsRtlFirstCharacterNotRtlOppositePreJellyBeanMR1()
+    public void testIsRtlFirstCharacterNotRtlNotOppositePreJellyBeanMR1()
     {
         ReflectionHelpers.setStaticField(Build.VERSION.class, "SDK_INT", Build.VERSION_CODES.JELLY_BEAN_MR1);
         final Layout layout = mock(Layout.class);
