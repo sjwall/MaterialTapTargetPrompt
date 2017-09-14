@@ -17,12 +17,15 @@
 package uk.co.samuelwall.materialtaptargetprompt;
 
 import android.app.Activity;
+import android.content.res.Resources;
+import android.util.DisplayMetrics;
 
 import org.robolectric.Robolectric;
 
 import uk.co.samuelwall.materialtaptargetprompt.extras.PromptOptions;
 
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 public class UnitTestUtils
 {
@@ -39,6 +42,10 @@ public class UnitTestUtils
         if (mock)
         {
             resourceFinder = mock(ResourceFinder.class);
+            final Resources resources = mock(Resources.class);
+            when(resourceFinder.getResources()).thenReturn(resources);
+            final DisplayMetrics displayMetrics = new DisplayMetrics();
+            when(resources.getDisplayMetrics()).thenReturn(displayMetrics);
         }
         else
         {
@@ -51,5 +58,11 @@ public class UnitTestUtils
     public static PromptOptions createPromptOptions(final ResourceFinder resourceFinder)
     {
         return new PromptOptions(resourceFinder);
+    }
+
+    public static PromptOptions createPromptOptionsWithTestResourceFinder()
+    {
+        return new PromptOptions(new TestResourceFinder(Robolectric.buildActivity(Activity.class)
+                .create().get()));
     }
 }

@@ -17,12 +17,9 @@
 package uk.co.samuelwall.materialtaptargetprompt.extras;
 
 import android.app.Activity;
-import android.content.res.TypedArray;
 import android.graphics.Canvas;
 import android.graphics.Rect;
 import android.graphics.RectF;
-import android.support.annotation.StyleRes;
-import android.support.annotation.StyleableRes;
 import android.text.Layout;
 import android.view.Gravity;
 import android.view.ViewGroup;
@@ -33,7 +30,7 @@ import org.robolectric.Robolectric;
 import org.robolectric.RobolectricTestRunner;
 import org.robolectric.annotation.Config;
 
-import uk.co.samuelwall.materialtaptargetprompt.ActivityResourceFinder;
+import uk.co.samuelwall.materialtaptargetprompt.TestResourceFinder;
 import uk.co.samuelwall.materialtaptargetprompt.UnitTestUtils;
 
 import static junit.framework.TestCase.assertFalse;
@@ -800,31 +797,6 @@ public class PromptTextUnitTest
         assertEquals(572, bounds.bottom, 0);
         assertFalse(promptText.contains(10, 10));
         promptText.draw(mock(Canvas.class));
-    }
-
-    private static class TestResourceFinder extends ActivityResourceFinder
-    {
-        private ViewGroup mParentView;
-        private TypedArray mStyledAttributes;
-
-        public TestResourceFinder(final Activity activity)
-        {
-            super(activity);
-            mParentView = mock(ViewGroup.class);
-            mStyledAttributes = mock(TypedArray.class);
-        }
-
-        @Override
-        public ViewGroup getPromptParentView()
-        {
-            return mParentView;
-        }
-
-        @Override
-        public TypedArray obtainStyledAttributes(@StyleRes int resId, @StyleableRes int[] attrs)
-        {
-            return mStyledAttributes;
-        }
     }
 
     private static class TestPromptText extends PromptText
