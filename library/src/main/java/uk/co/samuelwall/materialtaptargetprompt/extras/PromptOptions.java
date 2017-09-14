@@ -43,6 +43,7 @@ import uk.co.samuelwall.materialtaptargetprompt.ResourceFinder;
 import uk.co.samuelwall.materialtaptargetprompt.extras.backgrounds.CirclePromptBackground;
 import uk.co.samuelwall.materialtaptargetprompt.extras.focals.CirclePromptFocal;
 
+@SuppressWarnings("unchecked")
 public class PromptOptions<T extends PromptOptions>
 {
     /**
@@ -69,7 +70,10 @@ public class PromptOptions<T extends PromptOptions>
      * The text to display.
      */
     private CharSequence mPrimaryText, mSecondaryText;
-    private @ColorInt int mPrimaryTextColour, mSecondaryTextColour, mBackgroundColour, mFocalColour;
+    private @ColorInt int mPrimaryTextColour = Color.WHITE;
+    private @ColorInt int mSecondaryTextColour = Color.argb(179, 255, 255, 255);
+    private @ColorInt int mBackgroundColour = Color.argb(244, 63, 81, 181);
+    private @ColorInt int mFocalColour = Color.WHITE;
 
     private float mFocalRadius;
     private float mPrimaryTextSize, mSecondaryTextSize;
@@ -91,19 +95,19 @@ public class PromptOptions<T extends PromptOptions>
 
     private boolean mCaptureTouchEventOnFocal;
     private float mTextSeparation;
-    private boolean mAutoDismiss, mAutoFinish;
+    private boolean mAutoDismiss = true;
+    private boolean mAutoFinish = true;
     private boolean mCaptureTouchEventOutsidePrompt;
     private Typeface mPrimaryTextTypeface, mSecondaryTextTypeface;
     private int mPrimaryTextTypefaceStyle, mSecondaryTextTypefaceStyle;
     private ColorStateList mIconDrawableTintList = null;
-    private PorterDuff.Mode mIconDrawableTintMode = null;
+    private PorterDuff.Mode mIconDrawableTintMode = PorterDuff.Mode.MULTIPLY;
     private boolean mHasIconDrawableTint;
     private int mIconDrawableColourFilter;
     private View mTargetRenderView;
     private boolean mIdleAnimationEnabled = true;
     private int mPrimaryTextGravity = Gravity.START, mSecondaryTextGravity = Gravity.START;
     private View mClipToView;
-    private float m88dp;
 
     /**
      * The shape to render for the prompt background.
@@ -120,6 +124,14 @@ public class PromptOptions<T extends PromptOptions>
     public PromptOptions(final ResourceFinder resourceFinder)
     {
         mResourceFinder = resourceFinder;
+        final float density = mResourceFinder.getResources().getDisplayMetrics().density;
+        mFocalRadius =       density * 44;
+        mPrimaryTextSize =   density * 22;
+        mSecondaryTextSize = density * 18;
+        mMaxTextWidth =      density * 400;
+        mTextPadding =       density * 40;
+        mFocalPadding =      density * 20;
+        mTextSeparation =    density * 16;
     }
 
     public void load(int themeResId)
@@ -132,34 +144,32 @@ public class PromptOptions<T extends PromptOptions>
             themeResId = outValue.resourceId;
         }
 
-        final float density = mResourceFinder.getResources().getDisplayMetrics().density;
-        m88dp = 88 * density;
         final TypedArray a = mResourceFinder.obtainStyledAttributes(themeResId, R.styleable.PromptView);
-        mPrimaryTextColour = a.getColor(R.styleable.PromptView_mttp_primaryTextColour, Color.WHITE);
-        mSecondaryTextColour = a.getColor(R.styleable.PromptView_mttp_secondaryTextColour, Color.argb(179, 255, 255, 255));
+        mPrimaryTextColour = a.getColor(R.styleable.PromptView_mttp_primaryTextColour, mPrimaryTextColour);
+        mSecondaryTextColour = a.getColor(R.styleable.PromptView_mttp_secondaryTextColour, mSecondaryTextColour);
         mPrimaryText = a.getString(R.styleable.PromptView_mttp_primaryText);
         mSecondaryText = a.getString(R.styleable.PromptView_mttp_secondaryText);
-        mBackgroundColour = a.getColor(R.styleable.PromptView_mttp_backgroundColour, Color.argb(244, 63, 81, 181));
-        mFocalColour = a.getColor(R.styleable.PromptView_mttp_focalColour, Color.WHITE);
-        mFocalRadius = a.getDimension(R.styleable.PromptView_mttp_focalRadius, density * 44);
-        mPrimaryTextSize = a.getDimension(R.styleable.PromptView_mttp_primaryTextSize, 22 * density);
-        mSecondaryTextSize = a.getDimension(R.styleable.PromptView_mttp_secondaryTextSize, 18 * density);
-        mMaxTextWidth = a.getDimension(R.styleable.PromptView_mttp_maxTextWidth, 400 * density);
-        mTextPadding = a.getDimension(R.styleable.PromptView_mttp_textPadding, 40 * density);
-        mFocalPadding = a.getDimension(R.styleable.PromptView_mttp_focalToTextPadding, 20 * density);
-        mTextSeparation = a.getDimension(R.styleable.PromptView_mttp_textSeparation, 16 * density);
-        mAutoDismiss = a.getBoolean(R.styleable.PromptView_mttp_autoDismiss, true);
-        mAutoFinish = a.getBoolean(R.styleable.PromptView_mttp_autoFinish, true);
-        mCaptureTouchEventOutsidePrompt = a.getBoolean(R.styleable.PromptView_mttp_captureTouchEventOutsidePrompt, false);
-        mCaptureTouchEventOnFocal = a.getBoolean(R.styleable.PromptView_mttp_captureTouchEventOnFocal, false);
-        mPrimaryTextTypefaceStyle = a.getInt(R.styleable.PromptView_mttp_primaryTextStyle, 0);
-        mSecondaryTextTypefaceStyle = a.getInt(R.styleable.PromptView_mttp_secondaryTextStyle, 0);
+        mBackgroundColour = a.getColor(R.styleable.PromptView_mttp_backgroundColour, mBackgroundColour);
+        mFocalColour = a.getColor(R.styleable.PromptView_mttp_focalColour, mFocalColour);
+        mFocalRadius = a.getDimension(R.styleable.PromptView_mttp_focalRadius, mFocalRadius);
+        mPrimaryTextSize = a.getDimension(R.styleable.PromptView_mttp_primaryTextSize, mPrimaryTextSize);
+        mSecondaryTextSize = a.getDimension(R.styleable.PromptView_mttp_secondaryTextSize, mSecondaryTextSize);
+        mMaxTextWidth = a.getDimension(R.styleable.PromptView_mttp_maxTextWidth, mMaxTextWidth);
+        mTextPadding = a.getDimension(R.styleable.PromptView_mttp_textPadding, mTextPadding);
+        mFocalPadding = a.getDimension(R.styleable.PromptView_mttp_focalToTextPadding, mFocalPadding);
+        mTextSeparation = a.getDimension(R.styleable.PromptView_mttp_textSeparation, mTextSeparation);
+        mAutoDismiss = a.getBoolean(R.styleable.PromptView_mttp_autoDismiss, mAutoDismiss);
+        mAutoFinish = a.getBoolean(R.styleable.PromptView_mttp_autoFinish, mAutoFinish);
+        mCaptureTouchEventOutsidePrompt = a.getBoolean(R.styleable.PromptView_mttp_captureTouchEventOutsidePrompt, mCaptureTouchEventOutsidePrompt);
+        mCaptureTouchEventOnFocal = a.getBoolean(R.styleable.PromptView_mttp_captureTouchEventOnFocal, mCaptureTouchEventOnFocal);
+        mPrimaryTextTypefaceStyle = a.getInt(R.styleable.PromptView_mttp_primaryTextStyle, mPrimaryTextTypefaceStyle);
+        mSecondaryTextTypefaceStyle = a.getInt(R.styleable.PromptView_mttp_secondaryTextStyle, mSecondaryTextTypefaceStyle);
         mPrimaryTextTypeface = PromptUtils.setTypefaceFromAttrs(a.getString(R.styleable.PromptView_mttp_primaryTextFontFamily), a.getInt(R.styleable.PromptView_mttp_primaryTextTypeface, 0), mPrimaryTextTypefaceStyle);
         mSecondaryTextTypeface = PromptUtils.setTypefaceFromAttrs(a.getString(R.styleable.PromptView_mttp_secondaryTextFontFamily), a.getInt(R.styleable.PromptView_mttp_secondaryTextTypeface, 0), mSecondaryTextTypefaceStyle);
 
         mIconDrawableColourFilter = a.getColor(R.styleable.PromptView_mttp_iconColourFilter, mBackgroundColour);
         mIconDrawableTintList = a.getColorStateList(R.styleable.PromptView_mttp_iconTint);
-        mIconDrawableTintMode = PromptUtils.parseTintMode(a.getInt(R.styleable.PromptView_mttp_iconTintMode, -1), PorterDuff.Mode.MULTIPLY);
+        mIconDrawableTintMode = PromptUtils.parseTintMode(a.getInt(R.styleable.PromptView_mttp_iconTintMode, -1), mIconDrawableTintMode);
         mHasIconDrawableTint = true;
 
         final int targetId = a.getResourceId(R.styleable.PromptView_mttp_target, 0);
@@ -792,6 +802,11 @@ public class PromptOptions<T extends PromptOptions>
         return (T) this;
     }
 
+    public int getBackgroundColour()
+    {
+        return mBackgroundColour;
+    }
+
     /**
      * Set the focal point colour.
      *
@@ -802,6 +817,11 @@ public class PromptOptions<T extends PromptOptions>
     {
         mFocalColour = colour;
         return (T) this;
+    }
+
+    public int getFocalColour()
+    {
+        return mFocalColour;
     }
 
     /**
@@ -826,6 +846,11 @@ public class PromptOptions<T extends PromptOptions>
     {
         mFocalRadius = mResourceFinder.getResources().getDimension(resId);
         return (T) this;
+    }
+
+    public float getFocalRadius()
+    {
+        return mFocalRadius;
     }
 
     /**
@@ -1086,15 +1111,15 @@ public class PromptOptions<T extends PromptOptions>
             }
         }
 
-        mPromptBackground.setColour(mBackgroundColour);
+        mPromptBackground.setColour(getBackgroundColour());
 
-        mPromptFocal.setColour(mFocalColour);
+        mPromptFocal.setColour(getFocalColour());
         mPromptFocal.setRippleAlpha(150);
-        mPromptFocal.setDrawRipple(mIdleAnimationEnabled);
-        mPromptFocal.setPadding(mFocalPadding);
+        mPromptFocal.setDrawRipple(getIdleAnimationEnabled());
+        mPromptFocal.setPadding(getFocalPadding());
         if (mPromptFocal instanceof CirclePromptFocal)
         {
-            ((CirclePromptFocal) mPromptFocal).setRadius(mFocalRadius);
+            ((CirclePromptFocal) mPromptFocal).setRadius(getFocalRadius());
         }
 
         return mPrompt;
