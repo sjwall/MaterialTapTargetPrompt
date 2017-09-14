@@ -295,8 +295,8 @@ public class PromptUtils
                         && Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1)
                 {
                     // If the layout and text are right to left and the alignment is normal then rtl
-                    result = textIsRtl && resources.getConfiguration()
-                            .getLayoutDirection() == View.LAYOUT_DIRECTION_RTL;
+                    result = resources.getConfiguration()
+                                .getLayoutDirection() == View.LAYOUT_DIRECTION_RTL;
                 }
                 else if (layout.getAlignment() == Layout.Alignment.ALIGN_OPPOSITE && textIsRtl)
                 {
