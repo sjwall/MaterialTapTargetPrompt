@@ -1060,7 +1060,7 @@ public class PromptOptions<T extends PromptOptions>
         }
         final MaterialTapTargetPrompt mPrompt = MaterialTapTargetPrompt.createDefault(this);
 
-        if (mAnimationInterpolator != null)
+        if (mAnimationInterpolator == null)
         {
             mAnimationInterpolator = new AccelerateDecelerateInterpolator();
         }
