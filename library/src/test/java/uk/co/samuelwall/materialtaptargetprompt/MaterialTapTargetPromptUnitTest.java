@@ -20,7 +20,6 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.graphics.Canvas;
 import android.graphics.Color;
-import android.graphics.PointF;
 import android.text.SpannableStringBuilder;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
@@ -55,13 +54,12 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.spy;
-import static org.mockito.Mockito.when;
 
 @RunWith(RobolectricTestRunner.class)
 @Config(constants = uk.co.samuelwall.materialtaptargetprompt.BuildConfig.class, sdk = 22)
 public class MaterialTapTargetPromptUnitTest
 {
-    private static int SCREEN_WIDTH = 1080;
+   private static int SCREEN_WIDTH = 1080;
     private static int SCREEN_HEIGHT = 1920;
 
     private int stateProgress;
@@ -508,7 +506,6 @@ public class MaterialTapTargetPromptUnitTest
 
         /*assertEquals(90, prompt.mTargetPosition.x, 0);
         assertEquals(90, prompt.mTargetPosition.y, 0);
-        assertTrue(prompt.mInside88dpBounds);
         assertFalse(prompt.mHorizontalTextPositionLeft);
 
 
@@ -562,10 +559,6 @@ public class MaterialTapTargetPromptUnitTest
                                 }
                                 prompt.mView.mClipToBounds = true;
                                 prompt.mView.mClipBounds.set(0, 0, screenWidth, screenHeight);
-                                prompt.mClipViewBoundsInset88dp.left = prompt.mView.mClipBounds.left + prompt.m88dp;
-                                prompt.mClipViewBoundsInset88dp.right = prompt.mView.mClipBounds.right - prompt.m88dp;
-                                prompt.mClipViewBoundsInset88dp.top = prompt.mView.mClipBounds.top + prompt.m88dp;
-                                prompt.mClipViewBoundsInset88dp.bottom = prompt.mView.mClipBounds.bottom - prompt.m88dp;
                                 return null;
                             }
                         }).when(prompt).updateClipBounds();
