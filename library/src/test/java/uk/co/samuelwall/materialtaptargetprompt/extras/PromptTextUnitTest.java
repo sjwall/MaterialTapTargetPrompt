@@ -766,47 +766,4 @@ public class PromptTextUnitTest
         assertFalse(promptText.contains(10, 10));
         promptText.draw(mock(Canvas.class));
     }
-
-    private static class TestPromptText extends PromptText
-    {
-        boolean mRtl;
-        float mMaxTextWidth;
-
-        public TestPromptText(float maxTextWidth) 
-        {
-            mMaxTextWidth = maxTextWidth;
-        }
-
-        public TestPromptText(float maxTextWidth, boolean rtl)
-        {
-            mMaxTextWidth = maxTextWidth;
-            mRtl = rtl;
-        }
-
-        @Override
-        void createTextLayout(final PromptOptions options, final float maxWidth, final float alphaModifier)
-        {
-            super.createTextLayout(options, maxWidth, alphaModifier);
-            if (mPrimaryTextLayout != null)
-            {
-                mPrimaryTextLayout = spy(mPrimaryTextLayout);
-                when(mPrimaryTextLayout.getLineWidth(0)).thenReturn(mMaxTextWidth);
-                when(mPrimaryTextLayout.getHeight()).thenReturn(200);
-                if (mRtl)
-                {
-                    when(mPrimaryTextLayout.getAlignment()).thenReturn(Layout.Alignment.ALIGN_OPPOSITE);
-                }
-            }
-            if (mSecondaryTextLayout != null)
-            {
-                mSecondaryTextLayout = spy(mSecondaryTextLayout);
-                when(mSecondaryTextLayout.getLineWidth(0)).thenReturn(mMaxTextWidth);
-                when(mSecondaryTextLayout.getHeight()).thenReturn(200);
-                if (mRtl)
-                {
-                    when(mSecondaryTextLayout.getAlignment()).thenReturn(Layout.Alignment.ALIGN_OPPOSITE);
-                }
-            }
-        }
-    }
 }

@@ -31,6 +31,7 @@ import uk.co.samuelwall.materialtaptargetprompt.extras.PromptUtilsUnitTest;
     PromptOptionsUnitTest.class,
     PromptTextUnitTest.class,
     PromptUtilsUnitTest.class,
+    CirclePromptBackgroundUnitTest.class,
     MaterialTapTargetPromptUnitTest.class
 })
 public class UnitTestSuite {}
