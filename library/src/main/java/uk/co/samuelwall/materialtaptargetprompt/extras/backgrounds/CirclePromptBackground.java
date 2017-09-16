@@ -72,10 +72,13 @@ public class CirclePromptBackground extends PromptBackground
         final float focalPadding = promptFocal.getPadding();
         final RectF textBounds = promptText.getBounds();
         final float textPadding = options.getTextPadding();
-
-        if (PromptUtils.containsInset(clipBounds,
-                (int) (88 * options.getResourceFinder().getResources().getDisplayMetrics().density),
-                (int) focalCentreX, (int) focalCentreY))
+        final RectF clipBoundsInset88dp = new RectF(clipBounds);
+        final float inset88dp = 88f * options.getResourceFinder().getResources().getDisplayMetrics().density;
+        clipBoundsInset88dp.inset(inset88dp, inset88dp);
+        if ((focalCentreX > clipBoundsInset88dp.left
+                && focalCentreX < clipBoundsInset88dp.right)
+                || (focalCentreY > clipBoundsInset88dp.top
+                && focalCentreY < clipBoundsInset88dp.bottom))
         {
             final boolean isTextAboveTarget = textBounds.top < focalBounds.top;
             float x1 = focalCentreX;
