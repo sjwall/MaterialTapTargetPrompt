@@ -64,9 +64,8 @@ public class CirclePromptBackground extends PromptBackground
     public void prepare(final PromptOptions options, final boolean clipToBounds,
                         final Rect clipBounds)
     {
-        final PromptFocal promptFocal = options.getPromptFocal();
         final PromptText promptText = options.getPromptText();
-        final RectF focalBounds = promptFocal.getBounds();
+        final RectF focalBounds = options.getPromptFocal().getBounds();
         final float focalCentreX = focalBounds.centerX();
         final float focalCentreY = focalBounds.centerY();
         final float focalPadding = options.getFocalPadding();
@@ -96,7 +95,7 @@ public class CirclePromptBackground extends PromptBackground
             }
 
             final float y3 = y2;
-            float x3 = x2 + promptText.getBounds().right + textPadding + textPadding;
+            float x3 = promptText.getBounds().right + textPadding;
 
             final float focalLeft = focalBounds.left - focalPadding;
             final float focalRight = focalBounds.right + focalPadding;
