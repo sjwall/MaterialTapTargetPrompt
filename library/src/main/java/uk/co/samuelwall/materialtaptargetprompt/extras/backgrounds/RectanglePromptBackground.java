@@ -20,6 +20,7 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.PointF;
+import android.graphics.Rect;
 import android.graphics.RectF;
 
 import uk.co.samuelwall.materialtaptargetprompt.extras.PromptBackground;
@@ -60,7 +61,7 @@ public class RectanglePromptBackground extends PromptBackground
     }
 
     @Override
-    public void prepare(final PromptOptions options, RectF clipViewBoundsInset88dp)
+    public void prepare(final PromptOptions options, final boolean clipToBounds, Rect clipBounds)
     {
         final RectF focalBounds = options.getPromptFocal().getBounds();
         final RectF textBounds = options.getPromptText().getBounds();

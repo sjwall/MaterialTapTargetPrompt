@@ -76,11 +76,8 @@ public class PromptText implements PromptUIElement
 
     /**
      * Recalculates the primary and secondary text positions.
-     * @param clipBounds
-     * @param clipViewBoundsInset88dp
      */
-    public void prepare(PromptOptions options, boolean clipToBounds, Rect clipBounds,
-                        RectF clipViewBoundsInset88dp)
+    public void prepare(PromptOptions options, boolean clipToBounds, Rect clipBounds)
     {
         mClipToBounds = clipToBounds;
         mClipBounds = clipBounds;
@@ -130,7 +127,9 @@ public class PromptText implements PromptUIElement
         final float focalPadding = options.getFocalPadding();
         final float textPadding = options.getTextPadding();
 
-        if (clipViewBoundsInset88dp.contains(focalCentreX, focalCentreY))
+        if (PromptUtils.containsInset(clipBounds,
+                (int) (88 * options.getResourceFinder().getResources().getDisplayMetrics().density),
+                (int) focalCentreX, (int) focalCentreY))
         {
             mPrimaryTextLeft = clipBounds.left;
             final float width = Math.min(textWidth, maxWidth);

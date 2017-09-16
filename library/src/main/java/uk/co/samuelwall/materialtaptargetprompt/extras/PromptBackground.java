@@ -16,10 +16,10 @@
 
 package uk.co.samuelwall.materialtaptargetprompt.extras;
 
-import android.graphics.RectF;
+import android.graphics.Rect;
 
 public abstract class PromptBackground implements PromptUIElement
 {
     public abstract void setColour(int colour);
-    public abstract void prepare(final PromptOptions options, RectF clipViewBoundsInset88dp);
+    public abstract void prepare(final PromptOptions options, boolean clipToBounds, Rect clipBounds);
 }

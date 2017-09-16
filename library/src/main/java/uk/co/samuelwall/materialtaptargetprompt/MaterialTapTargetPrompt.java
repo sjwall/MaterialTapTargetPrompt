@@ -129,16 +129,6 @@ public class MaterialTapTargetPrompt
     final ViewTreeObserver.OnGlobalLayoutListener mGlobalLayoutListener;
 
     /**
-     * Clip view bounds inset by 88dp.
-     */
-    RectF mClipViewBoundsInset88dp;
-
-    /**
-     * 88dp pixel value.
-     */
-    float m88dp;
-
-    /**
      * Default constructor.
      *
      * @param promptOptions The options used to create the prompt.
@@ -146,7 +136,6 @@ public class MaterialTapTargetPrompt
     MaterialTapTargetPrompt(final PromptOptions promptOptions)
     {
         final ResourceFinder resourceFinder = promptOptions.getResourceFinder();
-        m88dp = 88 * resourceFinder.getResources().getDisplayMetrics().density;
         mView = new PromptView(resourceFinder.getContext());
         mView.mPromptOptions = promptOptions;
         mView.mPromptTouchedListener = new PromptView.PromptTouchedListener()
@@ -518,8 +507,8 @@ public class MaterialTapTargetPrompt
             final PointF targetPosition = mView.mPromptOptions.getTargetPosition();
             mView.mPromptOptions.getPromptFocal().prepare(mView.mPromptOptions, targetPosition.x, targetPosition.y);
         }
-        mView.mPromptOptions.getPromptText().prepare(mView.mPromptOptions, mView.mClipToBounds, mView.mClipBounds, mClipViewBoundsInset88dp);
-        mView.mPromptOptions.getPromptBackground().prepare(mView.mPromptOptions, mClipViewBoundsInset88dp);
+        mView.mPromptOptions.getPromptText().prepare(mView.mPromptOptions, mView.mClipToBounds, mView.mClipBounds);
+        mView.mPromptOptions.getPromptBackground().prepare(mView.mPromptOptions, mView.mClipToBounds, mView.mClipBounds);
         updateIconPosition();
     }
 
@@ -570,9 +559,6 @@ public class MaterialTapTargetPrompt
             {
                 mView.mClipBounds.top += mStatusBarHeight;
             }
-
-            mClipViewBoundsInset88dp = new RectF(mView.mClipBounds);
-            mClipViewBoundsInset88dp.inset(m88dp, m88dp);
         }
         else
         {
@@ -580,8 +566,6 @@ public class MaterialTapTargetPrompt
             if (contentView != null)
             {
                 contentView.getGlobalVisibleRect(mView.mClipBounds, new Point());
-                mClipViewBoundsInset88dp = new RectF(mView.mClipBounds);
-                mClipViewBoundsInset88dp.inset(m88dp, m88dp);
             }
             mView.mClipToBounds = false;
         }

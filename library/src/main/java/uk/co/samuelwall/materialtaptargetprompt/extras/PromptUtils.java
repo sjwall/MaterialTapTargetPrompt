@@ -336,4 +336,12 @@ public class PromptUtils
         }
         return maxTextWidth;
     }
+
+    public static boolean containsInset(final Rect bounds, final int inset, final int x, final int y)
+    {
+        return x > bounds.left + inset
+                && x < bounds.right - inset
+                && y > bounds.top + inset
+                && y < bounds.bottom - inset;
+    }
 }

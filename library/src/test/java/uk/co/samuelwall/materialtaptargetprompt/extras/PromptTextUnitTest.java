@@ -47,15 +47,13 @@ public class PromptTextUnitTest
     public void testPromptText_Blank()
     {
         final Rect clipBounds = new Rect(0, 0, 1080, 1920);
-        final RectF clipBoundsInset = new RectF(clipBounds);
         final RectF focalBounds = new RectF(500, 500, 550, 550);
-        clipBoundsInset.inset(88f, 88f);
         final PromptOptions options = UnitTestUtils.createPromptOptions();
         options.load(0);
         options.setPromptFocal(mock(PromptFocal.class));
         when(options.getPromptFocal().getBounds()).thenReturn(focalBounds);
         final PromptText promptText = new PromptText();
-        promptText.prepare(options, false, clipBounds, clipBoundsInset);
+        promptText.prepare(options, false, clipBounds);
         RectF bounds = promptText.getBounds();
         assertEquals(0, bounds.width(), 0);
         assertEquals(0, bounds.height(), 0);
@@ -78,9 +76,7 @@ public class PromptTextUnitTest
     {
 
         final Rect clipBounds = new Rect(0, 0, 1080, 1920);
-        final RectF clipBoundsInset = new RectF(clipBounds);
         final RectF focalBounds = new RectF(1036, 1876, 1080, 1920);
-        clipBoundsInset.inset(88f, 88f);
         final PromptOptions options = UnitTestUtils.createPromptOptions(new TestResourceFinder(Robolectric.buildActivity(Activity.class)
                 .create().get()));
         final ViewGroup parentView = options.getResourceFinder().getPromptParentView();
@@ -97,7 +93,7 @@ public class PromptTextUnitTest
         options.setTextPadding(20f);
         when(options.getPromptFocal().getBounds()).thenReturn(focalBounds);
         final PromptText promptText = new TestPromptText(300);
-        promptText.prepare(options, false, clipBounds, clipBoundsInset);
+        promptText.prepare(options, false, clipBounds);
         RectF bounds = promptText.getBounds();
         assertEquals(760, bounds.left, 0);
         assertEquals(1436, bounds.top, 0);
@@ -126,9 +122,7 @@ public class PromptTextUnitTest
     {
 
         final Rect clipBounds = new Rect(0, 0, 1080, 1920);
-        final RectF clipBoundsInset = new RectF(clipBounds);
         final RectF focalBounds = new RectF(1036, 1876, 1080, 1920);
-        clipBoundsInset.inset(88f, 88f);
         final PromptOptions options = UnitTestUtils.createPromptOptions(new TestResourceFinder(Robolectric.buildActivity(Activity.class)
                 .create().get()));
         final ViewGroup parentView = options.getResourceFinder().getPromptParentView();
@@ -145,7 +139,7 @@ public class PromptTextUnitTest
         options.setTextPadding(20f);
         when(options.getPromptFocal().getBounds()).thenReturn(focalBounds);
         final PromptText promptText = new TestPromptText(300, true);
-        promptText.prepare(options, false, clipBounds, clipBoundsInset);
+        promptText.prepare(options, false, clipBounds);
         RectF bounds = promptText.getBounds();
         assertEquals(760, bounds.left, 0);
         assertEquals(1436, bounds.top, 0);
@@ -180,9 +174,7 @@ public class PromptTextUnitTest
     {
 
         final Rect clipBounds = new Rect(0, 0, 1080, 1920);
-        final RectF clipBoundsInset = new RectF(clipBounds);
         final RectF focalBounds = new RectF(1036, 1876, 1080, 1920);
-        clipBoundsInset.inset(88f, 88f);
         final PromptOptions options = UnitTestUtils.createPromptOptions(new TestResourceFinder(Robolectric.buildActivity(Activity.class)
                 .create().get()));
         final ViewGroup parentView = options.getResourceFinder().getPromptParentView();
@@ -198,7 +190,7 @@ public class PromptTextUnitTest
         options.setTextPadding(20f);
         when(options.getPromptFocal().getBounds()).thenReturn(focalBounds);
         final PromptText promptText = new TestPromptText(300);
-        promptText.prepare(options, false, clipBounds, clipBoundsInset);
+        promptText.prepare(options, false, clipBounds);
         RectF bounds = promptText.getBounds();
         assertEquals(760, bounds.left, 0);
         assertEquals(1656, bounds.top, 0);
@@ -227,9 +219,7 @@ public class PromptTextUnitTest
     {
 
         final Rect clipBounds = new Rect(0, 0, 1080, 1920);
-        final RectF clipBoundsInset = new RectF(clipBounds);
         final RectF focalBounds = new RectF(0, 1876, 44, 1920);
-        clipBoundsInset.inset(88f, 88f);
         final PromptOptions options = UnitTestUtils.createPromptOptions(new TestResourceFinder(Robolectric.buildActivity(Activity.class)
                 .create().get()));
         final ViewGroup parentView = options.getResourceFinder().getPromptParentView();
@@ -246,7 +236,7 @@ public class PromptTextUnitTest
         options.setTextPadding(20f);
         when(options.getPromptFocal().getBounds()).thenReturn(focalBounds);
         final PromptText promptText = new TestPromptText(300);
-        promptText.prepare(options, false, clipBounds, clipBoundsInset);
+        promptText.prepare(options, false, clipBounds);
         RectF bounds = promptText.getBounds();
         assertEquals(20, bounds.left, 0);
         assertEquals(1436, bounds.top, 0);
@@ -275,9 +265,7 @@ public class PromptTextUnitTest
     {
 
         final Rect clipBounds = new Rect(0, 0, 1080, 1920);
-        final RectF clipBoundsInset = new RectF(clipBounds);
         final RectF focalBounds = new RectF(1036, 0, 1080, 44);
-        clipBoundsInset.inset(88f, 88f);
         final PromptOptions options = UnitTestUtils.createPromptOptions(new TestResourceFinder(Robolectric.buildActivity(Activity.class)
                 .create().get()));
         final ViewGroup parentView = options.getResourceFinder().getPromptParentView();
@@ -294,7 +282,7 @@ public class PromptTextUnitTest
         options.setTextPadding(20f);
         when(options.getPromptFocal().getBounds()).thenReturn(focalBounds);
         final PromptText promptText = new TestPromptText(300);
-        promptText.prepare(options, false, clipBounds, clipBoundsInset);
+        promptText.prepare(options, false, clipBounds);
         RectF bounds = promptText.getBounds();
         assertEquals(760, bounds.left, 0);
         assertEquals(64, bounds.top, 0);
@@ -323,9 +311,7 @@ public class PromptTextUnitTest
     {
 
         final Rect clipBounds = new Rect(0, 0, 1080, 1920);
-        final RectF clipBoundsInset = new RectF(clipBounds);
         final RectF focalBounds = new RectF(0, 0, 44, 44);
-        clipBoundsInset.inset(88f, 88f);
         final PromptOptions options = UnitTestUtils.createPromptOptions(new TestResourceFinder(Robolectric.buildActivity(Activity.class)
                 .create().get()));
         final ViewGroup parentView = options.getResourceFinder().getPromptParentView();
@@ -342,7 +328,7 @@ public class PromptTextUnitTest
         options.setTextPadding(20f);
         when(options.getPromptFocal().getBounds()).thenReturn(focalBounds);
         final PromptText promptText = new TestPromptText(300);
-        promptText.prepare(options, false, clipBounds, clipBoundsInset);
+        promptText.prepare(options, false, clipBounds);
         RectF bounds = promptText.getBounds();
         assertEquals(20, bounds.left, 0);
         assertEquals(64, bounds.top, 0);
@@ -371,9 +357,7 @@ public class PromptTextUnitTest
     {
 
         final Rect clipBounds = new Rect(0, 0, 1080, 1920);
-        final RectF clipBoundsInset = new RectF(clipBounds);
         final RectF focalBounds = new RectF(1036, 1876, 1080, 1920);
-        clipBoundsInset.inset(88f, 88f);
         final PromptOptions options = UnitTestUtils.createPromptOptions(new TestResourceFinder(Robolectric.buildActivity(Activity.class)
                 .create().get()));
         final ViewGroup parentView = options.getResourceFinder().getPromptParentView();
@@ -390,7 +374,7 @@ public class PromptTextUnitTest
         options.setTextPadding(20f);
         when(options.getPromptFocal().getBounds()).thenReturn(focalBounds);
         final PromptText promptText = new TestPromptText(300);
-        promptText.prepare(options, true, clipBounds, clipBoundsInset);
+        promptText.prepare(options, true, clipBounds);
         RectF bounds = promptText.getBounds();
         assertEquals(760, bounds.left, 0);
         assertEquals(1436, bounds.top, 0);
@@ -419,9 +403,7 @@ public class PromptTextUnitTest
     {
 
         final Rect clipBounds = new Rect(0, 0, 1080, 1920);
-        final RectF clipBoundsInset = new RectF(clipBounds);
         final RectF focalBounds = new RectF(0, 1876, 44, 1920);
-        clipBoundsInset.inset(88f, 88f);
         final PromptOptions options = UnitTestUtils.createPromptOptions(new TestResourceFinder(Robolectric.buildActivity(Activity.class)
                 .create().get()));
         final ViewGroup parentView = options.getResourceFinder().getPromptParentView();
@@ -439,7 +421,7 @@ public class PromptTextUnitTest
         options.setTextGravity(Gravity.END);
         when(options.getPromptFocal().getBounds()).thenReturn(focalBounds);
         final PromptText promptText = new TestPromptText(300);
-        promptText.prepare(options, true, clipBounds, clipBoundsInset);
+        promptText.prepare(options, true, clipBounds);
         RectF bounds = promptText.getBounds();
         assertEquals(20, bounds.left, 0);
         assertEquals(1436, bounds.top, 0);
@@ -468,9 +450,7 @@ public class PromptTextUnitTest
     {
 
         final Rect clipBounds = new Rect(0, 0, 1080, 1920);
-        final RectF clipBoundsInset = new RectF(clipBounds);
         final RectF focalBounds = new RectF(1036, 0, 1080, 44);
-        clipBoundsInset.inset(88f, 88f);
         final PromptOptions options = UnitTestUtils.createPromptOptions(new TestResourceFinder(Robolectric.buildActivity(Activity.class)
                 .create().get()));
         final ViewGroup parentView = options.getResourceFinder().getPromptParentView();
@@ -487,7 +467,7 @@ public class PromptTextUnitTest
         options.setTextPadding(20f);
         when(options.getPromptFocal().getBounds()).thenReturn(focalBounds);
         final PromptText promptText = new TestPromptText(300);
-        promptText.prepare(options, true, clipBounds, clipBoundsInset);
+        promptText.prepare(options, true, clipBounds);
         RectF bounds = promptText.getBounds();
         assertEquals(760, bounds.left, 0);
         assertEquals(64, bounds.top, 0);
@@ -516,9 +496,7 @@ public class PromptTextUnitTest
     {
 
         final Rect clipBounds = new Rect(0, 0, 1080, 1920);
-        final RectF clipBoundsInset = new RectF(clipBounds);
         final RectF focalBounds = new RectF(0, 0, 44, 44);
-        clipBoundsInset.inset(88f, 88f);
         final PromptOptions options = UnitTestUtils.createPromptOptions(new TestResourceFinder(Robolectric.buildActivity(Activity.class)
                 .create().get()));
         final ViewGroup parentView = options.getResourceFinder().getPromptParentView();
@@ -535,7 +513,7 @@ public class PromptTextUnitTest
         options.setTextPadding(20f);
         when(options.getPromptFocal().getBounds()).thenReturn(focalBounds);
         final PromptText promptText = new TestPromptText(300);
-        promptText.prepare(options, true, clipBounds, clipBoundsInset);
+        promptText.prepare(options, true, clipBounds);
         RectF bounds = promptText.getBounds();
         assertEquals(20, bounds.left, 0);
         assertEquals(64, bounds.top, 0);
@@ -564,9 +542,7 @@ public class PromptTextUnitTest
     {
 
         final Rect clipBounds = new Rect(0, 0, 1080, 1920);
-        final RectF clipBoundsInset = new RectF(clipBounds);
         final RectF focalBounds = new RectF(948, 1788, 992, 1832);
-        clipBoundsInset.inset(88f, 88f);
         final PromptOptions options = UnitTestUtils.createPromptOptions(new TestResourceFinder(Robolectric.buildActivity(Activity.class)
                 .create().get()));
         final ViewGroup parentView = options.getResourceFinder().getPromptParentView();
@@ -583,7 +559,7 @@ public class PromptTextUnitTest
         options.setTextPadding(20f);
         when(options.getPromptFocal().getBounds()).thenReturn(focalBounds);
         final PromptText promptText = new TestPromptText(300);
-        promptText.prepare(options, false, clipBounds, clipBoundsInset);
+        promptText.prepare(options, false, clipBounds);
         RectF bounds = promptText.getBounds();
         assertEquals(690, bounds.left, 0);
         assertEquals(1348, bounds.top, 0);
@@ -612,9 +588,7 @@ public class PromptTextUnitTest
     {
 
         final Rect clipBounds = new Rect(0, 0, 1080, 1920);
-        final RectF clipBoundsInset = new RectF(clipBounds);
         final RectF focalBounds = new RectF(88, 1788, 132, 1832);
-        clipBoundsInset.inset(88f, 88f);
         final PromptOptions options = UnitTestUtils.createPromptOptions(new TestResourceFinder(Robolectric.buildActivity(Activity.class)
                 .create().get()));
         final ViewGroup parentView = options.getResourceFinder().getPromptParentView();
@@ -631,7 +605,7 @@ public class PromptTextUnitTest
         options.setTextPadding(20f);
         when(options.getPromptFocal().getBounds()).thenReturn(focalBounds);
         final PromptText promptText = new TestPromptText(300);
-        promptText.prepare(options, false, clipBounds, clipBoundsInset);
+        promptText.prepare(options, false, clipBounds);
         RectF bounds = promptText.getBounds();
         assertEquals(20, bounds.left, 0);
         assertEquals(1348, bounds.top, 0);
@@ -660,9 +634,7 @@ public class PromptTextUnitTest
     {
 
         final Rect clipBounds = new Rect(0, 0, 1080, 1920);
-        final RectF clipBoundsInset = new RectF(clipBounds);
         final RectF focalBounds = new RectF(948, 88, 992, 132);
-        clipBoundsInset.inset(88f, 88f);
         final PromptOptions options = UnitTestUtils.createPromptOptions(new TestResourceFinder(Robolectric.buildActivity(Activity.class)
                 .create().get()));
         final ViewGroup parentView = options.getResourceFinder().getPromptParentView();
@@ -679,7 +651,7 @@ public class PromptTextUnitTest
         options.setTextPadding(20f);
         when(options.getPromptFocal().getBounds()).thenReturn(focalBounds);
         final PromptText promptText = new TestPromptText(300);
-        promptText.prepare(options, false, clipBounds, clipBoundsInset);
+        promptText.prepare(options, false, clipBounds);
         RectF bounds = promptText.getBounds();
         assertEquals(690, bounds.left, 0);
         assertEquals(152, bounds.top, 0);
@@ -708,9 +680,7 @@ public class PromptTextUnitTest
     {
 
         final Rect clipBounds = new Rect(0, 0, 1080, 1920);
-        final RectF clipBoundsInset = new RectF(clipBounds);
         final RectF focalBounds = new RectF(88, 88, 132, 132);
-        clipBoundsInset.inset(88f, 88f);
         final PromptOptions options = UnitTestUtils.createPromptOptions(new TestResourceFinder(Robolectric.buildActivity(Activity.class)
                 .create().get()));
         final ViewGroup parentView = options.getResourceFinder().getPromptParentView();
@@ -727,7 +697,7 @@ public class PromptTextUnitTest
         options.setTextPadding(20f);
         when(options.getPromptFocal().getBounds()).thenReturn(focalBounds);
         final PromptText promptText = new TestPromptText(300);
-        promptText.prepare(options, false, clipBounds, clipBoundsInset);
+        promptText.prepare(options, false, clipBounds);
         RectF bounds = promptText.getBounds();
         assertEquals(20, bounds.left, 0);
         assertEquals(152, bounds.top, 0);
@@ -756,9 +726,7 @@ public class PromptTextUnitTest
     {
 
         final Rect clipBounds = new Rect(20, 0, 1080, 1920);
-        final RectF clipBoundsInset = new RectF(clipBounds);
         final RectF focalBounds = new RectF(88, 88, 132, 132);
-        clipBoundsInset.inset(88f, 88f);
         final PromptOptions options = UnitTestUtils.createPromptOptions(new TestResourceFinder(Robolectric.buildActivity(Activity.class)
                 .create().get()));
         final ViewGroup parentView = options.getResourceFinder().getPromptParentView();
@@ -775,7 +743,7 @@ public class PromptTextUnitTest
         options.setTextPadding(20f);
         when(options.getPromptFocal().getBounds()).thenReturn(focalBounds);
         final PromptText promptText = new TestPromptText(1050);
-        promptText.prepare(options, false, clipBounds, clipBoundsInset);
+        promptText.prepare(options, false, clipBounds);
         RectF bounds = promptText.getBounds();
         assertEquals(20, bounds.left, 0);
         assertEquals(152, bounds.top, 0);

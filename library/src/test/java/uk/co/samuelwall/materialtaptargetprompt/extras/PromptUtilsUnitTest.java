@@ -582,4 +582,34 @@ public class PromptUtilsUnitTest
         assertEquals(textPaint, layout.getPaint());
         assertEquals(300, layout.getWidth());
     }*/
+
+    @Test
+    public void testContainsInset_Left()
+    {
+        assertFalse(PromptUtils.containsInset(new Rect(0, 0, 500, 500), 50, 20, 0));
+    }
+
+    @Test
+    public void testContainsInset_Right()
+    {
+        assertFalse(PromptUtils.containsInset(new Rect(0, 0, 500, 500), 50, 460, 0));
+    }
+
+    @Test
+    public void testContainsInset_Top()
+    {
+        assertFalse(PromptUtils.containsInset(new Rect(0, 0, 500, 500), 50, 60, 0));
+    }
+
+    @Test
+    public void testContainsInset_Bottom()
+    {
+        assertFalse(PromptUtils.containsInset(new Rect(0, 0, 500, 500), 50, 60, 460));
+    }
+
+    @Test
+    public void testContainsInset()
+    {
+        assertTrue(PromptUtils.containsInset(new Rect(0, 0, 500, 500), 50, 60, 60));
+    }
 }

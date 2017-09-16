@@ -20,6 +20,7 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.PointF;
+import android.graphics.Rect;
 import android.graphics.RectF;
 
 import uk.co.samuelwall.materialtaptargetprompt.extras.PromptBackground;
@@ -60,7 +61,8 @@ public class CirclePromptBackground extends PromptBackground
     }
 
     @Override
-    public void prepare(final PromptOptions options, final RectF clipViewBoundsInset88dp)
+    public void prepare(final PromptOptions options, final boolean clipToBounds,
+                        final Rect clipBounds)
     {
         final PromptFocal promptFocal = options.getPromptFocal();
         final PromptText promptText = options.getPromptText();
@@ -70,10 +72,10 @@ public class CirclePromptBackground extends PromptBackground
         final float focalPadding = promptFocal.getPadding();
         final RectF textBounds = promptText.getBounds();
         final float textPadding = options.getTextPadding();
-        if ((focalCentreX > clipViewBoundsInset88dp.left
-                && focalCentreX < clipViewBoundsInset88dp.right)
-                || (focalCentreY > clipViewBoundsInset88dp.top
-                && focalCentreY < clipViewBoundsInset88dp.bottom))
+
+        if (PromptUtils.containsInset(clipBounds,
+                (int) (88 * options.getResourceFinder().getResources().getDisplayMetrics().density),
+                (int) focalCentreX, (int) focalCentreY))
         {
             final boolean isTextAboveTarget = textBounds.top < focalBounds.top;
             float x1 = focalCentreX;
