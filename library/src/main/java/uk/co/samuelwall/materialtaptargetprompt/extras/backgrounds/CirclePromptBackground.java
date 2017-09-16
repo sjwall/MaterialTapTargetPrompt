@@ -69,7 +69,7 @@ public class CirclePromptBackground extends PromptBackground
         final RectF focalBounds = promptFocal.getBounds();
         final float focalCentreX = focalBounds.centerX();
         final float focalCentreY = focalBounds.centerY();
-        final float focalPadding = promptFocal.getPadding();
+        final float focalPadding = options.getFocalPadding();
         final RectF textBounds = promptText.getBounds();
         final float textPadding = options.getTextPadding();
         final RectF clipBoundsInset88dp = new RectF(clipBounds);

@@ -1116,7 +1116,6 @@ public class PromptOptions<T extends PromptOptions>
         mPromptFocal.setColour(getFocalColour());
         mPromptFocal.setRippleAlpha(150);
         mPromptFocal.setDrawRipple(getIdleAnimationEnabled());
-        mPromptFocal.setPadding(getFocalPadding());
         if (mPromptFocal instanceof CirclePromptFocal)
         {
             ((CirclePromptFocal) mPromptFocal).setRadius(getFocalRadius());
