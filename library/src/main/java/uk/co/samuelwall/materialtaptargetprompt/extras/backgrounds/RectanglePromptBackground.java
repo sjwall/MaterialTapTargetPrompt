@@ -29,11 +29,11 @@ import uk.co.samuelwall.materialtaptargetprompt.extras.PromptUtils;
 
 public class RectanglePromptBackground extends PromptBackground
 {
-    private RectF mBounds, mBaseBounds;
-    private Paint mPaint;
-    private int mBaseColourAlpha;
-    private float mRx, mRy;
-    private PointF mFocalCentre;
+    RectF mBounds, mBaseBounds;
+    Paint mPaint;
+    int mBaseColourAlpha;
+    float mRx, mRy;
+    PointF mFocalCentre;
 
     public RectanglePromptBackground()
     {

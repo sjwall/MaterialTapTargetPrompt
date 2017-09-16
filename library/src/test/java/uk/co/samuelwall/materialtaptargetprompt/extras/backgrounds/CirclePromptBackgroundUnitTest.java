@@ -62,13 +62,6 @@ public class CirclePromptBackgroundUnitTest
         options.setMaxTextWidth(300f);
         options.setTextSeparation(20f);
 
-        /*if (textBounds != null)
-        {
-            final PromptText promptText = mock(PromptText.class);
-            options.setPromptText(promptText);
-            when(promptText.getBounds()).thenReturn(textBounds);
-        }*/
-
         options.create();
 
         options.getPromptText().prepare(options, false, clipBounds);

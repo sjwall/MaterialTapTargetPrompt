@@ -23,6 +23,8 @@ import uk.co.samuelwall.materialtaptargetprompt.extras.AlphaSpanUnitTest;
 import uk.co.samuelwall.materialtaptargetprompt.extras.PromptOptionsUnitTest;
 import uk.co.samuelwall.materialtaptargetprompt.extras.PromptTextUnitTest;
 import uk.co.samuelwall.materialtaptargetprompt.extras.PromptUtilsUnitTest;
+import uk.co.samuelwall.materialtaptargetprompt.extras.backgrounds.CirclePromptBackgroundUnitTest;
+import uk.co.samuelwall.materialtaptargetprompt.extras.backgrounds.RectanglePromptBackgroundUnitTest;
 
 // Runs all unit tests.
 @RunWith(Suite.class)
@@ -32,6 +34,7 @@ import uk.co.samuelwall.materialtaptargetprompt.extras.PromptUtilsUnitTest;
     PromptTextUnitTest.class,
     PromptUtilsUnitTest.class,
     CirclePromptBackgroundUnitTest.class,
+    RectanglePromptBackgroundUnitTest.class,
     MaterialTapTargetPromptUnitTest.class
 })
 public class UnitTestSuite {}
