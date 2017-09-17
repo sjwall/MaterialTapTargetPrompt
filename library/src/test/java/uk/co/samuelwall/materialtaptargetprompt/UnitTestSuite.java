@@ -25,6 +25,8 @@ import uk.co.samuelwall.materialtaptargetprompt.extras.PromptTextUnitTest;
 import uk.co.samuelwall.materialtaptargetprompt.extras.PromptUtilsUnitTest;
 import uk.co.samuelwall.materialtaptargetprompt.extras.backgrounds.CirclePromptBackgroundUnitTest;
 import uk.co.samuelwall.materialtaptargetprompt.extras.backgrounds.RectanglePromptBackgroundUnitTest;
+import uk.co.samuelwall.materialtaptargetprompt.extras.focals.CirclePromptFocalUnitTest;
+import uk.co.samuelwall.materialtaptargetprompt.extras.focals.RectanglePromptFocalUnitTest;
 
 // Runs all unit tests.
 @RunWith(Suite.class)
@@ -35,6 +37,8 @@ import uk.co.samuelwall.materialtaptargetprompt.extras.backgrounds.RectangleProm
     PromptUtilsUnitTest.class,
     CirclePromptBackgroundUnitTest.class,
     RectanglePromptBackgroundUnitTest.class,
+    CirclePromptFocalUnitTest.class,
+    RectanglePromptFocalUnitTest.class,
     MaterialTapTargetPromptUnitTest.class
 })
 public class UnitTestSuite {}

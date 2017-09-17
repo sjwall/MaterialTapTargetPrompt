@@ -17,6 +17,7 @@
 package uk.co.samuelwall.materialtaptargetprompt.extras.focals;
 
 import android.annotation.TargetApi;
+import android.content.res.Resources;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -40,7 +41,7 @@ public class RectanglePromptFocal extends PromptFocal
     PointF mBaseBoundsCentre;
     RectF mRippleBounds;
     int mBaseAlpha;
-    int mPadding = 40;
+    float mPadding = 40;
     private float mRx, mRy;
     private PointF mSize;
 
@@ -55,7 +56,9 @@ public class RectanglePromptFocal extends PromptFocal
         mBaseBounds = new RectF();
         mBaseBoundsCentre = new PointF();
         mRippleBounds = new RectF();
-        mRx = mRy = 20;
+        final float density = Resources.getSystem().getDisplayMetrics().density;
+        mRx = mRy = 20 * density;
+        mPadding = 40 * density;
     }
 
     public RectanglePromptFocal setCornerRadius(final float rx, final float ry)
@@ -65,7 +68,7 @@ public class RectanglePromptFocal extends PromptFocal
         return this;
     }
 
-    public RectanglePromptFocal setPadding(final int padding)
+    public RectanglePromptFocal setPadding(final float padding)
     {
         mPadding = padding;
         return this;
@@ -73,18 +76,16 @@ public class RectanglePromptFocal extends PromptFocal
 
     public RectanglePromptFocal setSize(final PointF size)
     {
-        mSize = new PointF();
-        mSize.x = size.x;
-        mSize.y = size.y;
-        return this;
-    }
-
-    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
-    public RectanglePromptFocal setSize(final SizeF size)
-    {
-        mSize = new PointF();
-        mSize.x = size.getWidth();
-        mSize.y = size.getHeight();
+        if (size == null)
+        {
+            mSize = null;
+        }
+        else
+        {
+            mSize = new PointF();
+            mSize.x = size.x;
+            mSize.y = size.y;
+        }
         return this;
     }
 
