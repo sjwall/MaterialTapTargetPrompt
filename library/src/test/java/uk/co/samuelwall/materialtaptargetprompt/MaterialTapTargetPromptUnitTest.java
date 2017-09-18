@@ -19,13 +19,10 @@ package uk.co.samuelwall.materialtaptargetprompt;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.graphics.Canvas;
-import android.graphics.Color;
-import android.text.SpannableStringBuilder;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewParent;
-import android.view.animation.LinearInterpolator;
 import android.widget.FrameLayout;
 
 import junit.framework.Assert;
@@ -40,11 +37,6 @@ import org.mockito.stubbing.Answer;
 import org.robolectric.Robolectric;
 import org.robolectric.RobolectricTestRunner;
 import org.robolectric.annotation.Config;
-
-import uk.co.samuelwall.materialtaptargetprompt.extras.backgrounds.CirclePromptBackground;
-import uk.co.samuelwall.materialtaptargetprompt.extras.backgrounds.CirclePromptBackgroundUtils;
-import uk.co.samuelwall.materialtaptargetprompt.extras.focals.CirclePromptFocal;
-import uk.co.samuelwall.materialtaptargetprompt.extras.focals.CirclePromptFocalUtils;
 
 import static junit.framework.Assert.assertFalse;
 import static junit.framework.Assert.assertNotNull;
@@ -67,7 +59,7 @@ public class MaterialTapTargetPromptUnitTest
     @Before
     public void setup()
     {
-        
+        stateProgress = 0;
     }
 
     @After
@@ -78,166 +70,6 @@ public class MaterialTapTargetPromptUnitTest
             Assert.assertEquals(4, stateProgress);
         }
         stateProgress = -1;
-    }
-
-    @Test
-    public void promptFromVariables()
-    {
-        LinearInterpolator interpolator = new LinearInterpolator();
-        MaterialTapTargetPrompt.Builder builder = createBuilder(SCREEN_WIDTH, SCREEN_HEIGHT, 340)
-            .setTarget(50, 40)
-            .setPrimaryText("Primary text")
-            .setSecondaryText("Secondary text")
-            .setMaxTextWidth(600f)
-            .setTextPadding(50f)
-            .setBackgroundColour(Color.BLUE)
-            .setFocalColour(Color.GREEN)
-            .setFocalRadius(55f)
-            .setTextSeparation(22f)
-            .setPrimaryTextSize(30f)
-            .setSecondaryTextSize(20f)
-            .setPrimaryTextColour(Color.CYAN)
-            .setSecondaryTextColour(Color.GRAY)
-            .setFocalPadding(30f)
-            .setAnimationInterpolator(interpolator);
-
-        assertTrue(builder.isTargetSet());
-        MaterialTapTargetPrompt prompt = builder.show();
-
-        /*assertEquals(600f, prompt.mMaxTextWidth, 0.0f);
-        assertEquals(50f, prompt.mTextPadding, 0.0f);
-        assertNull(prompt.mTargetView);
-        assertEquals(50f, prompt.mTargetPosition.x, 0.0f);
-        assertEquals(40f, prompt.mTargetPosition.y, 0.0f);
-        assertEquals(30f, prompt.mPaintPrimaryText.getTextSize(), 0f);
-        assertEquals(20f, prompt.mPaintSecondaryText.getTextSize(), 0f);
-        assertEquals(Color.CYAN, prompt.mPaintPrimaryText.getColor());
-        assertEquals(Color.GRAY, prompt.mPaintSecondaryText.getColor());
-        assertEquals(interpolator, prompt.mAnimationInterpolator);
-        assertEquals(30f, prompt.mView.mPromptFocal.getPadding(), 0.0f);
-
-        assertEquals("Primary text", prompt.mView.mPrimaryTextLayout.getText().toString());
-        assertEquals("Secondary text", prompt.mView.mSecondaryTextLayout.getText().toString());
-        assertEquals(22f, prompt.mView.mTextSeparation, 0.0f);*/
-
-        assertTrue(prompt.mView.mPromptOptions.getPromptBackground() instanceof CirclePromptBackground);
-        CirclePromptBackground promptBackground = (CirclePromptBackground) prompt.mView.mPromptOptions.getPromptBackground();
-        assertEquals(Color.BLUE, CirclePromptBackgroundUtils.getColour(promptBackground));
-
-        assertTrue(prompt.mView.mPromptOptions.getPromptFocal() instanceof CirclePromptFocal);
-        CirclePromptFocal promptFocal = (CirclePromptFocal) prompt.mView.mPromptOptions.getPromptFocal();
-        assertEquals(Color.GREEN, CirclePromptFocalUtils.getColour(promptFocal));
-        assertEquals(55f, CirclePromptFocalUtils.getBaseRadius(promptFocal), 0.0f);
-
-        prompt.dismiss();
-        prompt.mAnimationCurrent.end();
-        assertNull(prompt.mView.getParent());
-    }
-
-
-    @Test
-    public void promptFromVariablesWithCharSequences()
-    {
-        LinearInterpolator interpolator = new LinearInterpolator();
-        MaterialTapTargetPrompt.Builder builder = createBuilder(SCREEN_WIDTH, SCREEN_HEIGHT, 340)
-                .setTarget(50, 40)
-                .setPrimaryText(new SpannableStringBuilder("Primary text"))
-                .setSecondaryText(new SpannableStringBuilder("Secondary text"))
-                .setMaxTextWidth(600f)
-                .setTextPadding(50f)
-                .setBackgroundColour(Color.BLUE)
-                .setFocalColour(Color.GREEN)
-                .setFocalRadius(55f)
-                .setTextSeparation(22f)
-                .setPrimaryTextSize(30f)
-                .setSecondaryTextSize(20f)
-                .setPrimaryTextColour(Color.CYAN)
-                .setSecondaryTextColour(Color.GRAY)
-                .setFocalPadding(30f)
-                .setAnimationInterpolator(interpolator);
-
-        assertTrue(builder.isTargetSet());
-        MaterialTapTargetPrompt prompt = builder.show();
-
-        /*assertEquals(600f, prompt.mMaxTextWidth, 0.0f);
-        assertEquals(50f, prompt.mTextPadding, 0.0f);
-        assertNull(prompt.mTargetView);
-        assertEquals(50f, prompt.mTargetPosition.x, 0.0f);
-        assertEquals(40f, prompt.mTargetPosition.y, 0.0f);
-        assertEquals(30f, prompt.mPaintPrimaryText.getTextSize(), 0f);
-        assertEquals(20f, prompt.mPaintSecondaryText.getTextSize(), 0f);
-        assertEquals(Color.CYAN, prompt.mPaintPrimaryText.getColor());
-        assertEquals(Color.GRAY, prompt.mPaintSecondaryText.getColor());
-        assertEquals(interpolator, prompt.mAnimationInterpolator);
-        assertEquals(30f, prompt.getPromptFocal().getPadding(), 0.0f);
-
-        assertEquals("Primary text", prompt.mView.mPrimaryTextLayout.getText().toString());
-        assertEquals("Secondary text", prompt.mView.mSecondaryTextLayout.getText().toString());
-        assertEquals(22f, prompt.mView.mTextSeparation, 0.0f);
-
-        assertTrue(prompt.mView.mPromptBackground instanceof CirclePromptBackground);
-        CirclePromptBackground promptBackground = (CirclePromptBackground) prompt.mView.mPromptBackground;
-        assertEquals(Color.BLUE, CirclePromptBackgroundUtils.getColour(promptBackground));
-
-        assertTrue(prompt.mView.mPromptFocal instanceof CirclePromptFocal);
-        CirclePromptFocal promptFocal = (CirclePromptFocal) prompt.mView.mPromptFocal;
-        assertEquals(Color.GREEN, CirclePromptFocalUtils.getColour(promptFocal));
-        assertEquals(55f, CirclePromptFocalUtils.getBaseRadius(promptFocal), 0.0f);*/
-
-        prompt.dismiss();
-        prompt.mAnimationCurrent.end();
-        assertNull(prompt.mView.getParent());
-    }
-
-    @Test
-    public void promptNotCreatedWhenTargetNotSet()
-    {
-        MaterialTapTargetPrompt.Builder builder = createBuilder(SCREEN_WIDTH, SCREEN_HEIGHT, 340)
-                .setPrimaryText("Primary text")
-                .setSecondaryText("Secondary text");
-        assertNull(builder.create());
-    }
-
-    @Test
-    public void promptNotCreatedWhenTextNotSet()
-    {
-        MaterialTapTargetPrompt.Builder builder = createBuilder(SCREEN_WIDTH, SCREEN_HEIGHT, 340)
-                .setTarget(50, 40);
-        assertNull(builder.create());
-    }
-
-    @Test
-    public void promptCreatedWhenPrimaryTextNotSet()
-    {
-        MaterialTapTargetPrompt.Builder builder = createBuilder(SCREEN_WIDTH, SCREEN_HEIGHT, 340)
-                .setTarget(50, 40)
-                .setSecondaryText("Secondary text");
-        MaterialTapTargetPrompt prompt = builder.create();
-        assertNotNull(prompt);
-        prompt.show();
-
-        //assertNull(prompt.mView.mPrimaryTextLayout);
-
-        prompt.finish();
-        prompt.mAnimationCurrent.end();
-        assertNull(prompt.mView.getParent());
-    }
-
-    @Test
-    public void promptCreatedWhenSecondaryTextNotSet()
-    {
-        MaterialTapTargetPrompt.Builder builder = createBuilder(SCREEN_WIDTH, SCREEN_HEIGHT, 340)
-                .setTarget(50, 40)
-                .setPrimaryText("Primary text");
-        MaterialTapTargetPrompt prompt = builder.create();
-        assertNotNull(prompt);
-        prompt.show();
-
-        //assertNull(prompt.mView.mSecondaryTextLayout);
-
-        prompt.finish();
-        prompt.mAnimationCurrent.end();
-        assertNull(prompt.mView.getParent());
     }
 
     @Test
@@ -490,35 +322,6 @@ public class MaterialTapTargetPromptUnitTest
         .when(prompt.mView).getKeyDispatcherState();
         assertTrue(prompt.mView.dispatchKeyEventPreIme(new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_BACK)));
         assertTrue(prompt.mView.dispatchKeyEventPreIme(new KeyEvent(KeyEvent.ACTION_UP, KeyEvent.KEYCODE_BACK)));
-    }
-
-    @Test
-    public void promptCentreLeft()
-    {
-        final MaterialTapTargetPrompt prompt = createBuilder(SCREEN_WIDTH, SCREEN_HEIGHT, 300)
-                .setPrimaryText("Primary text")
-                .setTarget(90, 90)
-                .show();
-        if (prompt.mAnimationCurrent != null)
-        {
-            prompt.mAnimationCurrent.end();
-        }
-
-        /*assertEquals(90, prompt.mTargetPosition.x, 0);
-        assertEquals(90, prompt.mTargetPosition.y, 0);
-        assertFalse(prompt.mHorizontalTextPositionLeft);
-
-
-        assertTrue(prompt.mView.mPromptBackground instanceof CirclePromptBackground);
-        CirclePromptBackground promptBackground = (CirclePromptBackground) prompt.mView.mPromptBackground;
-        assertEquals(190, CirclePromptBackgroundUtils.getBaseRadius(promptBackground), 1);
-        final PointF basePosition = CirclePromptBackgroundUtils.getBasePosition(promptBackground);
-        assertEquals(190, basePosition.x, 1);
-        assertEquals(147, basePosition.y, 1);
-
-        assertTrue(prompt.mView.mPromptFocal instanceof CirclePromptFocal);
-        CirclePromptFocal promptFocal = (CirclePromptFocal) prompt.mView.mPromptFocal;
-        assertEquals(44, CirclePromptFocalUtils.getBaseRadius(promptFocal), 0);*/
     }
 
     private MaterialTapTargetPrompt.Builder createBuilder(final int screenWidth,
