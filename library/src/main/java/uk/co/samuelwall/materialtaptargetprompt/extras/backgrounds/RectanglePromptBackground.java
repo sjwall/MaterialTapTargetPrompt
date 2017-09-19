@@ -16,6 +16,7 @@
 
 package uk.co.samuelwall.materialtaptargetprompt.extras.backgrounds;
 
+import android.content.res.Resources;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -42,7 +43,8 @@ public class RectanglePromptBackground extends PromptBackground
         mBounds = new RectF();
         mBaseBounds = new RectF();
         mFocalCentre = new PointF();
-        mRx = mRy = 20;
+        final float density = Resources.getSystem().getDisplayMetrics().density;
+        mRx = mRy = 2 * density;
     }
 
     public RectanglePromptBackground setCornerRadius(final float rx, final float ry)

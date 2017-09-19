@@ -57,8 +57,8 @@ public class RectanglePromptFocal extends PromptFocal
         mBaseBoundsCentre = new PointF();
         mRippleBounds = new RectF();
         final float density = Resources.getSystem().getDisplayMetrics().density;
-        mRx = mRy = 20 * density;
-        mPadding = 40 * density;
+        mRx = mRy = 2 * density;
+        mPadding = 8 * density;
     }
 
     public RectanglePromptFocal setCornerRadius(final float rx, final float ry)
