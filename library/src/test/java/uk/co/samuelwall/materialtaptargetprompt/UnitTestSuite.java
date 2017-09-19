@@ -40,6 +40,7 @@ import uk.co.samuelwall.materialtaptargetprompt.extras.focals.RectanglePromptFoc
     CirclePromptFocalUnitTest.class,
     RectanglePromptFocalUnitTest.class,
     BuilderUnitTest.class,
+    PromptViewUnitTest.class,
     MaterialTapTargetPromptUnitTest.class
 })
 public class UnitTestSuite {}
