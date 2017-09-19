@@ -31,7 +31,7 @@ import uk.co.samuelwall.materialtaptargetprompt.extras.focals.RectanglePromptFoc
 // Runs all unit tests.
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
-    AlphaSpanUnitTest.class,
+    /*AlphaSpanUnitTest.class,
     PromptOptionsUnitTest.class,
     PromptTextUnitTest.class,
     PromptUtilsUnitTest.class,
@@ -41,6 +41,6 @@ import uk.co.samuelwall.materialtaptargetprompt.extras.focals.RectanglePromptFoc
     RectanglePromptFocalUnitTest.class,
     BuilderUnitTest.class,
     PromptViewUnitTest.class,
-    MaterialTapTargetPromptUnitTest.class
+    MaterialTapTargetPromptUnitTest.class*/
 })
 public class UnitTestSuite {}
