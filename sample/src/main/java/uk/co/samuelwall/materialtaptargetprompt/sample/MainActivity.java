@@ -216,7 +216,8 @@ public class MainActivity extends AppCompatActivity
     {
         new MaterialTapTargetPrompt.Builder(this)
                 .setTarget(view)
-                .setPrimaryText("Rectangles")
+                .setPrimaryText("Different shapes")
+                .setSecondaryText("Extend PromptFocal or PromptBackground to change the shapes")
                 .setPromptBackground(new RectanglePromptBackground())
                 .setPromptFocal(new RectanglePromptFocal())
                 .show();
