@@ -27,6 +27,9 @@ import uk.co.samuelwall.materialtaptargetprompt.extras.PromptFocal;
 import uk.co.samuelwall.materialtaptargetprompt.extras.PromptOptions;
 import uk.co.samuelwall.materialtaptargetprompt.extras.PromptUtils;
 
+/**
+ * Prompt focal implementation to draw the focal as a circle.
+ */
 public class CirclePromptFocal extends PromptFocal
 {
     Paint mPaint;
@@ -38,6 +41,9 @@ public class CirclePromptFocal extends PromptFocal
     PointF mPosition;
     RectF mBounds;
 
+    /**
+     * Constructor.
+     */
     public CirclePromptFocal()
     {
         mPaint = new Paint();
@@ -46,6 +52,12 @@ public class CirclePromptFocal extends PromptFocal
         mBounds = new RectF();
     }
 
+    /**
+     * Set the focal radius.
+     *
+     * @param radius The radius for the circle to be drawn.
+     * @return This prompt focal
+     */
     public CirclePromptFocal setRadius(final float radius)
     {
         mBaseRadius = radius;

@@ -16,21 +16,22 @@
 
 package uk.co.samuelwall.materialtaptargetprompt.extras.focals;
 
-import android.annotation.TargetApi;
 import android.content.res.Resources;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.PointF;
 import android.graphics.RectF;
-import android.os.Build;
-import android.util.SizeF;
+import android.support.annotation.Nullable;
 import android.view.View;
 
 import uk.co.samuelwall.materialtaptargetprompt.extras.PromptFocal;
 import uk.co.samuelwall.materialtaptargetprompt.extras.PromptOptions;
 import uk.co.samuelwall.materialtaptargetprompt.extras.PromptUtils;
 
+/**
+ * Prompt focal implementation to draw the focal as a rectangle.
+ */
 public class RectanglePromptFocal extends PromptFocal
 {
     Paint mPaint;
@@ -45,6 +46,9 @@ public class RectanglePromptFocal extends PromptFocal
     private float mRx, mRy;
     private PointF mSize;
 
+    /**
+     * Constructor.
+     */
     public RectanglePromptFocal()
     {
         mPaint = new Paint();
@@ -61,6 +65,13 @@ public class RectanglePromptFocal extends PromptFocal
         mPadding = 8 * density;
     }
 
+    /**
+     * Set the radius for the rectangle corners.
+     *
+     * @param rx The x-radius of the oval used to round the corners
+     * @param ry The y-radius of the oval used to round the corners
+     * @return This prompt focal
+     */
     public RectanglePromptFocal setCornerRadius(final float rx, final float ry)
     {
         mRx = rx;
@@ -68,13 +79,25 @@ public class RectanglePromptFocal extends PromptFocal
         return this;
     }
 
-    public RectanglePromptFocal setPadding(final float padding)
+    /**
+     * Set the padding between the target bounds and the rectangle edge.
+     *
+     * @param padding The distance from the target edge to the rectangle edge.
+     * @return This prompt focal.
+     */
+    public RectanglePromptFocal setTargetPadding(final float padding)
     {
         mPadding = padding;
         return this;
     }
 
-    public RectanglePromptFocal setSize(final PointF size)
+    /**
+     * Sets the focal to a fixed size. Set as null to change it back to dynamic.
+     *
+     * @param size The fixed focal size or null to change back to the default dynamic size.
+     * @return This prompt focal
+     */
+    public RectanglePromptFocal setSize(@Nullable final PointF size)
     {
         if (size == null)
         {

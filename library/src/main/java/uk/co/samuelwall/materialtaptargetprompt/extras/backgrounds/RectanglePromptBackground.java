@@ -28,6 +28,9 @@ import uk.co.samuelwall.materialtaptargetprompt.extras.PromptBackground;
 import uk.co.samuelwall.materialtaptargetprompt.extras.PromptOptions;
 import uk.co.samuelwall.materialtaptargetprompt.extras.PromptUtils;
 
+/**
+ * {@link PromptBackground} implementation that renders the prompt background as a rectangle.
+ */
 public class RectanglePromptBackground extends PromptBackground
 {
     RectF mBounds, mBaseBounds;
@@ -36,6 +39,9 @@ public class RectanglePromptBackground extends PromptBackground
     float mRx, mRy;
     PointF mFocalCentre;
 
+    /**
+     * Constructor.
+     */
     public RectanglePromptBackground()
     {
         mPaint = new Paint();
@@ -47,6 +53,13 @@ public class RectanglePromptBackground extends PromptBackground
         mRx = mRy = 2 * density;
     }
 
+    /**
+     * Set the radius for the rectangle corners.
+     *
+     * @param rx The x-radius of the oval used to round the corners
+     * @param ry The y-radius of the oval used to round the corners
+     * @return This prompt background
+     */
     public RectanglePromptBackground setCornerRadius(final float rx, final float ry)
     {
         mRx = rx;

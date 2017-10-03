@@ -43,6 +43,11 @@ import uk.co.samuelwall.materialtaptargetprompt.ResourceFinder;
 import uk.co.samuelwall.materialtaptargetprompt.extras.backgrounds.CirclePromptBackground;
 import uk.co.samuelwall.materialtaptargetprompt.extras.focals.CirclePromptFocal;
 
+/**
+ * Contains all the settings for creating a prompt.
+ *
+ * @param <T> The subclass that extends this.
+ */
 @SuppressWarnings("unchecked")
 public class PromptOptions<T extends PromptOptions>
 {
@@ -59,7 +64,7 @@ public class PromptOptions<T extends PromptOptions>
     /**
      * The view to place the prompt around.
      */
-    private View mTargetView;
+    private @Nullable View mTargetView;
 
     /**
      * The left and top positioning for the focal centre point.
@@ -67,21 +72,74 @@ public class PromptOptions<T extends PromptOptions>
     private PointF mTargetPosition;
 
     /**
-     * The text to display.
+     * The primary text to display.
      */
-    private CharSequence mPrimaryText, mSecondaryText;
+    private @Nullable CharSequence mPrimaryText;
+
+    /**
+     * The secondary text to display.
+     */
+    private @Nullable CharSequence mSecondaryText;
+
+    /**
+     * The colour for the primary text.
+     */
     private @ColorInt int mPrimaryTextColour = Color.WHITE;
+
+    /**
+     * The colour for the secondary text.
+     */
     private @ColorInt int mSecondaryTextColour = Color.argb(179, 255, 255, 255);
+
+    /**
+     * The colour for the prompt background.
+     */
     private @ColorInt int mBackgroundColour = Color.argb(244, 63, 81, 181);
+
+    /**
+     * The colour for the prompt focal.
+     */
     private @ColorInt int mFocalColour = Color.WHITE;
 
+    /**
+     * The circle focal implementation radius.
+     */
     private float mFocalRadius;
-    private float mPrimaryTextSize, mSecondaryTextSize;
+
+    /**
+     * The primary text font size.
+     */
+    private float mPrimaryTextSize;
+
+    /**
+     * The secondary text font size.
+     */
+    private float mSecondaryTextSize;
+
+    /**
+     * The maximum width to allow the text to be.
+     */
     private float mMaxTextWidth;
+
+    /**
+     * The distance between the text and the background edge.
+     */
     private float mTextPadding;
+
+    /**
+     * The distance between the focal edge and the text.
+     */
     private float mFocalPadding;
+
+    /**
+     * The interpolator to use for animations.
+     */
     private Interpolator mAnimationInterpolator;
-    private Drawable mIconDrawable;
+
+    /**
+     * The drawable to use to render the target.
+     */
+    private @Nullable Drawable mIconDrawable;
 
     /**
      * Should the back button press dismiss the prompt.
@@ -119,8 +177,16 @@ public class PromptOptions<T extends PromptOptions>
      */
     private PromptFocal mPromptFocal = new CirclePromptFocal();
 
+    /**
+     * The renderer for drawing the prompt text.
+     */
     private PromptText mPromptText = new PromptText();
 
+    /**
+     * Constructor.
+     *
+     * @param resourceFinder The resource finder implementation to use to find resources.
+     */
     public PromptOptions(final ResourceFinder resourceFinder)
     {
         mResourceFinder = resourceFinder;
@@ -134,6 +200,11 @@ public class PromptOptions<T extends PromptOptions>
         mTextSeparation =    density * 16;
     }
 
+    /**
+     * Loads the supplied theme into the prompt overwriting any previously set values if they are set in the theme.
+     *
+     * @param themeResId The resource id for the theme.
+     */
     public void load(int themeResId)
     {
         //Attempt to load the theme from the activity theme
@@ -187,6 +258,11 @@ public class PromptOptions<T extends PromptOptions>
         mClipToView = (View) mResourceFinder.findViewById(android.R.id.content).getParent();
     }
 
+    /**
+     * Get the resource finder being used.
+     *
+     * @return The resource finder being used.
+     */
     public ResourceFinder getResourceFinder()
     {
         return mResourceFinder;
@@ -220,7 +296,12 @@ public class PromptOptions<T extends PromptOptions>
         return (T) this;
     }
 
-    public View getTargetView()
+    /**
+     * Gets the view that the prompt is targeting.
+     *
+     * @return The target view or null if not set or targeting a position.
+     */
+    public @Nullable View getTargetView()
     {
         return mTargetView;
     }
@@ -240,7 +321,12 @@ public class PromptOptions<T extends PromptOptions>
         return (T) this;
     }
 
-    public PointF getTargetPosition()
+    /**
+     * Get the position on the screen that is being targeted.
+     *
+     * @return The target position or null if targeting a view.
+     */
+    public @Nullable PointF getTargetPosition()
     {
         return mTargetPosition;
     }
@@ -310,7 +396,12 @@ public class PromptOptions<T extends PromptOptions>
         return (T) this;
     }
 
-    public CharSequence getPrimaryText()
+    /**
+     * Get the text to draw for the primary text.
+     *
+     * @return The primary text.
+     */
+    public @Nullable CharSequence getPrimaryText()
     {
         return mPrimaryText;
     }
@@ -339,6 +430,11 @@ public class PromptOptions<T extends PromptOptions>
         return (T) this;
     }
 
+    /**
+     * Get the primary text font size.
+     *
+     * @return The primary text font size.
+     */
     public float getPrimaryTextSize()
     {
         return mPrimaryTextSize;
@@ -356,6 +452,11 @@ public class PromptOptions<T extends PromptOptions>
         return (T) this;
     }
 
+    /**
+     * Gets the primary text font colour.
+     *
+     * @return The primary text font colour.
+     */
     public @ColorInt int getPrimaryTextColour()
     {
         return mPrimaryTextColour;

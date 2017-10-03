@@ -35,6 +35,9 @@ import android.view.View;
 
 import java.text.Bidi;
 
+/**
+ * Useful methods for prompts that don't fit else where.
+ */
 public class PromptUtils
 {
 
@@ -243,6 +246,15 @@ public class PromptUtils
         return layout;
     }
 
+    /**
+     * Scales a rectangle.
+     *
+     * @param origin The point to scale from.
+     * @param base The rectangle at scale 1.0.
+     * @param out The rectangle to put the scaled size in.
+     * @param scale The amount to scale the rectangle by.
+     * @param even Should the rectangle be scaled evenly in both directions.
+     */
     public static void scale(final PointF origin, final RectF base, final RectF out, final float scale, final boolean even)
     {
         if (scale == 1)
@@ -337,6 +349,15 @@ public class PromptUtils
         return maxTextWidth;
     }
 
+    /**
+     * Determines if a point is within a rectangle that has been inset.
+     *
+     * @param bounds The rectangle bounds.
+     * @param inset The amount that the rectangle is inset by.
+     * @param x The point x coordinate.
+     * @param y The point y coordinate.
+     * @return True if the point is within the inset rectangle, false otherwise.
+     */
     public static boolean containsInset(final Rect bounds, final int inset, final int x, final int y)
     {
         return x > bounds.left + inset

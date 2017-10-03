@@ -581,6 +581,12 @@ public class MaterialTapTargetPrompt
         mView.mPromptOptions.onPromptStateChanged(this, state);
     }
 
+    /**
+     * Creates a prompt with the supplied options.
+     *
+     * @param promptOptions The options to use to create the prompt.
+     * @return The created prompt.
+     */
     public static MaterialTapTargetPrompt createDefault(final PromptOptions promptOptions)
     {
         return new MaterialTapTargetPrompt(promptOptions);

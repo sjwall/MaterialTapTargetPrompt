@@ -93,7 +93,7 @@ public class RectanglePromptFocalUnitTest
         final Canvas canvas = mock(Canvas.class);
         final PromptOptions options = createOptions(clipBounds, targetBounds);
         final RectanglePromptFocal promptFocal = (RectanglePromptFocal) options.getPromptFocal();
-        promptFocal.setPadding(40);
+        promptFocal.setTargetPadding(40);
         promptFocal.setCornerRadius(40, 40);
         promptFocal.setSize(null);
         promptFocal.prepare(options, options.getTargetView(), new int[]{0,0});
@@ -191,7 +191,7 @@ public class RectanglePromptFocalUnitTest
         final Canvas canvas = mock(Canvas.class);
         final PromptOptions options = createOptions(clipBounds, targetBounds);
         final RectanglePromptFocal promptFocal = (RectanglePromptFocal) options.getPromptFocal();
-        promptFocal.setPadding(40);
+        promptFocal.setTargetPadding(40);
         promptFocal.setCornerRadius(40, 40);
         promptFocal.setSize(new PointF(100, 80));
         promptFocal.prepare(options, options.getTargetView(), new int[]{0,0});

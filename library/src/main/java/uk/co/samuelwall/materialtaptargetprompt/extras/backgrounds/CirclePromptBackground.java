@@ -22,26 +22,57 @@ import android.graphics.Paint;
 import android.graphics.PointF;
 import android.graphics.Rect;
 import android.graphics.RectF;
+import android.support.annotation.ColorInt;
+import android.support.annotation.IntRange;
 
 import uk.co.samuelwall.materialtaptargetprompt.extras.PromptBackground;
-import uk.co.samuelwall.materialtaptargetprompt.extras.PromptFocal;
 import uk.co.samuelwall.materialtaptargetprompt.extras.PromptOptions;
 import uk.co.samuelwall.materialtaptargetprompt.extras.PromptText;
 import uk.co.samuelwall.materialtaptargetprompt.extras.PromptUtils;
 
+/**
+ * {@link PromptBackground} implementation that renders the prompt background as a circle.
+ */
 public class CirclePromptBackground extends PromptBackground
 {
+    /**
+     * The current circle centre position.
+     */
     PointF mPosition;
+
+    /**
+     * The current radius for the circle.
+     */
     float mRadius;
+
+    /**
+     * The position for circle centre at 1.0 scale.
+     */
     PointF mBasePosition;
+
+    /**
+     * The radius for the circle at 1.0 scale.
+     */
     float mBaseRadius;
+
+    /**
+     * The paint to use to render the circle.
+     */
     Paint mPaint;
+
+    /**
+     * The alpha value to use at 1.0 scale.
+     */
+    @IntRange(from=0, to=255)
     int mBaseColourAlpha;
     /*PointF point1 = new PointF();
     PointF point2 = new PointF();
     PointF point3 = new PointF();
     Paint pointPaint = new Paint();*/
 
+    /**
+     * Constructor.
+     */
     public CirclePromptBackground()
     {
         mPaint = new Paint();
@@ -53,7 +84,7 @@ public class CirclePromptBackground extends PromptBackground
     }
 
     @Override
-    public void setColour(int colour)
+    public void setColour(@ColorInt int colour)
     {
         mPaint.setColor(colour);
         mBaseColourAlpha = Color.alpha(colour);
@@ -64,6 +95,7 @@ public class CirclePromptBackground extends PromptBackground
     public void prepare(final PromptOptions options, final boolean clipToBounds,
                         final Rect clipBounds)
     {
+        // Obtain values from the prompt options.
         final PromptText promptText = options.getPromptText();
         final RectF focalBounds = options.getPromptFocal().getBounds();
         final float focalCentreX = focalBounds.centerX();
@@ -72,8 +104,11 @@ public class CirclePromptBackground extends PromptBackground
         final RectF textBounds = promptText.getBounds();
         final float textPadding = options.getTextPadding();
         final RectF clipBoundsInset88dp = new RectF(clipBounds);
+        // Default material design offset prompt when more than 88dp inset
         final float inset88dp = 88f * options.getResourceFinder().getResources().getDisplayMetrics().density;
         clipBoundsInset88dp.inset(inset88dp, inset88dp);
+
+        // Is the focal centre more than 88dp from the clip bounds edge
         if ((focalCentreX > clipBoundsInset88dp.left
                 && focalCentreX < clipBoundsInset88dp.right)
                 || (focalCentreY > clipBoundsInset88dp.top
@@ -138,12 +173,15 @@ public class CirclePromptBackground extends PromptBackground
         else
         {
             mBasePosition.set(focalCentreX, focalCentreY);
+            // Calculate the furthest distance from the a focal side to a text side.
             final float length = Math.abs(
                     (textBounds.left < focalBounds.left ?
                             textBounds.left - textPadding
                             : textBounds.right + textPadding)
                     - focalCentreX);
+            // Calculate the height based on the distance from the focal centre to the furthest text y position.
             float height = (focalBounds.height() / 2) + focalPadding + textBounds.height();
+            // Calculate the radius based on the calculated width and height
             mBaseRadius = (float) Math.sqrt(Math.pow(length, 2) + Math.pow(height, 2));
             /*point1.set(focalCentreX + (prompt.mHorizontalTextPositionLeft ? -length : length),
                             focalCentreY + (prompt.mVerticalTextPositionAbove ? - height : height));*/
@@ -159,6 +197,7 @@ public class CirclePromptBackground extends PromptBackground
         final float focalCentreY = focalBounds.centerY();
         mRadius = mBaseRadius * revealModifier;
         mPaint.setAlpha((int) (mBaseColourAlpha * alphaModifier));
+        // Change the current centre position to be a position scaled from the focal to the base.
         mPosition.set(focalCentreX + ((mBasePosition.x - focalCentreX) * revealModifier),
                 focalCentreY + ((mBasePosition.y - focalCentreY) * revealModifier));
     }
