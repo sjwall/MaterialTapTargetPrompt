@@ -29,6 +29,8 @@ import android.view.View;
 import android.widget.Toast;
 
 import uk.co.samuelwall.materialtaptargetprompt.MaterialTapTargetPrompt;
+import uk.co.samuelwall.materialtaptargetprompt.extras.backgrounds.RectanglePromptBackground;
+import uk.co.samuelwall.materialtaptargetprompt.extras.focals.RectanglePromptFocal;
 
 public class EmptyActivity extends AppCompatActivity
 {
@@ -226,6 +228,17 @@ public class EmptyActivity extends AppCompatActivity
                 .setMaxTextWidth(R.dimen.tap_target_menu_max_width)
                 .setTarget(findViewById(R.id.action_tick))
                 .setIcon(R.drawable.ic_check)
+                .show();
+    }
+
+    public void showRectPrompt(View view)
+    {
+        new MaterialTapTargetPrompt.Builder(this)
+                .setTarget(view)
+                .setPrimaryText("Different shapes")
+                .setSecondaryText("Extend PromptFocal or PromptBackground to change the shapes")
+                .setPromptBackground(new RectanglePromptBackground())
+                .setPromptFocal(new RectanglePromptFocal())
                 .show();
     }
 
