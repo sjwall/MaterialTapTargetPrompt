@@ -344,6 +344,11 @@ public class PromptOptions<T extends PromptOptions>
         return (T) this;
     }
 
+    /**
+     * Get the view that is rendered as the target.
+     *
+     * @return The view used to render the prompt target.
+     */
     public View getTargetRenderView()
     {
         return mTargetRenderView;
@@ -486,11 +491,21 @@ public class PromptOptions<T extends PromptOptions>
         return (T) this;
     }
 
+    /**
+     * Get the typeface for the primary text.
+     *
+     * @return The primary text typeface.
+     */
     public Typeface getPrimaryTextTypeface()
     {
         return mPrimaryTextTypeface;
     }
 
+    /**
+     * Get the primary text typeface style.
+     *
+     * @return the primary text typeface style.
+     */
     public int getPrimaryTextTypefaceStyle()
     {
         return mPrimaryTextTypefaceStyle;
@@ -533,6 +548,11 @@ public class PromptOptions<T extends PromptOptions>
         return (T) this;
     }
 
+    /**
+     * Get the secondary text.
+     *
+     * @return The secondary text.
+     */
     public CharSequence getSecondaryText()
     {
         return mSecondaryText;
@@ -562,6 +582,11 @@ public class PromptOptions<T extends PromptOptions>
         return (T) this;
     }
 
+    /**
+     * Get the secondary text size.
+     *
+     * @return The secondary text size.
+     */
     public float getSecondaryTextSize()
     {
         return mSecondaryTextSize;
@@ -579,6 +604,11 @@ public class PromptOptions<T extends PromptOptions>
         return (T) this;
     }
 
+    /**
+     * Get the secondary text colour.
+     *
+     * @return The secondary text colour.
+     */
     public int getSecondaryTextColour()
     {
         return mSecondaryTextColour;
@@ -608,11 +638,21 @@ public class PromptOptions<T extends PromptOptions>
         return (T) this;
     }
 
+    /**
+     * Get the secondary text typeface.
+     *
+     * @return The secondary text typeface.
+     */
     public Typeface getSecondaryTextTypeface()
     {
         return mSecondaryTextTypeface;
     }
 
+    /**
+     * Get the secondary text typeface style.
+     *
+     * @return The secondary text typeface style.
+     */
     public int getSecondaryTextTypefaceStyle()
     {
         return mSecondaryTextTypefaceStyle;
@@ -642,6 +682,11 @@ public class PromptOptions<T extends PromptOptions>
         return (T) this;
     }
 
+    /**
+     * Get the text left and right padding.
+     *
+     * @return The text left and right padding.
+     */
     public float getTextPadding()
     {
         return mTextPadding;
@@ -671,6 +716,11 @@ public class PromptOptions<T extends PromptOptions>
         return (T) this;
     }
 
+    /**
+     * Get the distance between the primary and secondary text.
+     *
+     * @return the distance between the primary and secondary text.
+     */
     public float getTextSeparation()
     {
         return mTextSeparation;
@@ -700,6 +750,11 @@ public class PromptOptions<T extends PromptOptions>
         return (T) this;
     }
 
+    /**
+     * Get the padding between the text and the focal.
+     *
+     * @return The padding between the text and the focal.
+     */
     public float getFocalPadding()
     {
         return mFocalPadding;
@@ -717,13 +772,18 @@ public class PromptOptions<T extends PromptOptions>
         return (T) this;
     }
 
+    /**
+     * Get the animation interpolator that is used.
+     *
+     * @return The animation interpolator that is used.
+     */
     public Interpolator getAnimationInterpolator()
     {
         return mAnimationInterpolator;
     }
 
     /**
-     * Enable/disable animation above target.
+     * Enable/disable focal animation.
      * true by default
      *
      * @param enabled Idle animation enabled
@@ -735,6 +795,11 @@ public class PromptOptions<T extends PromptOptions>
         return (T) this;
     }
 
+    /**
+     * Is the focal animation enabled.
+     *
+     * @return True if the idle animation is enabled.
+     */
     public boolean getIdleAnimationEnabled()
     {
         return mIdleAnimationEnabled;
@@ -764,6 +829,11 @@ public class PromptOptions<T extends PromptOptions>
         return (T) this;
     }
 
+    /**
+     * Get the icon drawn as the target.
+     *
+     * @return The icon drawn as the target.
+     */
     public Drawable getIconDrawable()
     {
         return mIconDrawable;
@@ -855,6 +925,12 @@ public class PromptOptions<T extends PromptOptions>
         return (T) this;
     }
 
+    /**
+     * Get if the prompt should stop touch events on the focal point from passing to underlying
+     * views.
+     *
+     * @return True to capture touch events in the prompt
+     */
     public boolean getCaptureTouchEventOnFocal()
     {
         return mCaptureTouchEventOnFocal;
@@ -885,6 +961,11 @@ public class PromptOptions<T extends PromptOptions>
         return (T) this;
     }
 
+    /**
+     * Get the maximum width that the primary and secondary text can be.
+     *
+     * @return The maximum text width.
+     */
     public float getMaxTextWidth()
     {
         return mMaxTextWidth;
@@ -903,7 +984,12 @@ public class PromptOptions<T extends PromptOptions>
         return (T) this;
     }
 
-    public int getBackgroundColour()
+    /**
+     * Get the background colour.
+     *
+     * @return The background colour.
+     */
+    public @ColorInt int getBackgroundColour()
     {
         return mBackgroundColour;
     }
@@ -920,7 +1006,12 @@ public class PromptOptions<T extends PromptOptions>
         return (T) this;
     }
 
-    public int getFocalColour()
+    /**
+     * Get the focal point colour.
+     *
+     * @return The focal point colour.
+     */
+    public @ColorInt int getFocalColour()
     {
         return mFocalColour;
     }
@@ -949,6 +1040,11 @@ public class PromptOptions<T extends PromptOptions>
         return (T) this;
     }
 
+    /**
+     * Get the focal point radius for the circle prompt focal.
+     *
+     * @return The radius used for the circle prompt focal.
+     */
     public float getFocalRadius()
     {
         return mFocalRadius;
@@ -972,6 +1068,12 @@ public class PromptOptions<T extends PromptOptions>
         return (T) this;
     }
 
+    /**
+     * Get whether the prompt should dismiss itself when a touch event occurs outside the focal.
+     *
+     * @return True - prompt will dismiss when touched outside the focal, false - no
+     *                    action taken.
+     */
     public boolean getAutoDismiss()
     {
         return mAutoDismiss;
@@ -995,6 +1097,11 @@ public class PromptOptions<T extends PromptOptions>
         return (T) this;
     }
 
+    /**
+     * Get if the prompt should finish itself when a touch event occurs inside the focal.
+     *
+     * @return True if the prompt should finish itself when a touch event occurs inside the focal.
+     */
     public boolean getAutoFinish()
     {
         return mAutoFinish;
@@ -1014,6 +1121,11 @@ public class PromptOptions<T extends PromptOptions>
         return (T) this;
     }
 
+    /**
+     * Get if the prompt should stop touch events outside the prompt from passing to underlying views.
+     *
+     * @return True if touch events will not be passed to views below the prompt.
+     */
     public boolean getCaptureTouchEventOutsidePrompt()
     {
         return mCaptureTouchEventOutsidePrompt;
@@ -1046,6 +1158,11 @@ public class PromptOptions<T extends PromptOptions>
         return (T) this;
     }
 
+    /**
+     * Gets the gravity for the primary text.
+     *
+     * @return The primary texts gravity.
+     */
     public int getPrimaryTextGravity()
     {
         return mPrimaryTextGravity;
@@ -1064,6 +1181,11 @@ public class PromptOptions<T extends PromptOptions>
         return (T) this;
     }
 
+    /**
+     * Gets the gravity for the secondary text.
+     *
+     * @return The secondary texts gravity.
+     */
     public int getSecondaryTextGravity()
     {
         return mSecondaryTextGravity;
@@ -1071,6 +1193,7 @@ public class PromptOptions<T extends PromptOptions>
 
     /**
      * Set the view to clip the prompt to.
+     * The prompt won't draw outside the bounds of this view.
      * Default: {@link android.R.id#content}
      * <p>
      * Null can be used to stop the prompt being clipped to a view.
@@ -1084,6 +1207,12 @@ public class PromptOptions<T extends PromptOptions>
         return (T) this;
     }
 
+    /**
+     * Get the view that the prompt canvas is clipped to.
+     * The prompt won't draw outside the bounds of this view.
+     *
+     * @return The view that the prompt canvas is clipped to.
+     */
     public View getClipToView()
     {
         return mClipToView;
@@ -1102,6 +1231,11 @@ public class PromptOptions<T extends PromptOptions>
         return (T) this;
     }
 
+    /**
+     * Will the pressing the system back button dismiss the prompt.
+     *
+     * @return True if pressing the system back button will dismiss the prompt, false otherwise.
+     */
     public boolean getBackButtonDismissEnabled()
     {
         return  mBackButtonDismissEnabled;
@@ -1151,12 +1285,23 @@ public class PromptOptions<T extends PromptOptions>
         return mPromptFocal;
     }
 
+    /**
+     * Set the {@link PromptText} implementation to use to render the prompt text.
+     *
+     * @param promptText The prompt text implementation.
+     * @return This Builder object to allow for chaining of calls to set methods
+     */
     public T setPromptText(@NonNull final PromptText promptText)
     {
         mPromptText = promptText;
         return (T) this;
     }
 
+    /**
+     * Get the {@link PromptText} implementation used to render the prompt text.
+     *
+     * @return This Builder object to allow for chaining of calls to set methods
+     */
     public PromptText getPromptText()
     {
         return mPromptText;
