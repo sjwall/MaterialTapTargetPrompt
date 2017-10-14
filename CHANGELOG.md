@@ -2,6 +2,18 @@
 
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## v2.2.0 (2017-10-14)
+
+### Features
+
+* Added PromptBackground, PromptFocal and PromptText to enable overriding the default implementation.
+* Added RectanglePromptBackground, RectanglePromptFocal, CirclePromptBackground and CirclePromptFocal background and focal implementations.
+* Added PromptOptions class as base for Builder class.
+
+### Other
+
+* Expanded unit testing.
+
 ## v2.1.0 (2017-09-06)
 
 ### Features
@@ -28,7 +40,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 ### Bug Fixes
 
 * Attributes are prefixed with mttp to be compatible with API 26.
- 
+
 ### Removed
 
 * `ResourceFinder.getWindow()`
