@@ -41,6 +41,7 @@ import android.view.View;
 import android.widget.Toast;
 
 import uk.co.samuelwall.materialtaptargetprompt.MaterialTapTargetPrompt;
+import uk.co.samuelwall.materialtaptargetprompt.extras.backgrounds.FullscreenPromptBackground;
 import uk.co.samuelwall.materialtaptargetprompt.extras.backgrounds.RectanglePromptBackground;
 import uk.co.samuelwall.materialtaptargetprompt.extras.focals.RectanglePromptFocal;
 
@@ -89,7 +90,7 @@ public class MainActivity extends AppCompatActivity
         SpannableStringBuilder secondaryText = new SpannableStringBuilder("Tap the envelop to start composing your first email");
         secondaryText.setSpan(new ForegroundColorSpan(ContextCompat.getColor(this, R.color.colorAccent)), 8, 15, Spanned.SPAN_INCLUSIVE_INCLUSIVE);
         SpannableStringBuilder primaryText = new SpannableStringBuilder("Send your first email");
-        primaryText.setSpan(new BackgroundColorSpan(ContextCompat.getColor(this, R.color.colorAccent)), 0,4, Spanned.SPAN_INCLUSIVE_INCLUSIVE);
+        primaryText.setSpan(new BackgroundColorSpan(ContextCompat.getColor(this, R.color.colorAccent)), 0, 4, Spanned.SPAN_INCLUSIVE_INCLUSIVE);
         mFabPrompt = new MaterialTapTargetPrompt.Builder(MainActivity.this)
                 .setTarget(findViewById(R.id.fab))
                 .setFocalPadding(R.dimen.dp40)
@@ -223,6 +224,17 @@ public class MainActivity extends AppCompatActivity
                 .show();
     }
 
+    public void showFullscreenRectPrompt(View view)
+    {
+        new MaterialTapTargetPrompt.Builder(this)
+                .setTarget(view)
+                .setPrimaryText("Different shapes")
+                .setSecondaryText("Extend PromptFocal or PromptBackground to change the shapes")
+                .setPromptBackground(new FullscreenPromptBackground())
+                .setPromptFocal(new RectanglePromptFocal())
+                .show();
+    }
+
     public void showDialog(View view)
     {
         startActivity(new Intent(this, DialogStyleActivity.class));
@@ -230,7 +242,7 @@ public class MainActivity extends AppCompatActivity
 
     public void showActionModePrompt(View view)
     {
-        mActionMode =  this.startSupportActionMode(mActionModeCallback);
+        mActionMode = this.startSupportActionMode(mActionModeCallback);
         new MaterialTapTargetPrompt.Builder(MainActivity.this)
                 .setPrimaryText(R.string.action_mode_prompt_title)
                 .setSecondaryText(R.string.action_mode_prompt_description)

@@ -96,5 +96,6 @@
     <string name="example_bottom_sheet_description">Displays prompt over a bottom sheet dialog</string>
 
     <string name="example_rectangle_title" translatable="false">Rectangle Prompt</string>
+    <string name="example_fullscreen_rectangle_title" translatable="false">Fullscreen Rectangle Prompt</string>
     <string name="example_rectangle_description" translatable="false">Displays a prompt with a rectangle background and focal</string>
 </resources>
