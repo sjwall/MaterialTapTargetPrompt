@@ -29,6 +29,7 @@ import android.view.View;
 import android.widget.Toast;
 
 import uk.co.samuelwall.materialtaptargetprompt.MaterialTapTargetPrompt;
+import uk.co.samuelwall.materialtaptargetprompt.extras.backgrounds.FullscreenPromptBackground;
 import uk.co.samuelwall.materialtaptargetprompt.extras.backgrounds.RectanglePromptBackground;
 import uk.co.samuelwall.materialtaptargetprompt.extras.focals.RectanglePromptFocal;
 
@@ -238,6 +239,17 @@ public class EmptyActivity extends AppCompatActivity
                 .setPrimaryText("Different shapes")
                 .setSecondaryText("Extend PromptFocal or PromptBackground to change the shapes")
                 .setPromptBackground(new RectanglePromptBackground())
+                .setPromptFocal(new RectanglePromptFocal())
+                .show();
+    }
+
+    public void showFullscreenRectPrompt(View view)
+    {
+        new MaterialTapTargetPrompt.Builder(this)
+                .setTarget(view)
+                .setPrimaryText("Different shapes")
+                .setSecondaryText("Extend PromptFocal or PromptBackground to change the shapes")
+                .setPromptBackground(new FullscreenPromptBackground())
                 .setPromptFocal(new RectanglePromptFocal())
                 .show();
     }
