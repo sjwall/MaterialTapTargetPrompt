@@ -2,6 +2,12 @@
 
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## v2.3.0 (2017-10-24)
+
+### Features
+
+* Added fullscreen prompt background. ([#85](https://github.com/sjwall/MaterialTapTargetPrompt/pull/85))
+
 ## v2.2.0 (2017-10-14)
 
 ### Features
