@@ -208,6 +208,11 @@ public class MaterialTapTargetPrompt
      */
     public void show()
     {
+        if (isStarting())
+        {
+            return;
+        }
+
         mView.mPromptOptions.getResourceFinder().getPromptParentView().addView(mView);
         addGlobalLayoutListener();
         onPromptStateChanged(STATE_REVEALING);
@@ -233,6 +238,11 @@ public class MaterialTapTargetPrompt
         return mState;
     }
 
+    boolean isStarting()
+    {
+        return mState == STATE_REVEALING || mState == STATE_REVEALED;
+    }
+
     boolean isDismissing()
     {
         return mState == STATE_DISMISSING || mState == STATE_FINISHING;
@@ -243,7 +253,7 @@ public class MaterialTapTargetPrompt
         return mState == STATE_DISMISSED || mState == STATE_FINISHED;
     }
 
-    boolean isDone()
+    boolean isComplete()
     {
         return mState == STATE_UNKNOWN || isDismissing() || isDismissed();
     }
@@ -287,7 +297,7 @@ public class MaterialTapTargetPrompt
      */
     public void finish()
     {
-        if (isDone())
+        if (isComplete())
         {
             return;
         }
@@ -329,7 +339,7 @@ public class MaterialTapTargetPrompt
      */
     public void dismiss()
     {
-        if (isDone())
+        if (isComplete())
         {
             return;
         }
