@@ -53,6 +53,11 @@ public class MaterialTapTargetPrompt
     /**
      * Prompt is reveal animation is running.
      */
+    public static final int STATE_UNKNOWN = 0;
+
+    /**
+     * Prompt is reveal animation is running.
+     */
     public static final int STATE_REVEALING = 1;
 
     /**
@@ -114,9 +119,9 @@ public class MaterialTapTargetPrompt
     float mFocalRippleProgress;
 
     /**
-     * Is the prompt currently being removed from view.
+     * The prompt's current state.
      */
-    boolean mDismissing;
+    int mState;
 
     /**
      * The system status bar height.
@@ -143,7 +148,7 @@ public class MaterialTapTargetPrompt
             @Override
             public void onFocalPressed()
             {
-                if (!mDismissing)
+                if (!isDismissing())
                 {
                     onPromptStateChanged(STATE_FOCAL_PRESSED);
                     if (mView.mPromptOptions.getAutoFinish())
@@ -156,7 +161,7 @@ public class MaterialTapTargetPrompt
             @Override
             public void onNonFocalPressed()
             {
-                if (!mDismissing)
+                if (!isDismissing())
                 {
                     onPromptStateChanged(STATE_NON_FOCAL_PRESSED);
                     if (mView.mPromptOptions.getAutoDismiss())
@@ -211,6 +216,39 @@ public class MaterialTapTargetPrompt
     }
 
     /**
+     * Get the current state of the prompt.
+     *
+     * @see #STATE_UNKNOWN
+     * @see #STATE_REVEALING
+     * @see #STATE_REVEALED
+     * @see #STATE_FOCAL_PRESSED
+     * @see #STATE_FINISHING
+     * @see #STATE_FINISHED
+     * @see #STATE_NON_FOCAL_PRESSED
+     * @see #STATE_DISMISSING
+     * @see #STATE_DISMISSED
+     */
+    public int getState()
+    {
+        return mState;
+    }
+
+    boolean isDismissing()
+    {
+        return mState == STATE_DISMISSING || mState == STATE_FINISHING;
+    }
+
+    boolean isDismissed()
+    {
+        return mState == STATE_DISMISSED || mState == STATE_FINISHED;
+    }
+
+    boolean isDone()
+    {
+        return mState == STATE_UNKNOWN || isDismissing() || isDismissed();
+    }
+
+    /**
      * Adds layout listener to view parent to capture layout changes.
      */
     void addGlobalLayoutListener()
@@ -249,12 +287,11 @@ public class MaterialTapTargetPrompt
      */
     public void finish()
     {
-        if (mDismissing)
+        if (isDone())
         {
             return;
         }
         onPromptStateChanged(STATE_FINISHING);
-        mDismissing = true;
         cleanUpAnimation();
         mAnimationCurrent = ValueAnimator.ofFloat(1f, 0f);
         mAnimationCurrent.setDuration(225);
@@ -292,12 +329,11 @@ public class MaterialTapTargetPrompt
      */
     public void dismiss()
     {
-        if (mDismissing)
+        if (isDone())
         {
             return;
         }
         onPromptStateChanged(STATE_DISMISSING);
-        mDismissing = true;
         cleanUpAnimation();
         mAnimationCurrent = ValueAnimator.ofFloat(1f, 0f);
         mAnimationCurrent.setDuration(225);
@@ -336,10 +372,9 @@ public class MaterialTapTargetPrompt
         cleanUpAnimation();
         removeGlobalLayoutListener();
         mView.mPromptOptions.getResourceFinder().getPromptParentView().removeView(mView);
-        if (mDismissing)
+        if (isDismissing())
         {
             onPromptStateChanged(state);
-            mDismissing = false;
         }
     }
 
@@ -578,6 +613,7 @@ public class MaterialTapTargetPrompt
      */
     protected void onPromptStateChanged(final int state)
     {
+        mState = state;
         mView.mPromptOptions.onPromptStateChanged(this, state);
     }
 
