@@ -51,9 +51,9 @@ public class MaterialTapTargetPrompt
 {
 
     /**
-     * Prompt is reveal animation is running.
+     * Prompt has yet to be shown.
      */
-    public static final int STATE_UNKNOWN = 0;
+    public static final int STATE_NOT_SHOWN = 0;
 
     /**
      * Prompt is reveal animation is running.
@@ -223,7 +223,7 @@ public class MaterialTapTargetPrompt
     /**
      * Get the current state of the prompt.
      *
-     * @see #STATE_UNKNOWN
+     * @see #STATE_NOT_SHOWN
      * @see #STATE_REVEALING
      * @see #STATE_REVEALED
      * @see #STATE_FOCAL_PRESSED
@@ -238,24 +238,44 @@ public class MaterialTapTargetPrompt
         return mState;
     }
 
+    /**
+     * Is the current state {@link #STATE_REVEALING} or {@link #STATE_REVEALED}.
+     *
+     * @return True if revealing or revealed.
+     */
     boolean isStarting()
     {
         return mState == STATE_REVEALING || mState == STATE_REVEALED;
     }
 
+    /**
+     * Is the current state {@link #STATE_DISMISSING} or {@link #STATE_FINISHING}.
+     *
+     * @return True if dismissing or finishing.
+     */
     boolean isDismissing()
     {
         return mState == STATE_DISMISSING || mState == STATE_FINISHING;
     }
 
+    /**
+     * Is the current state {@link #STATE_DISMISSED} or {@link #STATE_FINISHED}.
+     *
+     * @return True if dismissed or finished.
+     */
     boolean isDismissed()
     {
         return mState == STATE_DISMISSED || mState == STATE_FINISHED;
     }
 
+    /**
+     * Is the current state neither {@link #STATE_REVEALED} or {@link #STATE_REVEALING}.
+     *
+     * @return True if not revealed or revealing.
+     */
     boolean isComplete()
     {
-        return mState == STATE_UNKNOWN || isDismissing() || isDismissed();
+        return mState == STATE_NOT_SHOWN || isDismissing() || isDismissed();
     }
 
     /**

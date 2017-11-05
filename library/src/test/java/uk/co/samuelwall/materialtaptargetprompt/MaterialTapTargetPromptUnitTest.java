@@ -126,14 +126,17 @@ public class MaterialTapTargetPromptUnitTest
                         if (stateProgress == 0)
                         {
                             assertEquals(MaterialTapTargetPrompt.STATE_REVEALING, state);
+                            assertEquals(MaterialTapTargetPrompt.STATE_REVEALING, prompt.getState());
                         }
                         else if (stateProgress == 1)
                         {
                             assertEquals(MaterialTapTargetPrompt.STATE_REVEALED, state);
+                            assertEquals(MaterialTapTargetPrompt.STATE_REVEALED, prompt.getState());
                         }
                         else if (stateProgress == 2)
                         {
                             assertEquals(MaterialTapTargetPrompt.STATE_FOCAL_PRESSED, state);
+                            assertEquals(MaterialTapTargetPrompt.STATE_FOCAL_PRESSED, prompt.getState());
                             if (prompt.mAnimationCurrent != null)
                             {
                                 prompt.mAnimationCurrent.end();
@@ -142,10 +145,12 @@ public class MaterialTapTargetPromptUnitTest
                         else if (stateProgress == 3)
                         {
                             assertEquals(MaterialTapTargetPrompt.STATE_FINISHING, state);
+                            assertEquals(MaterialTapTargetPrompt.STATE_FINISHING, prompt.getState());
                         }
                         else if (stateProgress == 4)
                         {
                             assertEquals(MaterialTapTargetPrompt.STATE_FINISHED, state);
+                            assertEquals(MaterialTapTargetPrompt.STATE_FINISHED, prompt.getState());
                         }
                         else
                         {
@@ -174,14 +179,17 @@ public class MaterialTapTargetPromptUnitTest
                         if (stateProgress == 0)
                         {
                             assertEquals(MaterialTapTargetPrompt.STATE_REVEALING, state);
+                            assertEquals(MaterialTapTargetPrompt.STATE_REVEALING, prompt.getState());
                         }
                         else if (stateProgress == 1)
                         {
                             assertEquals(MaterialTapTargetPrompt.STATE_REVEALED, state);
+                            assertEquals(MaterialTapTargetPrompt.STATE_REVEALED, prompt.getState());
                         }
                         else if (stateProgress == 2)
                         {
                             assertEquals(MaterialTapTargetPrompt.STATE_FOCAL_PRESSED, state);
+                            assertEquals(MaterialTapTargetPrompt.STATE_FOCAL_PRESSED, prompt.getState());
                             if (prompt.mAnimationCurrent != null)
                             {
                                 prompt.mAnimationCurrent.end();
@@ -190,10 +198,12 @@ public class MaterialTapTargetPromptUnitTest
                         else if (stateProgress == 3)
                         {
                             assertEquals(MaterialTapTargetPrompt.STATE_FINISHING, state);
+                            assertEquals(MaterialTapTargetPrompt.STATE_FINISHING, prompt.getState());
                         }
                         else if (stateProgress == 4)
                         {
                             assertEquals(MaterialTapTargetPrompt.STATE_FINISHED, state);
+                            assertEquals(MaterialTapTargetPrompt.STATE_FINISHED, prompt.getState());
                         }
                         else
                         {
@@ -232,18 +242,22 @@ public class MaterialTapTargetPromptUnitTest
                         if (stateProgress == 0)
                         {
                             assertEquals(MaterialTapTargetPrompt.STATE_REVEALING, state);
+                            assertEquals(MaterialTapTargetPrompt.STATE_REVEALING, prompt.getState());
                         }
                         else if (stateProgress == 1)
                         {
                             assertEquals(MaterialTapTargetPrompt.STATE_REVEALED, state);
+                            assertEquals(MaterialTapTargetPrompt.STATE_REVEALED, prompt.getState());
                         }
                         else if (stateProgress == 2)
                         {
                             assertEquals(MaterialTapTargetPrompt.STATE_NON_FOCAL_PRESSED, state);
+                            assertEquals(MaterialTapTargetPrompt.STATE_NON_FOCAL_PRESSED, prompt.getState());
                         }
                         else if (stateProgress == 3)
                         {
                             assertEquals(MaterialTapTargetPrompt.STATE_DISMISSING, state);
+                            assertEquals(MaterialTapTargetPrompt.STATE_DISMISSING, prompt.getState());
                             if (prompt.mAnimationCurrent != null)
                             {
                                 prompt.mAnimationCurrent.end();
@@ -252,6 +266,7 @@ public class MaterialTapTargetPromptUnitTest
                         else if (stateProgress == 4)
                         {
                             assertEquals(MaterialTapTargetPrompt.STATE_DISMISSED, state);
+                            assertEquals(MaterialTapTargetPrompt.STATE_DISMISSED, prompt.getState());
                         }
                         else
                         {
@@ -280,18 +295,22 @@ public class MaterialTapTargetPromptUnitTest
                         if (stateProgress == 0)
                         {
                             assertEquals(MaterialTapTargetPrompt.STATE_REVEALING, state);
+                            assertEquals(MaterialTapTargetPrompt.STATE_REVEALING, prompt.getState());
                         }
                         else if (stateProgress == 1)
                         {
                             assertEquals(MaterialTapTargetPrompt.STATE_REVEALED, state);
+                            assertEquals(MaterialTapTargetPrompt.STATE_REVEALED, prompt.getState());
                         }
                         else if (stateProgress == 2)
                         {
                             assertEquals(MaterialTapTargetPrompt.STATE_NON_FOCAL_PRESSED, state);
+                            assertEquals(MaterialTapTargetPrompt.STATE_NON_FOCAL_PRESSED, prompt.getState());
                         }
                         else if (stateProgress == 3)
                         {
                             assertEquals(MaterialTapTargetPrompt.STATE_DISMISSING, state);
+                            assertEquals(MaterialTapTargetPrompt.STATE_DISMISSING, prompt.getState());
                             if (prompt.mAnimationCurrent != null)
                             {
                                 prompt.mAnimationCurrent.end();
@@ -300,6 +319,7 @@ public class MaterialTapTargetPromptUnitTest
                         else if (stateProgress == 4)
                         {
                             assertEquals(MaterialTapTargetPrompt.STATE_DISMISSED, state);
+                            assertEquals(MaterialTapTargetPrompt.STATE_DISMISSED, prompt.getState());
                         }
                         else
                         {
@@ -401,6 +421,7 @@ public class MaterialTapTargetPromptUnitTest
                                 return null;
                             }
                         }).when(prompt).show();
+                        assertEquals(MaterialTapTargetPrompt.STATE_NOT_SHOWN, prompt.getState());
                         return prompt;
                     }
                     return null;
