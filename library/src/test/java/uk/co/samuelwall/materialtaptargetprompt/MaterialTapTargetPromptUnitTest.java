@@ -324,6 +324,16 @@ public class MaterialTapTargetPromptUnitTest
         assertTrue(prompt.mView.dispatchKeyEventPreIme(new KeyEvent(KeyEvent.ACTION_UP, KeyEvent.KEYCODE_BACK)));
     }
 
+    @Test
+    public void dismissBeforeShow() {
+        MaterialTapTargetPrompt prompt = createBuilder(SCREEN_WIDTH, SCREEN_HEIGHT, 0)
+                .setTarget(10, 10)
+                .setPrimaryText("Primary text")
+                .create();
+        prompt.dismiss();
+        prompt.show();
+    }
+
     private MaterialTapTargetPrompt.Builder createBuilder(final int screenWidth,
                                               final int screenHeight, final float primaryTextWidth)
     {
