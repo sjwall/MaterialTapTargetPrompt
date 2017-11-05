@@ -2,6 +2,17 @@
 
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## v2.4.0 (2017-11-05)
+
+### Features
+
+* Added Prompt.getState() to get the current prompt state. ([#87](https://github.com/sjwall/MaterialTapTargetPrompt/pull/87))
+* Added prompt state STATE_NOT_SHOWN for the base state before prompt is shown. ([#87](https://github.com/sjwall/MaterialTapTargetPrompt/pull/87))
+
+### Bug Fixes
+
+* Fixed null pointer exception when attempting to dismiss prompt before it has been shown. ([#87](https://github.com/sjwall/MaterialTapTargetPrompt/pull/87))
+
 ## v2.3.0 (2017-10-24)
 
 ### Features
