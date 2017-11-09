@@ -345,13 +345,25 @@ public class MaterialTapTargetPromptUnitTest
     }
 
     @Test
-    public void dismissBeforeShow() {
+    public void testDismissBeforeShow() {
         MaterialTapTargetPrompt prompt = createBuilder(SCREEN_WIDTH, SCREEN_HEIGHT, 0)
                 .setTarget(10, 10)
                 .setPrimaryText("Primary text")
                 .create();
         prompt.dismiss();
         prompt.show();
+    }
+
+    @Test
+    public void testShowWhileDismissing() {
+        MaterialTapTargetPrompt prompt = createBuilder(SCREEN_WIDTH, SCREEN_HEIGHT, 0)
+                .setTarget(10, 10)
+                .setPrimaryText("Primary text")
+                .create();
+        prompt.show();
+        prompt.dismiss();
+        prompt.show();
+        assertTrue(prompt.isStarting());
     }
 
     private MaterialTapTargetPrompt.Builder createBuilder(final int screenWidth,

@@ -212,6 +212,10 @@ public class MaterialTapTargetPrompt
         {
             return;
         }
+        else if (isDismissing())
+        {
+            cleanUpPrompt(mState);
+        }
 
         mView.mPromptOptions.getResourceFinder().getPromptParentView().addView(mView);
         addGlobalLayoutListener();
@@ -342,12 +346,6 @@ public class MaterialTapTargetPrompt
             {
                 cleanUpPrompt(STATE_FINISHED);
             }
-
-            @Override
-            public void onAnimationCancel(Animator animation)
-            {
-                cleanUpPrompt(STATE_FINISHED);
-            }
         });
         mAnimationCurrent.start();
     }
@@ -381,12 +379,6 @@ public class MaterialTapTargetPrompt
         {
             @Override
             public void onAnimationEnd(Animator animation)
-            {
-                cleanUpPrompt(STATE_DISMISSED);
-            }
-
-            @Override
-            public void onAnimationCancel(Animator animation)
             {
                 cleanUpPrompt(STATE_DISMISSED);
             }
@@ -460,14 +452,6 @@ public class MaterialTapTargetPrompt
                     startIdleAnimations();
                 }
                 onPromptStateChanged(STATE_REVEALED);
-            }
-
-            @Override
-            public void onAnimationCancel(Animator animation)
-            {
-                animation.removeAllListeners();
-                updateAnimation(1, 1);
-                cleanUpAnimation();
             }
         });
         mAnimationCurrent.start();
