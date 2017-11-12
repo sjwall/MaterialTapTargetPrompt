@@ -33,6 +33,7 @@ import android.os.Build;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 
 import uk.co.samuelwall.materialtaptargetprompt.extras.PromptOptions;
@@ -212,12 +213,15 @@ public class MaterialTapTargetPrompt
         {
             return;
         }
-        else if (isDismissing())
+
+        final ViewGroup parent = mView.mPromptOptions.getResourceFinder().getPromptParentView();
+
+        if (isDismissing() || parent.findViewById(R.id.material_target_prompt_view) != null)
         {
             cleanUpPrompt(mState);
         }
 
-        mView.mPromptOptions.getResourceFinder().getPromptParentView().addView(mView);
+        parent.addView(mView);
         addGlobalLayoutListener();
         onPromptStateChanged(STATE_REVEALING);
         prepare();
