@@ -2,6 +2,12 @@
 
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## v2.4.1 (2017-11-14)
+
+### Bug Fixes
+
+* Fixed invalid state when attempting to show prompt that is dismissing ([#89](https://github.com/sjwall/MaterialTapTargetPrompt/pull/89))
+
 ## v2.4.0 (2017-11-05)
 
 ### Features
