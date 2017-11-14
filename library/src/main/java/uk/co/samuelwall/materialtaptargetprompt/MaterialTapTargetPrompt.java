@@ -33,6 +33,7 @@ import android.os.Build;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 
 import uk.co.samuelwall.materialtaptargetprompt.extras.PromptOptions;
@@ -213,7 +214,14 @@ public class MaterialTapTargetPrompt
             return;
         }
 
-        mView.mPromptOptions.getResourceFinder().getPromptParentView().addView(mView);
+        final ViewGroup parent = mView.mPromptOptions.getResourceFinder().getPromptParentView();
+
+        if (isDismissing() || parent.findViewById(R.id.material_target_prompt_view) != null)
+        {
+            cleanUpPrompt(mState);
+        }
+
+        parent.addView(mView);
         addGlobalLayoutListener();
         onPromptStateChanged(STATE_REVEALING);
         prepare();
@@ -342,12 +350,6 @@ public class MaterialTapTargetPrompt
             {
                 cleanUpPrompt(STATE_FINISHED);
             }
-
-            @Override
-            public void onAnimationCancel(Animator animation)
-            {
-                cleanUpPrompt(STATE_FINISHED);
-            }
         });
         mAnimationCurrent.start();
     }
@@ -381,12 +383,6 @@ public class MaterialTapTargetPrompt
         {
             @Override
             public void onAnimationEnd(Animator animation)
-            {
-                cleanUpPrompt(STATE_DISMISSED);
-            }
-
-            @Override
-            public void onAnimationCancel(Animator animation)
             {
                 cleanUpPrompt(STATE_DISMISSED);
             }
@@ -460,14 +456,6 @@ public class MaterialTapTargetPrompt
                     startIdleAnimations();
                 }
                 onPromptStateChanged(STATE_REVEALED);
-            }
-
-            @Override
-            public void onAnimationCancel(Animator animation)
-            {
-                animation.removeAllListeners();
-                updateAnimation(1, 1);
-                cleanUpAnimation();
             }
         });
         mAnimationCurrent.start();
