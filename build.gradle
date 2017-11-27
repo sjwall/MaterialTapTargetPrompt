@@ -14,45 +14,32 @@
  * limitations under the License.
  */
 
-// Top-level build file where you can add configuration options common to all sub-projects/modules.
 buildscript {
     repositories {
+        google()
         jcenter()
-        maven {
-            url "https://maven.google.com"
-        }
     }
-    dependencies {
-        classpath 'com.android.tools.build:gradle:2.3.3'
-        classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.7.1'
-        classpath 'com.github.dcendents:android-maven-gradle-plugin:1.5'
 
-        // NOTE: Do not place your application dependencies here; they belong
-        // in the individual module build.gradle files
+    dependencies {
+        classpath 'com.android.tools.build:gradle:3.0.0'
+        classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.7.3'
+        classpath 'com.github.dcendents:android-maven-gradle-plugin:1.5'
     }
 }
 
 allprojects {
     repositories {
+        google()
         jcenter()
-        maven {
-            url "https://maven.google.com"
-        }
     }
 }
 
-task clean(type: Delete) {
-    delete rootProject.buildDir
-}
-
-
 ext {
-    buildToolsVersion = '26.0.1'
-    supportLibVersion = '26.0.0'
+    supportLibVersion = '27.0.1'
 
     minSdkVersion = 14
-    targetSdkVersion = 26
-    compileSdkVersion = 26
+    targetSdkVersion = 27
+    compileSdkVersion = 27
 
     versionCode = 40
     versionName = '2.4.1'

@@ -18,7 +18,6 @@ apply plugin: 'com.android.application'
 
 android {
     compileSdkVersion rootProject.compileSdkVersion
-    buildToolsVersion rootProject.buildToolsVersion
 
     defaultConfig {
         applicationId "uk.co.samuelwall.materialtaptargetprompt.sample"
@@ -27,24 +26,24 @@ android {
         versionCode rootProject.versionCode
         versionName rootProject.versionName
     }
+
     buildTypes {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+
     lintOptions {
         abortOnError false
     }
 }
 
 dependencies {
-    compile fileTree(dir: 'libs', include: ['*.jar'])
-    testCompile 'junit:junit:4.12'
-    compile 'com.android.support:appcompat-v7:' + rootProject.supportLibVersion
-    compile 'com.android.support:support-v4:' + rootProject.supportLibVersion
-    compile 'com.android.support:design:' + rootProject.supportLibVersion
-    compile 'com.android.support:cardview-v7:' + rootProject.supportLibVersion
-    compile 'com.android.support:recyclerview-v7:' + rootProject.supportLibVersion
-    compile project(':material-tap-target-prompt')
+    implementation project(':material-tap-target-prompt')
+
+    implementation 'com.android.support:design:' + rootProject.supportLibVersion
+    implementation 'com.android.support:cardview-v7:' + rootProject.supportLibVersion
+
+    testImplementation 'junit:junit:4.12'
 }

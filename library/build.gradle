@@ -25,7 +25,6 @@ version rootProject.versionName
 
 android {
     compileSdkVersion rootProject.compileSdkVersion
-    buildToolsVersion rootProject.buildToolsVersion
 
     defaultConfig {
         minSdkVersion rootProject.minSdkVersion
@@ -33,15 +32,18 @@ android {
         versionCode rootProject.versionCode
         versionName rootProject.versionName
     }
+
     buildTypes {
         debug {
             testCoverageEnabled true
         }
+
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+
     lintOptions {
         abortOnError false
     }
@@ -52,13 +54,12 @@ configurations {
 }
 
 dependencies {
-    compile fileTree(dir: 'libs', include: ['*.jar'])
-    compile 'com.android.support:support-annotations:' + rootProject.supportLibVersion
+    implementation 'com.android.support:support-annotations:' + rootProject.supportLibVersion
 
-    testCompile 'com.android.support:support-annotations:' + rootProject.supportLibVersion
-    testCompile 'junit:junit:4.12'
-    testCompile 'org.robolectric:robolectric:3.4.2'
-    testCompile 'org.mockito:mockito-core:2.10.0'
+    testImplementation 'com.android.support:support-annotations:' + rootProject.supportLibVersion
+    testImplementation 'junit:junit:4.12'
+    testImplementation 'org.robolectric:robolectric:3.5.1'
+    testImplementation 'org.mockito:mockito-core:2.10.0'
 
     javadocCompile 'com.android.support:support-annotations:' + rootProject.supportLibVersion
 }
@@ -124,7 +125,7 @@ artifacts {
 // Bintray
 bintray {
     Properties properties = new Properties()
-    File propertiesFile = project.rootProject.file('local.properties');
+    File propertiesFile = project.rootProject.file('local.properties')
     if (propertiesFile.exists()) {
         properties.load(propertiesFile.newDataInputStream())
     }
