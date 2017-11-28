@@ -42,13 +42,7 @@ public class TestPromptText extends PromptText
     void createTextLayout(@NonNull final PromptOptions options, final float maxWidth, final float alphaModifier)
     {
         super.createTextLayout(options, maxWidth, alphaModifier);
-        setupLayout(mPrimaryTextLayout != null);
-        setupLayout(mSecondaryTextLayout != null);
-    }
-
-    private void setupLayout(boolean hasLayout)
-    {
-        if (hasLayout)
+        if (mPrimaryTextLayout != null)
         {
             mPrimaryTextLayout = spy(mPrimaryTextLayout);
             when(mPrimaryTextLayout.getLineWidth(0)).thenReturn(mMaxTextWidth);
@@ -56,6 +50,16 @@ public class TestPromptText extends PromptText
             if (mRtl)
             {
                 when(mPrimaryTextLayout.getAlignment()).thenReturn(Layout.Alignment.ALIGN_OPPOSITE);
+            }
+        }
+        if (mSecondaryTextLayout != null)
+        {
+            mSecondaryTextLayout = spy(mSecondaryTextLayout);
+            when(mSecondaryTextLayout.getLineWidth(0)).thenReturn(mMaxTextWidth);
+            when(mSecondaryTextLayout.getHeight()).thenReturn(200);
+            if (mRtl)
+            {
+                when(mSecondaryTextLayout.getAlignment()).thenReturn(Layout.Alignment.ALIGN_OPPOSITE);
             }
         }
     }
