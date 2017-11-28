@@ -31,6 +31,7 @@ import android.graphics.RectF;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.view.ViewCompat;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
@@ -107,12 +108,12 @@ public class MaterialTapTargetPrompt
     /**
      * Used to calculate the animation progress for the reveal and dismiss animations.
      */
-    ValueAnimator mAnimationCurrent;
+    @Nullable ValueAnimator mAnimationCurrent;
 
     /**
      * Used to calculate the animation progress for the idle animation.
      */
-    ValueAnimator mAnimationFocalRipple;
+    @Nullable ValueAnimator mAnimationFocalRipple;
 
     /**
      * The last percentage progress for idle animation.
@@ -134,7 +135,7 @@ public class MaterialTapTargetPrompt
     /**
      * Listener for the view layout changing.
      */
-    final ViewTreeObserver.OnGlobalLayoutListener mGlobalLayoutListener;
+    @Nullable final ViewTreeObserver.OnGlobalLayoutListener mGlobalLayoutListener;
 
     /**
      * Default constructor.
@@ -327,7 +328,7 @@ public class MaterialTapTargetPrompt
         mAnimationCurrent.addUpdateListener(new ValueAnimator.AnimatorUpdateListener()
         {
             @Override
-            public void onAnimationUpdate(ValueAnimator animation)
+            public void onAnimationUpdate(@NonNull ValueAnimator animation)
             {
                 final float value = (float) animation.getAnimatedValue();
                 updateAnimation(1f + ((1f - value) / 4), value);
@@ -363,7 +364,7 @@ public class MaterialTapTargetPrompt
         mAnimationCurrent.addUpdateListener(new ValueAnimator.AnimatorUpdateListener()
         {
             @Override
-            public void onAnimationUpdate(ValueAnimator animation)
+            public void onAnimationUpdate(@NonNull ValueAnimator animation)
             {
                 final float value = (float) animation.getAnimatedValue();
                 updateAnimation(value, value);
@@ -427,7 +428,7 @@ public class MaterialTapTargetPrompt
         mAnimationCurrent.addUpdateListener(new ValueAnimator.AnimatorUpdateListener()
         {
             @Override
-            public void onAnimationUpdate(ValueAnimator animation)
+            public void onAnimationUpdate(@NonNull ValueAnimator animation)
             {
                 final float value = (float) animation.getAnimatedValue();
                 updateAnimation(value, value);
@@ -436,7 +437,7 @@ public class MaterialTapTargetPrompt
         mAnimationCurrent.addListener(new AnimatorListener()
         {
             @Override
-            public void onAnimationEnd(Animator animation)
+            public void onAnimationEnd(@NonNull Animator animation)
             {
                 animation.removeAllListeners();
                 updateAnimation(1, 1);
@@ -467,7 +468,7 @@ public class MaterialTapTargetPrompt
             boolean direction = true;
 
             @Override
-            public void onAnimationUpdate(ValueAnimator animation)
+            public void onAnimationUpdate(@NonNull ValueAnimator animation)
             {
                 final float newFocalFraction = (Float) animation.getAnimatedValue();
                 boolean newDirection = direction;
@@ -497,7 +498,7 @@ public class MaterialTapTargetPrompt
         mAnimationFocalRipple.addUpdateListener(new ValueAnimator.AnimatorUpdateListener()
         {
             @Override
-            public void onAnimationUpdate(ValueAnimator animation)
+            public void onAnimationUpdate(@NonNull ValueAnimator animation)
             {
                 final float value = (float) animation.getAnimatedValue();
                 mView.mPromptOptions.getPromptFocal().updateRipple(value, (1.6f - value) * 2);

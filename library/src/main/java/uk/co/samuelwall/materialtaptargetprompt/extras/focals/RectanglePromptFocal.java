@@ -45,9 +45,9 @@ public class RectanglePromptFocal extends PromptFocal
     PointF mBaseBoundsCentre;
     RectF mRippleBounds;
     int mBaseAlpha;
-    float mPadding = 40;
+    float mPadding;
     private float mRx, mRy;
-    private PointF mSize;
+    @Nullable private PointF mSize;
 
     /**
      * Constructor.

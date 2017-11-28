@@ -34,7 +34,7 @@ public class TestResourceFinder extends ActivityResourceFinder
     private ViewGroup mParentView;
     private TypedArray mStyledAttributes;
 
-    public TestResourceFinder(final Activity activity)
+    public TestResourceFinder(@NonNull final Activity activity)
     {
         super(activity);
         mParentView = mock(ViewGroup.class);

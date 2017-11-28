@@ -66,42 +66,42 @@ public class PromptOptions<T extends PromptOptions>
     /**
      * The view to place the prompt around.
      */
-    private @Nullable View mTargetView;
+    @Nullable private View mTargetView;
 
     /**
      * The left and top positioning for the focal centre point.
      */
-    private PointF mTargetPosition;
+    @Nullable private PointF mTargetPosition;
 
     /**
      * The primary text to display.
      */
-    private @Nullable CharSequence mPrimaryText;
+    @Nullable private CharSequence mPrimaryText;
 
     /**
      * The secondary text to display.
      */
-    private @Nullable CharSequence mSecondaryText;
+    @Nullable private CharSequence mSecondaryText;
 
     /**
      * The colour for the primary text.
      */
-    private @ColorInt int mPrimaryTextColour = Color.WHITE;
+    @ColorInt private int mPrimaryTextColour = Color.WHITE;
 
     /**
      * The colour for the secondary text.
      */
-    private @ColorInt int mSecondaryTextColour = Color.argb(179, 255, 255, 255);
+    @ColorInt private int mSecondaryTextColour = Color.argb(179, 255, 255, 255);
 
     /**
      * The colour for the prompt background.
      */
-    private @ColorInt int mBackgroundColour = Color.argb(244, 63, 81, 181);
+    @ColorInt private int mBackgroundColour = Color.argb(244, 63, 81, 181);
 
     /**
      * The colour for the prompt focal.
      */
-    private @ColorInt int mFocalColour = Color.WHITE;
+    @ColorInt private int mFocalColour = Color.WHITE;
 
     /**
      * The circle focal implementation radius.
@@ -136,12 +136,12 @@ public class PromptOptions<T extends PromptOptions>
     /**
      * The interpolator to use for animations.
      */
-    private Interpolator mAnimationInterpolator;
+    @Nullable private Interpolator mAnimationInterpolator;
 
     /**
      * The drawable to use to render the target.
      */
-    private @Nullable Drawable mIconDrawable;
+    @Nullable private Drawable mIconDrawable;
 
     /**
      * Should the back button press dismiss the prompt.
@@ -151,38 +151,38 @@ public class PromptOptions<T extends PromptOptions>
     /**
      * Listener for when the prompt state changes.
      */
-    private MaterialTapTargetPrompt.PromptStateChangeListener mPromptStateChangeListener;
+    @Nullable private MaterialTapTargetPrompt.PromptStateChangeListener mPromptStateChangeListener;
 
     private boolean mCaptureTouchEventOnFocal;
     private float mTextSeparation;
     private boolean mAutoDismiss = true;
     private boolean mAutoFinish = true;
     private boolean mCaptureTouchEventOutsidePrompt;
-    private Typeface mPrimaryTextTypeface, mSecondaryTextTypeface;
+    @Nullable private Typeface mPrimaryTextTypeface, mSecondaryTextTypeface;
     private int mPrimaryTextTypefaceStyle, mSecondaryTextTypefaceStyle;
-    private ColorStateList mIconDrawableTintList = null;
-    private PorterDuff.Mode mIconDrawableTintMode = PorterDuff.Mode.MULTIPLY;
+    @Nullable private ColorStateList mIconDrawableTintList = null;
+    @Nullable private PorterDuff.Mode mIconDrawableTintMode = PorterDuff.Mode.MULTIPLY;
     private boolean mHasIconDrawableTint;
     private int mIconDrawableColourFilter;
-    private View mTargetRenderView;
+    @Nullable private View mTargetRenderView;
     private boolean mIdleAnimationEnabled = true;
     private int mPrimaryTextGravity = Gravity.START, mSecondaryTextGravity = Gravity.START;
-    private View mClipToView;
+    @Nullable private View mClipToView;
 
     /**
      * The shape to render for the prompt background.
      */
-    private PromptBackground mPromptBackground = new CirclePromptBackground();
+    @NonNull private PromptBackground mPromptBackground = new CirclePromptBackground();
 
     /**
      * The shape to render for the prompt focal.
      */
-    private PromptFocal mPromptFocal = new CirclePromptFocal();
+    @NonNull private PromptFocal mPromptFocal = new CirclePromptFocal();
 
     /**
      * The renderer for drawing the prompt text.
      */
-    private PromptText mPromptText = new PromptText();
+    @NonNull private PromptText mPromptText = new PromptText();
 
     /**
      * Constructor.

@@ -37,7 +37,7 @@ import android.view.ViewGroup;
  */
 public class ActivityResourceFinder implements ResourceFinder
 {
-    private final Activity mActivity;
+    @NonNull private final Activity mActivity;
 
     public ActivityResourceFinder(@NonNull final Activity activity)
     {

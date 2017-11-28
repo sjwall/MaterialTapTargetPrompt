@@ -29,7 +29,7 @@ import android.view.ViewGroup;
  */
 public class DialogResourceFinder extends ActivityResourceFinder
 {
-    private final Dialog mDialog;
+    @NonNull private final Dialog mDialog;
 
     public DialogResourceFinder(@NonNull final Dialog dialog)
     {
