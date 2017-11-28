@@ -17,6 +17,7 @@
 package uk.co.samuelwall.materialtaptargetprompt.sample;
 
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.view.animation.FastOutSlowInInterpolator;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.view.ActionMode;
@@ -95,7 +96,7 @@ public class EmptyActivity extends AppCompatActivity
                 .setPromptStateChangeListener(new MaterialTapTargetPrompt.PromptStateChangeListener()
                 {
                     @Override
-                    public void onPromptStateChanged(MaterialTapTargetPrompt prompt, int state)
+                    public void onPromptStateChanged(@NonNull MaterialTapTargetPrompt prompt, int state)
                     {
                         if (state == MaterialTapTargetPrompt.STATE_FOCAL_PRESSED
                                 || state == MaterialTapTargetPrompt.STATE_DISMISSING)
@@ -117,13 +118,13 @@ public class EmptyActivity extends AppCompatActivity
                 .setAnimationInterpolator(new FastOutSlowInInterpolator())
                 .setMaxTextWidth(R.dimen.tap_target_menu_max_width)
                 .setIcon(R.drawable.ic_back);
-        final Toolbar tb = (Toolbar) this.findViewById(android.support.v7.appcompat.R.id.action_bar);
+        final Toolbar tb = this.findViewById(android.support.v7.appcompat.R.id.action_bar);
         tapTargetPromptBuilder.setTarget(tb.getChildAt(1));
 
         tapTargetPromptBuilder.setPromptStateChangeListener(new MaterialTapTargetPrompt.PromptStateChangeListener()
         {
             @Override
-            public void onPromptStateChanged(MaterialTapTargetPrompt prompt, int state)
+            public void onPromptStateChanged(@NonNull MaterialTapTargetPrompt prompt, int state)
             {
                 if (state == MaterialTapTargetPrompt.STATE_FOCAL_PRESSED)
                 {
@@ -142,7 +143,7 @@ public class EmptyActivity extends AppCompatActivity
                 .setAnimationInterpolator(new FastOutSlowInInterpolator())
                 .setMaxTextWidth(R.dimen.tap_target_menu_max_width)
                 .setIcon(R.drawable.ic_more_vert);
-        final Toolbar tb = (Toolbar) this.findViewById(android.support.v7.appcompat.R.id.action_bar);
+        final Toolbar tb = this.findViewById(android.support.v7.appcompat.R.id.action_bar);
         final View child = tb.getChildAt(2);
         if (child instanceof ActionMenuView)
         {
@@ -180,7 +181,7 @@ public class EmptyActivity extends AppCompatActivity
     public void showStylePrompt(View view)
     {
         final MaterialTapTargetPrompt.Builder builder = new MaterialTapTargetPrompt.Builder(this, R.style.MaterialTapTargetPromptTheme_FabTarget);
-        final Toolbar tb = (Toolbar) this.findViewById(R.id.toolbar);
+        final Toolbar tb = this.findViewById(R.id.toolbar);
         builder.setIcon(R.drawable.ic_more_vert)
                 .setTarget(tb.getChildAt(2))
                 .show();
@@ -203,7 +204,7 @@ public class EmptyActivity extends AppCompatActivity
                 .setPromptStateChangeListener(new MaterialTapTargetPrompt.PromptStateChangeListener()
                 {
                     @Override
-                    public void onPromptStateChanged(MaterialTapTargetPrompt prompt, int state)
+                    public void onPromptStateChanged(@NonNull MaterialTapTargetPrompt prompt, int state)
                     {
                         if (state == MaterialTapTargetPrompt.STATE_FOCAL_PRESSED)
                         {

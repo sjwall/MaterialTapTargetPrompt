@@ -17,6 +17,7 @@
 package uk.co.samuelwall.materialtaptargetprompt.sample;
 
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.view.animation.FastOutSlowInInterpolator;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.ActionMenuView;
@@ -37,7 +38,7 @@ public class DialogStyleActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dialog_style);
 
-        final Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        final Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
@@ -62,13 +63,13 @@ public class DialogStyleActivity extends AppCompatActivity
                 .setMaxTextWidth(R.dimen.tap_target_menu_max_width)
                 .setIcon(R.drawable.ic_back)
                 .setClipToView(findViewById(R.id.dialog_view));
-        final Toolbar tb = (Toolbar) this.findViewById(R.id.toolbar);
+        final Toolbar tb = this.findViewById(R.id.toolbar);
         tapTargetPromptBuilder.setTarget(tb.getChildAt(1));
 
         tapTargetPromptBuilder.setPromptStateChangeListener(new MaterialTapTargetPrompt.PromptStateChangeListener()
         {
             @Override
-            public void onPromptStateChanged(MaterialTapTargetPrompt prompt, int state)
+            public void onPromptStateChanged(@NonNull MaterialTapTargetPrompt prompt, int state)
             {
                 if (state == MaterialTapTargetPrompt.STATE_FOCAL_PRESSED)
                 {
@@ -88,7 +89,7 @@ public class DialogStyleActivity extends AppCompatActivity
                 .setMaxTextWidth(R.dimen.max_prompt_width)
                 .setIcon(R.drawable.ic_more_vert)
                 .setClipToView(findViewById(R.id.dialog_view));
-        final Toolbar tb = (Toolbar) this.findViewById(R.id.toolbar);
+        final Toolbar tb = this.findViewById(R.id.toolbar);
         final View child = tb.getChildAt(2);
         if (child instanceof ActionMenuView)
         {

@@ -17,6 +17,7 @@
 package uk.co.samuelwall.materialtaptargetprompt.extras;
 
 import android.graphics.Color;
+import android.support.annotation.NonNull;
 import android.text.TextPaint;
 import android.text.style.CharacterStyle;
 
@@ -41,7 +42,7 @@ class AlphaSpan extends CharacterStyle
     }
 
     @Override
-    public void updateDrawState(TextPaint paint)
+    public void updateDrawState(@NonNull TextPaint paint)
     {
         paint.setAlpha((int) (paint.getAlpha() * mValue));
         paint.bgColor = Color.argb((int) (Color.alpha(paint.bgColor) * mValue),

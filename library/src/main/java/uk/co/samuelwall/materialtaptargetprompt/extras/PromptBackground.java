@@ -18,6 +18,7 @@ package uk.co.samuelwall.materialtaptargetprompt.extras;
 
 import android.graphics.Rect;
 import android.support.annotation.ColorInt;
+import android.support.annotation.NonNull;
 
 /**
  * Used to render the prompt background.
@@ -38,5 +39,6 @@ public abstract class PromptBackground implements PromptUIElement
      * @param clipToBounds Should the prompt be clipped to the supplied clipBounds.
      * @param clipBounds The bounds to clip the drawing to.
      */
-    public abstract void prepare(final PromptOptions options, boolean clipToBounds, Rect clipBounds);
+    public abstract void prepare(@NonNull final PromptOptions options,
+                                 boolean clipToBounds, Rect clipBounds);
 }

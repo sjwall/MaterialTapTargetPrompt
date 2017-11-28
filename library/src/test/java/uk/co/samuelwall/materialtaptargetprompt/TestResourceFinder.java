@@ -19,6 +19,8 @@ package uk.co.samuelwall.materialtaptargetprompt;
 import android.app.Activity;
 import android.content.res.TypedArray;
 import android.support.annotation.IdRes;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.annotation.StyleRes;
 import android.support.annotation.StyleableRes;
 import android.view.View;
@@ -45,18 +47,21 @@ public class TestResourceFinder extends ActivityResourceFinder
         when(mParentView.findViewById(id)).thenReturn(view);
     }
 
+    @NonNull
     @Override
     public ViewGroup getPromptParentView()
     {
         return mParentView;
     }
 
+    @NonNull
     @Override
     public TypedArray obtainStyledAttributes(@StyleRes int resId, @StyleableRes int[] attrs)
     {
         return mStyledAttributes;
     }
 
+    @Nullable
     @Override
     public View findViewById(@IdRes int id)
     {

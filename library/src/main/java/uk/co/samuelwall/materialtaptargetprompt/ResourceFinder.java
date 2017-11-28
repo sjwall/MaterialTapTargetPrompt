@@ -50,6 +50,7 @@ public interface ResourceFinder
      *
      * @return The view to add the prompt to.
      */
+    @NonNull
     ViewGroup getPromptParentView();
 
     /**
@@ -57,6 +58,7 @@ public interface ResourceFinder
      *
      * @return Context The Context used by the prompt.
      */
+    @NonNull
     Context getContext();
 
     /**
@@ -64,11 +66,13 @@ public interface ResourceFinder
      *
      * @return a Resources instance for the application's package
      */
+    @NonNull
     Resources getResources();
 
     /**
      * Return the Theme object associated with {@link #getContext()}.
      */
+    @NonNull
     Resources.Theme getTheme();
 
     /**
@@ -89,6 +93,7 @@ public interface ResourceFinder
      *
      * @see android.content.res.Resources.Theme#obtainStyledAttributes(int, int[])
      */
+    @NonNull
     TypedArray obtainStyledAttributes(@StyleRes int resId, @StyleableRes int[] attrs);
 
     /**

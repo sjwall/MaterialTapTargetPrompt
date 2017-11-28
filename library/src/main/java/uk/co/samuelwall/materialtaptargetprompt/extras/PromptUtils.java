@@ -24,6 +24,7 @@ import android.graphics.Rect;
 import android.graphics.RectF;
 import android.graphics.Typeface;
 import android.os.Build;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.text.Layout;
 import android.text.SpannableStringBuilder;
@@ -52,7 +53,8 @@ public class PromptUtils
      * @param radius       The radius of the circle.
      * @return True if the point (x, y) is in the circle.
      */
-    public static boolean isPointInCircle(final float x, final float y, final PointF circleCentre,
+    public static boolean isPointInCircle(final float x, final float y,
+                                          @NonNull final PointF circleCentre,
                                           final float radius)
     {
         return Math.pow(x - circleCentre.x, 2) + Math.pow(y - circleCentre.y, 2) < Math.pow(radius, 2);
@@ -62,7 +64,7 @@ public class PromptUtils
      * Based on setTypeface in android TextView, Copyright (C) 2006 The Android Open Source
      * Project. https://android.googlesource.com/platform/frameworks/base.git/+/master/core/java/android/widget/TextView.java
      */
-    public static void setTypeface(TextPaint textPaint, Typeface typeface, int style)
+    public static void setTypeface(@NonNull TextPaint textPaint, @Nullable Typeface typeface, int style)
     {
         if (style > 0)
         {
@@ -96,7 +98,8 @@ public class PromptUtils
      * Based on setTypefaceFromAttrs in android TextView, Copyright (C) 2006 The Android Open
      * Source Project. https://android.googlesource.com/platform/frameworks/base.git/+/master/core/java/android/widget/TextView.java
      */
-    public static Typeface setTypefaceFromAttrs(String familyName, int typefaceIndex, int styleIndex)
+    @NonNull
+    public static Typeface setTypefaceFromAttrs(@Nullable String familyName, int typefaceIndex, int styleIndex)
     {
         Typeface tf = null;
         if (familyName != null)
@@ -128,7 +131,8 @@ public class PromptUtils
      * Based on parseTintMode in android appcompat v7 DrawableUtils, Copyright (C) 2014 The
      * Android Open Source Project. https://android.googlesource.com/platform/frameworks/support.git/+/master/v7/appcompat/src/android/support/v7/widget/DrawableUtils.java
      */
-    public static PorterDuff.Mode parseTintMode(int value, PorterDuff.Mode defaultMode)
+    @Nullable
+    public static PorterDuff.Mode parseTintMode(int value, @Nullable PorterDuff.Mode defaultMode)
     {
         switch (value)
         {
@@ -150,11 +154,13 @@ public class PromptUtils
      * @return absolute layout direction
      */
     @SuppressLint("RtlHardcoded")
-    public static Layout.Alignment getTextAlignment(final Resources resources, final int gravity,
-                                                    final CharSequence text)
+    @NonNull
+    public static Layout.Alignment getTextAlignment(@NonNull final Resources resources,
+                                                    final int gravity,
+                                                    @Nullable final CharSequence text)
     {
         final int absoluteGravity;
-        if (isVersionAfterJellyBeanMR1())
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1)
         {
             int realGravity = gravity;
             final int layoutDirection = resources.getConfiguration().getLayoutDirection();
@@ -204,16 +210,6 @@ public class PromptUtils
     }
 
     /**
-     * Determines if Android is after Jelly Bean MR1.
-     *
-     * @return True if running on Android after Jelly Bean MR1.
-     */
-    public static boolean isVersionAfterJellyBeanMR1()
-    {
-        return Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1;
-    }
-
-    /**
      * Creates a static text layout. Uses the {@link android.text.StaticLayout.Builder} if
      * available.
      *
@@ -224,10 +220,11 @@ public class PromptUtils
      * @param alphaModifier The modification to apply to the alpha value between 0 and 1.
      * @return the newly constructed {@link StaticLayout} object
      */
-    public static StaticLayout createStaticTextLayout(final CharSequence text,
-                                                      final TextPaint paint,
+    @NonNull
+    public static StaticLayout createStaticTextLayout(@NonNull final CharSequence text,
+                                                      @NonNull final TextPaint paint,
                                                       final int maxTextWidth,
-                                                      final Layout.Alignment textAlignment,
+                                                      @NonNull final Layout.Alignment textAlignment,
                                                       final float alphaModifier)
     {
         final SpannableStringBuilder wrappedText = new SpannableStringBuilder(text);
@@ -255,7 +252,9 @@ public class PromptUtils
      * @param scale The amount to scale the rectangle by.
      * @param even Should the rectangle be scaled evenly in both directions.
      */
-    public static void scale(final PointF origin, final RectF base, final RectF out, final float scale, final boolean even)
+    public static void scale(@NonNull final PointF origin, @NonNull final RectF base,
+                             @NonNull final RectF out,
+                             final float scale, final boolean even)
     {
         if (scale == 1)
         {
@@ -290,30 +289,27 @@ public class PromptUtils
      * @param layout The layout to check.
      * @return True if the text in the supplied layout is displayed right to left. False otherwise.
      */
-    public static boolean isRtlText(final Layout layout, final Resources resources)
+    public static boolean isRtlText(@Nullable final Layout layout, @NonNull final Resources resources)
     {
         boolean result = false;
         if (layout != null)
         {
             // Treat align opposite as right to left by default
             result = layout.getAlignment() == Layout.Alignment.ALIGN_OPPOSITE;
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH)
+            // If the first character is a right to left character
+            final boolean textIsRtl = layout.isRtlCharAt(0);
+            // If the text and result are right to left then false otherwise use the textIsRtl value
+            result = (!(result && textIsRtl) && !(!result && !textIsRtl)) || textIsRtl;
+            if (!result && layout.getAlignment() == Layout.Alignment.ALIGN_NORMAL
+                    && Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1)
             {
-                // If the first character is a right to left character
-                final boolean textIsRtl = layout.isRtlCharAt(0);
-                // If the text and result are right to left then false otherwise use the textIsRtl value
-                result = (!(result && textIsRtl) && !(!result && !textIsRtl)) || textIsRtl;
-                if (!result && layout.getAlignment() == Layout.Alignment.ALIGN_NORMAL
-                        && Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1)
-                {
-                    // If the layout and text are right to left and the alignment is normal then rtl
-                    result = resources.getConfiguration()
-                                .getLayoutDirection() == View.LAYOUT_DIRECTION_RTL;
-                }
-                else if (layout.getAlignment() == Layout.Alignment.ALIGN_OPPOSITE && textIsRtl)
-                {
-                    result = false;
-                }
+                // If the layout and text are right to left and the alignment is normal then rtl
+                result = resources.getConfiguration()
+                            .getLayoutDirection() == View.LAYOUT_DIRECTION_RTL;
+            }
+            else if (layout.getAlignment() == Layout.Alignment.ALIGN_OPPOSITE && textIsRtl)
+            {
+                result = false;
             }
         }
         return result;
@@ -336,7 +332,7 @@ public class PromptUtils
      * @param textLayout The text layout
      * @return The maximum length line
      */
-    public static float calculateMaxTextWidth(final Layout textLayout)
+    public static float calculateMaxTextWidth(@Nullable final Layout textLayout)
     {
         float maxTextWidth = 0f;
         if (textLayout != null)
@@ -358,7 +354,8 @@ public class PromptUtils
      * @param y The point y coordinate.
      * @return True if the point is within the inset rectangle, false otherwise.
      */
-    public static boolean containsInset(final Rect bounds, final int inset, final int x, final int y)
+    public static boolean containsInset(@NonNull final Rect bounds,
+                                        final int inset, final int x, final int y)
     {
         return x > bounds.left + inset
                 && x < bounds.right - inset

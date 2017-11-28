@@ -28,6 +28,7 @@ import android.os.Build;
 import android.support.annotation.DimenRes;
 import android.support.annotation.DrawableRes;
 import android.support.annotation.IdRes;
+import android.support.annotation.NonNull;
 import android.support.annotation.StringRes;
 import android.support.annotation.StyleRes;
 import android.view.Gravity;
@@ -781,7 +782,7 @@ public class PromptOptionsUnitTest
         final PromptOptions options = UnitTestUtils.createPromptOptions();
         assertEquals(options, options.setPromptStateChangeListener(new MaterialTapTargetPrompt.PromptStateChangeListener() {
             @Override
-            public void onPromptStateChanged(MaterialTapTargetPrompt prompt, int state)
+            public void onPromptStateChanged(@NonNull MaterialTapTargetPrompt prompt, int state)
             {
                 assertEquals(thePrompt, prompt);
                 assertEquals(MaterialTapTargetPrompt.STATE_FINISHED, state, 0);

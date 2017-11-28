@@ -16,6 +16,7 @@
 
 package uk.co.samuelwall.materialtaptargetprompt.extras;
 
+import android.support.annotation.NonNull;
 import android.text.Layout;
 
 import static org.mockito.Mockito.spy;
@@ -38,10 +39,16 @@ public class TestPromptText extends PromptText
     }
 
     @Override
-    void createTextLayout(final PromptOptions options, final float maxWidth, final float alphaModifier)
+    void createTextLayout(@NonNull final PromptOptions options, final float maxWidth, final float alphaModifier)
     {
         super.createTextLayout(options, maxWidth, alphaModifier);
-        if (mPrimaryTextLayout != null)
+        setupLayout(mPrimaryTextLayout != null);
+        setupLayout(mSecondaryTextLayout != null);
+    }
+
+    private void setupLayout(boolean hasLayout)
+    {
+        if (hasLayout)
         {
             mPrimaryTextLayout = spy(mPrimaryTextLayout);
             when(mPrimaryTextLayout.getLineWidth(0)).thenReturn(mMaxTextWidth);
@@ -49,16 +56,6 @@ public class TestPromptText extends PromptText
             if (mRtl)
             {
                 when(mPrimaryTextLayout.getAlignment()).thenReturn(Layout.Alignment.ALIGN_OPPOSITE);
-            }
-        }
-        if (mSecondaryTextLayout != null)
-        {
-            mSecondaryTextLayout = spy(mSecondaryTextLayout);
-            when(mSecondaryTextLayout.getLineWidth(0)).thenReturn(mMaxTextWidth);
-            when(mSecondaryTextLayout.getHeight()).thenReturn(200);
-            if (mRtl)
-            {
-                when(mSecondaryTextLayout.getAlignment()).thenReturn(Layout.Alignment.ALIGN_OPPOSITE);
             }
         }
     }

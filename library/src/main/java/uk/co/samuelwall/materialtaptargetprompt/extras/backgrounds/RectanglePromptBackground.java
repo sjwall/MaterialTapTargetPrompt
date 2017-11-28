@@ -23,6 +23,8 @@ import android.graphics.Paint;
 import android.graphics.PointF;
 import android.graphics.Rect;
 import android.graphics.RectF;
+import android.support.annotation.ColorInt;
+import android.support.annotation.NonNull;
 
 import uk.co.samuelwall.materialtaptargetprompt.extras.PromptBackground;
 import uk.co.samuelwall.materialtaptargetprompt.extras.PromptOptions;
@@ -60,6 +62,7 @@ public class RectanglePromptBackground extends PromptBackground
      * @param ry The y-radius of the oval used to round the corners
      * @return This prompt background
      */
+    @NonNull
     public RectanglePromptBackground setCornerRadius(final float rx, final float ry)
     {
         mRx = rx;
@@ -68,7 +71,7 @@ public class RectanglePromptBackground extends PromptBackground
     }
 
     @Override
-    public void setColour(int colour)
+    public void setColour(@ColorInt int colour)
     {
         mPaint.setColor(colour);
         mBaseColourAlpha = Color.alpha(colour);
@@ -76,7 +79,7 @@ public class RectanglePromptBackground extends PromptBackground
     }
 
     @Override
-    public void prepare(final PromptOptions options, final boolean clipToBounds, Rect clipBounds)
+    public void prepare(@NonNull final PromptOptions options, final boolean clipToBounds, Rect clipBounds)
     {
         final RectF focalBounds = options.getPromptFocal().getBounds();
         final RectF textBounds = options.getPromptText().getBounds();
@@ -102,7 +105,7 @@ public class RectanglePromptBackground extends PromptBackground
     }
 
     @Override
-    public void update(final PromptOptions prompt, float revealModifier,
+    public void update(@NonNull final PromptOptions prompt, float revealModifier,
                        float alphaModifier)
     {
         mPaint.setAlpha((int) (mBaseColourAlpha * alphaModifier));
@@ -110,7 +113,7 @@ public class RectanglePromptBackground extends PromptBackground
     }
 
     @Override
-    public void draw(Canvas canvas)
+    public void draw(@NonNull Canvas canvas)
     {
         canvas.drawRoundRect(mBounds, mRx, mRy, mPaint);
     }

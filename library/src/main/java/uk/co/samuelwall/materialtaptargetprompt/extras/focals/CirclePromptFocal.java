@@ -21,6 +21,8 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.PointF;
 import android.graphics.RectF;
+import android.support.annotation.ColorInt;
+import android.support.annotation.NonNull;
 import android.view.View;
 
 import uk.co.samuelwall.materialtaptargetprompt.extras.PromptFocal;
@@ -58,12 +60,14 @@ public class CirclePromptFocal extends PromptFocal
      * @param radius The radius for the circle to be drawn.
      * @return This prompt focal
      */
+    @NonNull
     public CirclePromptFocal setRadius(final float radius)
     {
         mBaseRadius = radius;
         return this;
     }
 
+    @NonNull
     @Override
     public RectF getBounds()
     {
@@ -71,7 +75,7 @@ public class CirclePromptFocal extends PromptFocal
     }
 
     @Override
-    public void setColour(int colour)
+    public void setColour(@ColorInt int colour)
     {
         mPaint.setColor(colour);
         mBaseAlpha = Color.alpha(colour);
@@ -79,7 +83,7 @@ public class CirclePromptFocal extends PromptFocal
     }
 
     @Override
-    public void prepare(PromptOptions options, View target, final int[] promptViewPosition)
+    public void prepare(@NonNull PromptOptions options, @NonNull View target, final int[] promptViewPosition)
     {
         final int[] targetPosition = new int[2];
         target.getLocationInWindow(targetPosition);
@@ -89,7 +93,7 @@ public class CirclePromptFocal extends PromptFocal
     }
 
     @Override
-    public void prepare(PromptOptions options, float targetX, float targetY)
+    public void prepare(@NonNull PromptOptions options, float targetX, float targetY)
     {
         mPosition.x = targetX;
         mPosition.y = targetY;
@@ -100,7 +104,7 @@ public class CirclePromptFocal extends PromptFocal
     }
 
     @Override
-    public void update(PromptOptions options, float revealModifier,
+    public void update(@NonNull PromptOptions options, float revealModifier,
                        float alphaModifier)
     {
         mPaint.setAlpha((int) (mBaseAlpha * alphaModifier));
@@ -115,7 +119,7 @@ public class CirclePromptFocal extends PromptFocal
     }
 
     @Override
-    public void draw(Canvas canvas)
+    public void draw(@NonNull Canvas canvas)
     {
         //Draw the ripple
         if (mDrawRipple)
