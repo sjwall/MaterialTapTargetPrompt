@@ -94,7 +94,7 @@ public class CirclePromptBackground extends PromptBackground
 
     @Override
     public void prepare(@NonNull final PromptOptions options, final boolean clipToBounds,
-                        final Rect clipBounds)
+                        @NonNull final Rect clipBounds)
     {
         // Obtain values from the prompt options.
         final PromptText promptText = options.getPromptText();

@@ -40,5 +40,5 @@ public abstract class PromptBackground implements PromptUIElement
      * @param clipBounds The bounds to clip the drawing to.
      */
     public abstract void prepare(@NonNull final PromptOptions options,
-                                 boolean clipToBounds, Rect clipBounds);
+                                 boolean clipToBounds, @NonNull Rect clipBounds);
 }

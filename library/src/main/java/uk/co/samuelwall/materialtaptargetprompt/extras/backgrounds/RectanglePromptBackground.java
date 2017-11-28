@@ -79,7 +79,7 @@ public class RectanglePromptBackground extends PromptBackground
     }
 
     @Override
-    public void prepare(@NonNull final PromptOptions options, final boolean clipToBounds, Rect clipBounds)
+    public void prepare(@NonNull final PromptOptions options, final boolean clipToBounds, @NonNull Rect clipBounds)
     {
         final RectF focalBounds = options.getPromptFocal().getBounds();
         final RectF textBounds = options.getPromptText().getBounds();
