@@ -23,6 +23,7 @@ import android.graphics.PointF;
 import android.graphics.PorterDuff;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.support.annotation.ColorInt;
 import android.support.annotation.DimenRes;
 import android.support.annotation.Dimension;
@@ -32,7 +33,6 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.annotation.StringRes;
 import android.support.annotation.StyleRes;
-import android.support.v4.graphics.drawable.DrawableCompat;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
@@ -1311,7 +1311,7 @@ public class PromptOptions<T extends PromptOptions>
      */
     public boolean getBackButtonDismissEnabled()
     {
-        return  mBackButtonDismissEnabled;
+        return mBackButtonDismissEnabled;
     }
 
     /**
@@ -1424,7 +1424,10 @@ public class PromptOptions<T extends PromptOptions>
             {
                 if (mIconDrawableTintList != null)
                 {
-                    DrawableCompat.setTintList(mIconDrawable, mIconDrawableTintList);
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
+                    {
+                        mIconDrawable.setTintList(mIconDrawableTintList);
+                    }
                 }
                 else
                 {

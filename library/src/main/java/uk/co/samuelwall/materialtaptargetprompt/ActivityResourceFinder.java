@@ -21,6 +21,7 @@ import android.content.Context;
 import android.content.res.Resources;
 import android.content.res.TypedArray;
 import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.support.annotation.DrawableRes;
 import android.support.annotation.IdRes;
 import android.support.annotation.NonNull;
@@ -28,7 +29,6 @@ import android.support.annotation.Nullable;
 import android.support.annotation.StringRes;
 import android.support.annotation.StyleRes;
 import android.support.annotation.StyleableRes;
-import android.support.v4.content.ContextCompat;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -97,6 +97,14 @@ public class ActivityResourceFinder implements ResourceFinder
     @Override
     public Drawable getDrawable(@DrawableRes int resId)
     {
-        return ContextCompat.getDrawable(mActivity, resId);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
+        {
+            return mActivity.getDrawable(resId);
+        }
+        else
+        {
+            //noinspection deprecation
+            return mActivity.getResources().getDrawable(resId);
+        }
     }
 }

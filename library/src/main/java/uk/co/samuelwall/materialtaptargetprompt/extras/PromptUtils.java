@@ -362,4 +362,16 @@ public class PromptUtils
                 && y > bounds.top + inset
                 && y < bounds.bottom - inset;
     }
+
+    /**
+     * Determines if Android is on or after Jelly Bean MR1.
+     *
+     * @return True if running on Android on or after Jelly Bean MR1.
+     * @deprecated use Build directly: {@code Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1}
+     */
+    @Deprecated
+    public static boolean isVersionAfterJellyBeanMR1()
+    {
+        return Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1;
+    }
 }

@@ -55,7 +55,6 @@ configurations {
 
 dependencies {
     implementation 'com.android.support:support-annotations:' + rootProject.supportLibVersion
-    implementation 'com.android.support:support-compat:' + rootProject.supportLibVersion
 
     testImplementation 'com.android.support:support-annotations:' + rootProject.supportLibVersion
     testImplementation 'junit:junit:4.12'

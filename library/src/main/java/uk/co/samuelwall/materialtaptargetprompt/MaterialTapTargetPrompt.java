@@ -32,7 +32,6 @@ import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v4.view.ViewCompat;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
@@ -186,9 +185,22 @@ public class MaterialTapTargetPrompt
             public void onGlobalLayout()
             {
                 final View targetView = mView.mPromptOptions.getTargetView();
-                if (targetView != null && !ViewCompat.isAttachedToWindow(targetView))
+                if (targetView != null)
                 {
-                    return;
+                    final boolean isTargetAttachedToWindow;
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT)
+                    {
+                        isTargetAttachedToWindow = targetView.isAttachedToWindow();
+                    }
+                    else
+                    {
+                        isTargetAttachedToWindow = targetView.getWindowToken() != null;
+                    }
+
+                    if (!isTargetAttachedToWindow)
+                    {
+                        return;
+                    }
                 }
                 prepare();
             }
