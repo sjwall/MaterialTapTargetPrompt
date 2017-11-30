@@ -41,6 +41,8 @@ import uk.co.samuelwall.materialtaptargetprompt.extras.focals.RectanglePromptFoc
     RectanglePromptFocalUnitTest.class,
     BuilderUnitTest.class,
     PromptViewUnitTest.class,
+    ActivityResourceFinderUnitTest.class,
+    DialogResourceFinderUnitTest.class,
     MaterialTapTargetPromptUnitTest.class*/
 })
 public class UnitTestSuite {}
