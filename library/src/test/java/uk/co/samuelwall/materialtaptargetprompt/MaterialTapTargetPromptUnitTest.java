@@ -367,6 +367,18 @@ public class MaterialTapTargetPromptUnitTest
     }
 
     @Test
+    public void testShowWhileShowing()
+    {
+        MaterialTapTargetPrompt prompt = createBuilder(SCREEN_WIDTH, SCREEN_HEIGHT, 0)
+                .setTarget(10, 10)
+                .setPrimaryText("Primary text")
+                .create();
+        prompt.mState = MaterialTapTargetPrompt.STATE_REVEALED;
+        prompt.show();
+        assertEquals(MaterialTapTargetPrompt.STATE_REVEALED, prompt.mState);
+    }
+
+    @Test
     public void testStateGetters_NOT_SHOWN()
     {
         MaterialTapTargetPrompt prompt = createBuilder(SCREEN_WIDTH, SCREEN_HEIGHT, 0)
