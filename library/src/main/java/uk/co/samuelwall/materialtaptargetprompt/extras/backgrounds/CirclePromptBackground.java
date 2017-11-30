@@ -24,6 +24,7 @@ import android.graphics.Rect;
 import android.graphics.RectF;
 import android.support.annotation.ColorInt;
 import android.support.annotation.IntRange;
+import android.support.annotation.NonNull;
 
 import uk.co.samuelwall.materialtaptargetprompt.extras.PromptBackground;
 import uk.co.samuelwall.materialtaptargetprompt.extras.PromptOptions;
@@ -92,8 +93,8 @@ public class CirclePromptBackground extends PromptBackground
     }
 
     @Override
-    public void prepare(final PromptOptions options, final boolean clipToBounds,
-                        final Rect clipBounds)
+    public void prepare(@NonNull final PromptOptions options, final boolean clipToBounds,
+                        @NonNull final Rect clipBounds)
     {
         // Obtain values from the prompt options.
         final PromptText promptText = options.getPromptText();
@@ -190,7 +191,7 @@ public class CirclePromptBackground extends PromptBackground
     }
 
     @Override
-    public void update(final PromptOptions options, float revealModifier, float alphaModifier)
+    public void update(@NonNull final PromptOptions options, float revealModifier, float alphaModifier)
     {
         final RectF focalBounds = options.getPromptFocal().getBounds();
         final float focalCentreX = focalBounds.centerX();
@@ -203,7 +204,7 @@ public class CirclePromptBackground extends PromptBackground
     }
 
     @Override
-    public void draw(Canvas canvas)
+    public void draw(@NonNull Canvas canvas)
     {
         canvas.drawCircle(mPosition.x, mPosition.y, mRadius, mPaint);
 

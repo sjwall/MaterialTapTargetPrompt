@@ -19,6 +19,7 @@ package uk.co.samuelwall.materialtaptargetprompt;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.graphics.Canvas;
+import android.support.annotation.NonNull;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
@@ -97,7 +98,7 @@ public class MaterialTapTargetPromptUnitTest
                 .setPromptStateChangeListener(new MaterialTapTargetPrompt.PromptStateChangeListener()
                 {
                     @Override
-                    public void onPromptStateChanged(final MaterialTapTargetPrompt prompt, final int state)
+                    public void onPromptStateChanged(@NonNull final MaterialTapTargetPrompt prompt, final int state)
                     {
 
                     }
@@ -121,7 +122,7 @@ public class MaterialTapTargetPromptUnitTest
                 .setPromptStateChangeListener(new MaterialTapTargetPrompt.PromptStateChangeListener()
                 {
                     @Override
-                    public void onPromptStateChanged(final MaterialTapTargetPrompt prompt, final int state)
+                    public void onPromptStateChanged(@NonNull final MaterialTapTargetPrompt prompt, final int state)
                     {
                         if (stateProgress == 0)
                         {
@@ -174,7 +175,7 @@ public class MaterialTapTargetPromptUnitTest
                 .setPromptStateChangeListener(new MaterialTapTargetPrompt.PromptStateChangeListener()
                 {
                     @Override
-                    public void onPromptStateChanged(final MaterialTapTargetPrompt prompt, final int state)
+                    public void onPromptStateChanged(@NonNull final MaterialTapTargetPrompt prompt, final int state)
                     {
                         if (stateProgress == 0)
                         {
@@ -237,7 +238,7 @@ public class MaterialTapTargetPromptUnitTest
                 .setPromptStateChangeListener(new MaterialTapTargetPrompt.PromptStateChangeListener()
                 {
                     @Override
-                    public void onPromptStateChanged(final MaterialTapTargetPrompt prompt, final int state)
+                    public void onPromptStateChanged(@NonNull final MaterialTapTargetPrompt prompt, final int state)
                     {
                         if (stateProgress == 0)
                         {
@@ -290,7 +291,7 @@ public class MaterialTapTargetPromptUnitTest
                 .setPromptStateChangeListener(new MaterialTapTargetPrompt.PromptStateChangeListener()
                 {
                     @Override
-                    public void onPromptStateChanged(final MaterialTapTargetPrompt prompt, final int state)
+                    public void onPromptStateChanged(@NonNull final MaterialTapTargetPrompt prompt, final int state)
                     {
                         if (stateProgress == 0)
                         {
@@ -334,7 +335,6 @@ public class MaterialTapTargetPromptUnitTest
         {
             @Override
             public KeyEvent.DispatcherState answer(final InvocationOnMock invocation)
-                    throws Throwable
             {
                 return dispatchState;
             }

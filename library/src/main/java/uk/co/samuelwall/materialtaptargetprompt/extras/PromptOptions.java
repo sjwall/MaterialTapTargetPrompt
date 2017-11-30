@@ -6,7 +6,7 @@
  * You may obtain a copy of the License at
  *
  * http://www.apache.org/licenses/LICENSE-2.0
- *  
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -26,11 +26,13 @@ import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.support.annotation.ColorInt;
 import android.support.annotation.DimenRes;
+import android.support.annotation.Dimension;
 import android.support.annotation.DrawableRes;
 import android.support.annotation.IdRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.annotation.StringRes;
+import android.support.annotation.StyleRes;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
@@ -64,42 +66,42 @@ public class PromptOptions<T extends PromptOptions>
     /**
      * The view to place the prompt around.
      */
-    private @Nullable View mTargetView;
+    @Nullable private View mTargetView;
 
     /**
      * The left and top positioning for the focal centre point.
      */
-    private PointF mTargetPosition;
+    @Nullable private PointF mTargetPosition;
 
     /**
      * The primary text to display.
      */
-    private @Nullable CharSequence mPrimaryText;
+    @Nullable private CharSequence mPrimaryText;
 
     /**
      * The secondary text to display.
      */
-    private @Nullable CharSequence mSecondaryText;
+    @Nullable private CharSequence mSecondaryText;
 
     /**
      * The colour for the primary text.
      */
-    private @ColorInt int mPrimaryTextColour = Color.WHITE;
+    @ColorInt private int mPrimaryTextColour = Color.WHITE;
 
     /**
      * The colour for the secondary text.
      */
-    private @ColorInt int mSecondaryTextColour = Color.argb(179, 255, 255, 255);
+    @ColorInt private int mSecondaryTextColour = Color.argb(179, 255, 255, 255);
 
     /**
      * The colour for the prompt background.
      */
-    private @ColorInt int mBackgroundColour = Color.argb(244, 63, 81, 181);
+    @ColorInt private int mBackgroundColour = Color.argb(244, 63, 81, 181);
 
     /**
      * The colour for the prompt focal.
      */
-    private @ColorInt int mFocalColour = Color.WHITE;
+    @ColorInt private int mFocalColour = Color.WHITE;
 
     /**
      * The circle focal implementation radius.
@@ -134,12 +136,12 @@ public class PromptOptions<T extends PromptOptions>
     /**
      * The interpolator to use for animations.
      */
-    private Interpolator mAnimationInterpolator;
+    @Nullable private Interpolator mAnimationInterpolator;
 
     /**
      * The drawable to use to render the target.
      */
-    private @Nullable Drawable mIconDrawable;
+    @Nullable private Drawable mIconDrawable;
 
     /**
      * Should the back button press dismiss the prompt.
@@ -149,45 +151,45 @@ public class PromptOptions<T extends PromptOptions>
     /**
      * Listener for when the prompt state changes.
      */
-    private MaterialTapTargetPrompt.PromptStateChangeListener mPromptStateChangeListener;
+    @Nullable private MaterialTapTargetPrompt.PromptStateChangeListener mPromptStateChangeListener;
 
     private boolean mCaptureTouchEventOnFocal;
     private float mTextSeparation;
     private boolean mAutoDismiss = true;
     private boolean mAutoFinish = true;
     private boolean mCaptureTouchEventOutsidePrompt;
-    private Typeface mPrimaryTextTypeface, mSecondaryTextTypeface;
+    @Nullable private Typeface mPrimaryTextTypeface, mSecondaryTextTypeface;
     private int mPrimaryTextTypefaceStyle, mSecondaryTextTypefaceStyle;
-    private ColorStateList mIconDrawableTintList = null;
-    private PorterDuff.Mode mIconDrawableTintMode = PorterDuff.Mode.MULTIPLY;
+    @Nullable private ColorStateList mIconDrawableTintList = null;
+    @Nullable private PorterDuff.Mode mIconDrawableTintMode = PorterDuff.Mode.MULTIPLY;
     private boolean mHasIconDrawableTint;
     private int mIconDrawableColourFilter;
-    private View mTargetRenderView;
+    @Nullable private View mTargetRenderView;
     private boolean mIdleAnimationEnabled = true;
     private int mPrimaryTextGravity = Gravity.START, mSecondaryTextGravity = Gravity.START;
-    private View mClipToView;
+    @Nullable private View mClipToView;
 
     /**
      * The shape to render for the prompt background.
      */
-    private PromptBackground mPromptBackground = new CirclePromptBackground();
+    @NonNull private PromptBackground mPromptBackground = new CirclePromptBackground();
 
     /**
      * The shape to render for the prompt focal.
      */
-    private PromptFocal mPromptFocal = new CirclePromptFocal();
+    @NonNull private PromptFocal mPromptFocal = new CirclePromptFocal();
 
     /**
      * The renderer for drawing the prompt text.
      */
-    private PromptText mPromptText = new PromptText();
+    @NonNull private PromptText mPromptText = new PromptText();
 
     /**
      * Constructor.
      *
      * @param resourceFinder The resource finder implementation to use to find resources.
      */
-    public PromptOptions(final ResourceFinder resourceFinder)
+    public PromptOptions(@NonNull final ResourceFinder resourceFinder)
     {
         mResourceFinder = resourceFinder;
         final float density = mResourceFinder.getResources().getDisplayMetrics().density;
@@ -205,7 +207,7 @@ public class PromptOptions<T extends PromptOptions>
      *
      * @param themeResId The resource id for the theme.
      */
-    public void load(int themeResId)
+    public void load(@StyleRes int themeResId)
     {
         //Attempt to load the theme from the activity theme
         if (themeResId == 0)
@@ -263,6 +265,7 @@ public class PromptOptions<T extends PromptOptions>
      *
      * @return The resource finder being used.
      */
+    @NonNull
     public ResourceFinder getResourceFinder()
     {
         return mResourceFinder;
@@ -274,7 +277,8 @@ public class PromptOptions<T extends PromptOptions>
      * @param target The view that the prompt will highlight.
      * @return This Builder object to allow for chaining of calls to set methods
      */
-    public T setTarget(final View target)
+    @NonNull
+    public T setTarget(@Nullable final View target)
     {
         mTargetView = target;
         mTargetPosition = null;
@@ -288,6 +292,7 @@ public class PromptOptions<T extends PromptOptions>
      * @param target The view that the prompt will highlight.
      * @return This Builder object to allow for chaining of calls to set methods
      */
+    @NonNull
     public T setTarget(@IdRes final int target)
     {
         mTargetView = mResourceFinder.findViewById(target);
@@ -301,7 +306,8 @@ public class PromptOptions<T extends PromptOptions>
      *
      * @return The target view or null if not set or targeting a position.
      */
-    public @Nullable View getTargetView()
+    @Nullable
+    public View getTargetView()
     {
         return mTargetView;
     }
@@ -313,6 +319,7 @@ public class PromptOptions<T extends PromptOptions>
      * @param top  Centre point from screen top
      * @return This Builder object to allow for chaining of calls to set methods
      */
+    @NonNull
     public T setTarget(final float left, final float top)
     {
         mTargetView = null;
@@ -326,7 +333,8 @@ public class PromptOptions<T extends PromptOptions>
      *
      * @return The target position or null if targeting a view.
      */
-    public @Nullable PointF getTargetPosition()
+    @Nullable
+    public PointF getTargetPosition()
     {
         return mTargetPosition;
     }
@@ -338,7 +346,8 @@ public class PromptOptions<T extends PromptOptions>
      * @param view The view to use to render the prompt target
      * @return This Builder object to allow for chaining of calls to set methods
      */
-    public T setTargetRenderView(final View view)
+    @NonNull
+    public T setTargetRenderView(@Nullable final View view)
     {
         mTargetRenderView = view;
         return (T) this;
@@ -349,6 +358,7 @@ public class PromptOptions<T extends PromptOptions>
      *
      * @return The view used to render the prompt target.
      */
+    @Nullable
     public View getTargetRenderView()
     {
         return mTargetRenderView;
@@ -370,6 +380,7 @@ public class PromptOptions<T extends PromptOptions>
      * @param resId The string resource id for the primary text
      * @return This Builder object to allow for chaining of calls to set methods
      */
+    @NonNull
     public T setPrimaryText(@StringRes final int resId)
     {
         mPrimaryText = mResourceFinder.getString(resId);
@@ -382,7 +393,8 @@ public class PromptOptions<T extends PromptOptions>
      * @param text The primary text
      * @return This Builder object to allow for chaining of calls to set methods
      */
-    public T setPrimaryText(final String text)
+    @NonNull
+    public T setPrimaryText(@Nullable final String text)
     {
         mPrimaryText = text;
         return (T) this;
@@ -395,7 +407,8 @@ public class PromptOptions<T extends PromptOptions>
      * @param text The primary text as CharSequence
      * @return This Builder object to allow for chaining of calls to set methods
      */
-    public T setPrimaryText(final CharSequence text)
+    @NonNull
+    public T setPrimaryText(@Nullable final CharSequence text)
     {
         mPrimaryText = text;
         return (T) this;
@@ -406,7 +419,8 @@ public class PromptOptions<T extends PromptOptions>
      *
      * @return The primary text.
      */
-    public @Nullable CharSequence getPrimaryText()
+    @Nullable
+    public CharSequence getPrimaryText()
     {
         return mPrimaryText;
     }
@@ -417,7 +431,8 @@ public class PromptOptions<T extends PromptOptions>
      * @param size The primary text font size
      * @return This Builder object to allow for chaining of calls to set methods
      */
-    public T setPrimaryTextSize(final float size)
+    @NonNull
+    public T setPrimaryTextSize(@Dimension final float size)
     {
         mPrimaryTextSize = size;
         return (T) this;
@@ -429,6 +444,7 @@ public class PromptOptions<T extends PromptOptions>
      * @param resId The resource id for the primary text size
      * @return This Builder object to allow for chaining of calls to set methods
      */
+    @NonNull
     public T setPrimaryTextSize(@DimenRes final int resId)
     {
         mPrimaryTextSize = mResourceFinder.getResources().getDimension(resId);
@@ -440,6 +456,7 @@ public class PromptOptions<T extends PromptOptions>
      *
      * @return The primary text font size.
      */
+    @Dimension
     public float getPrimaryTextSize()
     {
         return mPrimaryTextSize;
@@ -451,6 +468,7 @@ public class PromptOptions<T extends PromptOptions>
      * @param colour The primary text colour resource id
      * @return This Builder object to allow for chaining of calls to set methods
      */
+    @NonNull
     public T setPrimaryTextColour(@ColorInt final int colour)
     {
         mPrimaryTextColour = colour;
@@ -462,7 +480,8 @@ public class PromptOptions<T extends PromptOptions>
      *
      * @return The primary text font colour.
      */
-    public @ColorInt int getPrimaryTextColour()
+    @ColorInt
+    public int getPrimaryTextColour()
     {
         return mPrimaryTextColour;
     }
@@ -472,7 +491,8 @@ public class PromptOptions<T extends PromptOptions>
      *
      * @param typeface The primary text typeface
      */
-    public T setPrimaryTextTypeface(final Typeface typeface)
+    @NonNull
+    public T setPrimaryTextTypeface(@Nullable final Typeface typeface)
     {
         return setPrimaryTextTypeface(typeface, 0);
     }
@@ -484,7 +504,8 @@ public class PromptOptions<T extends PromptOptions>
      * @param style    The typeface style
      * @return This Builder object to allow for chaining of calls to set methods
      */
-    public T setPrimaryTextTypeface(final Typeface typeface, final int style)
+    @NonNull
+    public T setPrimaryTextTypeface(@Nullable final Typeface typeface, final int style)
     {
         mPrimaryTextTypeface = typeface;
         mPrimaryTextTypefaceStyle = style;
@@ -496,6 +517,7 @@ public class PromptOptions<T extends PromptOptions>
      *
      * @return The primary text typeface.
      */
+    @Nullable
     public Typeface getPrimaryTextTypeface()
     {
         return mPrimaryTextTypeface;
@@ -517,6 +539,7 @@ public class PromptOptions<T extends PromptOptions>
      * @param resId The secondary text resource id
      * @return This Builder object to allow for chaining of calls to set methods
      */
+    @NonNull
     public T setSecondaryText(@StringRes final int resId)
     {
         mSecondaryText = mResourceFinder.getString(resId);
@@ -529,7 +552,8 @@ public class PromptOptions<T extends PromptOptions>
      * @param text The secondary text
      * @return This Builder object to allow for chaining of calls to set methods
      */
-    public T setSecondaryText(final String text)
+    @NonNull
+    public T setSecondaryText(@Nullable final String text)
     {
         mSecondaryText = text;
         return (T) this;
@@ -542,7 +566,8 @@ public class PromptOptions<T extends PromptOptions>
      * @param text The secondary text as a CharSequence
      * @return This Builder object to allow for chaining of calls to set methods
      */
-    public T setSecondaryText(final CharSequence text)
+    @NonNull
+    public T setSecondaryText(@Nullable final CharSequence text)
     {
         mSecondaryText = text;
         return (T) this;
@@ -553,6 +578,7 @@ public class PromptOptions<T extends PromptOptions>
      *
      * @return The secondary text.
      */
+    @Nullable
     public CharSequence getSecondaryText()
     {
         return mSecondaryText;
@@ -564,6 +590,7 @@ public class PromptOptions<T extends PromptOptions>
      * @param resId The secondary text string resource id
      * @return This Builder object to allow for chaining of calls to set methods
      */
+    @NonNull
     public T setSecondaryTextSize(@DimenRes final int resId)
     {
         mSecondaryTextSize = mResourceFinder.getResources().getDimension(resId);
@@ -576,7 +603,8 @@ public class PromptOptions<T extends PromptOptions>
      * @param size The secondary text font size
      * @return This Builder object to allow for chaining of calls to set methods
      */
-    public T setSecondaryTextSize(final float size)
+    @NonNull
+    public T setSecondaryTextSize(@Dimension final float size)
     {
         mSecondaryTextSize = size;
         return (T) this;
@@ -587,6 +615,7 @@ public class PromptOptions<T extends PromptOptions>
      *
      * @return The secondary text size.
      */
+    @Dimension
     public float getSecondaryTextSize()
     {
         return mSecondaryTextSize;
@@ -598,6 +627,7 @@ public class PromptOptions<T extends PromptOptions>
      * @param colour The secondary text colour resource id
      * @return This Builder object to allow for chaining of calls to set methods
      */
+    @NonNull
     public T setSecondaryTextColour(@ColorInt final int colour)
     {
         mSecondaryTextColour = colour;
@@ -619,7 +649,8 @@ public class PromptOptions<T extends PromptOptions>
      *
      * @param typeface The secondary text typeface
      */
-    public T setSecondaryTextTypeface(final Typeface typeface)
+    @NonNull
+    public T setSecondaryTextTypeface(@Nullable final Typeface typeface)
     {
         return setSecondaryTextTypeface(typeface, 0);
     }
@@ -631,7 +662,8 @@ public class PromptOptions<T extends PromptOptions>
      * @param style    The typeface style
      * @return This Builder object to allow for chaining of calls to set methods
      */
-    public T setSecondaryTextTypeface(final Typeface typeface, final int style)
+    @NonNull
+    public T setSecondaryTextTypeface(@Nullable final Typeface typeface, final int style)
     {
         mSecondaryTextTypeface = typeface;
         mSecondaryTextTypefaceStyle = style;
@@ -643,6 +675,7 @@ public class PromptOptions<T extends PromptOptions>
      *
      * @return The secondary text typeface.
      */
+    @Nullable
     public Typeface getSecondaryTextTypeface()
     {
         return mSecondaryTextTypeface;
@@ -659,26 +692,28 @@ public class PromptOptions<T extends PromptOptions>
     }
 
     /**
-     * Set the text left and right padding.
-     *
-     * @param padding The padding on the text left and right
-     * @return This Builder object to allow for chaining of calls to set methods
-     */
-    public T setTextPadding(final float padding)
-    {
-        mTextPadding = padding;
-        return (T) this;
-    }
-
-    /**
      * Set the text left and right padding using the given resource id.
      *
      * @param resId The text padding dimension resource id
      * @return This Builder object to allow for chaining of calls to set methods
      */
+    @NonNull
     public T setTextPadding(@DimenRes final int resId)
     {
         mTextPadding = mResourceFinder.getResources().getDimension(resId);
+        return (T) this;
+    }
+
+    /**
+     * Set the text left and right padding.
+     *
+     * @param padding The padding on the text left and right
+     * @return This Builder object to allow for chaining of calls to set methods
+     */
+    @NonNull
+    public T setTextPadding(@Dimension final float padding)
+    {
+        mTextPadding = padding;
         return (T) this;
     }
 
@@ -687,21 +722,10 @@ public class PromptOptions<T extends PromptOptions>
      *
      * @return The text left and right padding.
      */
+    @Dimension
     public float getTextPadding()
     {
         return mTextPadding;
-    }
-
-    /**
-     * Set the distance between the primary and secondary text.
-     *
-     * @param separation The distance separation between the primary and secondary text
-     * @return This Builder object to allow for chaining of calls to set methods
-     */
-    public T setTextSeparation(final float separation)
-    {
-        mTextSeparation = separation;
-        return (T) this;
     }
 
     /**
@@ -710,9 +734,23 @@ public class PromptOptions<T extends PromptOptions>
      * @param resId The dimension resource id for the text separation
      * @return This Builder object to allow for chaining of calls to set methods
      */
+    @NonNull
     public T setTextSeparation(@DimenRes final int resId)
     {
         mTextSeparation = mResourceFinder.getResources().getDimension(resId);
+        return (T) this;
+    }
+
+    /**
+     * Set the distance between the primary and secondary text.
+     *
+     * @param separation The distance separation between the primary and secondary text
+     * @return This Builder object to allow for chaining of calls to set methods
+     */
+    @NonNull
+    public T setTextSeparation(@Dimension final float separation)
+    {
+        mTextSeparation = separation;
         return (T) this;
     }
 
@@ -721,21 +759,10 @@ public class PromptOptions<T extends PromptOptions>
      *
      * @return the distance between the primary and secondary text.
      */
+    @Dimension
     public float getTextSeparation()
     {
         return mTextSeparation;
-    }
-
-    /**
-     * Set the padding between the text and the focal point.
-     *
-     * @param padding The distance between the text and focal
-     * @return This Builder object to allow for chaining of calls to set methods
-     */
-    public T setFocalPadding(final float padding)
-    {
-        mFocalPadding = padding;
-        return (T) this;
     }
 
     /**
@@ -744,9 +771,23 @@ public class PromptOptions<T extends PromptOptions>
      * @param resId The dimension resource id for the focal to text distance
      * @return This Builder object to allow for chaining of calls to set methods
      */
+    @NonNull
     public T setFocalPadding(@DimenRes final int resId)
     {
         mFocalPadding = mResourceFinder.getResources().getDimension(resId);
+        return (T) this;
+    }
+
+    /**
+     * Set the padding between the text and the focal point.
+     *
+     * @param padding The distance between the text and focal
+     * @return This Builder object to allow for chaining of calls to set methods
+     */
+    @NonNull
+    public T setFocalPadding(@Dimension final float padding)
+    {
+        mFocalPadding = padding;
         return (T) this;
     }
 
@@ -755,6 +796,7 @@ public class PromptOptions<T extends PromptOptions>
      *
      * @return The padding between the text and the focal.
      */
+    @Dimension
     public float getFocalPadding()
     {
         return mFocalPadding;
@@ -766,7 +808,8 @@ public class PromptOptions<T extends PromptOptions>
      * @param interpolator The animation interpolator to use
      * @return This Builder object to allow for chaining of calls to set methods
      */
-    public T setAnimationInterpolator(final Interpolator interpolator)
+    @NonNull
+    public T setAnimationInterpolator(@Nullable final Interpolator interpolator)
     {
         mAnimationInterpolator = interpolator;
         return (T) this;
@@ -777,6 +820,7 @@ public class PromptOptions<T extends PromptOptions>
      *
      * @return The animation interpolator that is used.
      */
+    @Nullable
     public Interpolator getAnimationInterpolator()
     {
         return mAnimationInterpolator;
@@ -789,6 +833,7 @@ public class PromptOptions<T extends PromptOptions>
      * @param enabled Idle animation enabled
      * @return This Builder object to allow for chaining of calls to set methods
      */
+    @NonNull
     public T setIdleAnimationEnabled(final boolean enabled)
     {
         mIdleAnimationEnabled = enabled;
@@ -811,6 +856,7 @@ public class PromptOptions<T extends PromptOptions>
      * @param resId The drawable resource id for the icon
      * @return This Builder object to allow for chaining of calls to set methods
      */
+    @NonNull
     public T setIcon(@DrawableRes final int resId)
     {
         mIconDrawable = mResourceFinder.getDrawable(resId);
@@ -823,7 +869,8 @@ public class PromptOptions<T extends PromptOptions>
      * @param drawable The drawable for the icon
      * @return This Builder object to allow for chaining of calls to set methods
      */
-    public T setIconDrawable(final Drawable drawable)
+    @NonNull
+    public T setIconDrawable(@Nullable final Drawable drawable)
     {
         mIconDrawable = drawable;
         return (T) this;
@@ -834,6 +881,7 @@ public class PromptOptions<T extends PromptOptions>
      *
      * @return The icon drawn as the target.
      */
+    @Nullable
     public Drawable getIconDrawable()
     {
         return mIconDrawable;
@@ -845,6 +893,7 @@ public class PromptOptions<T extends PromptOptions>
      * @param tint the tint to apply to the icon drawable, {@code null} will remove the tint.
      * @return This Builder object to allow for chaining of calls to set methods
      */
+    @NonNull
     public T setIconDrawableTintList(@Nullable ColorStateList tint)
     {
         mIconDrawableTintList = tint;
@@ -859,6 +908,7 @@ public class PromptOptions<T extends PromptOptions>
      *                 tint.
      * @return This Builder object to allow for chaining of calls to set methods
      */
+    @NonNull
     public T setIconDrawableTintMode(@Nullable PorterDuff.Mode tintMode)
     {
         mIconDrawableTintMode = tintMode;
@@ -879,6 +929,7 @@ public class PromptOptions<T extends PromptOptions>
      *               tint.
      * @return This Builder object to allow for chaining of calls to set methods
      */
+    @NonNull
     public T setIconDrawableColourFilter(@ColorInt final int colour)
     {
         mIconDrawableColourFilter = colour;
@@ -893,7 +944,9 @@ public class PromptOptions<T extends PromptOptions>
      * @param listener The listener to use
      * @return This Builder object to allow for chaining of calls to set methods
      */
-    public T setPromptStateChangeListener(final MaterialTapTargetPrompt.PromptStateChangeListener listener)
+    @NonNull
+    public T setPromptStateChangeListener(
+            @Nullable final MaterialTapTargetPrompt.PromptStateChangeListener listener)
     {
         mPromptStateChangeListener = listener;
         return (T) this;
@@ -904,7 +957,7 @@ public class PromptOptions<T extends PromptOptions>
      *
      * @param state The state that the prompt is now in.
      */
-    public void onPromptStateChanged(final MaterialTapTargetPrompt prompt, final int state)
+    public void onPromptStateChanged(@NonNull final MaterialTapTargetPrompt prompt, final int state)
     {
         if (mPromptStateChangeListener != null)
         {
@@ -919,6 +972,7 @@ public class PromptOptions<T extends PromptOptions>
      * @param captureTouchEvent True to capture touch events in the prompt
      * @return This Builder object to allow for chaining of calls to set methods
      */
+    @NonNull
     public T setCaptureTouchEventOnFocal(final boolean captureTouchEvent)
     {
         mCaptureTouchEventOnFocal = captureTouchEvent;
@@ -937,27 +991,29 @@ public class PromptOptions<T extends PromptOptions>
     }
 
     /**
-     * Set the max width that the primary and secondary text can be.
-     *
-     * @param width The max width that the text can reach
-     * @return This Builder object to allow for chaining of calls to set methods
-     */
-    public T setMaxTextWidth(final float width)
-    {
-        mMaxTextWidth = width;
-        return (T) this;
-    }
-
-    /**
      * Set the max width that the primary and secondary text can be using the given resource
      * id.
      *
      * @param resId The dimension resource id for the max width that the text can reach
      * @return This Builder object to allow for chaining of calls to set methods
      */
+    @NonNull
     public T setMaxTextWidth(@DimenRes final int resId)
     {
         mMaxTextWidth = mResourceFinder.getResources().getDimension(resId);
+        return (T) this;
+    }
+
+    /**
+     * Set the max width that the primary and secondary text can be.
+     *
+     * @param width The max width that the text can reach
+     * @return This Builder object to allow for chaining of calls to set methods
+     */
+    @NonNull
+    public T setMaxTextWidth(@Dimension final float width)
+    {
+        mMaxTextWidth = width;
         return (T) this;
     }
 
@@ -966,6 +1022,7 @@ public class PromptOptions<T extends PromptOptions>
      *
      * @return The maximum text width.
      */
+    @Dimension
     public float getMaxTextWidth()
     {
         return mMaxTextWidth;
@@ -978,6 +1035,7 @@ public class PromptOptions<T extends PromptOptions>
      * @param colour The background colour colour resource id
      * @return This Builder object to allow for chaining of calls to set methods
      */
+    @NonNull
     public T setBackgroundColour(@ColorInt final int colour)
     {
         mBackgroundColour = colour;
@@ -989,7 +1047,8 @@ public class PromptOptions<T extends PromptOptions>
      *
      * @return The background colour.
      */
-    public @ColorInt int getBackgroundColour()
+    @ColorInt
+    public int getBackgroundColour()
     {
         return mBackgroundColour;
     }
@@ -1000,6 +1059,7 @@ public class PromptOptions<T extends PromptOptions>
      * @param colour The focal colour colour resource id
      * @return This Builder object to allow for chaining of calls to set methods
      */
+    @NonNull
     public T setFocalColour(@ColorInt final int colour)
     {
         mFocalColour = colour;
@@ -1011,21 +1071,10 @@ public class PromptOptions<T extends PromptOptions>
      *
      * @return The focal point colour.
      */
-    public @ColorInt int getFocalColour()
+    @ColorInt
+    public int getFocalColour()
     {
         return mFocalColour;
-    }
-
-    /**
-     * Set the focal point radius.
-     *
-     * @param radius The focal radius
-     * @return This Builder object to allow for chaining of calls to set methods
-     */
-    public T setFocalRadius(final float radius)
-    {
-        mFocalRadius = radius;
-        return (T) this;
     }
 
     /**
@@ -1034,9 +1083,23 @@ public class PromptOptions<T extends PromptOptions>
      * @param resId The focal radius dimension resource id
      * @return This Builder object to allow for chaining of calls to set methods
      */
+    @NonNull
     public T setFocalRadius(@DimenRes final int resId)
     {
         mFocalRadius = mResourceFinder.getResources().getDimension(resId);
+        return (T) this;
+    }
+
+    /**
+     * Set the focal point radius.
+     *
+     * @param radius The focal radius
+     * @return This Builder object to allow for chaining of calls to set methods
+     */
+    @NonNull
+    public T setFocalRadius(@Dimension final float radius)
+    {
+        mFocalRadius = radius;
         return (T) this;
     }
 
@@ -1045,6 +1108,7 @@ public class PromptOptions<T extends PromptOptions>
      *
      * @return The radius used for the circle prompt focal.
      */
+    @Dimension
     public float getFocalRadius()
     {
         return mFocalRadius;
@@ -1062,6 +1126,7 @@ public class PromptOptions<T extends PromptOptions>
      *                    action taken.
      * @return This Builder object to allow for chaining of calls to set methods
      */
+    @NonNull
     public T setAutoDismiss(final boolean autoDismiss)
     {
         mAutoDismiss = autoDismiss;
@@ -1091,6 +1156,7 @@ public class PromptOptions<T extends PromptOptions>
      *                   action taken.
      * @return This Builder object to allow for chaining of calls to set methods
      */
+    @NonNull
     public T setAutoFinish(final boolean autoFinish)
     {
         mAutoFinish = autoFinish;
@@ -1114,6 +1180,7 @@ public class PromptOptions<T extends PromptOptions>
      * @param captureTouchEventOutsidePrompt True to capture touch events out side the prompt
      * @return This Builder object to allow for chaining of calls to set methods
      */
+    @NonNull
     public T setCaptureTouchEventOutsidePrompt(
             final boolean captureTouchEventOutsidePrompt)
     {
@@ -1138,6 +1205,7 @@ public class PromptOptions<T extends PromptOptions>
      * @param gravity The horizontal gravity
      * @return This Builder object to allow for chaining of calls to set methods
      */
+    @NonNull
     public T setTextGravity(final int gravity)
     {
         mPrimaryTextGravity = gravity;
@@ -1152,6 +1220,7 @@ public class PromptOptions<T extends PromptOptions>
      * @param gravity The horizontal gravity
      * @return This Builder object to allow for chaining of calls to set methods
      */
+    @NonNull
     public T setPrimaryTextGravity(final int gravity)
     {
         mPrimaryTextGravity = gravity;
@@ -1175,6 +1244,7 @@ public class PromptOptions<T extends PromptOptions>
      * @param gravity The horizontal gravity
      * @return This Builder object to allow for chaining of calls to set methods
      */
+    @NonNull
     public T setSecondaryTextGravity(final int gravity)
     {
         mSecondaryTextGravity = gravity;
@@ -1201,7 +1271,8 @@ public class PromptOptions<T extends PromptOptions>
      * @param view The view to clip to
      * @return This Builder object to allow for chaining of calls to set methods
      */
-    public T setClipToView(final View view)
+    @NonNull
+    public T setClipToView(@Nullable final View view)
     {
         mClipToView = view;
         return (T) this;
@@ -1213,6 +1284,7 @@ public class PromptOptions<T extends PromptOptions>
      *
      * @return The view that the prompt canvas is clipped to.
      */
+    @Nullable
     public View getClipToView()
     {
         return mClipToView;
@@ -1225,6 +1297,7 @@ public class PromptOptions<T extends PromptOptions>
      * @param enabled True for back button dismiss enabled
      * @return This Builder object to allow for chaining of calls to set methods
      */
+    @NonNull
     public T setBackButtonDismissEnabled(final boolean enabled)
     {
         mBackButtonDismissEnabled = enabled;
@@ -1238,7 +1311,7 @@ public class PromptOptions<T extends PromptOptions>
      */
     public boolean getBackButtonDismissEnabled()
     {
-        return  mBackButtonDismissEnabled;
+        return mBackButtonDismissEnabled;
     }
 
     /**
@@ -1247,6 +1320,7 @@ public class PromptOptions<T extends PromptOptions>
      * @param promptBackground The background shape to use.
      * @return This Builder object to allow for chaining of calls to set methods
      */
+    @NonNull
     public T setPromptBackground(@NonNull final PromptBackground promptBackground)
     {
         mPromptBackground = promptBackground;
@@ -1258,6 +1332,7 @@ public class PromptOptions<T extends PromptOptions>
      *
      * @return The prompt focal instance.
      */
+    @NonNull
     public PromptBackground getPromptBackground()
     {
         return mPromptBackground;
@@ -1269,6 +1344,7 @@ public class PromptOptions<T extends PromptOptions>
      * @param promptFocal The focal shape to use.
      * @return This Builder object to allow for chaining of calls to set methods
      */
+    @NonNull
     public T setPromptFocal(@NonNull final PromptFocal promptFocal)
     {
         mPromptFocal = promptFocal;
@@ -1280,6 +1356,7 @@ public class PromptOptions<T extends PromptOptions>
      *
      * @return The prompt focal instance.
      */
+    @NonNull
     public PromptFocal getPromptFocal()
     {
         return mPromptFocal;
@@ -1291,6 +1368,7 @@ public class PromptOptions<T extends PromptOptions>
      * @param promptText The prompt text implementation.
      * @return This Builder object to allow for chaining of calls to set methods
      */
+    @NonNull
     public T setPromptText(@NonNull final PromptText promptText)
     {
         mPromptText = promptText;
@@ -1302,6 +1380,7 @@ public class PromptOptions<T extends PromptOptions>
      *
      * @return This Builder object to allow for chaining of calls to set methods
      */
+    @NonNull
     public PromptText getPromptText()
     {
         return mPromptText;
@@ -1323,6 +1402,7 @@ public class PromptOptions<T extends PromptOptions>
      *
      * @return The created builder or null if no target
      */
+    @Nullable
     public MaterialTapTargetPrompt create()
     {
         if (!mTargetSet || (mPrimaryText == null && mSecondaryText == null))
@@ -1388,6 +1468,7 @@ public class PromptOptions<T extends PromptOptions>
      *
      * @return The created builder or null if no target
      */
+    @Nullable
     public MaterialTapTargetPrompt show()
     {
         final MaterialTapTargetPrompt mPrompt = create();

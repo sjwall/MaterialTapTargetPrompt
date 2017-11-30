@@ -22,6 +22,9 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.PointF;
 import android.graphics.RectF;
+import android.support.annotation.ColorInt;
+import android.support.annotation.Dimension;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.view.View;
 
@@ -42,9 +45,9 @@ public class RectanglePromptFocal extends PromptFocal
     PointF mBaseBoundsCentre;
     RectF mRippleBounds;
     int mBaseAlpha;
-    float mPadding = 40;
+    float mPadding;
     private float mRx, mRy;
-    private PointF mSize;
+    @Nullable private PointF mSize;
 
     /**
      * Constructor.
@@ -72,6 +75,7 @@ public class RectanglePromptFocal extends PromptFocal
      * @param ry The y-radius of the oval used to round the corners
      * @return This prompt focal
      */
+    @NonNull
     public RectanglePromptFocal setCornerRadius(final float rx, final float ry)
     {
         mRx = rx;
@@ -85,7 +89,8 @@ public class RectanglePromptFocal extends PromptFocal
      * @param padding The distance from the target edge to the rectangle edge.
      * @return This prompt focal.
      */
-    public RectanglePromptFocal setTargetPadding(final float padding)
+    @NonNull
+    public RectanglePromptFocal setTargetPadding(@Dimension final float padding)
     {
         mPadding = padding;
         return this;
@@ -97,6 +102,7 @@ public class RectanglePromptFocal extends PromptFocal
      * @param size The fixed focal size or null to change back to the default dynamic size.
      * @return This prompt focal
      */
+    @NonNull
     public RectanglePromptFocal setSize(@Nullable final PointF size)
     {
         if (size == null)
@@ -112,6 +118,7 @@ public class RectanglePromptFocal extends PromptFocal
         return this;
     }
 
+    @NonNull
     @Override
     public RectF getBounds()
     {
@@ -119,7 +126,7 @@ public class RectanglePromptFocal extends PromptFocal
     }
 
     @Override
-    public void setColour(int colour)
+    public void setColour(@ColorInt int colour)
     {
         mPaint.setColor(colour);
         mBaseAlpha = Color.alpha(colour);
@@ -127,7 +134,7 @@ public class RectanglePromptFocal extends PromptFocal
     }
 
     @Override
-    public void prepare(PromptOptions options, View target, final int[] promptViewPosition)
+    public void prepare(@NonNull PromptOptions options, @NonNull View target, final int[] promptViewPosition)
     {
         final int[] targetPosition = new int[2];
         target.getLocationInWindow(targetPosition);
@@ -151,7 +158,7 @@ public class RectanglePromptFocal extends PromptFocal
     }
 
     @Override
-    public void prepare(PromptOptions options, float targetX, float targetY)
+    public void prepare(@NonNull PromptOptions options, float targetX, float targetY)
     {
         if (mSize != null)
         {
@@ -171,7 +178,7 @@ public class RectanglePromptFocal extends PromptFocal
     }
 
     @Override
-    public void update(PromptOptions options, float revealModifier,
+    public void update(@NonNull PromptOptions options, float revealModifier,
                        float alphaModifier)
     {
         PromptUtils.scale(mBaseBoundsCentre, mBaseBounds, mBounds, revealModifier, true);
@@ -185,7 +192,7 @@ public class RectanglePromptFocal extends PromptFocal
     }
 
     @Override
-    public void draw(Canvas canvas)
+    public void draw(@NonNull Canvas canvas)
     {
         //Draw the ripple
         if (mDrawRipple)
@@ -204,6 +211,6 @@ public class RectanglePromptFocal extends PromptFocal
     @Override
     public boolean contains(float x, float y)
     {
-        return this.mBounds.contains(x, y);
+        return mBounds.contains(x, y);
     }
 }

@@ -25,6 +25,7 @@ import android.os.Build;
 import android.support.annotation.DrawableRes;
 import android.support.annotation.IdRes;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.annotation.StringRes;
 import android.support.annotation.StyleRes;
 import android.support.annotation.StyleableRes;
@@ -36,37 +37,42 @@ import android.view.ViewGroup;
  */
 public class ActivityResourceFinder implements ResourceFinder
 {
-    private final Activity mActivity;
+    @NonNull private final Activity mActivity;
 
-    public ActivityResourceFinder(final Activity activity)
+    public ActivityResourceFinder(@NonNull final Activity activity)
     {
-        this.mActivity = activity;
+        mActivity = activity;
     }
 
+    @Nullable
     @Override
     public View findViewById(@IdRes int resId)
     {
-        return this.mActivity.findViewById(resId);
+        return mActivity.findViewById(resId);
     }
 
+    @NonNull
     @Override
     public ViewGroup getPromptParentView()
     {
         return (ViewGroup) mActivity.getWindow().getDecorView();
     }
 
+    @NonNull
     @Override
     public Context getContext()
     {
         return mActivity;
     }
 
+    @NonNull
     @Override
     public Resources getResources()
     {
         return mActivity.getResources();
     }
 
+    @NonNull
     @Override
     public Resources.Theme getTheme()
     {
@@ -80,25 +86,25 @@ public class ActivityResourceFinder implements ResourceFinder
         return mActivity.getString(resId);
     }
 
+    @NonNull
     @Override
     public TypedArray obtainStyledAttributes(@StyleRes int resId, @StyleableRes int[] attrs)
     {
         return mActivity.obtainStyledAttributes(resId, attrs);
     }
 
+    @Nullable
     @Override
     public Drawable getDrawable(@DrawableRes int resId)
     {
-        final Drawable drawable;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
         {
-            drawable = mActivity.getDrawable(resId);
+            return mActivity.getDrawable(resId);
         }
         else
         {
             //noinspection deprecation
-            drawable = mActivity.getResources().getDrawable(resId);
+            return mActivity.getResources().getDrawable(resId);
         }
-        return drawable;
     }
 }

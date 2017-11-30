@@ -20,6 +20,7 @@ import android.graphics.RectF;
 import android.support.annotation.ColorInt;
 import android.support.annotation.FloatRange;
 import android.support.annotation.IntRange;
+import android.support.annotation.NonNull;
 import android.view.View;
 
 /**
@@ -68,6 +69,7 @@ public abstract class PromptFocal implements PromptUIElement
      * Get the focal bounds at scale 1.
      * @return The screen area that the focal is drawn in at scale 1.
      */
+    @NonNull
     public abstract RectF getBounds();
 
     /**
@@ -77,7 +79,8 @@ public abstract class PromptFocal implements PromptUIElement
      * @param target The prompt target view.
      * @param promptViewPosition The prompt views screen position.
      */
-    public abstract void prepare(final PromptOptions options, View target, final int[] promptViewPosition);
+    public abstract void prepare(@NonNull final PromptOptions options,
+                                 @NonNull View target, final int[] promptViewPosition);
 
     /**
      * Setup the focal ready for rendering when targeting a point on the screen, called prior to first render.
@@ -86,7 +89,7 @@ public abstract class PromptFocal implements PromptUIElement
      * @param targetX The target screen x position.
      * @param targetY The target screen y position.
      */
-    public abstract void prepare(final PromptOptions options, float targetX, float targetY);
+    public abstract void prepare(@NonNull final PromptOptions options, float targetX, float targetY);
 
     /**
      * Update the ripple around the focal.
@@ -94,5 +97,6 @@ public abstract class PromptFocal implements PromptUIElement
      * @param revealModifier The amount to scale the ripple by where a 1 value is the same size as the focal.
      * @param alphaModifier The amount to modify the ripple alpha by.
      */
-    public abstract void updateRipple(@FloatRange(from = 0, to = 2) float revealModifier, @FloatRange(from = 0, to = 1) float alphaModifier);
+    public abstract void updateRipple(@FloatRange(from = 0, to = 2) float revealModifier,
+                                      @FloatRange(from = 0, to = 1) float alphaModifier);
 }

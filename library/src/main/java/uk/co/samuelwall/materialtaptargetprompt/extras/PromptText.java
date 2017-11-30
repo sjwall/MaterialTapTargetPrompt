@@ -21,6 +21,7 @@ import android.graphics.Color;
 import android.graphics.Rect;
 import android.graphics.RectF;
 import android.support.annotation.ColorInt;
+import android.support.annotation.NonNull;
 import android.text.Layout;
 import android.text.TextPaint;
 
@@ -63,12 +64,13 @@ public class PromptText implements PromptUIElement
     Rect mClipBounds;
 
     public  PromptText() {}
-    
+
     /**
      * Get the window position for the prompt text.
      *
      * @return The prompt text bounds.
      */
+    @NonNull
     public RectF getBounds()
     {
         return mTextBounds;
@@ -77,7 +79,8 @@ public class PromptText implements PromptUIElement
     /**
      * Recalculates the primary and secondary text positions.
      */
-    public void prepare(PromptOptions options, boolean clipToBounds, Rect clipBounds)
+    public void prepare(@NonNull PromptOptions options,
+                        boolean clipToBounds, @NonNull Rect clipBounds)
     {
         mClipToBounds = clipToBounds;
         mClipBounds = clipBounds;
@@ -230,7 +233,8 @@ public class PromptText implements PromptUIElement
      *
      * @param maxWidth The maximum width that the text can be.
      */
-    void createTextLayout(final PromptOptions options, final float maxWidth, final float alphaModifier)
+    void createTextLayout(@NonNull final PromptOptions options, final float maxWidth,
+                          final float alphaModifier)
     {
         if (options.getPrimaryText() != null)
         {
@@ -253,7 +257,7 @@ public class PromptText implements PromptUIElement
     }
 
     @Override
-    public void update(final PromptOptions options, float revealModifier,
+    public void update(@NonNull final PromptOptions options, float revealModifier,
                        float alphaModifier)
     {
         final float maxWidth = PromptUtils.calculateMaxWidth(options.getMaxTextWidth(),
@@ -264,7 +268,7 @@ public class PromptText implements PromptUIElement
     }
 
     @Override
-    public void draw(Canvas canvas)
+    public void draw(@NonNull Canvas canvas)
     {
         canvas.translate(mPrimaryTextLeft - mPrimaryTextLeftChange, mPrimaryTextTop);
         if (mPrimaryTextLayout != null)

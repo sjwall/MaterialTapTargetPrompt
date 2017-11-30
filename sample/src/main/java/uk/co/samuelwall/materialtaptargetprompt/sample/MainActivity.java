@@ -18,6 +18,7 @@ package uk.co.samuelwall.materialtaptargetprompt.sample;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
@@ -101,7 +102,7 @@ public class MainActivity extends AppCompatActivity
                 .setPromptStateChangeListener(new MaterialTapTargetPrompt.PromptStateChangeListener()
                 {
                     @Override
-                    public void onPromptStateChanged(MaterialTapTargetPrompt prompt, int state)
+                    public void onPromptStateChanged(@NonNull MaterialTapTargetPrompt prompt, int state)
                     {
                         if (state == MaterialTapTargetPrompt.STATE_FOCAL_PRESSED
                                 || state == MaterialTapTargetPrompt.STATE_NON_FOCAL_PRESSED)
@@ -135,13 +136,13 @@ public class MainActivity extends AppCompatActivity
                 .setAnimationInterpolator(new FastOutSlowInInterpolator())
                 .setMaxTextWidth(R.dimen.tap_target_menu_max_width)
                 .setIcon(R.drawable.ic_menu);
-        final Toolbar tb = (Toolbar) this.findViewById(R.id.toolbar);
+        final Toolbar tb = this.findViewById(R.id.toolbar);
         tapTargetPromptBuilder.setTarget(tb.getChildAt(1));
 
         tapTargetPromptBuilder.setPromptStateChangeListener(new MaterialTapTargetPrompt.PromptStateChangeListener()
         {
             @Override
-            public void onPromptStateChanged(MaterialTapTargetPrompt prompt, int state)
+            public void onPromptStateChanged(@NonNull MaterialTapTargetPrompt prompt, int state)
             {
                 if (state == MaterialTapTargetPrompt.STATE_FOCAL_PRESSED)
                 {
@@ -160,7 +161,7 @@ public class MainActivity extends AppCompatActivity
                 .setAnimationInterpolator(new FastOutSlowInInterpolator())
                 .setMaxTextWidth(R.dimen.tap_target_menu_max_width)
                 .setIcon(R.drawable.ic_more_vert);
-        final Toolbar tb = (Toolbar) this.findViewById(R.id.toolbar);
+        final Toolbar tb = this.findViewById(R.id.toolbar);
         final View child = tb.getChildAt(2);
         if (child instanceof ActionMenuView)
         {
@@ -198,7 +199,7 @@ public class MainActivity extends AppCompatActivity
     public void showStylePrompt(View view)
     {
         final MaterialTapTargetPrompt.Builder builder = new MaterialTapTargetPrompt.Builder(this, R.style.MaterialTapTargetPromptTheme_FabTarget);
-        final Toolbar tb = (Toolbar) this.findViewById(R.id.toolbar);
+        final Toolbar tb = this.findViewById(R.id.toolbar);
         final View child = tb.getChildAt(2);
         if (child instanceof ActionMenuView)
         {
@@ -287,7 +288,7 @@ public class MainActivity extends AppCompatActivity
                 .setPromptStateChangeListener(new MaterialTapTargetPrompt.PromptStateChangeListener()
                 {
                     @Override
-                    public void onPromptStateChanged(MaterialTapTargetPrompt prompt, int state)
+                    public void onPromptStateChanged(@NonNull MaterialTapTargetPrompt prompt, int state)
                     {
                         if (state == MaterialTapTargetPrompt.STATE_FOCAL_PRESSED)
                         {
@@ -308,10 +309,10 @@ public class MainActivity extends AppCompatActivity
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        final Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        final Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener()
         {
             @Override
@@ -327,20 +328,20 @@ public class MainActivity extends AppCompatActivity
             }
         });
 
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        DrawerLayout drawer = findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.setDrawerListener(toggle);
         toggle.syncState();
 
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        NavigationView navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
     }
 
     @Override
     public void onBackPressed()
     {
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        DrawerLayout drawer = findViewById(R.id.drawer_layout);
         if (drawer.isDrawerOpen(GravityCompat.START))
         {
             drawer.closeDrawer(GravityCompat.START);
@@ -381,7 +382,7 @@ public class MainActivity extends AppCompatActivity
     public boolean onNavigationItemSelected(MenuItem item)
     {
         // Handle navigation view item clicks here.
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        DrawerLayout drawer = findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }

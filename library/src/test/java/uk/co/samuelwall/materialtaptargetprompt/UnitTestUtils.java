@@ -18,6 +18,7 @@ package uk.co.samuelwall.materialtaptargetprompt;
 
 import android.app.Activity;
 import android.content.res.Resources;
+import android.support.annotation.NonNull;
 import android.util.DisplayMetrics;
 
 import org.robolectric.Robolectric;
@@ -55,7 +56,7 @@ public class UnitTestUtils
         return createPromptOptions(resourceFinder);
     }
 
-    public static PromptOptions createPromptOptions(final ResourceFinder resourceFinder)
+    public static PromptOptions createPromptOptions(@NonNull final ResourceFinder resourceFinder)
     {
         return new PromptOptions(resourceFinder);
     }

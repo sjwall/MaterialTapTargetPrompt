@@ -30,6 +30,8 @@ import android.graphics.Rect;
 import android.graphics.RectF;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
@@ -105,12 +107,12 @@ public class MaterialTapTargetPrompt
     /**
      * Used to calculate the animation progress for the reveal and dismiss animations.
      */
-    ValueAnimator mAnimationCurrent;
+    @Nullable ValueAnimator mAnimationCurrent;
 
     /**
      * Used to calculate the animation progress for the idle animation.
      */
-    ValueAnimator mAnimationFocalRipple;
+    @Nullable ValueAnimator mAnimationFocalRipple;
 
     /**
      * The last percentage progress for idle animation.
@@ -132,7 +134,7 @@ public class MaterialTapTargetPrompt
     /**
      * Listener for the view layout changing.
      */
-    final ViewTreeObserver.OnGlobalLayoutListener mGlobalLayoutListener;
+    @Nullable final ViewTreeObserver.OnGlobalLayoutListener mGlobalLayoutListener;
 
     /**
      * Default constructor.
@@ -194,6 +196,7 @@ public class MaterialTapTargetPrompt
                     {
                         isTargetAttachedToWindow = targetView.getWindowToken() != null;
                     }
+
                     if (!isTargetAttachedToWindow)
                     {
                         return;
@@ -337,7 +340,7 @@ public class MaterialTapTargetPrompt
         mAnimationCurrent.addUpdateListener(new ValueAnimator.AnimatorUpdateListener()
         {
             @Override
-            public void onAnimationUpdate(ValueAnimator animation)
+            public void onAnimationUpdate(@NonNull ValueAnimator animation)
             {
                 final float value = (float) animation.getAnimatedValue();
                 updateAnimation(1f + ((1f - value) / 4), value);
@@ -373,7 +376,7 @@ public class MaterialTapTargetPrompt
         mAnimationCurrent.addUpdateListener(new ValueAnimator.AnimatorUpdateListener()
         {
             @Override
-            public void onAnimationUpdate(ValueAnimator animation)
+            public void onAnimationUpdate(@NonNull ValueAnimator animation)
             {
                 final float value = (float) animation.getAnimatedValue();
                 updateAnimation(value, value);
@@ -437,7 +440,7 @@ public class MaterialTapTargetPrompt
         mAnimationCurrent.addUpdateListener(new ValueAnimator.AnimatorUpdateListener()
         {
             @Override
-            public void onAnimationUpdate(ValueAnimator animation)
+            public void onAnimationUpdate(@NonNull ValueAnimator animation)
             {
                 final float value = (float) animation.getAnimatedValue();
                 updateAnimation(value, value);
@@ -446,7 +449,7 @@ public class MaterialTapTargetPrompt
         mAnimationCurrent.addListener(new AnimatorListener()
         {
             @Override
-            public void onAnimationEnd(Animator animation)
+            public void onAnimationEnd(@NonNull Animator animation)
             {
                 animation.removeAllListeners();
                 updateAnimation(1, 1);
@@ -477,7 +480,7 @@ public class MaterialTapTargetPrompt
             boolean direction = true;
 
             @Override
-            public void onAnimationUpdate(ValueAnimator animation)
+            public void onAnimationUpdate(@NonNull ValueAnimator animation)
             {
                 final float newFocalFraction = (Float) animation.getAnimatedValue();
                 boolean newDirection = direction;
@@ -507,7 +510,7 @@ public class MaterialTapTargetPrompt
         mAnimationFocalRipple.addUpdateListener(new ValueAnimator.AnimatorUpdateListener()
         {
             @Override
-            public void onAnimationUpdate(ValueAnimator animation)
+            public void onAnimationUpdate(@NonNull ValueAnimator animation)
             {
                 final float value = (float) animation.getAnimatedValue();
                 mView.mPromptOptions.getPromptFocal().updateRipple(value, (1.6f - value) * 2);
@@ -641,7 +644,8 @@ public class MaterialTapTargetPrompt
      * @param promptOptions The options to use to create the prompt.
      * @return The created prompt.
      */
-    public static MaterialTapTargetPrompt createDefault(final PromptOptions promptOptions)
+    @NonNull
+    public static MaterialTapTargetPrompt createDefault(@NonNull final PromptOptions promptOptions)
     {
         return new MaterialTapTargetPrompt(promptOptions);
     }
@@ -808,7 +812,7 @@ public class MaterialTapTargetPrompt
          *
          * @param fragment the fragment to show the prompt within.
          */
-        public Builder(final Fragment fragment)
+        public Builder(@NonNull final Fragment fragment)
         {
             this(fragment.getActivity(), 0);
         }
@@ -824,7 +828,7 @@ public class MaterialTapTargetPrompt
          *                   {@code 0} to use the parent {@code context}'s default material tap
          *                   target prompt theme
          */
-        public Builder(final Fragment fragment, int themeResId)
+        public Builder(@NonNull final Fragment fragment, int themeResId)
         {
             this(fragment.getActivity(), themeResId);
         }
@@ -834,7 +838,7 @@ public class MaterialTapTargetPrompt
          *
          * @param dialogFragment the dialog fragment to show the prompt within.
          */
-        public Builder(final DialogFragment dialogFragment)
+        public Builder(@NonNull final DialogFragment dialogFragment)
         {
             this(dialogFragment, 0);
         }
@@ -850,7 +854,7 @@ public class MaterialTapTargetPrompt
          *                       or {@code 0} to use the parent {@code context}'s default material
          *                       tap target prompt theme
          */
-        public Builder(final DialogFragment dialogFragment, int themeResId)
+        public Builder(@NonNull final DialogFragment dialogFragment, int themeResId)
         {
             this(dialogFragment.getDialog(), themeResId);
         }
@@ -860,7 +864,7 @@ public class MaterialTapTargetPrompt
          *
          * @param dialog the dialog to show the prompt within.
          */
-        public Builder(final Dialog dialog)
+        public Builder(@NonNull final Dialog dialog)
         {
             this(dialog, 0);
         }
@@ -876,7 +880,7 @@ public class MaterialTapTargetPrompt
          *                   {@code 0} to use the parent {@code context}'s default material tap
          *                   target prompt theme
          */
-        public Builder(final Dialog dialog, int themeResId)
+        public Builder(@NonNull final Dialog dialog, int themeResId)
         {
             this(new DialogResourceFinder(dialog), themeResId);
         }
@@ -886,7 +890,7 @@ public class MaterialTapTargetPrompt
          *
          * @param activity the activity to show the prompt within.
          */
-        public Builder(final Activity activity)
+        public Builder(@NonNull final Activity activity)
         {
             this(activity, 0);
         }
@@ -902,7 +906,7 @@ public class MaterialTapTargetPrompt
          *                   {@code 0} to use the parent {@code context}'s default material tap
          *                   target prompt theme
          */
-        public Builder(final Activity activity, int themeResId)
+        public Builder(@NonNull final Activity activity, int themeResId)
         {
             this(new ActivityResourceFinder(activity), themeResId);
         }
@@ -918,7 +922,7 @@ public class MaterialTapTargetPrompt
          *                       or {@code 0} to use the parent {@code context}'s default material
          *                       tap target prompt theme
          */
-        public Builder(final ResourceFinder resourceFinder, int themeResId)
+        public Builder(@NonNull final ResourceFinder resourceFinder, int themeResId)
         {
             super(resourceFinder);
             load(themeResId);
@@ -938,7 +942,7 @@ public class MaterialTapTargetPrompt
          *               #STATE_FOCAL_PRESSED}, {@link #STATE_FINISHED}, {@link #STATE_DISMISSING},
          *               {@link #STATE_DISMISSED}
          */
-        void onPromptStateChanged(final MaterialTapTargetPrompt prompt, final int state);
+        void onPromptStateChanged(@NonNull final MaterialTapTargetPrompt prompt, final int state);
     }
 
     static class AnimatorListener implements Animator.AnimatorListener

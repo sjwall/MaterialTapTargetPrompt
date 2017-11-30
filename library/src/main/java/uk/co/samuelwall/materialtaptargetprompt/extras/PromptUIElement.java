@@ -18,6 +18,7 @@ package uk.co.samuelwall.materialtaptargetprompt.extras;
 
 import android.graphics.Canvas;
 import android.support.annotation.FloatRange;
+import android.support.annotation.NonNull;
 
 /**
  * Base interface containing common methods for UI elements in a prompt.
@@ -27,19 +28,20 @@ interface PromptUIElement
     /**
      * Update the current prompt rendering state based on the prompt options and current reveal & alpha scales.
      *
-     * @param options The options used to create the prompt.
+     * @param options        The options used to create the prompt.
      * @param revealModifier The current size/revealed scale from 0 - 1.
-     * @param alphaModifier The current colour alpha scale from 0 - 1.
+     * @param alphaModifier  The current colour alpha scale from 0 - 1.
      */
-    void update(final PromptOptions options, @FloatRange(from=0, to=2) float revealModifier,
-                @FloatRange(from=0, to=1) float alphaModifier);
+    void update(@NonNull final PromptOptions options,
+                @FloatRange(from = 0, to = 2) float revealModifier,
+                @FloatRange(from = 0, to = 1) float alphaModifier);
 
     /**
      * Draw the element.
      *
      * @param canvas The canvas to draw to.
      */
-    void draw(Canvas canvas);
+    void draw(@NonNull Canvas canvas);
 
     /**
      * Does the element contain the point.

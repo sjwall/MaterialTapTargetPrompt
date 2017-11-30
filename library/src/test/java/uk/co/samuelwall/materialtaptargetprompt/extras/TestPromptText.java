@@ -16,6 +16,7 @@
 
 package uk.co.samuelwall.materialtaptargetprompt.extras;
 
+import android.support.annotation.NonNull;
 import android.text.Layout;
 
 import static org.mockito.Mockito.spy;
@@ -38,7 +39,7 @@ public class TestPromptText extends PromptText
     }
 
     @Override
-    void createTextLayout(final PromptOptions options, final float maxWidth, final float alphaModifier)
+    void createTextLayout(@NonNull final PromptOptions options, final float maxWidth, final float alphaModifier)
     {
         super.createTextLayout(options, maxWidth, alphaModifier);
         if (mPrimaryTextLayout != null)
