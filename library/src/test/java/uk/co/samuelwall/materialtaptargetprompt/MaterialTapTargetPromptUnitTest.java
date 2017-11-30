@@ -366,6 +366,126 @@ public class MaterialTapTargetPromptUnitTest
         assertTrue(prompt.isStarting());
     }
 
+    @Test
+    public void testStateGetters_NOT_SHOWN()
+    {
+        MaterialTapTargetPrompt prompt = createBuilder(SCREEN_WIDTH, SCREEN_HEIGHT, 0)
+                .setTarget(10, 10)
+                .setPrimaryText("Primary text")
+                .create();
+        prompt.show();
+        prompt.mState = MaterialTapTargetPrompt.STATE_NOT_SHOWN;
+        assertFalse(prompt.isStarting());
+        assertTrue(prompt.isComplete());
+        assertFalse(prompt.isDismissed());
+        assertFalse(prompt.isDismissing());
+    }
+
+    @Test
+    public void testStateGetters_REVEALING()
+    {
+        MaterialTapTargetPrompt prompt = createBuilder(SCREEN_WIDTH, SCREEN_HEIGHT, 0)
+                .setTarget(10, 10)
+                .setPrimaryText("Primary text")
+                .create();
+        prompt.show();
+        prompt.mState =  MaterialTapTargetPrompt.STATE_REVEALING;
+        assertTrue(prompt.isStarting());
+        assertFalse(prompt.isComplete());
+        assertFalse(prompt.isDismissed());
+        assertFalse(prompt.isDismissing());
+    }
+
+    @Test
+    public void testStateGetters_REVEALED()
+    {
+        MaterialTapTargetPrompt prompt = createBuilder(SCREEN_WIDTH, SCREEN_HEIGHT, 0)
+                .setTarget(10, 10)
+                .setPrimaryText("Primary text")
+                .create();
+        prompt.show();
+        prompt.mState =  MaterialTapTargetPrompt.STATE_REVEALED;
+        assertTrue(prompt.isStarting());
+        assertFalse(prompt.isComplete());
+        assertFalse(prompt.isDismissed());
+        assertFalse(prompt.isDismissing());
+    }
+
+    @Test
+    public void testStateGetters_PRESSED()
+    {
+        MaterialTapTargetPrompt prompt = createBuilder(SCREEN_WIDTH, SCREEN_HEIGHT, 0)
+                .setTarget(10, 10)
+                .setPrimaryText("Primary text")
+                .create();
+        prompt.show();
+        prompt.mState =  MaterialTapTargetPrompt.STATE_FOCAL_PRESSED;
+        assertFalse(prompt.isStarting());
+        assertFalse(prompt.isComplete());
+        assertFalse(prompt.isDismissed());
+        assertFalse(prompt.isDismissing());
+    }
+
+    @Test
+    public void testStateGetters_FINISHED()
+    {
+        MaterialTapTargetPrompt prompt = createBuilder(SCREEN_WIDTH, SCREEN_HEIGHT, 0)
+                .setTarget(10, 10)
+                .setPrimaryText("Primary text")
+                .create();
+        prompt.show();
+        prompt.mState =  MaterialTapTargetPrompt.STATE_FINISHED;
+        assertFalse(prompt.isStarting());
+        assertTrue(prompt.isComplete());
+        assertTrue(prompt.isDismissed());
+        assertFalse(prompt.isDismissing());
+    }
+
+    @Test
+    public void testStateGetters_DISMISSING()
+    {
+        MaterialTapTargetPrompt prompt = createBuilder(SCREEN_WIDTH, SCREEN_HEIGHT, 0)
+                .setTarget(10, 10)
+                .setPrimaryText("Primary text")
+                .create();
+        prompt.show();
+        prompt.mState =  MaterialTapTargetPrompt.STATE_DISMISSING;
+        assertFalse(prompt.isStarting());
+        assertTrue(prompt.isComplete());
+        assertFalse(prompt.isDismissed());
+        assertTrue(prompt.isDismissing());
+    }
+
+    @Test
+    public void testStateGetters_DISMISSED()
+    {
+        MaterialTapTargetPrompt prompt = createBuilder(SCREEN_WIDTH, SCREEN_HEIGHT, 0)
+                .setTarget(10, 10)
+                .setPrimaryText("Primary text")
+                .create();
+        prompt.show();
+        prompt.mState =  MaterialTapTargetPrompt.STATE_DISMISSED;
+        assertFalse(prompt.isStarting());
+        assertTrue(prompt.isComplete());
+        assertTrue(prompt.isDismissed());
+        assertFalse(prompt.isDismissing());
+    }
+
+    @Test
+    public void testStateGetters_FINISHING()
+    {
+        MaterialTapTargetPrompt prompt = createBuilder(SCREEN_WIDTH, SCREEN_HEIGHT, 0)
+                .setTarget(10, 10)
+                .setPrimaryText("Primary text")
+                .create();
+        prompt.show();
+        prompt.mState =  MaterialTapTargetPrompt.STATE_FINISHING;
+        assertFalse(prompt.isStarting());
+        assertTrue(prompt.isComplete());
+        assertFalse(prompt.isDismissed());
+        assertTrue(prompt.isDismissing());
+    }
+
     private MaterialTapTargetPrompt.Builder createBuilder(final int screenWidth,
                                               final int screenHeight, final float primaryTextWidth)
     {
