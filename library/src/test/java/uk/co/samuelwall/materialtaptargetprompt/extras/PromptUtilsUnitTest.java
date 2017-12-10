@@ -612,4 +612,19 @@ public class PromptUtilsUnitTest
     {
         assertTrue(PromptUtils.containsInset(new Rect(0, 0, 500, 500), 50, 60, 60));
     }
+
+    @Deprecated
+    @Test
+    public void testIsVersionAfterJellyBeanMR1()
+    {
+        assertTrue(PromptUtils.isVersionAfterJellyBeanMR1());
+    }
+
+    @Deprecated
+    @Test
+    public void testIsVersionBeforeJellyBeanMR1()
+    {
+        ReflectionHelpers.setStaticField(Build.VERSION.class, "SDK_INT", Build.VERSION_CODES.JELLY_BEAN);
+        assertFalse(PromptUtils.isVersionAfterJellyBeanMR1());
+    }
 }

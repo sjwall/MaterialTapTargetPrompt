@@ -656,4 +656,102 @@ public class CirclePromptBackgroundUnitTest
         assertTrue(promptBackground.contains(910, 779));
         assertFalse(promptBackground.contains(200, 22));
     }
+
+    @Test
+    public void testCirclePromptBackground_OutOfBounds_Left()
+    {
+        final Canvas canvas = mock(Canvas.class);
+        final Rect clipBounds = new Rect(0, 0, 1080, 1920);
+        final RectF focalBounds = new RectF(-85, 961, -41, 1004);
+        final PromptOptions options = createOptions(clipBounds, focalBounds);
+        final CirclePromptBackground promptBackground = (CirclePromptBackground) options.getPromptBackground();
+
+        promptBackground.prepare(options, false, clipBounds);
+        promptBackground.draw(canvas);
+        assertEquals(170, promptBackground.mBasePosition.x, 1);
+        assertEquals(797, promptBackground.mBasePosition.y, 1);
+        assertEquals(170, promptBackground.mPosition.x, 1);
+        assertEquals(797, promptBackground.mPosition.y, 1);
+        assertEquals(324, promptBackground.mBaseRadius, 1);
+        assertEquals(0, promptBackground.mRadius, 1);
+        assertFalse(promptBackground.contains(1058, 22));
+        promptBackground.update(options, 0, 0);
+        promptBackground.draw(canvas);
+        assertEquals(170, promptBackground.mBasePosition.x, 1);
+        assertEquals(797, promptBackground.mBasePosition.y, 1);
+        assertEquals(-63, promptBackground.mPosition.x, 1);
+        assertEquals(982, promptBackground.mPosition.y, 1);
+        assertEquals(324, promptBackground.mBaseRadius, 1);
+        assertEquals(0, promptBackground.mRadius, 1);
+        assertFalse(promptBackground.contains(1058, 22));
+        promptBackground.update(options, 0.5f, 0.5f);
+        promptBackground.draw(canvas);
+        assertEquals(170, promptBackground.mBasePosition.x, 1);
+        assertEquals(797, promptBackground.mBasePosition.y, 1);
+        assertEquals(53, promptBackground.mPosition.x, 1);
+        assertEquals(890, promptBackground.mPosition.y, 1);
+        assertEquals(324, promptBackground.mBaseRadius, 1);
+        assertEquals(162, promptBackground.mRadius, 1);
+        assertTrue(promptBackground.contains(53, 779));
+        assertFalse(promptBackground.contains(700, 22));
+        promptBackground.update(options, 1, 1);
+        promptBackground.draw(canvas);
+        assertEquals(170, promptBackground.mBasePosition.x, 1);
+        assertEquals(797, promptBackground.mBasePosition.y, 1);
+        assertEquals(170, promptBackground.mPosition.x, 1);
+        assertEquals(797, promptBackground.mPosition.y, 1);
+        assertEquals(324, promptBackground.mBaseRadius, 1);
+        assertEquals(324, promptBackground.mRadius, 1);
+        assertTrue(promptBackground.contains(53, 779));
+        assertFalse(promptBackground.contains(200, 22));
+    }
+
+    @Test
+    public void testCirclePromptBackground_OutOfBounds_Right()
+    {
+        final Canvas canvas = mock(Canvas.class);
+        final Rect clipBounds = new Rect(0, 0, 1080, 1920);
+        final RectF focalBounds = new RectF(1160, 961, 1204, 1004);
+        final PromptOptions options = createOptions(clipBounds, focalBounds);
+        final CirclePromptBackground promptBackground = (CirclePromptBackground) options.getPromptBackground();
+
+        promptBackground.prepare(options, false, clipBounds);
+        promptBackground.draw(canvas);
+        assertEquals(910, promptBackground.mBasePosition.x, 1);
+        assertEquals(817, promptBackground.mBasePosition.y, 1);
+        assertEquals(910, promptBackground.mPosition.x, 1);
+        assertEquals(817, promptBackground.mPosition.y, 1);
+        assertEquals(341, promptBackground.mBaseRadius, 1);
+        assertEquals(0, promptBackground.mRadius, 1);
+        assertFalse(promptBackground.contains(1058, 22));
+        promptBackground.update(options, 0, 0);
+        promptBackground.draw(canvas);
+        assertEquals(910, promptBackground.mBasePosition.x, 1);
+        assertEquals(817, promptBackground.mBasePosition.y, 1);
+        assertEquals(1182, promptBackground.mPosition.x, 1);
+        assertEquals(982, promptBackground.mPosition.y, 1);
+        assertEquals(341, promptBackground.mBaseRadius, 1);
+        assertEquals(0, promptBackground.mRadius, 1);
+        assertFalse(promptBackground.contains(1058, 22));
+        promptBackground.update(options, 0.5f, 0.5f);
+        promptBackground.draw(canvas);
+        assertEquals(910, promptBackground.mBasePosition.x, 1);
+        assertEquals(817, promptBackground.mBasePosition.y, 1);
+        assertEquals(1046, promptBackground.mPosition.x, 1);
+        assertEquals(899, promptBackground.mPosition.y, 1);
+        assertEquals(341, promptBackground.mBaseRadius, 1);
+        assertEquals(170, promptBackground.mRadius, 1);
+        assertTrue(promptBackground.contains(1046, 779));
+        assertFalse(promptBackground.contains(700, 22));
+        promptBackground.update(options, 1, 1);
+        promptBackground.draw(canvas);
+        assertEquals(910, promptBackground.mBasePosition.x, 1);
+        assertEquals(817, promptBackground.mBasePosition.y, 1);
+        assertEquals(910, promptBackground.mPosition.x, 1);
+        assertEquals(817, promptBackground.mPosition.y, 1);
+        assertEquals(341, promptBackground.mBaseRadius, 1);
+        assertEquals(341, promptBackground.mRadius, 1);
+        assertTrue(promptBackground.contains(910, 779));
+        assertFalse(promptBackground.contains(200, 22));
+    }
 }
