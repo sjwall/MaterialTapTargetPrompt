@@ -2,6 +2,12 @@
 
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## v2.5.1 (2017-12-12)
+
+### Bug Fixes
+
+* Reverted changes that fixed prompt positioning not updating correctly when the target moves but caused the background to not be shown
+
 ## v2.5.0 (2017-11-30)
 
 ### Features
