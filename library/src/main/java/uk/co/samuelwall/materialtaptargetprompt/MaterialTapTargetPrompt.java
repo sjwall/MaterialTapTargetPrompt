@@ -203,18 +203,6 @@ public class MaterialTapTargetPrompt
                     }
                 }
                 prepare();
-                // Need to update the prompt components with the new view location.
-                float revealModifier = 1;
-                float alphaModifier = 1;
-                if (mAnimationCurrent != null)
-                {
-                    revealModifier = (float) mAnimationCurrent.getAnimatedValue();
-                    if (mState != STATE_REVEALED)
-                    {
-                        alphaModifier = revealModifier;
-                    }
-                }
-                updateAnimation(revealModifier, alphaModifier);
             }
         };
     }
