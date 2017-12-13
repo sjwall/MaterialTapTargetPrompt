@@ -80,7 +80,7 @@ public class MaterialTapTargetPromptUnitTest
                 .setTarget(10, 10)
                 .setPrimaryText("Primary text")
                 .show();
-        prompt.mAnimationCurrent.cancel();
+        prompt.cleanUpAnimation();
         //assertEquals(1f, prompt.mRevealedAmount, 0f);
 
         prompt.dismiss();
