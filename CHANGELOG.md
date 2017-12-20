@@ -2,6 +2,12 @@
 
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## v2.5.2 (2017-12-20)
+
+### Bug Fixes
+
+* Fixed prompt not updating correctly when target view moves ([#95](https://github.com/sjwall/MaterialTapTargetPrompt/pull/95))
+
 ## v2.5.1 (2017-12-12)
 
 ### Bug Fixes
