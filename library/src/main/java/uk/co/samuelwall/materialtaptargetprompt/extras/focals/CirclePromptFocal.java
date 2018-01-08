@@ -19,6 +19,7 @@ package uk.co.samuelwall.materialtaptargetprompt.extras.focals;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.Path;
 import android.graphics.PointF;
 import android.graphics.RectF;
 import android.support.annotation.ColorInt;
@@ -72,6 +73,15 @@ public class CirclePromptFocal extends PromptFocal
     public RectF getBounds()
     {
         return mBounds;
+    }
+
+    @NonNull
+    @Override
+    public Path getPath()
+    {
+        final Path path = new Path();
+        path.addCircle(mPosition.x, mPosition.y, mRadius, Path.Direction.CW);
+        return path;
     }
 
     @Override
@@ -132,7 +142,7 @@ public class CirclePromptFocal extends PromptFocal
 
         // canvas.drawRect(mBounds, mPaint);
 
-        canvas.drawCircle(mPosition.x, mPosition.y, mRadius, mPaint);
+        canvas.drawPath(getPath(), mPaint);
     }
 
     @Override

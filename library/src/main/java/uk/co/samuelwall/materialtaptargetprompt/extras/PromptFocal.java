@@ -16,6 +16,7 @@
 
 package uk.co.samuelwall.materialtaptargetprompt.extras;
 
+import android.graphics.Path;
 import android.graphics.RectF;
 import android.support.annotation.ColorInt;
 import android.support.annotation.FloatRange;
@@ -71,6 +72,13 @@ public abstract class PromptFocal implements PromptUIElement
      */
     @NonNull
     public abstract RectF getBounds();
+
+    /**
+     * Get the focal path to be drawn.
+     * @return The path used to draw the focal
+     */
+    @NonNull
+    public abstract Path getPath();
 
     /**
      * Setup the focal ready for rendering when targeting a view, called prior to first render.

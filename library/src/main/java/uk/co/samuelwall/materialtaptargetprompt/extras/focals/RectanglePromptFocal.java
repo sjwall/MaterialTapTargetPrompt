@@ -20,6 +20,7 @@ import android.content.res.Resources;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.Path;
 import android.graphics.PointF;
 import android.graphics.RectF;
 import android.support.annotation.ColorInt;
@@ -125,6 +126,15 @@ public class RectanglePromptFocal extends PromptFocal
         return mBaseBounds;
     }
 
+    @NonNull
+    @Override
+    public Path getPath()
+    {
+        final Path path = new Path();
+        path.addRoundRect(mBounds, mRx, mRy, Path.Direction.CW);
+        return path;
+    }
+
     @Override
     public void setColour(@ColorInt int colour)
     {
@@ -203,7 +213,7 @@ public class RectanglePromptFocal extends PromptFocal
             mPaint.setAlpha(oldAlpha);
         }
 
-        canvas.drawRoundRect(mBounds, mRx, mRy, mPaint);
+        canvas.drawPath(getPath(), mPaint);
 
         // canvas.drawRoundRect(mBaseBounds, mRx, mRy, mBoundsPaint);
     }

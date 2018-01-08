@@ -28,6 +28,7 @@ import android.graphics.Point;
 import android.graphics.PointF;
 import android.graphics.Rect;
 import android.graphics.RectF;
+import android.graphics.Region;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.support.annotation.NonNull;
@@ -710,7 +711,10 @@ public class MaterialTapTargetPrompt
             }
 
             //Draw the backgrounds
+            canvas.save();
+            canvas.clipPath(mPromptOptions.getPromptFocal().getPath(), Region.Op.DIFFERENCE);
             mPromptOptions.getPromptBackground().draw(canvas);
+            canvas.restore();
 
             //Draw the focal
             mPromptOptions.getPromptFocal().draw(canvas);
