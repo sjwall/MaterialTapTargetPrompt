@@ -60,6 +60,14 @@ public abstract class PromptFocal implements PromptUIElement
     }
 
     /**
+     * Get the focal path to be drawn. Override this to support a transparent focal colour.
+     * @return The path used to draw the focal
+     */
+    public Path getPath() {
+        return null;
+    }
+
+    /**
      * Set the focal colour.
      *
      * @param colour Int colour.
@@ -72,13 +80,6 @@ public abstract class PromptFocal implements PromptUIElement
      */
     @NonNull
     public abstract RectF getBounds();
-
-    /**
-     * Get the focal path to be drawn.
-     * @return The path used to draw the focal
-     */
-    @NonNull
-    public abstract Path getPath();
 
     /**
      * Setup the focal ready for rendering when targeting a view, called prior to first render.

@@ -24,6 +24,7 @@ import android.app.DialogFragment;
 import android.app.Fragment;
 import android.content.Context;
 import android.graphics.Canvas;
+import android.graphics.Path;
 import android.graphics.Point;
 import android.graphics.PointF;
 import android.graphics.Rect;
@@ -710,11 +711,20 @@ public class MaterialTapTargetPrompt
                 canvas.clipRect(mClipBounds);
             }
 
-            //Draw the backgrounds
-            canvas.save();
-            canvas.clipPath(mPromptOptions.getPromptFocal().getPath(), Region.Op.DIFFERENCE);
+            //Draw the backgrounds, clipping the focal path so we don't draw over it.
+            final Path focalPath = mPromptOptions.getPromptFocal().getPath();
+            if (focalPath != null)
+            {
+                canvas.save();
+                canvas.clipPath(focalPath, Region.Op.DIFFERENCE);
+            }
+
             mPromptOptions.getPromptBackground().draw(canvas);
-            canvas.restore();
+
+            if (focalPath != null)
+            {
+                canvas.restore();
+            }
 
             //Draw the focal
             mPromptOptions.getPromptFocal().draw(canvas);
