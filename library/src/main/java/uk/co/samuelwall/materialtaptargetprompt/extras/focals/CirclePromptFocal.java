@@ -43,6 +43,7 @@ public class CirclePromptFocal extends PromptFocal
     int mBaseAlpha;
     PointF mPosition;
     RectF mBounds;
+    Path mPath;
 
     /**
      * Constructor.
@@ -79,9 +80,7 @@ public class CirclePromptFocal extends PromptFocal
     @Override
     public Path getPath()
     {
-        final Path path = new Path();
-        path.addCircle(mPosition.x, mPosition.y, mRadius, Path.Direction.CW);
-        return path;
+        return mPath;
     }
 
     @Override
@@ -111,6 +110,9 @@ public class CirclePromptFocal extends PromptFocal
         mBounds.top = targetY - mBaseRadius;
         mBounds.right = targetX + mBaseRadius;
         mBounds.bottom = targetY + mBaseRadius;
+
+        mPath = new Path();
+        mPath.addCircle(mPosition.x, mPosition.y, mBaseRadius, Path.Direction.CW);
     }
 
     @Override

@@ -47,6 +47,7 @@ public class RectanglePromptFocal extends PromptFocal
     RectF mRippleBounds;
     int mBaseAlpha;
     float mPadding;
+    Path mPath;
     private float mRx, mRy;
     @Nullable private PointF mSize;
 
@@ -130,9 +131,7 @@ public class RectanglePromptFocal extends PromptFocal
     @Override
     public Path getPath()
     {
-        final Path path = new Path();
-        path.addRoundRect(mBounds, mRx, mRy, Path.Direction.CW);
-        return path;
+        return mPath;
     }
 
     @Override
@@ -160,6 +159,9 @@ public class RectanglePromptFocal extends PromptFocal
             mBaseBounds.bottom = top + height + mPadding;
             mBaseBoundsCentre.x = left + (width / 2);
             mBaseBoundsCentre.y = top + (height / 2);
+
+            mPath = new Path();
+            mPath.addRoundRect(mBaseBounds, mRx, mRy, Path.Direction.CW);
         }
         else
         {
@@ -180,6 +182,9 @@ public class RectanglePromptFocal extends PromptFocal
             mBaseBounds.bottom = targetY + halfHeight + mPadding;
             mBaseBoundsCentre.x = targetX;
             mBaseBoundsCentre.y = targetY;
+
+            mPath = new Path();
+            mPath.addRoundRect(mBaseBounds, mRx, mRy, Path.Direction.CW);
         }
         else
         {
