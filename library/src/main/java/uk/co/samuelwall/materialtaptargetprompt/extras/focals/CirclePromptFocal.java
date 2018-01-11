@@ -110,9 +110,6 @@ public class CirclePromptFocal extends PromptFocal
         mBounds.top = targetY - mBaseRadius;
         mBounds.right = targetX + mBaseRadius;
         mBounds.bottom = targetY + mBaseRadius;
-
-        mPath = new Path();
-        mPath.addCircle(mPosition.x, mPosition.y, mBaseRadius, Path.Direction.CW);
     }
 
     @Override
@@ -121,6 +118,9 @@ public class CirclePromptFocal extends PromptFocal
     {
         mPaint.setAlpha((int) (mBaseAlpha * alphaModifier));
         mRadius = mBaseRadius * revealModifier;
+
+        mPath = new Path();
+        mPath.addCircle(mPosition.x, mPosition.y, mRadius, Path.Direction.CW);
     }
 
     @Override
