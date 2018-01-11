@@ -214,7 +214,10 @@ public class RectanglePromptFocal extends PromptFocal
         {
             final int oldAlpha = mPaint.getAlpha();
             final int oldColor = mPaint.getColor();
-            mPaint.setColor(Color.WHITE);
+            if (oldColor == Color.TRANSPARENT)
+            {
+                mPaint.setColor(Color.WHITE);
+            }
             mPaint.setAlpha(mRippleAlpha);
             canvas.drawRoundRect(mRippleBounds, mRx, mRy, mPaint);
             mPaint.setColor(oldColor);
