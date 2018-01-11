@@ -22,7 +22,7 @@ repositories {
 }
 
 dependencies {
-    implementation 'uk.co.samuelwall:material-tap-target-prompt:2.5.2'
+    implementation 'uk.co.samuelwall:material-tap-target-prompt:2.6.0'
 }
 ```
 Supports minSdkVersion 14
@@ -69,7 +69,7 @@ new MaterialTapTargetPrompt.Builder(this)
 ![Rectangle Example](art/example_rectangle.png)
 
 # License
-    Copyright (C) 2016-2017 Samuel Wall
+    Copyright (C) 2016-2018 Samuel Wall
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.

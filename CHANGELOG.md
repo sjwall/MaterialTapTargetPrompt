@@ -2,6 +2,13 @@
 
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## v2.6.0 (2018-01-11)
+
+### Features
+
+* Added `getPath` to `PromptFocal` to get the clip path for the prompt focal ([#99](https://github.com/sjwall/MaterialTapTargetPrompt/pull/95))
+* Transparent focal colour is now supported and no longer renders black ([#99](https://github.com/sjwall/MaterialTapTargetPrompt/pull/95))
+
 ## v2.5.2 (2017-12-20)
 
 ### Bug Fixes
