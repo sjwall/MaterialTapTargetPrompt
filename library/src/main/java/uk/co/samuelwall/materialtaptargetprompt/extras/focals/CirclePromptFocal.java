@@ -19,6 +19,7 @@ package uk.co.samuelwall.materialtaptargetprompt.extras.focals;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.Path;
 import android.graphics.PointF;
 import android.graphics.RectF;
 import android.support.annotation.ColorInt;
@@ -42,6 +43,7 @@ public class CirclePromptFocal extends PromptFocal
     int mBaseAlpha;
     PointF mPosition;
     RectF mBounds;
+    Path mPath;
 
     /**
      * Constructor.
@@ -72,6 +74,13 @@ public class CirclePromptFocal extends PromptFocal
     public RectF getBounds()
     {
         return mBounds;
+    }
+
+    @NonNull
+    @Override
+    public Path getPath()
+    {
+        return mPath;
     }
 
     @Override
@@ -109,6 +118,9 @@ public class CirclePromptFocal extends PromptFocal
     {
         mPaint.setAlpha((int) (mBaseAlpha * alphaModifier));
         mRadius = mBaseRadius * revealModifier;
+
+        mPath = new Path();
+        mPath.addCircle(mPosition.x, mPosition.y, mRadius, Path.Direction.CW);
     }
 
     @Override
@@ -125,14 +137,20 @@ public class CirclePromptFocal extends PromptFocal
         if (mDrawRipple)
         {
             final int oldAlpha = mPaint.getAlpha();
+            final int oldColor = mPaint.getColor();
+            if (oldColor == Color.TRANSPARENT)
+            {
+                mPaint.setColor(Color.WHITE);
+            }
             mPaint.setAlpha(mRippleAlpha);
             canvas.drawCircle(mPosition.x, mPosition.y, mRippleRadius, mPaint);
+            mPaint.setColor(oldColor);
             mPaint.setAlpha(oldAlpha);
         }
 
         // canvas.drawRect(mBounds, mPaint);
 
-        canvas.drawCircle(mPosition.x, mPosition.y, mRadius, mPaint);
+        canvas.drawPath(getPath(), mPaint);
     }
 
     @Override

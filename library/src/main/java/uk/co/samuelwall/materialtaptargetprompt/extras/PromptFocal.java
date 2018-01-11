@@ -16,6 +16,7 @@
 
 package uk.co.samuelwall.materialtaptargetprompt.extras;
 
+import android.graphics.Path;
 import android.graphics.RectF;
 import android.support.annotation.ColorInt;
 import android.support.annotation.FloatRange;
@@ -56,6 +57,14 @@ public abstract class PromptFocal implements PromptUIElement
     public void setRippleAlpha(final @IntRange(from = 0, to = 255) int rippleAlpha)
     {
         mBaseRippleAlpha = rippleAlpha;
+    }
+
+    /**
+     * Get the focal path to be drawn. Override this to support a transparent focal colour.
+     * @return The path used to draw the focal
+     */
+    public Path getPath() {
+        return null;
     }
 
     /**
