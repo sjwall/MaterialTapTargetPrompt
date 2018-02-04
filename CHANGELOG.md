@@ -2,6 +2,12 @@
 
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## v2.6.1 (2018-02-04)
+
+### Bug Fixes
+
+* Fixed UnsupportedOperationException caused by clipping to path in Android SDK < 18 ([#101](https://github.com/sjwall/MaterialTapTargetPrompt/issues/101))
+
 ## v2.6.0 (2018-01-11)
 
 ### Features
