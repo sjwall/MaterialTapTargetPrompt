@@ -697,6 +697,12 @@ public class MaterialTapTargetPrompt
             setId(R.id.material_target_prompt_view);
             setFocusableInTouchMode(true);
             requestFocus();
+            // Hardware acceleration for clipping to a path is not supported on SDK < 18
+            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN_MR2)
+            {
+                // Disable hardware acceleration
+                setLayerType(View.LAYER_TYPE_SOFTWARE, null);
+            }
             /*paddingPaint.setColor(Color.GREEN);
             paddingPaint.setAlpha(100);
             itemPaint.setColor(Color.BLUE);
