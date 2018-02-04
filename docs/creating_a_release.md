@@ -1,3 +1,7 @@
+---
+layout: home
+---
+
 # Creating a release
 
 The instructions below detail the release process:

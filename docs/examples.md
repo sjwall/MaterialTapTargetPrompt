@@ -4,7 +4,7 @@ layout: home
 
 # View
 
-<img src="assets/example_FAB.png" alt="FAB Example">
+![FAB Example](assets/example_FAB.png)
 
 ```java
 

@@ -1,3 +1,7 @@
+---
+layout: home
+---
+
 # Shapes
 
 The default shape is a circle but any other shape can be rendered by extending the [PromptBackground](https://github.com/sjwall/MaterialTapTargetPrompt/blob/master/library/src/main/java/uk/co/samuelwall/materialtaptargetprompt/extras/PromptBackground.java) and [PromptFocal](https://github.com/sjwall/MaterialTapTargetPrompt/blob/master/library/src/main/java/uk/co/samuelwall/materialtaptargetprompt/extras/PromptFocal.java) classes.

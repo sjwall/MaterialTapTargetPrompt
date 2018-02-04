@@ -4,6 +4,8 @@ layout: home
 
 Follow the [quick start guide](#quick-start) below to get started.
 
+[![FAB Example](assets/example_FAB.png)](examples#View)
+
 [JavaDocs](javadocs), [examples](examples) and a [sample app](https://github.com/sjwall/MaterialTapTargetPrompt/tree/master/sample/src/main/java/uk/co/samuelwall/materialtaptargetprompt/sample) with examples implemented are available.
 The sample app is available to download on the Google Play Store:
 <a href='https://play.google.com/store/apps/details?id=uk.co.samuelwall.materialtaptargetprompt.sample&utm_source=global_co&utm_medium=prtnr&utm_content=Mar2515&utm_campaign=PartBadge&pcampaignid=MKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1'><img alt='Get it on Google Play' style='max-width:90px' src='assets/play_store.png'/></a>
@@ -56,6 +58,7 @@ If a target is not set or the target view could not be found or both the primary
 
 ## Customisation
 
+The library is designed with extendable classes to allow for maximum customisation. More details and examples available [here](customisation).
 
 # License
     Copyright (C) 2016-2018 Samuel Wall
