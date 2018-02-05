@@ -1,0 +1,131 @@
+---
+---
+
+$app-bar-height: 64px;
+$app-bar-below: 48px;
+$nav-width: 260px;
+
+body
+{
+    color: #2b2b2b;
+    color: rgba(0,0,0,.82);
+}
+
+.grow
+{
+    flex-grow: 1;
+}
+
+.app-bar
+{
+    position: fixed;
+    left: 0;
+    right: 0;
+    top: 0;
+    height: $app-bar-height;
+    display: flex;
+    flex-direction: row;
+    border-bottom: 1px solid #eee;
+    background: #FFF;
+
+    .title
+    {
+        line-height: $app-bar-height;
+        padding-left: 16px;
+        font-weight: 700;
+        font-size: 26px;
+        color: #6f6f6f;
+        color: rgba(0,0,0,.58);
+        text-decoration: none;
+    }
+
+    .button
+    {
+        line-height: $app-bar-height - 24px;
+        padding: 0 16px;
+        margin: 12px;
+        border-radius: 2px;
+        background: #43A047;
+        color: #FFF;
+        font-weight: 600;
+        text-transform: uppercase;
+
+        &:hover
+        {
+            text-decoration: none;
+            background: #2E7D32;
+        }
+    }
+}
+
+main
+{
+    margin-top: $app-bar-height;
+    display: flex;
+    flex-direction: row;
+}
+
+nav
+{
+    position: fixed;
+    width: $nav-width;
+    top: $app-bar-height;
+    padding-top: $app-bar-below;
+    bottom: 0;
+    border-right: 1px solid #eee;
+    display: flex;
+    flex-direction: column;
+
+    header
+    {
+        padding: 0 8px 16px 16px;
+    }
+
+    .links
+    {
+        margin-top: 24px;
+        flex-grow: 1;
+
+        ul
+        {
+            margin-left: 24px;
+            list-style: none;
+
+            li:last-child
+            {
+                border-bottom: 1px solid #eee;
+            }
+        }
+
+        a
+        {
+            line-height: 48px;
+            padding-left: 16px;
+            font-size: 16px;
+            display: block;
+
+            &:hover
+            {
+                text-decoration: none;
+                background: #eee;
+            }
+        }
+    }
+
+    footer
+    {
+        padding: 24px;
+    }
+}
+
+section
+{
+    margin: $app-bar-below $app-bar-below $app-bar-below ($nav-width + $app-bar-below);
+}
+
+pre
+{
+    border: 1px solid #bbb;
+    border-radius: 5px;
+    padding: 4px;
+}
