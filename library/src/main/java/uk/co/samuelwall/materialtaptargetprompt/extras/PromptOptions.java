@@ -1451,7 +1451,7 @@ public class PromptOptions<T extends PromptOptions>
     }
 
     /**
-     * Creates an {@link MaterialTapTargetPrompt} with the arguments supplied to this
+     * Creates a {@link MaterialTapTargetPrompt} with the arguments supplied to this
      * builder and immediately displays the prompt.
      * <p>
      * Calling this method is functionally identical to:
@@ -1461,8 +1461,8 @@ public class PromptOptions<T extends PromptOptions>
      *     prompt.show();
      * </pre>
      * <p>
-     * Will return {@link null} if a valid target has not been set or the primary text is {@link
-     * null}.
+     * Will return {@link null} if a valid target has not been set or the primary text and secondary
+     * text are {@link null}.
      * To check that a valid target has been set call {@link #isTargetSet()}.
      * </p>
      *
