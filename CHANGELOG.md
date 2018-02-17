@@ -2,6 +2,12 @@
 
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## v2.7.0 (2018-02-17)
+
+### Features
+
+* Added showFor to show prompt for a time limit
+
 ## v2.6.1 (2018-02-04)
 
 ### Bug Fixes
