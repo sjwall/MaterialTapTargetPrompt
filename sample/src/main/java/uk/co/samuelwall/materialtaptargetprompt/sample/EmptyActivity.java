@@ -110,6 +110,31 @@ public class EmptyActivity extends AppCompatActivity
         mFabPrompt.show();
     }
 
+    public void showFabPromptFor(View view)
+    {
+        new MaterialTapTargetPrompt.Builder(EmptyActivity.this)
+                .setTarget(findViewById(R.id.fab))
+                .setFocalPadding(R.dimen.dp40)
+                .setPrimaryText("showFor(7000)")
+                .setSecondaryText("This prompt will show for 7 seconds")
+                .setAnimationInterpolator(new FastOutSlowInInterpolator())
+                .setPromptStateChangeListener(new MaterialTapTargetPrompt.PromptStateChangeListener()
+                {
+                    @Override
+                    public void onPromptStateChanged(@NonNull MaterialTapTargetPrompt prompt, int state)
+                    {
+                        if (state == MaterialTapTargetPrompt.STATE_SHOW_FOR_TIMEOUT)
+                        {
+
+                            Toast.makeText(EmptyActivity.this,
+                                    "Prompt timedout after 7 seconds", Toast.LENGTH_SHORT)
+                                    .show();
+                        }
+                    }
+                })
+                .showFor(7000);
+    }
+
     public void showSideNavigationPrompt(View view)
     {
         final MaterialTapTargetPrompt.Builder tapTargetPromptBuilder = new MaterialTapTargetPrompt.Builder(this)

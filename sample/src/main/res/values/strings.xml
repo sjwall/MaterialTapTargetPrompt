@@ -98,4 +98,7 @@
     <string name="example_rectangle_title" translatable="false">Rectangle Prompt</string>
     <string name="example_fullscreen_rectangle_title" translatable="false">Fullscreen Rectangle Prompt</string>
     <string name="example_rectangle_description" translatable="false">Displays a prompt with a rectangle background and focal</string>
+
+    <string name="example_show_for_title">showFor</string>
+    <string name="example_show_for_description">Displays prompt over the FAB button for 7 seconds</string>
 </resources>

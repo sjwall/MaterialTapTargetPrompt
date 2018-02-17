@@ -1478,4 +1478,34 @@ public class PromptOptions<T extends PromptOptions>
         }
         return mPrompt;
     }
+
+    /**
+     * Creates a {@link MaterialTapTargetPrompt} with the arguments supplied to this
+     * builder and immediately displays the prompt for the number of milliseconds supplied.
+     * <p>
+     * Calling this method is functionally identical to:
+     * </p>
+     * <pre>
+     *     MaterialTapTargetPrompt prompt = builder.create();
+     *     prompt.showFor(milliseconds);
+     * </pre>
+     * <p>
+     * Will return {@link null} if a valid target has not been set or the primary text and secondary
+     * text are {@link null}.
+     * To check that a valid target has been set call {@link #isTargetSet()}.
+     * </p>
+     *
+     * @param milliseconds The number of milliseconds to show the prompt for.
+     * @return The created builder or null if no target
+     */
+    @Nullable
+    public MaterialTapTargetPrompt showFor(final long milliseconds)
+    {
+        final MaterialTapTargetPrompt mPrompt = create();
+        if (mPrompt != null)
+        {
+            mPrompt.showFor(milliseconds);
+        }
+        return mPrompt;
+    }
 }

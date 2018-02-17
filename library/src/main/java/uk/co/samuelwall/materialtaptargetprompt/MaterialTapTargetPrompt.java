@@ -40,6 +40,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 
+import java.util.Timer;
+import java.util.TimerTask;
+
 import uk.co.samuelwall.materialtaptargetprompt.extras.PromptOptions;
 
 /**
@@ -102,6 +105,11 @@ public class MaterialTapTargetPrompt
     public static final int STATE_NON_FOCAL_PRESSED = 8;
 
     /**
+     * The prompt has been dismissed by the show for timeout.
+     */
+    public static final int STATE_SHOW_FOR_TIMEOUT = 9;
+
+    /**
      * The view that renders the prompt.
      */
     PromptView mView;
@@ -137,6 +145,34 @@ public class MaterialTapTargetPrompt
      * The system status bar height.
      */
     final float mStatusBarHeight;
+
+    /**
+     * The show for timer to automatically dismiss the prompt.
+     */
+    Timer mShowForTimer;
+
+    /**
+     * Task used for triggering the prompt timeout.
+     */
+    TimerTask mTimerTask = new TimerTask()
+    {
+        @Override
+        public void run()
+        {
+            mShowForTimer = null;
+            // Run on the UI thread
+            mView.post(new Runnable()
+            {
+                @Override
+                public void run()
+                {
+                    // Emit the state change and dismiss the prompt
+                    onPromptStateChanged(STATE_SHOW_FOR_TIMEOUT);
+                    dismiss();
+                }
+            });
+        }
+    };
 
     /**
      * Listener for the view layout changing.
@@ -245,6 +281,34 @@ public class MaterialTapTargetPrompt
     }
 
     /**
+     * Displays the prompt for a maximum amount of time.
+     *
+     * @param milliseconds The number of milliseconds to show the prompt for.
+     */
+    public void showFor(long milliseconds)
+    {
+        if (mShowForTimer == null)
+        {
+            mShowForTimer = new Timer();
+            mShowForTimer.schedule(mTimerTask, milliseconds);
+            show();
+        }
+    }
+
+    /**
+     * Cancel the show for timer if it has been created.
+     */
+    public void cancelShowForTimer()
+    {
+        if (mShowForTimer != null)
+        {
+            mShowForTimer.cancel();
+            mShowForTimer = null;
+        }
+    }
+
+
+    /**
      * Get the current state of the prompt.
      *
      * @see #STATE_NOT_SHOWN
@@ -345,7 +409,7 @@ public class MaterialTapTargetPrompt
         {
             return;
         }
-        onPromptStateChanged(STATE_FINISHING);
+        cancelShowForTimer();
         cleanUpAnimation();
         mAnimationCurrent = ValueAnimator.ofFloat(1f, 0f);
         mAnimationCurrent.setDuration(225);
@@ -367,6 +431,7 @@ public class MaterialTapTargetPrompt
                 cleanUpPrompt(STATE_FINISHED);
             }
         });
+        onPromptStateChanged(STATE_FINISHING);
         mAnimationCurrent.start();
     }
 
@@ -381,7 +446,7 @@ public class MaterialTapTargetPrompt
         {
             return;
         }
-        onPromptStateChanged(STATE_DISMISSING);
+        cancelShowForTimer();
         cleanUpAnimation();
         mAnimationCurrent = ValueAnimator.ofFloat(1f, 0f);
         mAnimationCurrent.setDuration(225);
@@ -403,6 +468,7 @@ public class MaterialTapTargetPrompt
                 cleanUpPrompt(STATE_DISMISSED);
             }
         });
+        onPromptStateChanged(STATE_DISMISSING);
         mAnimationCurrent.start();
     }
 
