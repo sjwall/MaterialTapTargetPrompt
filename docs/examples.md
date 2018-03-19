@@ -13,3 +13,5 @@ Below are a variety of common use case examples. The bare minimum required to sh
 {% include examples/card.md %}
 
 {% include examples/centre.md %}
+
+{% include examples/text-style.md %}
