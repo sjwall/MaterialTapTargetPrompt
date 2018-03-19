@@ -10,9 +10,7 @@ Below are a variety of common use case examples. The bare minimum required to sh
 
 {% include examples/app-bar.md %}
 
-## Card
-
-![Card Example](assets/example_card.png)
+{% include examples/card.md %}
 
 ## Centre
 
