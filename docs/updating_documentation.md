@@ -16,3 +16,10 @@ https://help.github.com/articles/setting-up-your-github-pages-site-locally-with-
 ```bash
 bundle exec jekyll serve
 ```
+
+## Adding examples
+
+0. Created a new markdown file in `_includes/examples` such as `circles.md`
+0. Add a second level heading `## Circles`
+0. Write example, including an image
+0. Include the new example in `examples.md`: `{% raw %}{%{% endraw %} include examples/circles.md {% raw %}%}{% endraw %}`
