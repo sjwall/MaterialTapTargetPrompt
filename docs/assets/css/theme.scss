@@ -11,6 +11,11 @@ body
     color: rgba(0,0,0,.82);
 }
 
+h2
+{
+    margin-top: 24px;
+}
+
 .grow
 {
     flex-grow: 1;
@@ -75,6 +80,7 @@ nav
     border-right: 1px solid #eee;
     display: flex;
     flex-direction: column;
+    background: #FFF;
 
     header
     {

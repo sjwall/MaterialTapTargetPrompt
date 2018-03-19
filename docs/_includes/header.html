@@ -1,4 +1,3 @@
-<!doctype html>
 <!--
   ~ Copyright (C) 2018 Samuel Wall
   ~
@@ -14,15 +13,10 @@
   ~ See the License for the specific language governing permissions and
   ~ limitations under the License.
   -->
-<html lang="{{ site.lang | default: "en-US" }}">
-    {% include head.html %}
-    <body>
-        {% include header.html %}
-        <main>
-            {% include nav.html %}
-            <section class="{{page.title}}">
-                {{ content }}
-            </section>
-        </main>
-    </body>
-</html>
+<header class="app-bar">
+    <a class="title" href="{{ site.github.url }}">{{ site.title | default: site.github.repository_name }}</a>
+    <span class="grow"></span>
+    <a class="button" href="{{ site.github.repository_url }}">
+        Github
+    </a>
+</header>
