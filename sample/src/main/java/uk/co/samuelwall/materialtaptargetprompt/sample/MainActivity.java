@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2016 Samuel Wall
+ * Copyright (C) 2018 Samuel Wall
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -294,6 +294,11 @@ public class MainActivity extends AppCompatActivity
     public void showCardsActivity(View view)
     {
         startActivity(new Intent(this, CardActivity.class));
+    }
+
+    public void showListActivity(View view)
+    {
+        startActivity(new Intent(this, ListActivity.class));
     }
 
     public void showNoAutoDismiss(View view)

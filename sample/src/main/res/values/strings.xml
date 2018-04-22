@@ -1,5 +1,5 @@
 <!--
-  ~ Copyright (C) 2016 Samuel Wall
+  ~ Copyright (C) 2018 Samuel Wall
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
   ~ you may not use this file except in compliance with the License.
@@ -84,6 +84,9 @@
     <string name="example_card_title">Cards</string>
     <string name="example_card_description">Displays activity with a prompt contained within a card</string>
 
+    <string name="example_list_title">List</string>
+    <string name="example_list_description">Displays activity with a prompt targeting a list item</string>
+
     <string name="title_activity_card">Card Example</string>
 
     <string name="example_card_fab_title">Card example</string>
@@ -101,4 +104,6 @@
 
     <string name="example_show_for_title">showFor</string>
     <string name="example_show_for_description">Displays prompt over the FAB button for 7 seconds</string>
+
+    <string name="title_activity_list_example" translatable="false">List Example</string>
 </resources>

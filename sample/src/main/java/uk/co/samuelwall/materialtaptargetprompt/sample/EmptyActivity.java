@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2016 Samuel Wall
+ * Copyright (C) 2018 Samuel Wall
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -79,6 +79,7 @@ public class EmptyActivity extends AppCompatActivity
         findViewById(R.id.other_examples_dialog).setVisibility(View.GONE);
         findViewById(R.id.other_examples_centre).setVisibility(View.GONE);
         findViewById(R.id.other_examples_card).setVisibility(View.GONE);
+        findViewById(R.id.other_examples_list).setVisibility(View.GONE);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
 

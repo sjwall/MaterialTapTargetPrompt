@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-  ~ Copyright (C) 2017 Samuel Wall
+  ~ Copyright (C) 2018 Samuel Wall
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
   ~ you may not use this file except in compliance with the License.
@@ -84,6 +84,9 @@
 
     <string name="example_card_title">Cards</string>
     <string name="example_card_description">Displays activity with a prompt contained within a card</string>
+
+    <string name="example_list_title">List</string>
+    <string name="example_list_description">Displays activity with a prompt targeting a list item</string>
 
     <string name="title_activity_card">Card Example</string>
 
