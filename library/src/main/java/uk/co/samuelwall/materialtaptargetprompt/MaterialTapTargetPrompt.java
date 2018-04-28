@@ -188,6 +188,7 @@ public class MaterialTapTargetPrompt
     {
         final ResourceFinder resourceFinder = promptOptions.getResourceFinder();
         mView = new PromptView(resourceFinder.getContext());
+        mView.mPrompt = this;
         mView.mPromptOptions = promptOptions;
         mView.mPromptTouchedListener = new PromptView.PromptTouchedListener()
         {
@@ -749,6 +750,7 @@ public class MaterialTapTargetPrompt
         PromptTouchedListener mPromptTouchedListener;
         Rect mClipBounds = new Rect();
         View mTargetRenderView;
+        MaterialTapTargetPrompt mPrompt;
         PromptOptions mPromptOptions;
         boolean mClipToBounds;
 
@@ -885,6 +887,13 @@ public class MaterialTapTargetPrompt
             }
 
             return super.dispatchKeyEventPreIme(event);
+        }
+
+        @Override
+        protected void onDetachedFromWindow()
+        {
+            super.onDetachedFromWindow();
+            mPrompt.cleanUpAnimation();
         }
 
         /**
