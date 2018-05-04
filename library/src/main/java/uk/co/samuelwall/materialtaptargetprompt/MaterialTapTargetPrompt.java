@@ -40,9 +40,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 
-import java.util.Timer;
-import java.util.TimerTask;
-
 import uk.co.samuelwall.materialtaptargetprompt.extras.PromptOptions;
 
 /**
@@ -147,30 +144,16 @@ public class MaterialTapTargetPrompt
     final float mStatusBarHeight;
 
     /**
-     * The show for timer to automatically dismiss the prompt.
-     */
-    Timer mShowForTimer;
-
-    /**
      * Task used for triggering the prompt timeout.
      */
-    TimerTask mTimerTask = new TimerTask()
+    final Runnable mTimeoutRunnable = new Runnable()
     {
         @Override
         public void run()
         {
-            mShowForTimer = null;
-            // Run on the UI thread
-            mView.post(new Runnable()
-            {
-                @Override
-                public void run()
-                {
-                    // Emit the state change and dismiss the prompt
-                    onPromptStateChanged(STATE_SHOW_FOR_TIMEOUT);
-                    dismiss();
-                }
-            });
+            // Emit the state change and dismiss the prompt
+            onPromptStateChanged(STATE_SHOW_FOR_TIMEOUT);
+            dismiss();
         }
     };
 
@@ -283,16 +266,12 @@ public class MaterialTapTargetPrompt
     /**
      * Displays the prompt for a maximum amount of time.
      *
-     * @param milliseconds The number of milliseconds to show the prompt for.
+     * @param millis The number of milliseconds to show the prompt for.
      */
-    public void showFor(long milliseconds)
+    public void showFor(long millis)
     {
-        if (mShowForTimer == null)
-        {
-            mShowForTimer = new Timer();
-            mShowForTimer.schedule(mTimerTask, milliseconds);
-            show();
-        }
+        mView.postDelayed(mTimeoutRunnable, millis);
+        show();
     }
 
     /**
@@ -300,13 +279,8 @@ public class MaterialTapTargetPrompt
      */
     public void cancelShowForTimer()
     {
-        if (mShowForTimer != null)
-        {
-            mShowForTimer.cancel();
-            mShowForTimer = null;
-        }
+        mView.removeCallbacks(mTimeoutRunnable);
     }
-
 
     /**
      * Get the current state of the prompt.

@@ -17,11 +17,9 @@
 package uk.co.samuelwall.materialtaptargetprompt;
 
 import android.animation.Animator;
-import android.animation.ValueAnimator;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.graphics.Canvas;
-import android.os.Looper;
 import android.support.annotation.NonNull;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
@@ -41,8 +39,6 @@ import org.mockito.stubbing.Answer;
 import org.robolectric.Robolectric;
 import org.robolectric.RobolectricTestRunner;
 import org.robolectric.annotation.Config;
-
-import java.util.Timer;
 
 import static junit.framework.Assert.assertFalse;
 import static junit.framework.Assert.assertNotNull;
@@ -384,11 +380,8 @@ public class MaterialTapTargetPromptUnitTest
                 .setPrimaryText("Primary text")
                 .create();
         prompt.mState = MaterialTapTargetPrompt.STATE_REVEALED;
-        final Timer timer = new Timer();
-        prompt.mShowForTimer = timer;
         prompt.showFor(2000);
         assertEquals(MaterialTapTargetPrompt.STATE_REVEALED, prompt.mState);
-        assertEquals(timer, prompt.mShowForTimer);
     }
 
     @Test
@@ -425,8 +418,16 @@ public class MaterialTapTargetPromptUnitTest
                         {
                             assertEquals(MaterialTapTargetPrompt.STATE_REVEALED, state);
                             assertEquals(MaterialTapTargetPrompt.STATE_REVEALED, prompt.getState());
-                            // timer doesn't work in junit so run manually
-                            prompt.mTimerTask.run();
+                            // Post to prevent recursion
+                            prompt.mView.post(new Runnable()
+                            {
+                                @Override
+                                public void run()
+                                {
+                                    // Manually run because the test won't wait
+                                    prompt.mTimeoutRunnable.run();
+                                }
+                            });
                         }
                         else if (stateProgress == 2)
                         {
@@ -453,7 +454,6 @@ public class MaterialTapTargetPromptUnitTest
                     }
                 })
                 .showFor(1000);
-        assertNotNull(prompt.mShowForTimer);
     }
 
     @Test
@@ -463,9 +463,7 @@ public class MaterialTapTargetPromptUnitTest
                 .setTarget(10, 10)
                 .setPrimaryText("Primary text")
                 .showFor(2000);
-        assertNotNull(prompt.mShowForTimer);
         prompt.cancelShowForTimer();
-        assertNull(prompt.mShowForTimer);
         try
         {
             Thread.sleep(3000);
