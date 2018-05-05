@@ -20,8 +20,6 @@ import android.animation.Animator;
 import android.animation.ValueAnimator;
 import android.app.Activity;
 import android.app.Dialog;
-import android.app.DialogFragment;
-import android.app.Fragment;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Path;
@@ -34,6 +32,8 @@ import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.app.DialogFragment;
+import android.support.v4.app.Fragment;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
@@ -897,10 +897,71 @@ public class MaterialTapTargetPrompt
          * Creates a builder for a tap target prompt that uses the default tap target prompt theme.
          *
          * @param fragment the fragment to show the prompt within.
+         * @deprecated use support library fragments instead
+         */
+        @Deprecated
+        public Builder(@NonNull final android.app.Fragment fragment)
+        {
+            this(fragment.getActivity(), 0);
+        }
+
+        /**
+         * Creates a builder for a material tap target prompt that uses an explicit theme resource.
+         * <p>
+         * The {@code themeResId} may be specified as {@code 0} to use the parent {@code context}'s
+         * resolved value for {@link R.attr#MaterialTapTargetPromptTheme}.
+         *
+         * @param fragment   the fragment to show the prompt within.
+         * @param themeResId the resource ID of the theme against which to inflate this dialog, or
+         *                   {@code 0} to use the parent {@code context}'s default material tap
+         *                   target prompt theme
+         * @deprecated use support library fragments instead
+         */
+        @Deprecated
+        public Builder(@NonNull final android.app.Fragment fragment, int themeResId)
+        {
+            this(fragment.getActivity(), themeResId);
+        }
+
+        /**
+         * Creates a builder for a tap target prompt that uses the default tap target prompt theme.
+         *
+         * @param dialogFragment the dialog fragment to show the prompt within.
+         * @deprecated use support library fragments instead
+         */
+        @Deprecated
+        public Builder(@NonNull final android.app.DialogFragment dialogFragment)
+        {
+            this(dialogFragment, 0);
+        }
+
+        /**
+         * Creates a builder for a material tap target prompt that uses an explicit theme resource.
+         * <p>
+         * The {@code themeResId} may be specified as {@code 0} to use the parent {@code context}'s
+         * resolved value for {@link R.attr#MaterialTapTargetPromptTheme}.
+         *
+         * @param dialogFragment the dialog fragment to show the prompt within.
+         * @param themeResId     the resource ID of the theme against which to inflate this dialog,
+         *                       or {@code 0} to use the parent {@code context}'s default material
+         *                       tap target prompt theme
+         * @deprecated use support library fragments instead
+         */
+        @Deprecated
+        public Builder(@NonNull final android.app.DialogFragment dialogFragment, int themeResId)
+        {
+            this(dialogFragment.getDialog(), themeResId);
+        }
+
+        /**
+         * Creates a builder for a tap target prompt that uses the default tap target prompt theme.
+         *
+         * @param fragment the fragment to show the prompt within.
+         * @see #Builder(Fragment, int)
          */
         public Builder(@NonNull final Fragment fragment)
         {
-            this(fragment.getActivity(), 0);
+            this(fragment, 0);
         }
 
         /**
@@ -916,13 +977,14 @@ public class MaterialTapTargetPrompt
          */
         public Builder(@NonNull final Fragment fragment, int themeResId)
         {
-            this(fragment.getActivity(), themeResId);
+            this(fragment.requireActivity(), themeResId);
         }
 
         /**
          * Creates a builder for a tap target prompt that uses the default tap target prompt theme.
          *
          * @param dialogFragment the dialog fragment to show the prompt within.
+         * @see #Builder(DialogFragment, int)
          */
         public Builder(@NonNull final DialogFragment dialogFragment)
         {
