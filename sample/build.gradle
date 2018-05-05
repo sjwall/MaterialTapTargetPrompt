@@ -44,7 +44,10 @@ dependencies {
 
     implementation 'com.android.support:design:' + rootProject.supportLibVersion
     implementation 'com.android.support:cardview-v7:' + rootProject.supportLibVersion
-
     implementation 'com.android.support.constraint:constraint-layout:1.1.0'
+
+    debugImplementation 'com.squareup.leakcanary:leakcanary-android:1.5.4'
+    releaseImplementation 'com.squareup.leakcanary:leakcanary-android-no-op:1.5.4'
+
     testImplementation 'junit:junit:4.12'
 }
