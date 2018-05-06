@@ -22,7 +22,7 @@ repositories {
 }
 
 dependencies {
-    implementation 'uk.co.samuelwall:material-tap-target-prompt:2.7.0'
+    implementation 'uk.co.samuelwall:material-tap-target-prompt:2.8.0'
 }
 ```
 Supports minSdkVersion 14

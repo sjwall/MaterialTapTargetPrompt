@@ -2,6 +2,21 @@
 
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## v2.8.0 (2018-05-06)
+
+### Features
+
+* Added support library as a `CompileOnly` dependency ([#114](https://github.com/sjwall/MaterialTapTargetPrompt/issues/114))
+* Added support library fragment constructors to `Builder` ([#114](https://github.com/sjwall/MaterialTapTargetPrompt/issues/114))
+
+### Bug Fixes
+
+* Fixed memory leak caused by animation maintaining view reference ([#113](https://github.com/sjwall/MaterialTapTargetPrompt/issues/113))
+
+### Deprecated
+
+* Deprecated Android system fragment constructors in `Builder` ([#114](https://github.com/sjwall/MaterialTapTargetPrompt/issues/114))
+
 ## v2.7.0 (2018-02-17)
 
 ### Features
