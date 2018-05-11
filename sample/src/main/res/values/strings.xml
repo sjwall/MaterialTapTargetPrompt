@@ -106,4 +106,6 @@
     <string name="example_show_for_description">Displays prompt over the FAB button for 7 seconds</string>
 
     <string name="title_activity_list_example" translatable="false">List Example</string>
+    <string name="example_sequence">Show an example of a sequence of promps</string>
+    <string name="example_sequence_title">Sequence</string>
 </resources>

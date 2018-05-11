@@ -696,6 +696,7 @@ public class MaterialTapTargetPrompt
     {
         mState = state;
         mView.mPromptOptions.onPromptStateChanged(this, state);
+        mView.mPromptOptions.onExtraPromptStateChanged(this, state);
     }
 
     /**

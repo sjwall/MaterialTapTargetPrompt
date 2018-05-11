@@ -57,7 +57,7 @@ public class MaterialTapTargetSequence {
                 if (state == MaterialTapTargetPrompt.STATE_NON_FOCAL_PRESSED ||
                         state == MaterialTapTargetPrompt.STATE_FOCAL_PRESSED)
 
-                    if (mPrompts.size() > nextPromptIndex) {
+                    if (mPrompts.size() > nextPromptIndex + 1) {
                         mPrompts.get(++nextPromptIndex).show();
                     }else{
                         if (mOnCompleteListener != null) {
@@ -68,6 +68,16 @@ public class MaterialTapTargetSequence {
         });
 
         mPrompts.add(prompt);
+    }
+
+    public void show() {
+        if (mPrompts != null && mPrompts.size() > 0){
+            mPrompts.get(0).show(); // todo how about timed show?
+        }else{
+            if (mOnCompleteListener != null) {
+                mOnCompleteListener.onSequenceComplete();
+            }
+        }
     }
 
     /**

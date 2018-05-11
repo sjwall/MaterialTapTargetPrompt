@@ -25,6 +25,7 @@ import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.view.animation.FastOutSlowInInterpolator;
+import android.support.v4.view.animation.LinearOutSlowInInterpolator;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
@@ -42,6 +43,7 @@ import android.view.View;
 import android.widget.Toast;
 
 import uk.co.samuelwall.materialtaptargetprompt.MaterialTapTargetPrompt;
+import uk.co.samuelwall.materialtaptargetprompt.MaterialTapTargetSequence;
 import uk.co.samuelwall.materialtaptargetprompt.extras.backgrounds.FullscreenPromptBackground;
 import uk.co.samuelwall.materialtaptargetprompt.extras.backgrounds.RectanglePromptBackground;
 import uk.co.samuelwall.materialtaptargetprompt.extras.focals.RectanglePromptFocal;
@@ -295,6 +297,29 @@ public class MainActivity extends AppCompatActivity
     {
         startActivity(new Intent(this, CardActivity.class));
     }
+
+    public void showSequence(View view) {
+
+        MaterialTapTargetSequence sequence = new MaterialTapTargetSequence();
+
+
+        sequence.addPrompt(new MaterialTapTargetPrompt.Builder(MainActivity.this)
+            .setTarget(findViewById(R.id.fab))
+            .setPrimaryText("Step 1")
+            .setFocalPadding(R.dimen.dp40)
+            .create());
+
+        sequence.addPrompt(new MaterialTapTargetPrompt.Builder(MainActivity.this)
+            .setTarget(findViewById(R.id.action_search))
+            .setPrimaryText("Step 2")
+            .setAnimationInterpolator(new LinearOutSlowInInterpolator())
+            .setFocalPadding(R.dimen.dp40)
+            .setIcon(R.drawable.ic_search)
+            .create());
+
+        sequence.show();
+    }
+
 
     public void showListActivity(View view)
     {

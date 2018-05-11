@@ -596,6 +596,23 @@ public class MaterialTapTargetPromptUnitTest
         assertTrue(prompt.isDismissing());
     }
 
+    @Test
+    public void testEmptySequenceCanBeRun(){
+
+        final boolean[] seqCompleted = {false};
+
+        MaterialTapTargetSequence s = new MaterialTapTargetSequence();
+        s.setSequenceCompleteListener(new MaterialTapTargetSequence.SequenceCompleteListener() {
+            @Override
+            public void onSequenceComplete() {
+                seqCompleted[0] = true;
+            }
+        });
+        s.show();
+
+        assertEquals(true, seqCompleted[0]);
+    }
+
     private MaterialTapTargetPrompt.Builder createBuilder(final int screenWidth,
                                               final int screenHeight, final float primaryTextWidth)
     {
