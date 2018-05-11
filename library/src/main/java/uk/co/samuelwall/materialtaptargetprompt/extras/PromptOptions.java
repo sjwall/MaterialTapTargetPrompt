@@ -153,6 +153,13 @@ public class PromptOptions<T extends PromptOptions>
      */
     @Nullable private MaterialTapTargetPrompt.PromptStateChangeListener mPromptStateChangeListener;
 
+    /**
+     * Additional listener that can be set by other package classes for handling e.g. sequences of
+     * prompts.
+     */
+    @Nullable private MaterialTapTargetPrompt.PromptStateChangeListener mInternalPromptStateChangeListener;
+
+
     private boolean mCaptureTouchEventOnFocal;
     private float mTextSeparation;
     private boolean mAutoDismiss = true;
@@ -951,6 +958,20 @@ public class PromptOptions<T extends PromptOptions>
         mPromptStateChangeListener = listener;
         return (T) this;
     }
+
+    /**
+     * Set the internal listener to listen for when the prompt state changes.
+     * This does not return a builder is it's not intended to be user during the
+     * creation of Prompts
+     *
+     * @param listener The listener to use
+     */
+    public void setExtraPromptStateChangeListener(
+            @Nullable final MaterialTapTargetPrompt.PromptStateChangeListener listener)
+    {
+        mInternalPromptStateChangeListener = listener;
+    }
+
 
     /**
      * Handles emitting the prompt state changed events.
