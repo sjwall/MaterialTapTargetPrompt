@@ -157,7 +157,7 @@ public class PromptOptions<T extends PromptOptions>
      * Additional listener that can be set by other package classes for handling e.g. sequences of
      * prompts.
      */
-    @Nullable private MaterialTapTargetPrompt.PromptStateChangeListener mExtraPromptStateChangeListener;
+    @Nullable private MaterialTapTargetPrompt.PromptStateChangeListener mSequencePromptStateChangeListener;
 
 
     private boolean mCaptureTouchEventOnFocal;
@@ -966,10 +966,10 @@ public class PromptOptions<T extends PromptOptions>
      *
      * @param listener The listener to use
      */
-    public void setExtraPromptStateChangeListener(
+    public void setSequenceListener(
             @Nullable final MaterialTapTargetPrompt.PromptStateChangeListener listener)
     {
-        mExtraPromptStateChangeListener = listener;
+        mSequencePromptStateChangeListener = listener;
     }
 
 
@@ -994,9 +994,9 @@ public class PromptOptions<T extends PromptOptions>
      */
     public void onExtraPromptStateChanged(@NonNull final MaterialTapTargetPrompt prompt, final int state)
     {
-        if (mExtraPromptStateChangeListener != null)
+        if (mSequencePromptStateChangeListener != null)
         {
-            mExtraPromptStateChangeListener.onPromptStateChanged(prompt, state);
+            mSequencePromptStateChangeListener.onPromptStateChanged(prompt, state);
         }
     }
 

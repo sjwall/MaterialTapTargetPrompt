@@ -22,6 +22,9 @@ import android.support.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * A Sequence of prompts to be shown one after another
+ */
 public class MaterialTapTargetSequence {
 
     /**
@@ -47,10 +50,14 @@ public class MaterialTapTargetSequence {
         mOnCompleteListener = listener;
     }
 
+    /**
+     * Add a prompt to the end of the sequence.
+     * @param prompt The prompt to add
+     */
     public void addPrompt(MaterialTapTargetPrompt prompt){
 
         // add the listener to trigger the next in the sequence
-        prompt.mView.mPromptOptions.setExtraPromptStateChangeListener(new MaterialTapTargetPrompt.PromptStateChangeListener() {
+        prompt.mView.mPromptOptions.setSequenceListener(new MaterialTapTargetPrompt.PromptStateChangeListener() {
             @Override
             public void onPromptStateChanged(@NonNull MaterialTapTargetPrompt prompt, int state) {
 
@@ -70,6 +77,9 @@ public class MaterialTapTargetSequence {
         mPrompts.add(prompt);
     }
 
+    /***
+     * Start the sequence by showing the first prompt
+     */
     public void show() {
         if (mPrompts != null && mPrompts.size() > 0){
             mPrompts.get(0).show(); // todo how about timed show?
