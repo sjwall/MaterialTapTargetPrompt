@@ -612,42 +612,7 @@ public class MaterialTapTargetPromptUnitTest
 
         assertEquals(true, seqCompleted[0]);
     }
-
-
-    @Test
-    public void testSequenceOfOneCompleted(){
-
-        final boolean[] booleans = {false, false};
-
-        MaterialTapTargetSequence s = new MaterialTapTargetSequence();
-        s.setSequenceCompleteListener(new MaterialTapTargetSequence.SequenceCompleteListener() {
-            @Override
-            public void onSequenceComplete() {
-                booleans[0] = true;
-            }
-        });
-
-        MaterialTapTargetPrompt p = createBuilder(SCREEN_WIDTH,SCREEN_HEIGHT,340)
-                .setTarget(10,10)
-                .setPromptStateChangeListener(new MaterialTapTargetPrompt.PromptStateChangeListener() {
-                    @Override
-                    public void onPromptStateChanged(@NonNull MaterialTapTargetPrompt prompt, int state) {
-                        if (state == MaterialTapTargetPrompt.STATE_FOCAL_PRESSED)
-                            booleans[1] = true;
-                    }
-                })
-                .create();
-
-        s.addPrompt(p);
-        s.show();
-
-        p.mView.onTouchEvent(MotionEvent.obtain(0, 0, MotionEvent.ACTION_DOWN, 10, 10, 0));
-
-        assertTrue("Sequence was completed", booleans[0]);
-        assertTrue("Step 1 was completed", booleans[0]);
-
-    }
-
+    
     private MaterialTapTargetPrompt.Builder createBuilder(final int screenWidth,
                                               final int screenHeight, final float primaryTextWidth)
     {
