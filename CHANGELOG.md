@@ -2,6 +2,17 @@
 
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## v2.9.0 (2018-05-19)
+
+### Features
+
+* Added `MaterialTapTargetSequence` for showing prompts one after another ([#118](https://github.com/sjwall/MaterialTapTargetPrompt/issues/118))
+
+### Bug Fixes
+
+* Fixed incorrect prompt size calculation ([#116](https://github.com/sjwall/MaterialTapTargetPrompt/issues/116))
+* Fixed incorrect prompt size calculation when target is wider than the text
+
 ## v2.8.0 (2018-05-06)
 
 ### Features
