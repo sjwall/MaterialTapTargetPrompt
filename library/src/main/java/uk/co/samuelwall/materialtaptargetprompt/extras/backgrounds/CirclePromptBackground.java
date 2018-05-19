@@ -174,12 +174,11 @@ public class CirclePromptBackground extends PromptBackground
         else
         {
             mBasePosition.set(focalCentreX, focalCentreY);
-            // Calculate the furthest distance from the a focal side to a text side.
-            final float length = Math.abs(
-                    (textBounds.left < focalBounds.left ?
-                            textBounds.left - textPadding
-                            : textBounds.right + textPadding)
-                    - focalCentreX);
+           // Calculate the furthest distance from the center based on the text size.
+            final float length = Math.max(
+                    Math.abs(textBounds.right - focalCentreX),
+                    Math.abs(textBounds.left - focalCentreX)
+            ) + textPadding + focalBounds.width() / 2f;
             // Calculate the height based on the distance from the focal centre to the furthest text y position.
             float height = (focalBounds.height() / 2) + focalPadding + textBounds.height();
             // Calculate the radius based on the calculated width and height
