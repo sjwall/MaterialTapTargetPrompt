@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017 Samuel Wall
+ * Copyright (C) 2017-2018 Samuel Wall
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -131,26 +131,33 @@ public class CirclePromptBackground extends PromptBackground
             }
 
             final float y3 = y2;
-            float x3 = promptText.getBounds().right + textPadding;
+            float x3 = textBounds.right + textPadding;
+            // If the focal width is greater than the text width
+            if (focalBounds.right > x3)
+            {
+                x1 = x3 = focalBounds.right + focalPadding;
+            }
 
             final float focalLeft = focalBounds.left - focalPadding;
             final float focalRight = focalBounds.right + focalPadding;
+            // If the text left is within the focal bounds
             if (x2 > focalLeft && x2 < focalRight)
             {
                 if (isTextAboveTarget)
                 {
-                    x1 = focalBounds.left - focalPadding;
+                    x1 = focalLeft;
                 }
                 else
                 {
                     x2 -= (focalBounds.width() / 2) - focalPadding;
                 }
             }
+            // If the text right is within the focal bounds
             else if (x3 > focalLeft && x3 < focalRight)
             {
                 if (isTextAboveTarget)
                 {
-                    x1 = focalBounds.right + focalPadding;
+                    x1 = focalRight;
                 }
                 else
                 {
@@ -178,7 +185,7 @@ public class CirclePromptBackground extends PromptBackground
             final float length = Math.max(
                     Math.abs(textBounds.right - focalCentreX),
                     Math.abs(textBounds.left - focalCentreX)
-            ) + textPadding + focalBounds.width() / 2f;
+                ) + textPadding;
             // Calculate the height based on the distance from the focal centre to the furthest text y position.
             float height = (focalBounds.height() / 2) + focalPadding + textBounds.height();
             // Calculate the radius based on the calculated width and height
@@ -208,8 +215,14 @@ public class CirclePromptBackground extends PromptBackground
         canvas.drawCircle(mPosition.x, mPosition.y, mRadius, mPaint);
 
         /*canvas.drawCircle(point1.x, point1.y, 100, pointPaint);
+        pointPaint.setColor(Color.YELLOW);
+        pointPaint.setAlpha(100);
         canvas.drawCircle(point2.x, point2.y, 100, pointPaint);
-        canvas.drawCircle(point3.x, point3.y, 100, pointPaint);*/
+        pointPaint.setColor(Color.GREEN);
+        pointPaint.setAlpha(100);
+        canvas.drawCircle(point3.x, point3.y, 100, pointPaint);
+        pointPaint.setColor(Color.RED);
+        pointPaint.setAlpha(100);*/
     }
 
     @Override

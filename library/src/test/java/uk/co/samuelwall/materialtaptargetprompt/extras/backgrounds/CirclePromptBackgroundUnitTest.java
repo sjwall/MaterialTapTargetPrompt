@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017 Samuel Wall
+ * Copyright (C) 2017-2018 Samuel Wall
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -717,40 +717,40 @@ public class CirclePromptBackgroundUnitTest
 
         promptBackground.prepare(options, false, clipBounds);
         promptBackground.draw(canvas);
-        assertEquals(910, promptBackground.mBasePosition.x, 1);
-        assertEquals(817, promptBackground.mBasePosition.y, 1);
-        assertEquals(910, promptBackground.mPosition.x, 1);
-        assertEquals(817, promptBackground.mPosition.y, 1);
-        assertEquals(341, promptBackground.mBaseRadius, 1);
+        assertEquals(982, promptBackground.mBasePosition.x, 1);
+        assertEquals(772.5, promptBackground.mBasePosition.y, 1);
+        assertEquals(982, promptBackground.mPosition.x, 1);
+        assertEquals(772.5, promptBackground.mPosition.y, 1);
+        assertEquals(349.0218474537, promptBackground.mBaseRadius, 1);
         assertEquals(0, promptBackground.mRadius, 1);
         assertFalse(promptBackground.contains(1058, 22));
         promptBackground.update(options, 0, 0);
         promptBackground.draw(canvas);
-        assertEquals(910, promptBackground.mBasePosition.x, 1);
-        assertEquals(817, promptBackground.mBasePosition.y, 1);
+        assertEquals(982, promptBackground.mBasePosition.x, 1);
+        assertEquals(772.5, promptBackground.mBasePosition.y, 1);
         assertEquals(1182, promptBackground.mPosition.x, 1);
         assertEquals(982, promptBackground.mPosition.y, 1);
-        assertEquals(341, promptBackground.mBaseRadius, 1);
+        assertEquals(349.0218474537, promptBackground.mBaseRadius, 1);
         assertEquals(0, promptBackground.mRadius, 1);
         assertFalse(promptBackground.contains(1058, 22));
         promptBackground.update(options, 0.5f, 0.5f);
         promptBackground.draw(canvas);
-        assertEquals(910, promptBackground.mBasePosition.x, 1);
-        assertEquals(817, promptBackground.mBasePosition.y, 1);
-        assertEquals(1046, promptBackground.mPosition.x, 1);
-        assertEquals(899, promptBackground.mPosition.y, 1);
-        assertEquals(341, promptBackground.mBaseRadius, 1);
-        assertEquals(170, promptBackground.mRadius, 1);
+        assertEquals(982, promptBackground.mBasePosition.x, 1);
+        assertEquals(772.5, promptBackground.mBasePosition.y, 1);
+        assertEquals(1082.0, promptBackground.mPosition.x, 1);
+        assertEquals(877.5, promptBackground.mPosition.y, 1);
+        assertEquals(349.0218474537, promptBackground.mBaseRadius, 1);
+        assertEquals(174.51093, promptBackground.mRadius, 1);
         assertTrue(promptBackground.contains(1046, 779));
         assertFalse(promptBackground.contains(700, 22));
         promptBackground.update(options, 1, 1);
         promptBackground.draw(canvas);
-        assertEquals(910, promptBackground.mBasePosition.x, 1);
-        assertEquals(817, promptBackground.mBasePosition.y, 1);
-        assertEquals(910, promptBackground.mPosition.x, 1);
-        assertEquals(817, promptBackground.mPosition.y, 1);
-        assertEquals(341, promptBackground.mBaseRadius, 1);
-        assertEquals(341, promptBackground.mRadius, 1);
+        assertEquals(982, promptBackground.mBasePosition.x, 1);
+        assertEquals(772.5, promptBackground.mBasePosition.y, 1);
+        assertEquals(982.0, promptBackground.mPosition.x, 1);
+        assertEquals(772.5, promptBackground.mPosition.y, 1);
+        assertEquals(349.0218474537, promptBackground.mBaseRadius, 1);
+        assertEquals(349.0218474537, promptBackground.mRadius, 1);
         assertTrue(promptBackground.contains(910, 779));
         assertFalse(promptBackground.contains(200, 22));
     }
