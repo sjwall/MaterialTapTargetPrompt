@@ -153,6 +153,13 @@ public class PromptOptions<T extends PromptOptions>
      */
     @Nullable private MaterialTapTargetPrompt.PromptStateChangeListener mPromptStateChangeListener;
 
+    /**
+     * Additional listener that can be set by other package classes for handling e.g. sequences of
+     * prompts.
+     */
+    @Nullable private MaterialTapTargetPrompt.PromptStateChangeListener mSequencePromptStateChangeListener;
+
+
     private boolean mCaptureTouchEventOnFocal;
     private float mTextSeparation;
     private boolean mAutoDismiss = true;
@@ -953,6 +960,20 @@ public class PromptOptions<T extends PromptOptions>
     }
 
     /**
+     * Set the internal listener to listen for when the prompt state changes.
+     * This does not return a builder is it's not intended to be user during the
+     * creation of Prompts
+     *
+     * @param listener The listener to use
+     */
+    public void setSequenceListener(
+            @Nullable final MaterialTapTargetPrompt.PromptStateChangeListener listener)
+    {
+        mSequencePromptStateChangeListener = listener;
+    }
+
+
+    /**
      * Handles emitting the prompt state changed events.
      *
      * @param state The state that the prompt is now in.
@@ -964,6 +985,21 @@ public class PromptOptions<T extends PromptOptions>
             mPromptStateChangeListener.onPromptStateChanged(prompt, state);
         }
     }
+
+
+    /**
+     * Handles emitting the additional prompt state changed events.
+     *
+     * @param state The state that the prompt is now in.
+     */
+    public void onExtraPromptStateChanged(@NonNull final MaterialTapTargetPrompt prompt, final int state)
+    {
+        if (mSequencePromptStateChangeListener != null)
+        {
+            mSequencePromptStateChangeListener.onPromptStateChanged(prompt, state);
+        }
+    }
+
 
     /**
      * Set if the prompt should stop touch events on the focal point from passing to underlying
