@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2016 Samuel Wall
+ * Copyright (C) 2016-2018 Samuel Wall
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -68,11 +68,12 @@ public class MaterialTapTargetPromptUnitTest
     @After
     public void after()
     {
-        if (stateProgress > 0)
+        if (lastStateValue > 0)
         {
             Assert.assertEquals(lastStateValue, stateProgress);
         }
         stateProgress = -1;
+        lastStateValue = 0;
     }
 
     @Test
@@ -594,23 +595,6 @@ public class MaterialTapTargetPromptUnitTest
         assertTrue(prompt.isComplete());
         assertFalse(prompt.isDismissed());
         assertTrue(prompt.isDismissing());
-    }
-
-    @Test
-    public void testEmptySequenceCanBeRun(){
-
-        final boolean[] seqCompleted = {false};
-
-        MaterialTapTargetSequence s = new MaterialTapTargetSequence();
-        s.setSequenceCompleteListener(new MaterialTapTargetSequence.SequenceCompleteListener() {
-            @Override
-            public void onSequenceComplete() {
-                seqCompleted[0] = true;
-            }
-        });
-        s.show();
-
-        assertEquals(true, seqCompleted[0]);
     }
     
     private MaterialTapTargetPrompt.Builder createBuilder(final int screenWidth,

@@ -30,7 +30,7 @@ public class MaterialTapTargetSequence {
     /**
      * The list of prompts to display when the sequence is shown
      */
-    private List<MaterialTapTargetPrompt> mPrompts = new ArrayList<>();
+    private final List<MaterialTapTargetPrompt> mPrompts = new ArrayList<>();
 
     /**
      * Pointer to the next prompt to be shown
@@ -78,15 +78,17 @@ public class MaterialTapTargetSequence {
     }
 
     /***
-     * Start the sequence by showing the first prompt
+     * Start the sequence by showing the first prompt.
      */
-    public void show() {
-        if (mPrompts != null && mPrompts.size() > 0){
-            mPrompts.get(0).show(); // todo how about timed show?
-        }else{
-            if (mOnCompleteListener != null) {
-                mOnCompleteListener.onSequenceComplete();
-            }
+    public void show()
+    {
+        if (!mPrompts.isEmpty())
+        {
+            mPrompts.get(0).show();
+        }
+        else if (mOnCompleteListener != null)
+        {
+            mOnCompleteListener.onSequenceComplete();
         }
     }
 
