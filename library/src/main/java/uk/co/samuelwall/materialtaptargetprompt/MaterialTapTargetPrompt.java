@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2016 Samuel Wall
+ * Copyright (C) 2016-2018 Samuel Wall
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -252,6 +252,7 @@ public class MaterialTapTargetPrompt
 
         final ViewGroup parent = mView.mPromptOptions.getResourceFinder().getPromptParentView();
 
+        // If dismissing or the prompt already exists in the parent view
         if (isDismissing() || parent.findViewById(R.id.material_target_prompt_view) != null)
         {
             cleanUpPrompt(mState);

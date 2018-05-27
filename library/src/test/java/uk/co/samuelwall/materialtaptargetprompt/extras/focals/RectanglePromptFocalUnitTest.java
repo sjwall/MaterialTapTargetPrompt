@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017 Samuel Wall
+ * Copyright (C) 2017-2018 Samuel Wall
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,6 +17,7 @@
 package uk.co.samuelwall.materialtaptargetprompt.extras.focals;
 
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.PointF;
 import android.graphics.Rect;
 import android.graphics.RectF;
@@ -93,6 +94,7 @@ public class RectanglePromptFocalUnitTest
         final Canvas canvas = mock(Canvas.class);
         final PromptOptions options = createOptions(clipBounds, targetBounds);
         final RectanglePromptFocal promptFocal = (RectanglePromptFocal) options.getPromptFocal();
+        promptFocal.setColour(Color.GREEN);
         promptFocal.setTargetPadding(40);
         promptFocal.setCornerRadius(40, 40);
         promptFocal.setSize(null);
