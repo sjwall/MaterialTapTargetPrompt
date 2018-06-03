@@ -225,7 +225,6 @@ public class PromptText implements PromptUIElement
         mTextBounds.top = mPrimaryTextTop;
         mTextBounds.right = mTextBounds.left + textWidth;
         mTextBounds.bottom = mTextBounds.top + textHeight;
-        //padding = (int) mTextPadding;
     }
 
     /**

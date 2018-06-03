@@ -16,7 +16,6 @@
 
 package uk.co.samuelwall.materialtaptargetprompt;
 
-import android.animation.Animator;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.graphics.Canvas;
@@ -30,10 +29,6 @@ import android.view.ViewParent;
 import android.widget.Button;
 import android.widget.FrameLayout;
 
-import junit.framework.Assert;
-
-import org.junit.After;
-import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mockito;
@@ -55,30 +50,10 @@ import static org.mockito.Mockito.when;
 
 @RunWith(RobolectricTestRunner.class)
 @Config(constants = uk.co.samuelwall.materialtaptargetprompt.BuildConfig.class, sdk = 22)
-public class MaterialTapTargetPromptUnitTest
+public class MaterialTapTargetPromptUnitTest extends BaseTestStateProgress
 {
-   private static int SCREEN_WIDTH = 1080;
+    private static int SCREEN_WIDTH = 1080;
     private static int SCREEN_HEIGHT = 1920;
-
-    private int stateProgress;
-    private int lastStateValue;
-
-    @Before
-    public void setup()
-    {
-        stateProgress = 0;
-    }
-
-    @After
-    public void after()
-    {
-        if (lastStateValue > 0)
-        {
-            Assert.assertEquals(lastStateValue, stateProgress);
-        }
-        stateProgress = -1;
-        lastStateValue = 0;
-    }
 
     @Test
     public void targetView()
@@ -141,7 +116,7 @@ public class MaterialTapTargetPromptUnitTest
     @Test
     public void promptTouchEventFocal()
     {
-        lastStateValue = 5;
+        expectedStateProgress = 5;
         final MaterialTapTargetPrompt prompt = createMockBuilder(SCREEN_WIDTH, SCREEN_HEIGHT)
                 .setTarget(10, 10)
                 .setPrimaryText("Primary text")
@@ -150,28 +125,28 @@ public class MaterialTapTargetPromptUnitTest
                     @Override
                     public void onPromptStateChanged(@NonNull final MaterialTapTargetPrompt prompt, final int state)
                     {
-                        if (stateProgress == 0)
+                        if (actualStateProgress == 0)
                         {
                             assertEquals(MaterialTapTargetPrompt.STATE_REVEALING, state);
                             assertEquals(MaterialTapTargetPrompt.STATE_REVEALING, prompt.getState());
                         }
-                        else if (stateProgress == 1)
+                        else if (actualStateProgress == 1)
                         {
                             assertEquals(MaterialTapTargetPrompt.STATE_REVEALED, state);
                             assertEquals(MaterialTapTargetPrompt.STATE_REVEALED, prompt.getState());
                         }
-                        else if (stateProgress == 2)
+                        else if (actualStateProgress == 2)
                         {
                             assertEquals(MaterialTapTargetPrompt.STATE_FOCAL_PRESSED, state);
                             assertEquals(MaterialTapTargetPrompt.STATE_FOCAL_PRESSED, prompt.getState());
                         }
-                        else if (stateProgress == 3)
+                        else if (actualStateProgress == 3)
                         {
                             assertEquals(MaterialTapTargetPrompt.STATE_FINISHING, state);
                             assertEquals(MaterialTapTargetPrompt.STATE_FINISHING, prompt.getState());
-                            endCurrentAnimation(prompt);
+                            UnitTestUtils.endCurrentAnimation(prompt);
                         }
-                        else if (stateProgress == 4)
+                        else if (actualStateProgress == 4)
                         {
                             assertEquals(MaterialTapTargetPrompt.STATE_FINISHED, state);
                             assertEquals(MaterialTapTargetPrompt.STATE_FINISHED, prompt.getState());
@@ -179,9 +154,9 @@ public class MaterialTapTargetPromptUnitTest
                         else
                         {
                             fail(String.format("Incorrect state progress %s for state %s",
-                                    stateProgress, state));
+                                    actualStateProgress, state));
                         }
-                        stateProgress++;
+                        actualStateProgress++;
                     }
                 })
                 .show();
@@ -193,7 +168,7 @@ public class MaterialTapTargetPromptUnitTest
     @Test
     public void promptTouchEventFocalDismissing()
     {
-        lastStateValue = 4;
+        expectedStateProgress = 4;
         createBuilder(SCREEN_WIDTH, SCREEN_HEIGHT)
                 .setTarget(10, 10)
                 .setPrimaryText("Primary text")
@@ -202,38 +177,38 @@ public class MaterialTapTargetPromptUnitTest
                     @Override
                     public void onPromptStateChanged(@NonNull final MaterialTapTargetPrompt prompt, final int state)
                     {
-                        if (stateProgress == 0)
+                        if (actualStateProgress == 0)
                         {
                             assertEquals(MaterialTapTargetPrompt.STATE_REVEALING, state);
                             assertEquals(MaterialTapTargetPrompt.STATE_REVEALING, prompt.getState());
                         }
-                        else if (stateProgress == 1)
+                        else if (actualStateProgress == 1)
                         {
                             assertEquals(MaterialTapTargetPrompt.STATE_REVEALED, state);
                             assertEquals(MaterialTapTargetPrompt.STATE_REVEALED, prompt.getState());
                         }
-                        else if (stateProgress == 2)
+                        else if (actualStateProgress == 2)
                         {
                             assertEquals(MaterialTapTargetPrompt.STATE_DISMISSING, state);
                             assertEquals(MaterialTapTargetPrompt.STATE_DISMISSING, prompt.getState());
                         }
-                        else if (stateProgress == 3)
+                        else if (actualStateProgress == 3)
                         {
                             assertEquals(MaterialTapTargetPrompt.STATE_DISMISSED, state);
                             assertEquals(MaterialTapTargetPrompt.STATE_DISMISSED, prompt.getState());
-                            endCurrentAnimation(prompt);
+                            UnitTestUtils.endCurrentAnimation(prompt);
                         }
                         else
                         {
                             fail(String.format("Incorrect state progress %s for state %s",
-                                    stateProgress, state));
+                                    actualStateProgress, state));
                         }
-                        stateProgress++;
-                        if (stateProgress == 2)
+                        actualStateProgress++;
+                        if (actualStateProgress == 2)
                         {
                             prompt.dismiss();
                         }
-                        else if (stateProgress == 3)
+                        else if (actualStateProgress == 3)
                         {
                             assertFalse(prompt.mView.onTouchEvent(MotionEvent.obtain(0, 0, MotionEvent.ACTION_DOWN, 10, 10, 0)));
                         }
@@ -245,7 +220,7 @@ public class MaterialTapTargetPromptUnitTest
     @Test
     public void promptTouchEventFocalNoFinish()
     {
-        lastStateValue = 3;
+        expectedStateProgress = 3;
         final MaterialTapTargetPrompt prompt = createMockBuilder(SCREEN_WIDTH, SCREEN_HEIGHT)
                 .setTarget(10, 10)
                 .setPrimaryText("Primary text")
@@ -255,17 +230,17 @@ public class MaterialTapTargetPromptUnitTest
                     @Override
                     public void onPromptStateChanged(@NonNull final MaterialTapTargetPrompt prompt, final int state)
                     {
-                        if (stateProgress == 0)
+                        if (actualStateProgress == 0)
                         {
                             assertEquals(MaterialTapTargetPrompt.STATE_REVEALING, state);
                             assertEquals(MaterialTapTargetPrompt.STATE_REVEALING, prompt.getState());
                         }
-                        else if (stateProgress == 1)
+                        else if (actualStateProgress == 1)
                         {
                             assertEquals(MaterialTapTargetPrompt.STATE_REVEALED, state);
                             assertEquals(MaterialTapTargetPrompt.STATE_REVEALED, prompt.getState());
                         }
-                        else if (stateProgress == 2)
+                        else if (actualStateProgress == 2)
                         {
                             assertEquals(MaterialTapTargetPrompt.STATE_FOCAL_PRESSED, state);
                             assertEquals(MaterialTapTargetPrompt.STATE_FOCAL_PRESSED, prompt.getState());
@@ -273,9 +248,9 @@ public class MaterialTapTargetPromptUnitTest
                         else
                         {
                             fail(String.format("Incorrect state progress %s for state %s",
-                                    stateProgress, state));
+                                    actualStateProgress, state));
                         }
-                        stateProgress++;
+                        actualStateProgress++;
                     }
                 })
                 .show();
@@ -286,7 +261,7 @@ public class MaterialTapTargetPromptUnitTest
     @Test
     public void promptTouchEventFocalCaptureEvent()
     {
-        lastStateValue = 5;
+        expectedStateProgress = 5;
         MaterialTapTargetPrompt prompt = createMockBuilder(SCREEN_WIDTH, SCREEN_HEIGHT)
                 .setTarget(10, 10)
                 .setPrimaryText("Primary text")
@@ -296,28 +271,28 @@ public class MaterialTapTargetPromptUnitTest
                     @Override
                     public void onPromptStateChanged(@NonNull final MaterialTapTargetPrompt prompt, final int state)
                     {
-                        if (stateProgress == 0)
+                        if (actualStateProgress == 0)
                         {
                             assertEquals(MaterialTapTargetPrompt.STATE_REVEALING, state);
                             assertEquals(MaterialTapTargetPrompt.STATE_REVEALING, prompt.getState());
                         }
-                        else if (stateProgress == 1)
+                        else if (actualStateProgress == 1)
                         {
                             assertEquals(MaterialTapTargetPrompt.STATE_REVEALED, state);
                             assertEquals(MaterialTapTargetPrompt.STATE_REVEALED, prompt.getState());
                         }
-                        else if (stateProgress == 2)
+                        else if (actualStateProgress == 2)
                         {
                             assertEquals(MaterialTapTargetPrompt.STATE_FOCAL_PRESSED, state);
                             assertEquals(MaterialTapTargetPrompt.STATE_FOCAL_PRESSED, prompt.getState());
                         }
-                        else if (stateProgress == 3)
+                        else if (actualStateProgress == 3)
                         {
                             assertEquals(MaterialTapTargetPrompt.STATE_FINISHING, state);
                             assertEquals(MaterialTapTargetPrompt.STATE_FINISHING, prompt.getState());
-                            endCurrentAnimation(prompt);
+                            UnitTestUtils.endCurrentAnimation(prompt);
                         }
-                        else if (stateProgress == 4)
+                        else if (actualStateProgress == 4)
                         {
                             assertEquals(MaterialTapTargetPrompt.STATE_FINISHED, state);
                             assertEquals(MaterialTapTargetPrompt.STATE_FINISHED, prompt.getState());
@@ -325,9 +300,9 @@ public class MaterialTapTargetPromptUnitTest
                         else
                         {
                             fail(String.format("Incorrect state progress %s for state %s",
-                                    stateProgress, state));
+                                    actualStateProgress, state));
                         }
-                        stateProgress++;
+                        actualStateProgress++;
                     }
                 })
                 .show();
@@ -350,7 +325,7 @@ public class MaterialTapTargetPromptUnitTest
     @Test
     public void promptTouchEventBackground()
     {
-        lastStateValue = 5;
+        expectedStateProgress = 5;
         MaterialTapTargetPrompt prompt = createMockBuilder(SCREEN_WIDTH, SCREEN_HEIGHT)
                 .setTarget(10, 10)
                 .setPrimaryText("Primary text")
@@ -359,28 +334,28 @@ public class MaterialTapTargetPromptUnitTest
                     @Override
                     public void onPromptStateChanged(@NonNull final MaterialTapTargetPrompt prompt, final int state)
                     {
-                        if (stateProgress == 0)
+                        if (actualStateProgress == 0)
                         {
                             assertEquals(MaterialTapTargetPrompt.STATE_REVEALING, state);
                             assertEquals(MaterialTapTargetPrompt.STATE_REVEALING, prompt.getState());
                         }
-                        else if (stateProgress == 1)
+                        else if (actualStateProgress == 1)
                         {
                             assertEquals(MaterialTapTargetPrompt.STATE_REVEALED, state);
                             assertEquals(MaterialTapTargetPrompt.STATE_REVEALED, prompt.getState());
                         }
-                        else if (stateProgress == 2)
+                        else if (actualStateProgress == 2)
                         {
                             assertEquals(MaterialTapTargetPrompt.STATE_NON_FOCAL_PRESSED, state);
                             assertEquals(MaterialTapTargetPrompt.STATE_NON_FOCAL_PRESSED, prompt.getState());
                         }
-                        else if (stateProgress == 3)
+                        else if (actualStateProgress == 3)
                         {
                             assertEquals(MaterialTapTargetPrompt.STATE_DISMISSING, state);
                             assertEquals(MaterialTapTargetPrompt.STATE_DISMISSING, prompt.getState());
-                            endCurrentAnimation(prompt);
+                            UnitTestUtils.endCurrentAnimation(prompt);
                         }
-                        else if (stateProgress == 4)
+                        else if (actualStateProgress == 4)
                         {
                             assertEquals(MaterialTapTargetPrompt.STATE_DISMISSED, state);
                             assertEquals(MaterialTapTargetPrompt.STATE_DISMISSED, prompt.getState());
@@ -388,9 +363,9 @@ public class MaterialTapTargetPromptUnitTest
                         else
                         {
                             fail(String.format("Incorrect state progress %s for state %s",
-                                    stateProgress, state));
+                                    actualStateProgress, state));
                         }
-                        stateProgress++;
+                        actualStateProgress++;
                     }
                 })
                 .show();
@@ -401,7 +376,7 @@ public class MaterialTapTargetPromptUnitTest
     @Test
     public void promptTouchEventBackgroundDismissing()
     {
-        lastStateValue = 4;
+        expectedStateProgress = 4;
         final MaterialTapTargetPrompt prompt = createBuilder(SCREEN_WIDTH, SCREEN_HEIGHT)
                 .setTarget(10, 10)
                 .setPrimaryText("Primary text")
@@ -410,38 +385,38 @@ public class MaterialTapTargetPromptUnitTest
                     @Override
                     public void onPromptStateChanged(@NonNull final MaterialTapTargetPrompt prompt, final int state)
                     {
-                        if (stateProgress == 0)
+                        if (actualStateProgress == 0)
                         {
                             assertEquals(MaterialTapTargetPrompt.STATE_REVEALING, state);
                             assertEquals(MaterialTapTargetPrompt.STATE_REVEALING, prompt.getState());
                         }
-                        else if (stateProgress == 1)
+                        else if (actualStateProgress == 1)
                         {
                             assertEquals(MaterialTapTargetPrompt.STATE_REVEALED, state);
                             assertEquals(MaterialTapTargetPrompt.STATE_REVEALED, prompt.getState());
                         }
-                        else if (stateProgress == 2)
+                        else if (actualStateProgress == 2)
                         {
                             assertEquals(MaterialTapTargetPrompt.STATE_FINISHING, state);
                             assertEquals(MaterialTapTargetPrompt.STATE_FINISHING, prompt.getState());
                         }
-                        else if (stateProgress == 3)
+                        else if (actualStateProgress == 3)
                         {
                             assertEquals(MaterialTapTargetPrompt.STATE_FINISHED, state);
                             assertEquals(MaterialTapTargetPrompt.STATE_FINISHED, prompt.getState());
-                            endCurrentAnimation(prompt);
+                            UnitTestUtils.endCurrentAnimation(prompt);
                         }
                         else
                         {
                             fail(String.format("Incorrect state progress %s for state %s",
-                                    stateProgress, state));
+                                    actualStateProgress, state));
                         }
-                        stateProgress++;
-                        if (stateProgress == 2)
+                        actualStateProgress++;
+                        if (actualStateProgress == 2)
                         {
                             prompt.finish();
                         }
-                        else if (stateProgress == 3)
+                        else if (actualStateProgress == 3)
                         {
                             assertTrue(prompt.mView.onTouchEvent(MotionEvent.obtain(0, 0, MotionEvent.ACTION_DOWN, 60, 60, 0)));
                         }
@@ -454,7 +429,7 @@ public class MaterialTapTargetPromptUnitTest
     @Test
     public void promptTouchEventBackgroundNoDismiss()
     {
-        lastStateValue = 3;
+        expectedStateProgress = 3;
         MaterialTapTargetPrompt prompt = createMockBuilder(SCREEN_WIDTH, SCREEN_HEIGHT)
                 .setTarget(10, 10)
                 .setPrimaryText("Primary text")
@@ -464,17 +439,17 @@ public class MaterialTapTargetPromptUnitTest
                     @Override
                     public void onPromptStateChanged(@NonNull final MaterialTapTargetPrompt prompt, final int state)
                     {
-                        if (stateProgress == 0)
+                        if (actualStateProgress == 0)
                         {
                             assertEquals(MaterialTapTargetPrompt.STATE_REVEALING, state);
                             assertEquals(MaterialTapTargetPrompt.STATE_REVEALING, prompt.getState());
                         }
-                        else if (stateProgress == 1)
+                        else if (actualStateProgress == 1)
                         {
                             assertEquals(MaterialTapTargetPrompt.STATE_REVEALED, state);
                             assertEquals(MaterialTapTargetPrompt.STATE_REVEALED, prompt.getState());
                         }
-                        else if (stateProgress == 2)
+                        else if (actualStateProgress == 2)
                         {
                             assertEquals(MaterialTapTargetPrompt.STATE_NON_FOCAL_PRESSED, state);
                             assertEquals(MaterialTapTargetPrompt.STATE_NON_FOCAL_PRESSED, prompt.getState());
@@ -482,9 +457,9 @@ public class MaterialTapTargetPromptUnitTest
                         else
                         {
                             fail(String.format("Incorrect state progress %s for state %s",
-                                    stateProgress, state));
+                                    actualStateProgress, state));
                         }
-                        stateProgress++;
+                        actualStateProgress++;
                     }
                 })
                 .show();
@@ -495,7 +470,7 @@ public class MaterialTapTargetPromptUnitTest
     @Test
     public void testPromptBackButtonDismiss()
     {
-        lastStateValue = 5;
+        expectedStateProgress = 5;
         MaterialTapTargetPrompt prompt = createMockBuilder(SCREEN_WIDTH, SCREEN_HEIGHT)
                 .setTarget(10, 10)
                 .setPrimaryText("Primary text")
@@ -505,28 +480,28 @@ public class MaterialTapTargetPromptUnitTest
                     @Override
                     public void onPromptStateChanged(@NonNull final MaterialTapTargetPrompt prompt, final int state)
                     {
-                        if (stateProgress == 0)
+                        if (actualStateProgress == 0)
                         {
                             assertEquals(MaterialTapTargetPrompt.STATE_REVEALING, state);
                             assertEquals(MaterialTapTargetPrompt.STATE_REVEALING, prompt.getState());
                         }
-                        else if (stateProgress == 1)
+                        else if (actualStateProgress == 1)
                         {
                             assertEquals(MaterialTapTargetPrompt.STATE_REVEALED, state);
                             assertEquals(MaterialTapTargetPrompt.STATE_REVEALED, prompt.getState());
                         }
-                        else if (stateProgress == 2)
+                        else if (actualStateProgress == 2)
                         {
                             assertEquals(MaterialTapTargetPrompt.STATE_NON_FOCAL_PRESSED, state);
                             assertEquals(MaterialTapTargetPrompt.STATE_NON_FOCAL_PRESSED, prompt.getState());
                         }
-                        else if (stateProgress == 3)
+                        else if (actualStateProgress == 3)
                         {
                             assertEquals(MaterialTapTargetPrompt.STATE_DISMISSING, state);
                             assertEquals(MaterialTapTargetPrompt.STATE_DISMISSING, prompt.getState());
-                            endCurrentAnimation(prompt);
+                            UnitTestUtils.endCurrentAnimation(prompt);
                         }
-                        else if (stateProgress == 4)
+                        else if (actualStateProgress == 4)
                         {
                             assertEquals(MaterialTapTargetPrompt.STATE_DISMISSED, state);
                             assertEquals(MaterialTapTargetPrompt.STATE_DISMISSED, prompt.getState());
@@ -534,9 +509,9 @@ public class MaterialTapTargetPromptUnitTest
                         else
                         {
                             fail(String.format("Incorrect state progress %s for state %s",
-                                    stateProgress, state));
+                                    actualStateProgress, state));
                         }
-                        stateProgress++;
+                        actualStateProgress++;
                     }
                 })
                 .show();
@@ -636,7 +611,7 @@ public class MaterialTapTargetPromptUnitTest
     @Test
     public void testShowFor()
     {
-        lastStateValue = 5;
+        expectedStateProgress = 5;
         createMockBuilder(SCREEN_WIDTH, SCREEN_HEIGHT)
                 .setTarget(10, 10)
                 .setPrimaryText("Primary text")
@@ -645,38 +620,29 @@ public class MaterialTapTargetPromptUnitTest
                     @Override
                     public void onPromptStateChanged(@NonNull final MaterialTapTargetPrompt prompt, final int state)
                     {
-                        if (stateProgress == 0)
+                        if (actualStateProgress == 0)
                         {
                             assertEquals(MaterialTapTargetPrompt.STATE_REVEALING, state);
                             assertEquals(MaterialTapTargetPrompt.STATE_REVEALING, prompt.getState());
                         }
-                        else if (stateProgress == 1)
+                        else if (actualStateProgress == 1)
                         {
                             assertEquals(MaterialTapTargetPrompt.STATE_REVEALED, state);
                             assertEquals(MaterialTapTargetPrompt.STATE_REVEALED, prompt.getState());
-                            // Post to prevent recursion
-                            prompt.mView.post(new Runnable()
-                            {
-                                @Override
-                                public void run()
-                                {
-                                    // Manually run because the test won't wait
-                                    prompt.mTimeoutRunnable.run();
-                                }
-                            });
+                            UnitTestUtils.runPromptTimeOut(prompt);
                         }
-                        else if (stateProgress == 2)
+                        else if (actualStateProgress == 2)
                         {
                             assertEquals(MaterialTapTargetPrompt.STATE_SHOW_FOR_TIMEOUT, state);
                             assertEquals(MaterialTapTargetPrompt.STATE_SHOW_FOR_TIMEOUT, prompt.getState());
                         }
-                        else if (stateProgress == 3)
+                        else if (actualStateProgress == 3)
                         {
                             assertEquals(MaterialTapTargetPrompt.STATE_DISMISSING, state);
                             assertEquals(MaterialTapTargetPrompt.STATE_DISMISSING, prompt.getState());
-                            endCurrentAnimation(prompt);
+                            UnitTestUtils.endCurrentAnimation(prompt);
                         }
-                        else if (stateProgress == 4)
+                        else if (actualStateProgress == 4)
                         {
                             assertEquals(MaterialTapTargetPrompt.STATE_DISMISSED, state);
                             assertEquals(MaterialTapTargetPrompt.STATE_DISMISSED, prompt.getState());
@@ -684,9 +650,9 @@ public class MaterialTapTargetPromptUnitTest
                         else
                         {
                             fail(String.format("Incorrect state progress %s for state %s",
-                                    stateProgress, state));
+                                    actualStateProgress, state));
                         }
-                        stateProgress++;
+                        actualStateProgress++;
                     }
                 })
                 .showFor(1000);
@@ -929,28 +895,6 @@ public class MaterialTapTargetPromptUnitTest
         if (parent != null && ((View) parent).getRight() != 0 && ((View) parent).getBottom() != 0)
         {
             setViewBounds(((View) parent), width, height);
-        }
-    }
-
-    /**
-     * Robolectric isn't calling {@link Animator.AnimatorListener#onAnimationEnd(Animator)} so for
-     * those use cases end needs to be manually called.
-     *
-     * @param prompt The prompt to listen to the current animation.
-     */
-    private void endCurrentAnimation(final MaterialTapTargetPrompt prompt)
-    {
-        if (prompt.mAnimationCurrent != null)
-        {
-            prompt.mAnimationCurrent.addListener(
-                new MaterialTapTargetPrompt.AnimatorListener()
-                {
-                    @Override
-                    public void onAnimationStart(Animator animation)
-                    {
-                        animation.end();
-                    }
-                });
         }
     }
 }
