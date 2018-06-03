@@ -16,43 +16,26 @@
 
 package uk.co.samuelwall.materialtaptargetprompt;
 
-import android.app.Activity;
 import android.support.annotation.NonNull;
 
-import junit.framework.Assert;
-
-import org.junit.After;
-import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.robolectric.Robolectric;
 import org.robolectric.RobolectricTestRunner;
 import org.robolectric.annotation.Config;
 
+import uk.co.samuelwall.materialtaptargetprompt.extras.sequence.SequenceItem;
+import uk.co.samuelwall.materialtaptargetprompt.extras.sequence.SequenceItemShowFor;
+import uk.co.samuelwall.materialtaptargetprompt.extras.sequence.SequenceState;
+import uk.co.samuelwall.materialtaptargetprompt.extras.sequence.SequenceStatePromptOptions;
+
+import static junit.framework.Assert.assertEquals;
+import static junit.framework.Assert.assertNotNull;
+import static junit.framework.Assert.assertTrue;
+
 @RunWith(RobolectricTestRunner.class)
 @Config(constants = uk.co.samuelwall.materialtaptargetprompt.BuildConfig.class, sdk = 22)
-public class MaterialTapTargetSequenceTest
+public class MaterialTapTargetSequenceTest extends BaseTestStateProgress
 {
-    private int stateProgress;
-    private int lastStateValue;
-
-    @Before
-    public void setup()
-    {
-        stateProgress = 0;
-    }
-
-    @After
-    public void after()
-    {
-        if (lastStateValue > 0)
-        {
-            Assert.assertEquals(lastStateValue, stateProgress);
-        }
-        stateProgress = -1;
-        lastStateValue = 0;
-    }
-
     @Test
     public void emptyTest()
     {
@@ -63,25 +46,26 @@ public class MaterialTapTargetSequenceTest
     @Test
     public void emptyWithListenerTest()
     {
-        lastStateValue = 1;
+        expectedStateProgress = 1;
         final MaterialTapTargetSequence sequence = new MaterialTapTargetSequence();
         sequence.setSequenceCompleteListener(new MaterialTapTargetSequence.SequenceCompleteListener() {
             @Override
             public void onSequenceComplete()
             {
-                stateProgress++;
+                actualStateProgress++;
             }
         });
+        assertEquals(0, sequence.size());
         sequence.show();
     }
 
     @Test
     public void singlePromptTest()
     {
-        lastStateValue = 2;
+        expectedStateProgress = 2;
         final MaterialTapTargetSequence sequence = new MaterialTapTargetSequence();
-        sequence.addPrompt(
-            new MaterialTapTargetPrompt.Builder(Robolectric.buildActivity(Activity.class).create().get())
+
+        final MaterialTapTargetPrompt prompt = UnitTestUtils.createPromptOptions()
                 .setTarget(0,0)
                 .setPrimaryText("Test")
                 .setPromptStateChangeListener(new MaterialTapTargetPrompt.PromptStateChangeListener() {
@@ -89,15 +73,19 @@ public class MaterialTapTargetSequenceTest
                     public void onPromptStateChanged(@NonNull MaterialTapTargetPrompt prompt,
                                                      int state)
                     {
-                        stateProgress++;
+                        actualStateProgress++;
                     }
                 })
-                .create());
+                .create();
+        assertNotNull(prompt);
+        sequence.addPrompt(prompt);
+        assertEquals(1, sequence.size());
+        assertEquals(prompt, sequence.get(0).getState().getPrompt());
         sequence.setSequenceCompleteListener(new MaterialTapTargetSequence.SequenceCompleteListener() {
             @Override
             public void onSequenceComplete()
             {
-                stateProgress++;
+                actualStateProgress++;
             }
         });
         sequence.show();
@@ -106,10 +94,9 @@ public class MaterialTapTargetSequenceTest
     @Test
     public void threePromptTest()
     {
-        lastStateValue = 4;
+        expectedStateProgress = 4;
         final MaterialTapTargetSequence sequence = new MaterialTapTargetSequence();
-        sequence.addPrompt(
-                new MaterialTapTargetPrompt.Builder(Robolectric.buildActivity(Activity.class).create().get())
+        sequence.addPrompt(UnitTestUtils.createPromptOptions()
                         .setTarget(0,0)
                         .setPrimaryText("Test 1")
                         .setPromptStateChangeListener(new MaterialTapTargetPrompt.PromptStateChangeListener() {
@@ -119,15 +106,14 @@ public class MaterialTapTargetSequenceTest
                             {
                                 if (state == MaterialTapTargetPrompt.STATE_REVEALED)
                                 {
-                                    stateProgress++;
-                                    prompt.onPromptStateChanged(MaterialTapTargetPrompt.STATE_NON_FOCAL_PRESSED);
+                                    actualStateProgress++;
+                                    prompt.onPromptStateChanged(MaterialTapTargetPrompt.STATE_DISMISSED);
                                     prompt.dismiss();
                                 }
                             }
                         })
                         .create());
-        sequence.addPrompt(
-                new MaterialTapTargetPrompt.Builder(Robolectric.buildActivity(Activity.class).create().get())
+        sequence.addPrompt(UnitTestUtils.createPromptOptions()
                         .setTarget(0,0)
                         .setPrimaryText("Test 2")
                         .setPromptStateChangeListener(new MaterialTapTargetPrompt.PromptStateChangeListener() {
@@ -137,15 +123,14 @@ public class MaterialTapTargetSequenceTest
                             {
                                 if (state == MaterialTapTargetPrompt.STATE_REVEALED)
                                 {
-                                    stateProgress++;
-                                    prompt.onPromptStateChanged(MaterialTapTargetPrompt.STATE_FOCAL_PRESSED);
+                                    actualStateProgress++;
+                                    prompt.onPromptStateChanged(MaterialTapTargetPrompt.STATE_FINISHED);
                                     prompt.dismiss();
                                 }
                             }
                         })
                         .create());
-        sequence.addPrompt(
-                new MaterialTapTargetPrompt.Builder(Robolectric.buildActivity(Activity.class).create().get())
+        sequence.addPrompt(UnitTestUtils.createPromptOptions()
                         .setTarget(0,0)
                         .setPrimaryText("Test 3")
                         .setPromptStateChangeListener(new MaterialTapTargetPrompt.PromptStateChangeListener() {
@@ -155,8 +140,8 @@ public class MaterialTapTargetSequenceTest
                             {
                                 if (state == MaterialTapTargetPrompt.STATE_REVEALED)
                                 {
-                                    stateProgress++;
-                                    prompt.onPromptStateChanged(MaterialTapTargetPrompt.STATE_NON_FOCAL_PRESSED);
+                                    actualStateProgress++;
+                                    prompt.onPromptStateChanged(MaterialTapTargetPrompt.STATE_DISMISSED);
                                     prompt.dismiss();
                                 }
                             }
@@ -166,7 +151,7 @@ public class MaterialTapTargetSequenceTest
             @Override
             public void onSequenceComplete()
             {
-                stateProgress++;
+                actualStateProgress++;
             }
         });
         sequence.show();
@@ -175,10 +160,9 @@ public class MaterialTapTargetSequenceTest
     @Test
     public void threePromptNoCompleteListenerTest()
     {
-        lastStateValue = 3;
+        expectedStateProgress = 3;
         final MaterialTapTargetSequence sequence = new MaterialTapTargetSequence();
-        sequence.addPrompt(
-                new MaterialTapTargetPrompt.Builder(Robolectric.buildActivity(Activity.class).create().get())
+        sequence.addPrompt(UnitTestUtils.createPromptOptions()
                         .setTarget(0,0)
                         .setPrimaryText("Test 1")
                         .setPromptStateChangeListener(new MaterialTapTargetPrompt.PromptStateChangeListener() {
@@ -188,15 +172,14 @@ public class MaterialTapTargetSequenceTest
                             {
                                 if (state == MaterialTapTargetPrompt.STATE_REVEALED)
                                 {
-                                    stateProgress++;
-                                    prompt.onPromptStateChanged(MaterialTapTargetPrompt.STATE_NON_FOCAL_PRESSED);
+                                    actualStateProgress++;
+                                    prompt.onPromptStateChanged(MaterialTapTargetPrompt.STATE_DISMISSED);
                                     prompt.dismiss();
                                 }
                             }
                         })
                         .create());
-        sequence.addPrompt(
-                new MaterialTapTargetPrompt.Builder(Robolectric.buildActivity(Activity.class).create().get())
+        sequence.addPrompt(UnitTestUtils.createPromptOptions()
                         .setTarget(0,0)
                         .setPrimaryText("Test 2")
                         .setPromptStateChangeListener(new MaterialTapTargetPrompt.PromptStateChangeListener() {
@@ -206,15 +189,14 @@ public class MaterialTapTargetSequenceTest
                             {
                                 if (state == MaterialTapTargetPrompt.STATE_REVEALED)
                                 {
-                                    stateProgress++;
-                                    prompt.onPromptStateChanged(MaterialTapTargetPrompt.STATE_FOCAL_PRESSED);
+                                    actualStateProgress++;
+                                    prompt.onPromptStateChanged(MaterialTapTargetPrompt.STATE_FINISHED);
                                     prompt.dismiss();
                                 }
                             }
                         })
                         .create());
-        sequence.addPrompt(
-                new MaterialTapTargetPrompt.Builder(Robolectric.buildActivity(Activity.class).create().get())
+        sequence.addPrompt(UnitTestUtils.createPromptOptions()
                         .setTarget(0,0)
                         .setPrimaryText("Test 3")
                         .setPromptStateChangeListener(new MaterialTapTargetPrompt.PromptStateChangeListener() {
@@ -224,13 +206,124 @@ public class MaterialTapTargetSequenceTest
                             {
                                 if (state == MaterialTapTargetPrompt.STATE_REVEALED)
                                 {
-                                    stateProgress++;
-                                    prompt.onPromptStateChanged(MaterialTapTargetPrompt.STATE_NON_FOCAL_PRESSED);
+                                    actualStateProgress++;
+                                    prompt.onPromptStateChanged(MaterialTapTargetPrompt.STATE_DISMISSED);
                                     prompt.dismiss();
                                 }
                             }
-                        })
-                        .create());
+                        }));
+        sequence.show();
+    }
+
+    @Test
+    public void testAddPrompt()
+    {
+        expectedStateProgress = 5;
+        final MaterialTapTargetSequence sequence = new MaterialTapTargetSequence();
+        sequence.addPrompt(UnitTestUtils.createPromptOptions()
+                .setTarget(0,0)
+                .setPrimaryText("Test 3")
+                .setPromptStateChangeListener(new MaterialTapTargetPrompt.PromptStateChangeListener() {
+                    @Override
+                    public void onPromptStateChanged(@NonNull MaterialTapTargetPrompt prompt,
+                                                     int state)
+                    {
+                        if (state == MaterialTapTargetPrompt.STATE_REVEALED)
+                        {
+                            actualStateProgress++;
+                            prompt.onPromptStateChanged(MaterialTapTargetPrompt.STATE_DISMISSED);
+                            prompt.dismiss();
+                        }
+                    }
+                }), 5000);
+        assertTrue(sequence.get(0) instanceof SequenceItemShowFor);
+        assertTrue(sequence.get(0).getState() instanceof SequenceStatePromptOptions);
+
+        sequence.addPrompt(UnitTestUtils.createPromptOptions()
+                .setTarget(0,0)
+                .setPrimaryText("Test 3")
+                .setPromptStateChangeListener(new MaterialTapTargetPrompt.PromptStateChangeListener() {
+                    @Override
+                    public void onPromptStateChanged(@NonNull MaterialTapTargetPrompt prompt,
+                                                     int state)
+                    {
+                        if (state == MaterialTapTargetPrompt.STATE_REVEALED)
+                        {
+                            actualStateProgress++;
+                            prompt.onPromptStateChanged(MaterialTapTargetPrompt.STATE_DISMISSED);
+                            prompt.dismiss();
+                        }
+                    }
+                })
+                .create(), 5000);
+        assertTrue(sequence.get(1) instanceof SequenceItemShowFor);
+        assertNotNull(sequence.get(1).getState());
+
+        sequence.addPrompt(UnitTestUtils.createPromptOptions()
+                .setTarget(0,0)
+                .setPrimaryText("Test 3")
+                .setPromptStateChangeListener(new MaterialTapTargetPrompt.PromptStateChangeListener() {
+                    @Override
+                    public void onPromptStateChanged(@NonNull MaterialTapTargetPrompt prompt,
+                                                     int state)
+                    {
+                        if (state == MaterialTapTargetPrompt.STATE_REVEALED)
+                        {
+                            actualStateProgress++;
+                            prompt.onPromptStateChanged(MaterialTapTargetPrompt.STATE_DISMISSED);
+                            prompt.dismiss();
+                        }
+                    }
+                }));
+        assertNotNull(sequence.get(2));
+        assertTrue(sequence.get(2).getState() instanceof SequenceStatePromptOptions);
+
+        sequence.addPrompt(UnitTestUtils.createPromptOptions()
+                .setTarget(0,0)
+                .setPrimaryText("Test 3")
+                .setPromptStateChangeListener(new MaterialTapTargetPrompt.PromptStateChangeListener() {
+                    @Override
+                    public void onPromptStateChanged(@NonNull MaterialTapTargetPrompt prompt,
+                                                     int state)
+                    {
+                        if (state == MaterialTapTargetPrompt.STATE_REVEALED)
+                        {
+                            actualStateProgress++;
+                            prompt.onPromptStateChanged(MaterialTapTargetPrompt.STATE_DISMISSED);
+                            prompt.dismiss();
+                        }
+                    }
+                })
+                .create());
+        assertNotNull(sequence.get(3));
+        assertNotNull(sequence.get(3).getState());
+
+        final SequenceItem sequenceItem = new SequenceItem(new SequenceState(UnitTestUtils.createPromptOptions()
+                .setTarget(0,0)
+                .setPrimaryText("Test 3")
+                .setPromptStateChangeListener(new MaterialTapTargetPrompt.PromptStateChangeListener() {
+                    @Override
+                    public void onPromptStateChanged(@NonNull MaterialTapTargetPrompt prompt,
+                                                     int state)
+                    {
+                        if (state == MaterialTapTargetPrompt.STATE_REVEALED)
+                        {
+                            actualStateProgress++;
+                            prompt.onPromptStateChanged(MaterialTapTargetPrompt.STATE_DISMISSED);
+                            prompt.dismiss();
+                        }
+                    }
+                })
+                .create()));
+        sequence.addPrompt(sequenceItem);
+        assertEquals(sequenceItem, sequence.get(4));
+        sequence.setSequenceCompleteListener(new MaterialTapTargetSequence.SequenceCompleteListener() {
+            @Override
+            public void onSequenceComplete()
+            {
+                actualStateProgress++;
+            }
+        });
         sequence.show();
     }
 }

@@ -22,15 +22,21 @@ import android.support.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
+import uk.co.samuelwall.materialtaptargetprompt.extras.PromptOptions;
+import uk.co.samuelwall.materialtaptargetprompt.extras.sequence.SequenceItem;
+import uk.co.samuelwall.materialtaptargetprompt.extras.sequence.SequenceItemShowFor;
+import uk.co.samuelwall.materialtaptargetprompt.extras.sequence.SequenceState;
+import uk.co.samuelwall.materialtaptargetprompt.extras.sequence.SequenceStatePromptOptions;
+
 /**
  * A Sequence of prompts to be shown one after another
  */
-public class MaterialTapTargetSequence {
-
+public class MaterialTapTargetSequence
+{
     /**
      * The list of prompts to display when the sequence is shown
      */
-    private final List<MaterialTapTargetPrompt> mPrompts = new ArrayList<>();
+    private final List<SequenceItem> items = new ArrayList<>();
 
     /**
      * Pointer to the next prompt to be shown
@@ -38,43 +44,152 @@ public class MaterialTapTargetSequence {
     private int nextPromptIndex = 0;
 
     /**
+     * Listener added to a sequence item for it completing.
+     */
+    private SequenceCompleteListener itemListener = new SequenceCompleteListener()
+    {
+        @Override
+        public void onSequenceComplete()
+        {
+            // Cleanup current prompt
+            final SequenceItem currentItem = items.get(nextPromptIndex);
+            currentItem.setSequenceListener(null);
+            final MaterialTapTargetPrompt prompt = currentItem.getState().getPrompt();
+            if (prompt != null)
+            {
+                prompt.mView.mPromptOptions.setSequenceListener(null);
+            }
+            nextPromptIndex++;
+            // Check if there is another prompt to show
+            if (items.size() > nextPromptIndex)
+            {
+                show(nextPromptIndex);
+            }
+            else if (mOnCompleteListener != null)
+            {
+                mOnCompleteListener.onSequenceComplete();
+            }
+        }
+    };
+
+    /**
      * The listener to call when this sequence completes
      */
-    @Nullable private SequenceCompleteListener mOnCompleteListener;
+    @Nullable
+    private SequenceCompleteListener mOnCompleteListener;
 
     /**
      * Set the listener to listen with the action to call when the sequence ends
      * @param listener the listener with the action to execute
      */
-    public void setSequenceCompleteListener(@Nullable SequenceCompleteListener listener){
+    @NonNull
+    public MaterialTapTargetSequence setSequenceCompleteListener(@Nullable SequenceCompleteListener listener)
+    {
         mOnCompleteListener = listener;
+        return this;
     }
 
     /**
      * Add a prompt to the end of the sequence.
-     * @param prompt The prompt to add
+     *
+     * @param prompt The prompt to add.
      */
-    public void addPrompt(MaterialTapTargetPrompt prompt){
+    @NonNull
+    public MaterialTapTargetSequence addPrompt(@Nullable MaterialTapTargetPrompt prompt)
+    {
+        this.addItem(new SequenceItem(new SequenceState(prompt)));
+        return this;
+    }
 
-        // add the listener to trigger the next in the sequence
-        prompt.mView.mPromptOptions.setSequenceListener(new MaterialTapTargetPrompt.PromptStateChangeListener() {
-            @Override
-            public void onPromptStateChanged(@NonNull MaterialTapTargetPrompt prompt, int state) {
+    /**
+     * Add a show for time prompt to the end of the sequence.
+     *
+     * @param prompt The prompt to add.
+     * @param milliseconds The number of milliseconds to show the prompt for.
+     * @return This.
+     */
+    @NonNull
+    public MaterialTapTargetSequence addPrompt(@Nullable MaterialTapTargetPrompt prompt,
+                                               final long milliseconds)
+    {
+        this.addItem(new SequenceItemShowFor(new SequenceState(prompt), milliseconds));
+        return this;
+    }
 
-                if (state == MaterialTapTargetPrompt.STATE_NON_FOCAL_PRESSED ||
-                        state == MaterialTapTargetPrompt.STATE_FOCAL_PRESSED)
+    /**
+     * Add a prompt to the end of the sequence.
+     *
+     * @param promptOptions The prompt to add.
+     * @return This.
+     */
+    @NonNull
+    public MaterialTapTargetSequence addPrompt(@NonNull PromptOptions promptOptions)
+    {
+        this.addItem(new SequenceItem(new SequenceStatePromptOptions(promptOptions)));
+        return this;
+    }
 
-                    if (mPrompts.size() > nextPromptIndex + 1) {
-                        mPrompts.get(++nextPromptIndex).show();
-                    }else{
-                        if (mOnCompleteListener != null) {
-                            mOnCompleteListener.onSequenceComplete();
-                        }
-                    }
-            }
-        });
+    /**
+     * Add a show for time prompt to the end of the sequence.
+     *
+     * @param promptOptions The prompt to add.
+     * @param milliseconds The number of milliseconds to show the prompt for.
+     * @return This.
+     */
+    @NonNull
+    public MaterialTapTargetSequence addPrompt(@NonNull PromptOptions promptOptions,
+                                               final long milliseconds)
+    {
+        this.addItem(new SequenceItemShowFor(new SequenceStatePromptOptions(promptOptions), milliseconds));
+        return this;
+    }
 
-        mPrompts.add(prompt);
+    /**
+     * Adds a sequence item to the end of the sequence.
+     * This sequence item must have state changers added to it by calling
+     * {@link SequenceItem#addStateChanger(int)}.
+     *
+     * @param item The already created sequence item to add.
+     * @return This.
+     */
+    @NonNull
+    public MaterialTapTargetSequence addPrompt(@NonNull final SequenceItem item)
+    {
+        this.items.add(item);
+        return this;
+    }
+
+    /**
+     * Adds common state changers and adds the item to the list.
+     *
+     * @param sequenceItem The item to add the state changers to and adds it to the item list.
+     */
+    private void addItem(@NonNull final SequenceItem sequenceItem)
+    {
+        sequenceItem.addStateChanger(MaterialTapTargetPrompt.STATE_FINISHED);
+        sequenceItem.addStateChanger(MaterialTapTargetPrompt.STATE_DISMISSED);
+        this.items.add(sequenceItem);
+    }
+
+    /**
+     * Get the number of prompts in this sequence.
+     *
+     * @return The number of prompts in this sequence.
+     */
+    public int size()
+    {
+        return this.items.size();
+    }
+
+    /**
+     * Gets a prompt at a position in this sequence.
+     *
+     * @param index The prompt 0 based index.
+     * @return The prompt at the specified position in this sequence.
+     */
+    public SequenceItem get(final int index)
+    {
+        return this.items.get(index);
     }
 
     /***
@@ -82,14 +197,33 @@ public class MaterialTapTargetSequence {
      */
     public void show()
     {
-        if (!mPrompts.isEmpty())
+        this.nextPromptIndex = 0;
+        if (!this.items.isEmpty())
         {
-            mPrompts.get(0).show();
+            this.show(0);
         }
         else if (mOnCompleteListener != null)
         {
             mOnCompleteListener.onSequenceComplete();
         }
+    }
+
+    /**
+     * Shows a prompt from a sequence item at the supplied index.
+     *
+     * @param index The 0 based index for the sequence item to show.
+     */
+    private void show(final int index)
+    {
+        final SequenceItem sequenceItem = this.items.get(index);
+        sequenceItem.setSequenceListener(this.itemListener);
+        final MaterialTapTargetPrompt prompt = sequenceItem.getState().getPrompt();
+        if (prompt != null)
+        {
+            // add the listener to trigger the next in the sequence
+            prompt.mView.mPromptOptions.setSequenceListener(sequenceItem);
+        }
+        sequenceItem.show();
     }
 
     /**
@@ -103,5 +237,3 @@ public class MaterialTapTargetSequence {
         void onSequenceComplete();
     }
 }
-
-

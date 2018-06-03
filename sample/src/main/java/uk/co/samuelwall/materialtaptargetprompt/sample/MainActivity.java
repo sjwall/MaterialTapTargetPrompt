@@ -300,24 +300,21 @@ public class MainActivity extends AppCompatActivity
 
     public void showSequence(View view) {
 
-        MaterialTapTargetSequence sequence = new MaterialTapTargetSequence();
-
-
-        sequence.addPrompt(new MaterialTapTargetPrompt.Builder(MainActivity.this)
-            .setTarget(findViewById(R.id.fab))
-            .setPrimaryText("Step 1")
-            .setFocalPadding(R.dimen.dp40)
-            .create());
-
-        sequence.addPrompt(new MaterialTapTargetPrompt.Builder(MainActivity.this)
-            .setTarget(findViewById(R.id.action_search))
-            .setPrimaryText("Step 2")
-            .setAnimationInterpolator(new LinearOutSlowInInterpolator())
-            .setFocalPadding(R.dimen.dp40)
-            .setIcon(R.drawable.ic_search)
-            .create());
-
-        sequence.show();
+        new MaterialTapTargetSequence()
+            .addPrompt(new MaterialTapTargetPrompt.Builder(MainActivity.this)
+                .setTarget(findViewById(R.id.fab))
+                .setPrimaryText("Step 1")
+                .setSecondaryText("This will show for 4 seconds")
+                .setFocalPadding(R.dimen.dp40)
+                .create(), 4000)
+            .addPrompt(new MaterialTapTargetPrompt.Builder(MainActivity.this)
+                .setTarget(findViewById(R.id.action_search))
+                .setPrimaryText("Step 2")
+                .setSecondaryText("This will show till you press it")
+                .setAnimationInterpolator(new LinearOutSlowInInterpolator())
+                .setFocalPadding(R.dimen.dp40)
+                .setIcon(R.drawable.ic_search), 5000)
+            .show();
     }
 
 
