@@ -20,7 +20,7 @@
               android:orientation="vertical"
               android:layout_width="match_parent"
               android:layout_height="match_parent"
-              tools:context="uk.co.samuelwall.materialtaptargetprompt.sample.EmptyActivity">
+              tools:context="uk.co.samuelwall.materialtaptargetprompt.sample.KotlinActivity">
 
     <include layout="@layout/content_main" />
 

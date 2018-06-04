@@ -282,9 +282,9 @@ public class MainActivity extends AppCompatActivity
                 .show();
     }
 
-    public void showActivity(View view)
+    public void showKotlinActivity(View view)
     {
-        startActivity(new Intent(this, EmptyActivity.class));
+        startActivity(new Intent(this, KotlinActivity.class));
     }
 
 
@@ -313,10 +313,9 @@ public class MainActivity extends AppCompatActivity
                 .setSecondaryText("This will show till you press it")
                 .setAnimationInterpolator(new LinearOutSlowInInterpolator())
                 .setFocalPadding(R.dimen.dp40)
-                .setIcon(R.drawable.ic_search), 5000)
+                .setIcon(R.drawable.ic_search))
             .show();
     }
-
 
     public void showListActivity(View view)
     {

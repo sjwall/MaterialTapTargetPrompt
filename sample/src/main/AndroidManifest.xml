@@ -43,7 +43,7 @@
                 android:value=".MainActivity" />
         </activity>
         <activity
-            android:name=".EmptyActivity"
+            android:name=".KotlinActivity"
             android:theme="@style/AppTheme">
         </activity>
         <activity

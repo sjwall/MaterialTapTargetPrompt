@@ -231,7 +231,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="40dp"/>
             <LinearLayout
-                    android:id="@+id/other_examples_activity"
+                    android:id="@+id/kotlin_examples_activity"
                     android:orientation="horizontal"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -240,13 +240,13 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:width="@dimen/example_button_width"
-                        android:text="@string/example_activity_title"
-                        android:onClick="showActivity"/>
+                        android:text="@string/kotlin_activity_title"
+                        android:onClick="showKotlinActivity"/>
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
-                    android:text="@string/example_activity_description"/>
+                    android:text="@string/kotlin_activity_description"/>
             </LinearLayout>
             <LinearLayout
                     android:id="@+id/other_examples_dialog"

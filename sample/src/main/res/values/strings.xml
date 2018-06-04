@@ -55,8 +55,8 @@
     <string name="example_no_auto_dismiss_title">No auto dismiss</string>
     <string name="example_no_auto_dismiss_description">Displays prompt over the FAB button that can only be dismissed by pressing the FAB button</string>
 
-    <string name="example_activity_title">Activity</string>
-    <string name="example_activity_description">An example with an Activity with out a navigation drawer</string>
+    <string name="kotlin_activity_title">Kotlin</string>
+    <string name="kotlin_activity_description">Examples written in Kotlin</string>
 
     <string name="example_dialog_title">Dialog</string>
     <string name="example_dialog_description">An example with a dialog</string>
