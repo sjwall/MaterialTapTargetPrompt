@@ -31,6 +31,7 @@ import uk.co.samuelwall.materialtaptargetprompt.extras.sequence.SequenceStatePro
 import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertNotNull;
 import static junit.framework.Assert.assertTrue;
+import static org.mockito.Mockito.spy;
 
 @RunWith(RobolectricTestRunner.class)
 @Config(constants = uk.co.samuelwall.materialtaptargetprompt.BuildConfig.class, sdk = 22)
@@ -325,5 +326,48 @@ public class MaterialTapTargetSequenceTest extends BaseTestStateProgress
             }
         });
         sequence.show();
+    }
+
+    @Test
+    public void testNullPrompt()
+    {
+        expectedStateProgress = 2;
+        final MaterialTapTargetSequence sequence = spy(new MaterialTapTargetSequence());
+        sequence.itemListener = spy(sequence.itemListener);
+        sequence.addPrompt(UnitTestUtils.createPromptOptions()
+                .setTarget(0,0)
+                .setPrimaryText("Test 1")
+                .setPromptStateChangeListener(new MaterialTapTargetPrompt.PromptStateChangeListener() {
+                    @Override
+                    public void onPromptStateChanged(@NonNull MaterialTapTargetPrompt prompt,
+                                                     int state)
+                    {
+                        if (state == MaterialTapTargetPrompt.STATE_REVEALED)
+                        {
+                            prompt.onPromptStateChanged(MaterialTapTargetPrompt.STATE_DISMISSED);
+                            prompt.dismiss();
+                            actualStateProgress++;
+                        }
+                    }
+                })
+                .create())
+            .addPrompt((MaterialTapTargetPrompt) null)
+            .addPrompt(UnitTestUtils.createPromptOptions()
+                .setTarget(0,0)
+                .setPrimaryText("Test 3")
+                .setPromptStateChangeListener(new MaterialTapTargetPrompt.PromptStateChangeListener() {
+                    @Override
+                    public void onPromptStateChanged(@NonNull MaterialTapTargetPrompt prompt,
+                                                     int state)
+                    {
+                        if (state == MaterialTapTargetPrompt.STATE_REVEALED)
+                        {
+                            prompt.onPromptStateChanged(MaterialTapTargetPrompt.STATE_DISMISSED);
+                            prompt.dismiss();
+                            actualStateProgress++;
+                        }
+                    }
+                }))
+            .show();
     }
 }

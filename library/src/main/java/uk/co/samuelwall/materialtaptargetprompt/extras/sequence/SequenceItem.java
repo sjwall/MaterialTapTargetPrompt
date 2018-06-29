@@ -33,11 +33,13 @@ public class SequenceItem implements MaterialTapTargetPrompt.PromptStateChangeLi
     /**
      * Defines the prompt in this sequence item.
      */
+    @NonNull
     private final SequenceState sequenceState;
 
     /**
      * Lists the state changes that trigger this sequence item to complete.
      */
+    @NonNull
     final List<Integer> stateChangers = new ArrayList<>();
 
     /**
@@ -117,6 +119,7 @@ public class SequenceItem implements MaterialTapTargetPrompt.PromptStateChangeLi
      *
      * @return The prompt state.
      */
+    @NonNull
     public SequenceState getState()
     {
         return this.sequenceState;
@@ -125,13 +128,16 @@ public class SequenceItem implements MaterialTapTargetPrompt.PromptStateChangeLi
     /**
      * Show this sequence item.
      */
-    @Nullable
     public void show()
     {
         final MaterialTapTargetPrompt prompt = this.sequenceState.getPrompt();
         if (prompt != null)
         {
             this.show(prompt);
+        }
+        else
+        {
+            this.onItemComplete();
         }
     }
 
@@ -148,7 +154,15 @@ public class SequenceItem implements MaterialTapTargetPrompt.PromptStateChangeLi
     @Override
     public void onPromptStateChanged(@NonNull final MaterialTapTargetPrompt prompt, final int state)
     {
-        if (this.stateChangers.contains(state) && this.sequenceListener != null)
+        if (this.stateChangers.contains(state))
+        {
+            this.onItemComplete();
+        }
+    }
+
+    protected void onItemComplete()
+    {
+        if (this.sequenceListener != null)
         {
             this.sequenceListener.onSequenceComplete();
         }

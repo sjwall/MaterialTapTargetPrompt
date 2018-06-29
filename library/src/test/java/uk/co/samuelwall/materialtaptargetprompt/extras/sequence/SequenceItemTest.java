@@ -133,4 +133,25 @@ public class SequenceItemTest extends BaseTestStateProgress
         prompt.dismiss();
         UnitTestUtils.endCurrentAnimation(prompt);
     }
+
+    @Test
+    public void testNullPrompt()
+    {
+        final SequenceItem sequenceItem = new SequenceItem(new SequenceState(null));
+        sequenceItem.show();
+    }
+
+    @Test
+    public void testNullListener()
+    {
+        final MaterialTapTargetPrompt prompt = UnitTestUtils.createPromptOptions()
+                .setTarget(32, 43)
+                .setPrimaryText("Test")
+                .create();
+        assertNotNull(prompt);
+        final SequenceItem sequenceItem = new SequenceItem(new SequenceState(prompt));
+        UnitTestUtils.initSequenceItem(prompt, sequenceItem);
+        prompt.show();
+        prompt.dismiss();
+    }
 }

@@ -46,7 +46,7 @@ public class MaterialTapTargetSequence
     /**
      * Listener added to a sequence item for it completing.
      */
-    private SequenceCompleteListener itemListener = new SequenceCompleteListener()
+    SequenceCompleteListener itemListener = new SequenceCompleteListener()
     {
         @Override
         public void onSequenceComplete()
