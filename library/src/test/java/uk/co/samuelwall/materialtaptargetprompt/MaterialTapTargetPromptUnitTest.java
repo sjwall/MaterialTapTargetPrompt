@@ -19,6 +19,7 @@ package uk.co.samuelwall.materialtaptargetprompt;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.graphics.Canvas;
+import android.graphics.RectF;
 import android.os.Build;
 import android.os.IBinder;
 import android.support.annotation.NonNull;
@@ -38,6 +39,9 @@ import org.robolectric.Robolectric;
 import org.robolectric.RobolectricTestRunner;
 import org.robolectric.annotation.Config;
 import org.robolectric.util.ReflectionHelpers;
+
+import uk.co.samuelwall.materialtaptargetprompt.extras.PromptFocal;
+import uk.co.samuelwall.materialtaptargetprompt.extras.PromptOptions;
 
 import static junit.framework.Assert.assertFalse;
 import static junit.framework.Assert.assertNotNull;
@@ -798,6 +802,71 @@ public class MaterialTapTargetPromptUnitTest extends BaseTestStateProgress
         assertTrue(prompt.isComplete());
         assertFalse(prompt.isDismissed());
         assertTrue(prompt.isDismissing());
+    }
+
+    @Test
+    public void testNullFocalPath()
+    {
+        MaterialTapTargetPrompt prompt = createMockBuilder(SCREEN_WIDTH, SCREEN_HEIGHT)
+                .setTarget(10, 10)
+                .setPrimaryText("Primary text")
+                .setPromptFocal(new PromptFocal() {
+                    @Override
+                    public void setColour(int colour)
+                    {
+
+                    }
+
+                    @NonNull
+                    @Override
+                    public RectF getBounds()
+                    {
+                        return new RectF(0, 0, 10, 10);
+                    }
+
+                    @Override
+                    public void prepare(@NonNull PromptOptions options, @NonNull View target,
+                                        int[] promptViewPosition)
+                    {
+
+                    }
+
+                    @Override
+                    public void prepare(@NonNull PromptOptions options, float targetX,
+                                        float targetY)
+                    {
+
+                    }
+
+                    @Override
+                    public void updateRipple(float revealModifier, float alphaModifier)
+                    {
+
+                    }
+
+                    @Override
+                    public void update(@NonNull PromptOptions options, float revealModifier,
+                                       float alphaModifier)
+                    {
+
+                    }
+
+                    @Override
+                    public void draw(@NonNull Canvas canvas)
+                    {
+
+                    }
+
+                    @Override
+                    public boolean contains(float x, float y)
+                    {
+                        return false;
+                    }
+                })
+                .show();
+        assertNotNull(prompt);
+        prompt.show();
+        assertTrue(prompt.isStarting());
     }
     
     private MaterialTapTargetPrompt.Builder createMockBuilder(final int screenWidth,

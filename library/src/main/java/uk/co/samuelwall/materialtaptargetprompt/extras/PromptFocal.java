@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017 Samuel Wall
+ * Copyright (C) 2017-2018 Samuel Wall
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,6 +17,7 @@
 package uk.co.samuelwall.materialtaptargetprompt.extras;
 
 import android.graphics.Path;
+import android.graphics.PointF;
 import android.graphics.RectF;
 import android.support.annotation.ColorInt;
 import android.support.annotation.FloatRange;
@@ -65,6 +66,37 @@ public abstract class PromptFocal implements PromptUIElement
      */
     public Path getPath() {
         return null;
+    }
+
+    /**
+     * Calculate the point on the focal edge based on the angle.
+     * This is called after {@link #prepare(PromptOptions, float, float)} or
+     * {@link #prepare(PromptOptions, View, int[])}.
+     *
+     * Base implementation assumes that focal is a rectangle.
+     *
+     * @param angle The angle with 0 based on the right.
+     * @param padding The padding added to the focal bounds.
+     * @return The calculated point
+     */
+    @NonNull
+    public PointF calculateAngleEdgePoint(float angle, final float padding)
+    {
+        // Calculate the x and y on the focal from the angle calculated
+        final RectF bounds = this.getBounds();
+        final float angleRadians = (float) Math.toRadians(angle);
+        final float sin = (float) Math.sin(angleRadians);
+        final float cos = (float) Math.cos(angleRadians);
+        final float dx1 = (bounds.width() + padding) / (cos > 0 ? 2 : -2);
+        final float dy1 = (bounds.height() + padding) / (sin > 0 ? 2 : -2);
+
+        // Could go to part way along the target bounds but risk cutting off corners
+        /*final float dxs = dx1 * sin;
+        final float dyc = dy1 * cos;
+        final float dx = Math.abs(dxs) < Math.abs(dyc) ? dx1 : dyc / sin;
+        final float dy = Math.abs(dxs) < Math.abs(dyc) ? dxs / cos : dy1;*/
+
+        return new PointF(bounds.centerX() + dx1, bounds.centerY() + dy1);
     }
 
     /**

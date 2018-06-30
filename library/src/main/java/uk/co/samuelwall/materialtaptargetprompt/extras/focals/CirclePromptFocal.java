@@ -83,6 +83,43 @@ public class CirclePromptFocal extends PromptFocal
         return mPath;
     }
 
+    @NonNull
+    @Override
+    public PointF calculateAngleEdgePoint(final float angle, final float padding)
+    {
+        // Calculate the x and y on the focal from the angle calculated
+        final float focalRadius = mBounds.width() + padding;
+        final float x = calculateX(angle, focalRadius, mBounds.centerX());
+        final float y = calculateY(angle, focalRadius, mBounds.centerY());
+        return new PointF(x, y);
+    }
+    
+    /**
+     * Calculates the x position on a circle for an angle and centre point x.
+     *
+     * @param angle The angle on the circle to get the x position for.
+     * @param radius The circle radius.
+     * @param centreX The centre x position for the circle.
+     * @return The calculated x position for the angle.
+     */
+    private float calculateX(final float angle, final float radius, final float centreX)
+    {
+        return centreX + radius * (float) Math.cos(Math.toRadians(angle));
+    }
+
+    /**
+     * Calculates the y position on a circle for an angle and centre point y.
+     *
+     * @param angle The angle on the circle to get the y position for.
+     * @param radius The circle radius.
+     * @param centreY The centre y position for the circle.
+     * @return The calculated y position for the angle.
+     */
+    private float calculateY(final float angle, final float radius, final float centreY)
+    {
+        return centreY + radius * (float) Math.sin(Math.toRadians(angle));
+    }
+
     @Override
     public void setColour(@ColorInt int colour)
     {

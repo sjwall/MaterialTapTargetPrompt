@@ -115,56 +115,61 @@ public class CirclePromptBackground extends PromptBackground
                 || (focalCentreY > clipBoundsInset88dp.top
                 && focalCentreY < clipBoundsInset88dp.bottom))
         {
-            final boolean isTextAboveTarget = textBounds.top < focalBounds.top;
-            float x1 = focalCentreX;
-            float x2 = textBounds.left - textPadding;
-            float y1, y2;
-            if (isTextAboveTarget)
+            // The circle position and radius is calculated based on three points placed around the
+            // prompt: XY1, XY2 and XY3.
+            // XY2: the text left side
+            // XY3: the text right side
+            // XY1: the furthest point on the focal target from the text centre x point
+
+            // XY1
+            float textWidth = textBounds.width();
+            // Calculate the X distance from the text centre x to focal centre x
+            float distanceX = focalCentreX - textBounds.left + (textWidth / 2);
+            // Calculate how much percentage wise the focal centre x is from the text centre x to
+            // the nearest text edge
+            float percentageOffset = 100 / textWidth * distanceX;
+            // Angle is the above percentage of 90 degrees
+            float angle = 90 * (percentageOffset / 100);
+            // 0 degrees is right side middle
+            // If text above target
+            if (textBounds.top < focalBounds.top)
             {
-                y1 = focalBounds.bottom + textPadding;
+                angle = 180 - angle;
+            }
+            else
+            {
+                angle = 180 + angle;
+            }
+            final PointF furthestPoint = options.getPromptFocal().calculateAngleEdgePoint(angle,
+                focalPadding);
+            final float x1 = furthestPoint.x;
+            final float y1 = furthestPoint.y;
+
+            // XY2
+            final float x2 = textBounds.left - textPadding;
+            final float y2;
+            // If text is above the target
+            if (textBounds.top < focalBounds.top)
+            {
                 y2 = textBounds.top;
             }
             else
             {
-                y1 = focalBounds.top - (focalPadding + textPadding);
                 y2 = textBounds.bottom;
             }
 
+            // XY3
+            //noinspection UnnecessaryLocalVariable
             final float y3 = y2;
             float x3 = textBounds.right + textPadding;
+
             // If the focal width is greater than the text width
             if (focalBounds.right > x3)
             {
-                x1 = x3 = focalBounds.right + focalPadding;
+                x3 = focalBounds.right + focalPadding;
             }
 
-            final float focalLeft = focalBounds.left - focalPadding;
-            final float focalRight = focalBounds.right + focalPadding;
-            // If the text left is within the focal bounds
-            if (x2 > focalLeft && x2 < focalRight)
-            {
-                if (isTextAboveTarget)
-                {
-                    x1 = focalLeft;
-                }
-                else
-                {
-                    x2 -= (focalBounds.width() / 2) - focalPadding;
-                }
-            }
-            // If the text right is within the focal bounds
-            else if (x3 > focalLeft && x3 < focalRight)
-            {
-                if (isTextAboveTarget)
-                {
-                    x1 = focalRight;
-                }
-                else
-                {
-                    x3 += (focalBounds.width() / 2) + focalPadding;
-                }
-            }
-
+            // Calculate the position and radius
             final double offset = Math.pow(x2, 2) + Math.pow(y2, 2);
             final double bc = (Math.pow(x1, 2) + Math.pow(y1, 2) - offset) / 2.0;
             final double cd = (offset - Math.pow(x3, 2) - Math.pow(y3, 2)) / 2.0;
@@ -214,15 +219,15 @@ public class CirclePromptBackground extends PromptBackground
     {
         canvas.drawCircle(mPosition.x, mPosition.y, mRadius, mPaint);
 
-        /*canvas.drawCircle(point1.x, point1.y, 100, pointPaint);
-        pointPaint.setColor(Color.YELLOW);
+        /*pointPaint.setColor(Color.YELLOW);
         pointPaint.setAlpha(100);
-        canvas.drawCircle(point2.x, point2.y, 100, pointPaint);
+        canvas.drawCircle(point1.x, point1.y, 100, pointPaint);
         pointPaint.setColor(Color.GREEN);
         pointPaint.setAlpha(100);
-        canvas.drawCircle(point3.x, point3.y, 100, pointPaint);
+        canvas.drawCircle(point2.x, point2.y, 100, pointPaint);
         pointPaint.setColor(Color.RED);
-        pointPaint.setAlpha(100);*/
+        pointPaint.setAlpha(100);
+        canvas.drawCircle(point3.x, point3.y, 100, pointPaint);*/
     }
 
     @Override
