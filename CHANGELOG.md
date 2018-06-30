@@ -2,6 +2,21 @@
 
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## v2.10.0 (2018-06-30)
+
+### Features
+
+* Added `showFor` support to `MaterialTapTargetSequence`
+* Added support for passing `MaterialTapTargetPrompt.Builder` or `PromptOptions` to `MaterialTapTargetSequence`
+
+### Improvements
+
+* Improved circle background position calculations
+
+### Other
+
+* Added examples written in Kotlin
+
 ## v2.9.0 (2018-05-19)
 
 ### Features
