@@ -2,6 +2,14 @@
 
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## v2.11.0 (2018-07-08)
+
+### Features
+
+* Added `finish` to `MaterialTapTargetSequence` to cancel a sequence mid way with a finish action
+* Added `dismiss` to `MaterialTapTargetSequence` to cancel a sequence mid way with a dismiss action
+* Added `showFromIndex` to `MaterialTapTargetSequence` to start or continue a sequence from any prompt in it
+
 ## v2.10.0 (2018-06-30)
 
 ### Features
