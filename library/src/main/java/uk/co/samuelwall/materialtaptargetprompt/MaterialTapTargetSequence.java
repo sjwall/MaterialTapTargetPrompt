@@ -42,7 +42,7 @@ public class MaterialTapTargetSequence
     /**
      * Pointer to the next prompt to be shown
      */
-    private int nextPromptIndex = -1;
+    int nextPromptIndex = -1;
 
     /**
      * Listener added to a sequence item for it completing.
@@ -277,6 +277,20 @@ public class MaterialTapTargetSequence
             }
             sequenceItem.dismiss();
         }
+        return this;
+    }
+
+    /**
+     * Shows or continues to show this sequence from the prompt at the index supplied.
+     *
+     * @param index The index to show from.
+     * @return This.
+     */
+    @NonNull
+    public MaterialTapTargetSequence showFromIndex(final int index)
+    {
+        this.dismiss();
+        this.show(index);
         return this;
     }
 

@@ -28,10 +28,7 @@ import uk.co.samuelwall.materialtaptargetprompt.extras.sequence.SequenceItemShow
 import uk.co.samuelwall.materialtaptargetprompt.extras.sequence.SequenceState;
 import uk.co.samuelwall.materialtaptargetprompt.extras.sequence.SequenceStatePromptOptions;
 
-import static junit.framework.Assert.assertEquals;
-import static junit.framework.Assert.assertNotNull;
-import static junit.framework.Assert.assertTrue;
-import static org.mockito.Mockito.spy;
+import static org.junit.Assert.*;
 
 @RunWith(RobolectricTestRunner.class)
 @Config(constants = uk.co.samuelwall.materialtaptargetprompt.BuildConfig.class, sdk = 22)
@@ -443,5 +440,260 @@ public class MaterialTapTargetSequenceTest extends BaseTestStateProgress
                     }
                 }))
             .show();
+    }
+
+    @Test
+    public void testFinishSequenceBeforeShow()
+    {
+        expectedStateProgress = 4;
+        final MaterialTapTargetSequence sequence = new MaterialTapTargetSequence();
+        sequence.addPrompt(UnitTestUtils.createPromptOptions()
+                .setTarget(0,0)
+                .setPrimaryText("Test 1")
+                .setPromptStateChangeListener(new MaterialTapTargetPrompt.PromptStateChangeListener() {
+                    @Override
+                    public void onPromptStateChanged(@NonNull MaterialTapTargetPrompt prompt,
+                                                     int state)
+                    {
+                        if (state == MaterialTapTargetPrompt.STATE_REVEALED)
+                        {
+                            sequence.finish();
+                        }
+                        actualStateProgress++;
+                    }
+                })
+                .create())
+                .addPrompt(UnitTestUtils.createPromptOptions()
+                        .setTarget(0,0)
+                        .setPrimaryText("Test 3")
+                        .setPromptStateChangeListener(new MaterialTapTargetPrompt.PromptStateChangeListener() {
+                            @Override
+                            public void onPromptStateChanged(@NonNull MaterialTapTargetPrompt prompt,
+                                                             int state)
+                            {
+                                actualStateProgress++;
+                            }
+                        }))
+                .finish()
+                .show();
+    }
+
+    @Test
+    public void testDismissSequenceBeforeShow()
+    {
+        expectedStateProgress = 4;
+        final MaterialTapTargetSequence sequence = new MaterialTapTargetSequence();
+        sequence.addPrompt(UnitTestUtils.createPromptOptions()
+                .setTarget(0,0)
+                .setPrimaryText("Test 1")
+                .setPromptStateChangeListener(new MaterialTapTargetPrompt.PromptStateChangeListener() {
+                    @Override
+                    public void onPromptStateChanged(@NonNull MaterialTapTargetPrompt prompt,
+                                                     int state)
+                    {
+                        if (state == MaterialTapTargetPrompt.STATE_REVEALED)
+                        {
+                            sequence.dismiss();
+                        }
+                        actualStateProgress++;
+                    }
+                })
+                .create())
+                .addPrompt(UnitTestUtils.createPromptOptions()
+                        .setTarget(0,0)
+                        .setPrimaryText("Test 3")
+                        .setPromptStateChangeListener(new MaterialTapTargetPrompt.PromptStateChangeListener() {
+                            @Override
+                            public void onPromptStateChanged(@NonNull MaterialTapTargetPrompt prompt,
+                                                             int state)
+                            {
+                                if (state == MaterialTapTargetPrompt.STATE_REVEALED)
+                                {
+                                    prompt.onPromptStateChanged(MaterialTapTargetPrompt.STATE_DISMISSED);
+                                    prompt.dismiss();
+                                }
+                                actualStateProgress++;
+                            }
+                        }))
+                .dismiss()
+                .show();
+    }
+
+    @Test
+    public void testFinishSequenceBeforeShowOutOfRange()
+    {
+        expectedStateProgress = 4;
+        final MaterialTapTargetSequence sequence = new MaterialTapTargetSequence();
+        sequence.addPrompt(UnitTestUtils.createPromptOptions()
+                .setTarget(0,0)
+                .setPrimaryText("Test 1")
+                .setPromptStateChangeListener(new MaterialTapTargetPrompt.PromptStateChangeListener() {
+                    @Override
+                    public void onPromptStateChanged(@NonNull MaterialTapTargetPrompt prompt,
+                                                     int state)
+                    {
+                        if (state == MaterialTapTargetPrompt.STATE_REVEALED)
+                        {
+                            sequence.finish();
+                        }
+                        actualStateProgress++;
+                    }
+                })
+                .create())
+                .addPrompt(UnitTestUtils.createPromptOptions()
+                        .setTarget(0,0)
+                        .setPrimaryText("Test 3")
+                        .setPromptStateChangeListener(new MaterialTapTargetPrompt.PromptStateChangeListener() {
+                            @Override
+                            public void onPromptStateChanged(@NonNull MaterialTapTargetPrompt prompt,
+                                                             int state)
+                            {
+                                actualStateProgress++;
+                            }
+                        }));
+        sequence.nextPromptIndex = 1000;
+        sequence.finish()
+            .show();
+    }
+
+    @Test
+    public void testDismissSequenceBeforeShowOutOfRange()
+    {
+        expectedStateProgress = 4;
+        final MaterialTapTargetSequence sequence = new MaterialTapTargetSequence();
+        sequence.addPrompt(UnitTestUtils.createPromptOptions()
+                .setTarget(0,0)
+                .setPrimaryText("Test 1")
+                .setPromptStateChangeListener(new MaterialTapTargetPrompt.PromptStateChangeListener() {
+                    @Override
+                    public void onPromptStateChanged(@NonNull MaterialTapTargetPrompt prompt,
+                                                     int state)
+                    {
+                        if (state == MaterialTapTargetPrompt.STATE_REVEALED)
+                        {
+                            sequence.dismiss();
+                        }
+                        actualStateProgress++;
+                    }
+                })
+                .create())
+                .addPrompt(UnitTestUtils.createPromptOptions()
+                        .setTarget(0,0)
+                        .setPrimaryText("Test 3")
+                        .setPromptStateChangeListener(new MaterialTapTargetPrompt.PromptStateChangeListener() {
+                            @Override
+                            public void onPromptStateChanged(@NonNull MaterialTapTargetPrompt prompt,
+                                                             int state)
+                            {
+                                if (state == MaterialTapTargetPrompt.STATE_REVEALED)
+                                {
+                                    prompt.onPromptStateChanged(MaterialTapTargetPrompt.STATE_DISMISSED);
+                                    prompt.dismiss();
+                                }
+                                actualStateProgress++;
+                            }
+                        }));
+        sequence.nextPromptIndex = 1000;
+        sequence.dismiss()
+            .show();
+    }
+
+
+
+    @Test
+    public void testFinishSequenceBeforeShowNullPrompt()
+    {
+        expectedStateProgress = 2;
+        final MaterialTapTargetSequence sequence = new MaterialTapTargetSequence();
+        sequence.addPrompt(new SequenceItem(new SequenceState(null)))
+                .addPrompt(UnitTestUtils.createPromptOptions()
+                        .setTarget(0,0)
+                        .setPrimaryText("Test 3")
+                        .setPromptStateChangeListener(new MaterialTapTargetPrompt.PromptStateChangeListener() {
+                            @Override
+                            public void onPromptStateChanged(@NonNull MaterialTapTargetPrompt prompt,
+                                                             int state)
+                            {
+                                actualStateProgress++;
+                            }
+                        }));
+        sequence.nextPromptIndex = 0;
+        sequence.finish()
+                .show();
+    }
+
+    @Test
+    public void testDismissSequenceBeforeShowNullPrompt()
+    {
+        expectedStateProgress = 2;
+        final MaterialTapTargetSequence sequence = new MaterialTapTargetSequence();
+        sequence.addPrompt(new SequenceItem(new SequenceState(null)))
+                .addPrompt(UnitTestUtils.createPromptOptions()
+                        .setTarget(0,0)
+                        .setPrimaryText("Test 3")
+                        .setPromptStateChangeListener(new MaterialTapTargetPrompt.PromptStateChangeListener() {
+                            @Override
+                            public void onPromptStateChanged(@NonNull MaterialTapTargetPrompt prompt,
+                                                             int state)
+                            {
+                                actualStateProgress++;
+                            }
+                        }));
+        sequence.nextPromptIndex = 0;
+        sequence.dismiss()
+            .show();
+    }
+
+    @Test
+    public void testShowSequenceFromIndex()
+    {
+        expectedStateProgress = 6;
+        final MaterialTapTargetSequence sequence = new MaterialTapTargetSequence();
+        sequence.addPrompt(UnitTestUtils.createPromptOptions()
+                .setTarget(0,0)
+                .setPrimaryText("Test 1")
+                .setPromptStateChangeListener(new MaterialTapTargetPrompt.PromptStateChangeListener() {
+                    @Override
+                    public void onPromptStateChanged(@NonNull MaterialTapTargetPrompt prompt,
+                                                     int state)
+                    {
+                        if (state == MaterialTapTargetPrompt.STATE_REVEALED)
+                        {
+                            sequence.showFromIndex(2);
+                        }
+                        actualStateProgress++;
+                    }
+                })
+                .create())
+                .addPrompt(UnitTestUtils.createPromptOptions()
+                        .setTarget(0,0)
+                        .setPrimaryText("Test 3")
+                        .setPromptStateChangeListener(new MaterialTapTargetPrompt.PromptStateChangeListener() {
+                            @Override
+                            public void onPromptStateChanged(@NonNull MaterialTapTargetPrompt prompt,
+                                                             int state)
+                            {
+                                fail();
+                            }
+                        }))
+            .addPrompt(UnitTestUtils.createPromptOptions()
+                .setTarget(0,0)
+                .setPrimaryText("Test 3")
+                .setPromptStateChangeListener(new MaterialTapTargetPrompt.PromptStateChangeListener() {
+                    @Override
+                    public void onPromptStateChanged(@NonNull MaterialTapTargetPrompt prompt,
+                                                     int state)
+                    {
+                        actualStateProgress++;
+                    }
+                }))
+            .show();
+    }
+
+    @Test(expected = IndexOutOfBoundsException.class)
+    public void testShowSequenceFromIndexOutOfRange()
+    {
+        final MaterialTapTargetSequence sequence = new MaterialTapTargetSequence();
+        sequence.showFromIndex(-1);
     }
 }
