@@ -43,14 +43,8 @@ import org.robolectric.util.ReflectionHelpers;
 import uk.co.samuelwall.materialtaptargetprompt.extras.PromptFocal;
 import uk.co.samuelwall.materialtaptargetprompt.extras.PromptOptions;
 
-import static junit.framework.Assert.assertFalse;
-import static junit.framework.Assert.assertNotNull;
-import static junit.framework.Assert.assertTrue;
-import static junit.framework.Assert.fail;
-import static org.junit.Assert.assertEquals;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.spy;
-import static org.mockito.Mockito.when;
+import static org.junit.Assert.*;
+import static org.mockito.Mockito.*;
 
 @RunWith(RobolectricTestRunner.class)
 @Config(constants = uk.co.samuelwall.materialtaptargetprompt.BuildConfig.class, sdk = 22)
@@ -867,6 +861,19 @@ public class MaterialTapTargetPromptUnitTest extends BaseTestStateProgress
         assertNotNull(prompt);
         prompt.show();
         assertTrue(prompt.isStarting());
+    }
+
+    @Test
+    public void testIdleAnimationDisabled()
+    {
+        MaterialTapTargetPrompt prompt = createMockBuilder(SCREEN_WIDTH, SCREEN_HEIGHT)
+                .setTarget(10, 10)
+                .setPrimaryText("Primary text")
+                .setIdleAnimationEnabled(false)
+                .create();
+        assertNotNull(prompt);
+        prompt.show();
+        assertNull(prompt.mAnimationFocalBreathing);
     }
     
     private MaterialTapTargetPrompt.Builder createMockBuilder(final int screenWidth,

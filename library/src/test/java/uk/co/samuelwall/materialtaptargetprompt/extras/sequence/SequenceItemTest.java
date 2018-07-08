@@ -154,4 +154,20 @@ public class SequenceItemTest extends BaseTestStateProgress
         prompt.show();
         prompt.dismiss();
     }
+
+    @Test
+    public void testNullPromptFinish()
+    {
+        final SequenceState state = new SequenceState(null);
+        final SequenceItem sequenceItem = new SequenceItem(state);
+        sequenceItem.finish();
+    }
+
+    @Test
+    public void testNullPromptDismiss()
+    {
+        final SequenceState state = new SequenceState(null);
+        final SequenceItem sequenceItem = new SequenceItem(state);
+        sequenceItem.dismiss();
+    }
 }
