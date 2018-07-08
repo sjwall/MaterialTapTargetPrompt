@@ -96,8 +96,8 @@ public class MaterialTapTargetSequenceTest extends BaseTestStateProgress
     public void threePromptTest()
     {
         expectedStateProgress = 4;
-        final MaterialTapTargetSequence sequence = new MaterialTapTargetSequence();
-        sequence.addPrompt(UnitTestUtils.createPromptOptions()
+        new MaterialTapTargetSequence()
+            .addPrompt(UnitTestUtils.createPromptOptions()
                         .setTarget(0,0)
                         .setPrimaryText("Test 1")
                         .setPromptStateChangeListener(new MaterialTapTargetPrompt.PromptStateChangeListener() {
@@ -113,8 +113,8 @@ public class MaterialTapTargetSequenceTest extends BaseTestStateProgress
                                 }
                             }
                         })
-                        .create());
-        sequence.addPrompt(UnitTestUtils.createPromptOptions()
+                        .create())
+            .addPrompt(UnitTestUtils.createPromptOptions()
                         .setTarget(0,0)
                         .setPrimaryText("Test 2")
                         .setPromptStateChangeListener(new MaterialTapTargetPrompt.PromptStateChangeListener() {
@@ -130,8 +130,8 @@ public class MaterialTapTargetSequenceTest extends BaseTestStateProgress
                                 }
                             }
                         })
-                        .create());
-        sequence.addPrompt(UnitTestUtils.createPromptOptions()
+                        .create())
+            .addPrompt(UnitTestUtils.createPromptOptions()
                         .setTarget(0,0)
                         .setPrimaryText("Test 3")
                         .setPromptStateChangeListener(new MaterialTapTargetPrompt.PromptStateChangeListener() {
@@ -147,23 +147,23 @@ public class MaterialTapTargetSequenceTest extends BaseTestStateProgress
                                 }
                             }
                         })
-                        .create());
-        sequence.setSequenceCompleteListener(new MaterialTapTargetSequence.SequenceCompleteListener() {
+                        .create())
+            .setSequenceCompleteListener(new MaterialTapTargetSequence.SequenceCompleteListener() {
             @Override
             public void onSequenceComplete()
             {
                 actualStateProgress++;
             }
-        });
-        sequence.show();
+        })
+            .show();
     }
 
     @Test
     public void threePromptNoCompleteListenerTest()
     {
         expectedStateProgress = 3;
-        final MaterialTapTargetSequence sequence = new MaterialTapTargetSequence();
-        sequence.addPrompt(UnitTestUtils.createPromptOptions()
+        new MaterialTapTargetSequence()
+            .addPrompt(UnitTestUtils.createPromptOptions()
                         .setTarget(0,0)
                         .setPrimaryText("Test 1")
                         .setPromptStateChangeListener(new MaterialTapTargetPrompt.PromptStateChangeListener() {
@@ -179,8 +179,8 @@ public class MaterialTapTargetSequenceTest extends BaseTestStateProgress
                                 }
                             }
                         })
-                        .create());
-        sequence.addPrompt(UnitTestUtils.createPromptOptions()
+                        .create())
+            .addPrompt(UnitTestUtils.createPromptOptions()
                         .setTarget(0,0)
                         .setPrimaryText("Test 2")
                         .setPromptStateChangeListener(new MaterialTapTargetPrompt.PromptStateChangeListener() {
@@ -196,8 +196,8 @@ public class MaterialTapTargetSequenceTest extends BaseTestStateProgress
                                 }
                             }
                         })
-                        .create());
-        sequence.addPrompt(UnitTestUtils.createPromptOptions()
+                        .create())
+            .addPrompt(UnitTestUtils.createPromptOptions()
                         .setTarget(0,0)
                         .setPrimaryText("Test 3")
                         .setPromptStateChangeListener(new MaterialTapTargetPrompt.PromptStateChangeListener() {
@@ -212,8 +212,8 @@ public class MaterialTapTargetSequenceTest extends BaseTestStateProgress
                                     prompt.dismiss();
                                 }
                             }
-                        }));
-        sequence.show();
+                        }))
+            .show();
     }
 
     @Test
@@ -332,8 +332,7 @@ public class MaterialTapTargetSequenceTest extends BaseTestStateProgress
     public void testNullPrompt()
     {
         expectedStateProgress = 2;
-        final MaterialTapTargetSequence sequence = spy(new MaterialTapTargetSequence());
-        sequence.itemListener = spy(sequence.itemListener);
+        final MaterialTapTargetSequence sequence = new MaterialTapTargetSequence();
         sequence.addPrompt(UnitTestUtils.createPromptOptions()
                 .setTarget(0,0)
                 .setPrimaryText("Test 1")
@@ -366,6 +365,81 @@ public class MaterialTapTargetSequenceTest extends BaseTestStateProgress
                             prompt.dismiss();
                             actualStateProgress++;
                         }
+                    }
+                }))
+            .show();
+    }
+
+    @Test
+    public void testFinishSequence()
+    {
+        expectedStateProgress = 4;
+        final MaterialTapTargetSequence sequence = new MaterialTapTargetSequence();
+        sequence.addPrompt(UnitTestUtils.createPromptOptions()
+                .setTarget(0,0)
+                .setPrimaryText("Test 1")
+                .setPromptStateChangeListener(new MaterialTapTargetPrompt.PromptStateChangeListener() {
+                    @Override
+                    public void onPromptStateChanged(@NonNull MaterialTapTargetPrompt prompt,
+                                                     int state)
+                    {
+                        if (state == MaterialTapTargetPrompt.STATE_REVEALED)
+                        {
+                            sequence.finish();
+                        }
+                        actualStateProgress++;
+                    }
+                })
+            .create())
+            .addPrompt(UnitTestUtils.createPromptOptions()
+                .setTarget(0,0)
+                .setPrimaryText("Test 3")
+                .setPromptStateChangeListener(new MaterialTapTargetPrompt.PromptStateChangeListener() {
+                    @Override
+                    public void onPromptStateChanged(@NonNull MaterialTapTargetPrompt prompt,
+                                                     int state)
+                    {
+                        actualStateProgress++;
+                    }
+                }))
+            .show();
+    }
+
+    @Test
+    public void testDismissSequence()
+    {
+        expectedStateProgress = 4;
+        final MaterialTapTargetSequence sequence = new MaterialTapTargetSequence();
+        sequence.addPrompt(UnitTestUtils.createPromptOptions()
+                .setTarget(0,0)
+                .setPrimaryText("Test 1")
+                .setPromptStateChangeListener(new MaterialTapTargetPrompt.PromptStateChangeListener() {
+                    @Override
+                    public void onPromptStateChanged(@NonNull MaterialTapTargetPrompt prompt,
+                                                     int state)
+                    {
+                        if (state == MaterialTapTargetPrompt.STATE_REVEALED)
+                        {
+                            sequence.dismiss();
+                        }
+                        actualStateProgress++;
+                    }
+                })
+            .create())
+            .addPrompt(UnitTestUtils.createPromptOptions()
+                .setTarget(0,0)
+                .setPrimaryText("Test 3")
+                .setPromptStateChangeListener(new MaterialTapTargetPrompt.PromptStateChangeListener() {
+                    @Override
+                    public void onPromptStateChanged(@NonNull MaterialTapTargetPrompt prompt,
+                                                     int state)
+                    {
+                        if (state == MaterialTapTargetPrompt.STATE_REVEALED)
+                        {
+                            prompt.onPromptStateChanged(MaterialTapTargetPrompt.STATE_DISMISSED);
+                            prompt.dismiss();
+                        }
+                        actualStateProgress++;
                     }
                 }))
             .show();

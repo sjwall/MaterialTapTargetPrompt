@@ -41,7 +41,7 @@ public class MaterialTapTargetSequence
     /**
      * Pointer to the next prompt to be shown
      */
-    private int nextPromptIndex = 0;
+    private int nextPromptIndex = -1;
 
     /**
      * Listener added to a sequence item for it completing.
@@ -68,6 +68,7 @@ public class MaterialTapTargetSequence
             else if (mOnCompleteListener != null)
             {
                 mOnCompleteListener.onSequenceComplete();
+                nextPromptIndex = -1;
             }
         }
     };
@@ -194,8 +195,11 @@ public class MaterialTapTargetSequence
 
     /***
      * Start the sequence by showing the first prompt.
+     *
+     * @return This.
      */
-    public void show()
+    @NonNull
+    public MaterialTapTargetSequence show()
     {
         this.nextPromptIndex = 0;
         if (!this.items.isEmpty())
@@ -206,6 +210,7 @@ public class MaterialTapTargetSequence
         {
             mOnCompleteListener.onSequenceComplete();
         }
+        return this;
     }
 
     /**
@@ -224,6 +229,50 @@ public class MaterialTapTargetSequence
             prompt.mView.mPromptOptions.setSequenceListener(sequenceItem);
         }
         sequenceItem.show();
+    }
+
+    /**
+     * Removes the currently displayed prompt in the sequence from view using the finish action and stops the sequence
+     * from continuing.
+     *
+     * @return This.
+     */
+    public MaterialTapTargetSequence finish()
+    {
+        if (this.nextPromptIndex > -1 && this.nextPromptIndex < this.items.size())
+        {
+            final SequenceItem sequenceItem = this.items.get(nextPromptIndex);
+            sequenceItem.setSequenceListener(null);
+            final MaterialTapTargetPrompt prompt = sequenceItem.getState().getPrompt();
+            if (prompt != null)
+            {
+                prompt.mView.mPromptOptions.setSequenceListener(null);
+            }
+            sequenceItem.finish();
+        }
+        return this;
+    }
+
+    /**
+     * Removes the currently displayed prompt in the sequence from view using the dismiss action and stops the sequence
+     * from continuing.
+     *
+     * @return This.
+     */
+    public MaterialTapTargetSequence dismiss()
+    {
+        if (this.nextPromptIndex > -1 && this.nextPromptIndex < this.items.size())
+        {
+            final SequenceItem sequenceItem = this.items.get(nextPromptIndex);
+            sequenceItem.setSequenceListener(null);
+            final MaterialTapTargetPrompt prompt = sequenceItem.getState().getPrompt();
+            if (prompt != null)
+            {
+                prompt.mView.mPromptOptions.setSequenceListener(null);
+            }
+            sequenceItem.dismiss();
+        }
+        return this;
     }
 
     /**

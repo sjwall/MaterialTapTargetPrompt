@@ -142,6 +142,30 @@ public class SequenceItem implements MaterialTapTargetPrompt.PromptStateChangeLi
     }
 
     /**
+     * Calls {@link MaterialTapTargetPrompt#finish()} on this items states prompt.
+     */
+    public void finish()
+    {
+        final MaterialTapTargetPrompt prompt = this.sequenceState.getPrompt();
+        if (prompt != null)
+        {
+            prompt.finish();
+        }
+    }
+
+    /**
+     * Calls {@link MaterialTapTargetPrompt#dismiss()} on this items states prompt.
+     */
+    public void dismiss()
+    {
+        final MaterialTapTargetPrompt prompt = this.sequenceState.getPrompt();
+        if (prompt != null)
+        {
+            prompt.dismiss();
+        }
+    }
+
+    /**
      * Show the created prompt for this sequence item.
      *
      * @param prompt The prompt to show, this will never be null here.
