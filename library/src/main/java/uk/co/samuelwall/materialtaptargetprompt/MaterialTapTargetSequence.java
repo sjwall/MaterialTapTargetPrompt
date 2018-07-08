@@ -36,6 +36,7 @@ public class MaterialTapTargetSequence
     /**
      * The list of prompts to display when the sequence is shown
      */
+    @NonNull
     private final List<SequenceItem> items = new ArrayList<>();
 
     /**
@@ -46,6 +47,7 @@ public class MaterialTapTargetSequence
     /**
      * Listener added to a sequence item for it completing.
      */
+    @NonNull
     SequenceCompleteListener itemListener = new SequenceCompleteListener()
     {
         @Override
@@ -188,6 +190,7 @@ public class MaterialTapTargetSequence
      * @param index The prompt 0 based index.
      * @return The prompt at the specified position in this sequence.
      */
+    @NonNull
     public SequenceItem get(final int index)
     {
         return this.items.get(index);
@@ -237,6 +240,7 @@ public class MaterialTapTargetSequence
      *
      * @return This.
      */
+    @NonNull
     public MaterialTapTargetSequence finish()
     {
         if (this.nextPromptIndex > -1 && this.nextPromptIndex < this.items.size())
@@ -259,6 +263,7 @@ public class MaterialTapTargetSequence
      *
      * @return This.
      */
+    @NonNull
     public MaterialTapTargetSequence dismiss()
     {
         if (this.nextPromptIndex > -1 && this.nextPromptIndex < this.items.size())

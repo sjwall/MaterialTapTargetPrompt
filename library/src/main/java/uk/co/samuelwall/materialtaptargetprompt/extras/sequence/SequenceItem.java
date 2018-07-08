@@ -184,6 +184,10 @@ public class SequenceItem implements MaterialTapTargetPrompt.PromptStateChangeLi
         }
     }
 
+    /**
+     * Emits the {@link MaterialTapTargetSequence.SequenceCompleteListener#onSequenceComplete()} event if the listener
+     * is set.
+     */
     protected void onItemComplete()
     {
         if (this.sequenceListener != null)
