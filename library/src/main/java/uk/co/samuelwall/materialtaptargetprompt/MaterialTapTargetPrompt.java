@@ -18,6 +18,7 @@ package uk.co.samuelwall.materialtaptargetprompt;
 
 import android.animation.Animator;
 import android.animation.ValueAnimator;
+import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
@@ -32,13 +33,22 @@ import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.annotation.RequiresApi;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
+import android.support.v4.view.AccessibilityDelegateCompat;
+import android.support.v4.view.ViewCompat;
+import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewParent;
 import android.view.ViewTreeObserver;
+import android.view.accessibility.AccessibilityEvent;
+import android.view.accessibility.AccessibilityManager;
+import android.view.accessibility.AccessibilityNodeInfo;
+import android.view.accessibility.AccessibilityNodeProvider;
 
 import uk.co.samuelwall.materialtaptargetprompt.extras.PromptOptions;
 
@@ -405,6 +415,7 @@ public class MaterialTapTargetPrompt
             public void onAnimationEnd(Animator animation)
             {
                 cleanUpPrompt(STATE_FINISHED);
+                mView.sendAccessibilityEvent(AccessibilityEvent.TYPE_WINDOW_STATE_CHANGED);
             }
         });
         onPromptStateChanged(STATE_FINISHING);
@@ -442,6 +453,7 @@ public class MaterialTapTargetPrompt
             public void onAnimationEnd(Animator animation)
             {
                 cleanUpPrompt(STATE_DISMISSED);
+                mView.sendAccessibilityEvent(AccessibilityEvent.TYPE_WINDOW_STATE_CHANGED);
             }
         });
         onPromptStateChanged(STATE_DISMISSING);
@@ -520,6 +532,9 @@ public class MaterialTapTargetPrompt
                     startIdleAnimations();
                 }
                 onPromptStateChanged(STATE_REVEALED);
+
+                mView.requestFocus();
+                mView.sendAccessibilityEvent(AccessibilityEvent.TYPE_VIEW_FOCUSED);
             }
         });
         mAnimationCurrent.start();
@@ -729,6 +744,7 @@ public class MaterialTapTargetPrompt
         MaterialTapTargetPrompt mPrompt;
         PromptOptions mPromptOptions;
         boolean mClipToBounds;
+        AccessibilityManager mAccessibilityManager;
 
         /**
          * Create a new prompt view.
@@ -751,6 +767,9 @@ public class MaterialTapTargetPrompt
             paddingPaint.setAlpha(100);
             itemPaint.setColor(Color.BLUE);
             itemPaint.setAlpha(100);*/
+
+            setAccessibilityDelegate(new AccessibilityDelegate());
+            mAccessibilityManager = (AccessibilityManager) context.getSystemService(Context.ACCESSIBILITY_SERVICE);
         }
 
         @Override
@@ -799,6 +818,26 @@ public class MaterialTapTargetPrompt
 
             //Draw the text
             mPromptOptions.getPromptText().draw(canvas);
+        }
+
+        @Override
+        public boolean onHoverEvent(MotionEvent event) {
+            if (mAccessibilityManager.isTouchExplorationEnabled() && event.getPointerCount() == 1) {
+                final int action = event.getAction();
+                switch (action) {
+                    case MotionEvent.ACTION_HOVER_ENTER: {
+                        event.setAction(MotionEvent.ACTION_DOWN);
+                    } break;
+                    case MotionEvent.ACTION_HOVER_MOVE: {
+                        event.setAction(MotionEvent.ACTION_MOVE);
+                    } break;
+                    case MotionEvent.ACTION_HOVER_EXIT: {
+                        event.setAction(MotionEvent.ACTION_UP);
+                    } break;
+                }
+                return onTouchEvent(event);
+            }
+            return super.onHoverEvent(event);
         }
 
         @Override
@@ -887,6 +926,27 @@ public class MaterialTapTargetPrompt
              * pressed.
              */
             void onNonFocalPressed();
+        }
+
+        class AccessibilityDelegate extends View.AccessibilityDelegate {
+
+            @Override
+            public void onPopulateAccessibilityEvent(View host, AccessibilityEvent event)
+            {
+                super.onPopulateAccessibilityEvent(host, event);
+
+                final CharSequence primary = mPromptOptions.getPrimaryText();
+                if (!TextUtils.isEmpty(primary))
+                {
+                    event.getText().add(primary);
+                }
+
+                final CharSequence secondary = mPromptOptions.getSecondaryText();
+                if (!TextUtils.isEmpty(secondary))
+                {
+                    event.getText().add(secondary);
+                }
+            }
         }
     }
 
