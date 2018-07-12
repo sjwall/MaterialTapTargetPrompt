@@ -18,7 +18,6 @@ package uk.co.samuelwall.materialtaptargetprompt;
 
 import android.animation.Animator;
 import android.animation.ValueAnimator;
-import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
@@ -33,22 +32,17 @@ import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.annotation.RequiresApi;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
-import android.support.v4.view.AccessibilityDelegateCompat;
-import android.support.v4.view.ViewCompat;
 import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.ViewParent;
 import android.view.ViewTreeObserver;
 import android.view.accessibility.AccessibilityEvent;
 import android.view.accessibility.AccessibilityManager;
 import android.view.accessibility.AccessibilityNodeInfo;
-import android.view.accessibility.AccessibilityNodeProvider;
 
 import uk.co.samuelwall.materialtaptargetprompt.extras.PromptOptions;
 
@@ -770,6 +764,10 @@ public class MaterialTapTargetPrompt
 
             setAccessibilityDelegate(new AccessibilityDelegate());
             mAccessibilityManager = (AccessibilityManager) context.getSystemService(Context.ACCESSIBILITY_SERVICE);
+
+            if (mAccessibilityManager.isEnabled()) {
+                setClickable(true);
+            }
         }
 
         @Override
@@ -929,6 +927,34 @@ public class MaterialTapTargetPrompt
         }
 
         class AccessibilityDelegate extends View.AccessibilityDelegate {
+
+            @Override
+            public void onInitializeAccessibilityNodeInfo(View host, AccessibilityNodeInfo info)
+            {
+                super.onInitializeAccessibilityNodeInfo(host, info);
+
+                info.setClassName(PromptView.this.getClass().getName());
+                info.setPackageName(PromptView.this.getClass().getPackage().getName());
+                info.setSource(host);
+                info.setClickable(true);
+                info.setEnabled(true);
+                info.setChecked(false);
+                info.setFocusable(true);
+                info.setFocused(true);
+
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1)
+                {
+                    info.setLabelFor(mPromptOptions.getTargetView());
+                }
+
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT)
+                {
+                    info.setDismissable(true);
+                }
+
+                info.setContentDescription(String.format("%s. %s", mPromptOptions.getPrimaryText(), mPromptOptions.getSecondaryText()));
+                info.setText(String.format("%s. %s", mPromptOptions.getPrimaryText(), mPromptOptions.getSecondaryText()));
+            }
 
             @Override
             public void onPopulateAccessibilityEvent(View host, AccessibilityEvent event)
