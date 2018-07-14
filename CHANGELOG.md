@@ -2,6 +2,12 @@
 
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## v2.12.0 (2018-07-14)
+
+### Features
+
+* Added TalkBack support ([#127](https://github.com/sjwall/MaterialTapTargetPrompt/issues/127))
+
 ## v2.11.0 (2018-07-08)
 
 ### Features
