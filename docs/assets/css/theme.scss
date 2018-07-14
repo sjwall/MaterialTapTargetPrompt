@@ -32,9 +32,11 @@ h2
     flex-direction: row;
     border-bottom: 1px solid #eee;
     background: #FFF;
+    z-index: 1;
 
     .title
     {
+        display: flex;
         line-height: $app-bar-height;
         padding-left: 16px;
         font-weight: 700;
@@ -42,6 +44,11 @@ h2
         color: #6f6f6f;
         color: rgba(0,0,0,.58);
         text-decoration: none;
+
+        img
+        {
+            margin-right: 16px;
+        }
     }
 
     .button

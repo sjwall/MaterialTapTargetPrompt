@@ -14,7 +14,10 @@
   ~ limitations under the License.
   -->
 <header class="app-bar">
-    <a class="title" href="{{ site.github.url }}">{{ site.title | default: site.github.repository_name }}</a>
+    <a class="title" href="{{ site.github.url }}">
+        <img alt="icon" src="assets/app_icon.svg">
+        {{ site.title | default: site.github.repository_name }}
+    </a>
     <span class="grow"></span>
     <a class="button" href="{{ site.github.repository_url }}" title="Visit the repository on GitHub">
         GitHub
