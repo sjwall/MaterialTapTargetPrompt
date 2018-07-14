@@ -8,13 +8,29 @@ Notes on how to update the documentation...
 
 ## Setup instructions
 
-Follow the instructions on Github skipping step one and three:
-https://help.github.com/articles/setting-up-your-github-pages-site-locally-with-jekyll/
+Open Terminal.
+
+Check whether you have Ruby 2.1.0 or higher installed:
+
+```bash
+$ ruby --version
+ruby 2.X.X
+```
+
+If you don't have Ruby installed, install [Ruby 2.1.0 or higher](https://www.ruby-lang.org/en/downloads/).
+
+Install [Bundler](http://bundler.io/):
+
+```bash
+$ gem install bundler
+$ cd docs
+$ bundle install
+```
 
 ## Running the site locally
 
 ```bash
-bundle exec jekyll serve
+$ bundle exec jekyll serve
 ```
 
 ## Adding examples
