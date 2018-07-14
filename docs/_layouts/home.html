@@ -22,6 +22,8 @@
             {% include nav.html %}
             <section class="{{page.title}}">
                 {{ content }}
+                <a class="edit-this-page"
+                    href="{{site.github.repository_url}}/blob/master/docs/{{page.path}}">Edit this page</a>
             </section>
         </main>
     </body>

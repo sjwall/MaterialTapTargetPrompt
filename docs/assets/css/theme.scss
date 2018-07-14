@@ -142,3 +142,10 @@ pre
     border-radius: 5px;
     padding: 4px;
 }
+
+.edit-this-page
+{
+    position: absolute;
+    top: ($app-bar-height + 16px);
+    right: 16px;
+}
