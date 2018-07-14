@@ -4,7 +4,7 @@ layout: home
 
 # Customisation
 
-## Shapes
+The library is designed to make each individual component customisable:
 
-
-## Builder
+* [Builder](builder) - Add custom functionality to the tap target prompt builder
+* [Shapes](shapes) - Change how the background or focal are rendered
