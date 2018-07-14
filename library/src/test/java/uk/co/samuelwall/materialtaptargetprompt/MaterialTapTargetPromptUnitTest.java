@@ -27,6 +27,7 @@ import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewParent;
+import android.view.accessibility.AccessibilityEvent;
 import android.widget.Button;
 import android.widget.FrameLayout;
 
@@ -37,14 +38,23 @@ import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 import org.robolectric.Robolectric;
 import org.robolectric.RobolectricTestRunner;
+import org.robolectric.android.AccessibilityUtil;
+import org.robolectric.annotation.AccessibilityChecks;
 import org.robolectric.annotation.Config;
 import org.robolectric.util.ReflectionHelpers;
 
 import uk.co.samuelwall.materialtaptargetprompt.extras.PromptFocal;
 import uk.co.samuelwall.materialtaptargetprompt.extras.PromptOptions;
 
-import static org.junit.Assert.*;
-import static org.mockito.Mockito.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.spy;
+import static org.mockito.Mockito.when;
 
 @RunWith(RobolectricTestRunner.class)
 @Config(constants = uk.co.samuelwall.materialtaptargetprompt.BuildConfig.class, sdk = 22)
@@ -874,6 +884,23 @@ public class MaterialTapTargetPromptUnitTest extends BaseTestStateProgress
         assertNotNull(prompt);
         prompt.show();
         assertNull(prompt.mAnimationFocalBreathing);
+    }
+
+    @Test
+    @AccessibilityChecks
+    public void testPromptAccessibility() {
+        MaterialTapTargetPrompt prompt = createMockBuilder(SCREEN_WIDTH, SCREEN_HEIGHT)
+                .setTarget(10, 10)
+                .setPrimaryText("Primary text")
+                .setIdleAnimationEnabled(false)
+                .create();
+        assertNotNull(prompt);
+        prompt.show();
+
+        AccessibilityUtil.setThrowExceptionForErrors(true);
+        AccessibilityUtil.checkView(prompt.mView);
+
+        prompt.mView.sendAccessibilityEvent(AccessibilityEvent.TYPE_VIEW_FOCUSED);
     }
     
     private MaterialTapTargetPrompt.Builder createMockBuilder(final int screenWidth,
