@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017 Samuel Wall
+ * Copyright (C) 2017-2018 Samuel Wall
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,27 +16,46 @@
 
 package uk.co.samuelwall.materialtaptargetprompt;
 
+import android.animation.Animator;
 import android.app.Activity;
 import android.content.res.Resources;
-import android.support.annotation.NonNull;
 import android.util.DisplayMetrics;
 
 import org.robolectric.Robolectric;
 
 import uk.co.samuelwall.materialtaptargetprompt.extras.PromptOptions;
+import uk.co.samuelwall.materialtaptargetprompt.extras.sequence.SequenceItem;
 
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
+/**
+ * Common method calls required to run various tests.
+ */
 public class UnitTestUtils
 {
     private UnitTestUtils() {}
 
+    /**
+     * Creates a new {@link PromptOptions} by calling {@link #createPromptOptions(boolean)} with
+     * false as parameter.
+     *
+     * @return The created prompt.
+     */
     public static PromptOptions createPromptOptions()
     {
         return createPromptOptions(false);
     }
 
+    /**
+     * Creates a new {@link PromptOptions}.
+     * With mock as false a {@link ActivityResourceFinder} will be used.
+     * With mock as true a mocked {@link ResourceFinder} will be created with the
+     * {@link ResourceFinder#getResources()} method mocked.
+     *
+     * @param mock True to mock the {@link ResourceFinder} or use a {@link ActivityResourceFinder}.
+     * @return The created prompt.
+     */
     public static PromptOptions createPromptOptions(final boolean mock)
     {
         final ResourceFinder resourceFinder;
@@ -53,17 +72,77 @@ public class UnitTestUtils
             resourceFinder = new ActivityResourceFinder(Robolectric.buildActivity(Activity.class)
                     .create().get());
         }
-        return createPromptOptions(resourceFinder);
-    }
-
-    public static PromptOptions createPromptOptions(@NonNull final ResourceFinder resourceFinder)
-    {
         return new PromptOptions(resourceFinder);
     }
 
+    /**
+     * Creates a new {@link PromptOptions} with {@link TestResourceFinder}.
+     *
+     * @return The created options.
+     */
     public static PromptOptions createPromptOptionsWithTestResourceFinder()
     {
         return new PromptOptions(new TestResourceFinder(Robolectric.buildActivity(Activity.class)
                 .create().get()));
+    }
+
+    /**
+     * Calls {@link PromptOptions#setSequenceListener(MaterialTapTargetPrompt.PromptStateChangeListener)}
+     * with the supplied sequence item.
+     *
+     * @param prompt The prompt to add the listener to.
+     * @param item The listener to add.
+     */
+    public static void initSequenceItem(final MaterialTapTargetPrompt prompt, final SequenceItem item)
+    {
+        prompt.mView.mPromptOptions.setSequenceListener(item);
+    }
+
+    /**
+     * Robolectric isn't calling {@link Animator.AnimatorListener#onAnimationEnd(Animator)} so for
+     * those use cases end needs to be manually called.
+     *
+     * @param prompt The prompt to listen to the current animation.
+     */
+    public static void endCurrentAnimation(final MaterialTapTargetPrompt prompt)
+    {
+        if (prompt.mAnimationCurrent != null)
+        {
+            if (!prompt.mAnimationCurrent.isStarted())
+            {
+                prompt.mAnimationCurrent.addListener(
+                        new MaterialTapTargetPrompt.AnimatorListener()
+                        {
+                            @Override
+                            public void onAnimationStart(Animator animation)
+                            {
+                                animation.end();
+                            }
+                        });
+            }
+            else
+            {
+                prompt.mAnimationCurrent.end();
+            }
+        }
+    }
+
+    /**
+     * Calls the show for timeout run method.
+     *
+     * @param prompt The prompt to call the timeout on.
+     */
+    public static void runPromptTimeOut(final MaterialTapTargetPrompt prompt)
+    {
+        // Post to prevent recursion
+        prompt.mView.post(new Runnable()
+        {
+            @Override
+            public void run()
+            {
+                // Manually run because the test won't wait
+                prompt.mTimeoutRunnable.run();
+            }
+        });
     }
 }

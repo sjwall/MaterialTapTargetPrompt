@@ -20,6 +20,7 @@ import android.content.res.Resources;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.Path;
 import android.graphics.PointF;
 import android.graphics.RectF;
 import android.support.annotation.ColorInt;
@@ -46,6 +47,7 @@ public class RectanglePromptFocal extends PromptFocal
     RectF mRippleBounds;
     int mBaseAlpha;
     float mPadding;
+    Path mPath;
     private float mRx, mRy;
     @Nullable private PointF mSize;
 
@@ -125,6 +127,13 @@ public class RectanglePromptFocal extends PromptFocal
         return mBaseBounds;
     }
 
+    @NonNull
+    @Override
+    public Path getPath()
+    {
+        return mPath;
+    }
+
     @Override
     public void setColour(@ColorInt int colour)
     {
@@ -182,6 +191,9 @@ public class RectanglePromptFocal extends PromptFocal
                        float alphaModifier)
     {
         PromptUtils.scale(mBaseBoundsCentre, mBaseBounds, mBounds, revealModifier, true);
+
+        mPath = new Path();
+        mPath.addRoundRect(mBounds, mRx, mRy, Path.Direction.CW);
     }
 
     @Override
@@ -198,12 +210,18 @@ public class RectanglePromptFocal extends PromptFocal
         if (mDrawRipple)
         {
             final int oldAlpha = mPaint.getAlpha();
+            final int oldColor = mPaint.getColor();
+            if (oldColor == Color.TRANSPARENT)
+            {
+                mPaint.setColor(Color.WHITE);
+            }
             mPaint.setAlpha(mRippleAlpha);
             canvas.drawRoundRect(mRippleBounds, mRx, mRy, mPaint);
+            mPaint.setColor(oldColor);
             mPaint.setAlpha(oldAlpha);
         }
 
-        canvas.drawRoundRect(mBounds, mRx, mRy, mPaint);
+        canvas.drawPath(getPath(), mPaint);
 
         // canvas.drawRoundRect(mBaseBounds, mRx, mRy, mBoundsPaint);
     }

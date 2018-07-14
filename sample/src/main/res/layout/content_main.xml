@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-  ~ Copyright (C) 2016 Samuel Wall
+  ~ Copyright (C) 2018 Samuel Wall
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
   ~ you may not use this file except in compliance with the License.
@@ -39,6 +39,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content">
                 <Button
+                        android:id="@+id/btn_navigation_prompt"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:width="@dimen/example_button_width"
@@ -157,6 +158,25 @@
                     android:text="@string/example_style_description"/>
             </LinearLayout>
             <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingTop="@dimen/example_item_top_padding">
+                <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:width="@dimen/example_button_width"
+                    android:text="@string/example_show_for_title"
+                    android:onClick="showFabPromptFor"
+                    android:id="@+id/button_show_for_prompt"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:text="@string/example_show_for_description"/>
+            </LinearLayout>
+            <LinearLayout
                     android:orientation="horizontal"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -212,7 +232,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="40dp"/>
             <LinearLayout
-                    android:id="@+id/other_examples_activity"
+                    android:id="@+id/kotlin_examples_activity"
                     android:orientation="horizontal"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -221,13 +241,13 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:width="@dimen/example_button_width"
-                        android:text="@string/example_activity_title"
-                        android:onClick="showActivity"/>
+                        android:text="@string/kotlin_activity_title"
+                        android:onClick="showKotlinActivity"/>
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
-                    android:text="@string/example_activity_description"/>
+                    android:text="@string/kotlin_activity_description"/>
             </LinearLayout>
             <LinearLayout
                     android:id="@+id/other_examples_dialog"
@@ -266,6 +286,24 @@
                     android:text="@string/example_centre_description"/>
             </LinearLayout>
             <LinearLayout
+                android:id="@+id/other_examples_list"
+                android:orientation="horizontal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingTop="@dimen/example_item_top_padding">
+                <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:width="@dimen/example_button_width"
+                    android:text="@string/example_list_title"
+                    android:onClick="showListActivity"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:text="@string/example_list_description"/>
+            </LinearLayout>
+            <LinearLayout
                 android:id="@+id/other_examples_card"
                 android:orientation="horizontal"
                 android:layout_width="wrap_content"
@@ -282,6 +320,24 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
                     android:text="@string/example_card_description"/>
+            </LinearLayout>
+            <LinearLayout
+                android:id="@+id/other_sequence"
+                android:orientation="horizontal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingTop="@dimen/example_item_top_padding">
+                <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:width="@dimen/example_button_width"
+                    android:text="@string/example_sequence_title"
+                    android:onClick="showSequence"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:text="@string/example_sequence"/>
             </LinearLayout>
         </LinearLayout>
     </ScrollView>

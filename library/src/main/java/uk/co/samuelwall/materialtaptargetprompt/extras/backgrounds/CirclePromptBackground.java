@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017 Samuel Wall
+ * Copyright (C) 2017-2018 Samuel Wall
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -115,49 +115,61 @@ public class CirclePromptBackground extends PromptBackground
                 || (focalCentreY > clipBoundsInset88dp.top
                 && focalCentreY < clipBoundsInset88dp.bottom))
         {
-            final boolean isTextAboveTarget = textBounds.top < focalBounds.top;
-            float x1 = focalCentreX;
-            float x2 = textBounds.left - textPadding;
-            float y1, y2;
-            if (isTextAboveTarget)
+            // The circle position and radius is calculated based on three points placed around the
+            // prompt: XY1, XY2 and XY3.
+            // XY2: the text left side
+            // XY3: the text right side
+            // XY1: the furthest point on the focal target from the text centre x point
+
+            // XY1
+            float textWidth = textBounds.width();
+            // Calculate the X distance from the text centre x to focal centre x
+            float distanceX = focalCentreX - textBounds.left + (textWidth / 2);
+            // Calculate how much percentage wise the focal centre x is from the text centre x to
+            // the nearest text edge
+            float percentageOffset = 100 / textWidth * distanceX;
+            // Angle is the above percentage of 90 degrees
+            float angle = 90 * (percentageOffset / 100);
+            // 0 degrees is right side middle
+            // If text above target
+            if (textBounds.top < focalBounds.top)
             {
-                y1 = focalBounds.bottom + textPadding;
+                angle = 180 - angle;
+            }
+            else
+            {
+                angle = 180 + angle;
+            }
+            final PointF furthestPoint = options.getPromptFocal().calculateAngleEdgePoint(angle,
+                focalPadding);
+            final float x1 = furthestPoint.x;
+            final float y1 = furthestPoint.y;
+
+            // XY2
+            final float x2 = textBounds.left - textPadding;
+            final float y2;
+            // If text is above the target
+            if (textBounds.top < focalBounds.top)
+            {
                 y2 = textBounds.top;
             }
             else
             {
-                y1 = focalBounds.top - (focalPadding + textPadding);
                 y2 = textBounds.bottom;
             }
 
+            // XY3
+            //noinspection UnnecessaryLocalVariable
             final float y3 = y2;
-            float x3 = promptText.getBounds().right + textPadding;
+            float x3 = textBounds.right + textPadding;
 
-            final float focalLeft = focalBounds.left - focalPadding;
-            final float focalRight = focalBounds.right + focalPadding;
-            if (x2 > focalLeft && x2 < focalRight)
+            // If the focal width is greater than the text width
+            if (focalBounds.right > x3)
             {
-                if (isTextAboveTarget)
-                {
-                    x1 = focalBounds.left - focalPadding;
-                }
-                else
-                {
-                    x2 -= (focalBounds.width() / 2) - focalPadding;
-                }
-            }
-            else if (x3 > focalLeft && x3 < focalRight)
-            {
-                if (isTextAboveTarget)
-                {
-                    x1 = focalBounds.right + focalPadding;
-                }
-                else
-                {
-                    x3 += (focalBounds.width() / 2) + focalPadding;
-                }
+                x3 = focalBounds.right + focalPadding;
             }
 
+            // Calculate the position and radius
             final double offset = Math.pow(x2, 2) + Math.pow(y2, 2);
             final double bc = (Math.pow(x1, 2) + Math.pow(y1, 2) - offset) / 2.0;
             final double cd = (offset - Math.pow(x3, 2) - Math.pow(y3, 2)) / 2.0;
@@ -174,12 +186,11 @@ public class CirclePromptBackground extends PromptBackground
         else
         {
             mBasePosition.set(focalCentreX, focalCentreY);
-            // Calculate the furthest distance from the a focal side to a text side.
-            final float length = Math.abs(
-                    (textBounds.left < focalBounds.left ?
-                            textBounds.left - textPadding
-                            : textBounds.right + textPadding)
-                    - focalCentreX);
+           // Calculate the furthest distance from the center based on the text size.
+            final float length = Math.max(
+                    Math.abs(textBounds.right - focalCentreX),
+                    Math.abs(textBounds.left - focalCentreX)
+                ) + textPadding;
             // Calculate the height based on the distance from the focal centre to the furthest text y position.
             float height = (focalBounds.height() / 2) + focalPadding + textBounds.height();
             // Calculate the radius based on the calculated width and height
@@ -208,8 +219,14 @@ public class CirclePromptBackground extends PromptBackground
     {
         canvas.drawCircle(mPosition.x, mPosition.y, mRadius, mPaint);
 
-        /*canvas.drawCircle(point1.x, point1.y, 100, pointPaint);
+        /*pointPaint.setColor(Color.YELLOW);
+        pointPaint.setAlpha(100);
+        canvas.drawCircle(point1.x, point1.y, 100, pointPaint);
+        pointPaint.setColor(Color.GREEN);
+        pointPaint.setAlpha(100);
         canvas.drawCircle(point2.x, point2.y, 100, pointPaint);
+        pointPaint.setColor(Color.RED);
+        pointPaint.setAlpha(100);
         canvas.drawCircle(point3.x, point3.y, 100, pointPaint);*/
     }
 

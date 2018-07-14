@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2016 Samuel Wall
+ * Copyright (C) 2016-2018 Samuel Wall
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,23 +20,29 @@ import android.animation.Animator;
 import android.animation.ValueAnimator;
 import android.app.Activity;
 import android.app.Dialog;
-import android.app.DialogFragment;
-import android.app.Fragment;
 import android.content.Context;
 import android.graphics.Canvas;
+import android.graphics.Path;
 import android.graphics.Point;
 import android.graphics.PointF;
 import android.graphics.Rect;
 import android.graphics.RectF;
+import android.graphics.Region;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.app.DialogFragment;
+import android.support.v4.app.Fragment;
+import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
+import android.view.accessibility.AccessibilityEvent;
+import android.view.accessibility.AccessibilityManager;
+import android.view.accessibility.AccessibilityNodeInfo;
 
 import uk.co.samuelwall.materialtaptargetprompt.extras.PromptOptions;
 
@@ -100,6 +106,11 @@ public class MaterialTapTargetPrompt
     public static final int STATE_NON_FOCAL_PRESSED = 8;
 
     /**
+     * The prompt has been dismissed by the show for timeout.
+     */
+    public static final int STATE_SHOW_FOR_TIMEOUT = 9;
+
+    /**
      * The view that renders the prompt.
      */
     PromptView mView;
@@ -137,6 +148,20 @@ public class MaterialTapTargetPrompt
     final float mStatusBarHeight;
 
     /**
+     * Task used for triggering the prompt timeout.
+     */
+    final Runnable mTimeoutRunnable = new Runnable()
+    {
+        @Override
+        public void run()
+        {
+            // Emit the state change and dismiss the prompt
+            onPromptStateChanged(STATE_SHOW_FOR_TIMEOUT);
+            dismiss();
+        }
+    };
+
+    /**
      * Listener for the view layout changing.
      */
     @Nullable final ViewTreeObserver.OnGlobalLayoutListener mGlobalLayoutListener;
@@ -150,6 +175,7 @@ public class MaterialTapTargetPrompt
     {
         final ResourceFinder resourceFinder = promptOptions.getResourceFinder();
         mView = new PromptView(resourceFinder.getContext());
+        mView.mPrompt = this;
         mView.mPromptOptions = promptOptions;
         mView.mPromptTouchedListener = new PromptView.PromptTouchedListener()
         {
@@ -230,6 +256,7 @@ public class MaterialTapTargetPrompt
 
         final ViewGroup parent = mView.mPromptOptions.getResourceFinder().getPromptParentView();
 
+        // If dismissing or the prompt already exists in the parent view
         if (isDismissing() || parent.findViewById(R.id.material_target_prompt_view) != null)
         {
             cleanUpPrompt(mState);
@@ -240,6 +267,25 @@ public class MaterialTapTargetPrompt
         onPromptStateChanged(STATE_REVEALING);
         prepare();
         startRevealAnimation();
+    }
+
+    /**
+     * Displays the prompt for a maximum amount of time.
+     *
+     * @param millis The number of milliseconds to show the prompt for.
+     */
+    public void showFor(long millis)
+    {
+        mView.postDelayed(mTimeoutRunnable, millis);
+        show();
+    }
+
+    /**
+     * Cancel the show for timer if it has been created.
+     */
+    public void cancelShowForTimer()
+    {
+        mView.removeCallbacks(mTimeoutRunnable);
     }
 
     /**
@@ -343,7 +389,7 @@ public class MaterialTapTargetPrompt
         {
             return;
         }
-        onPromptStateChanged(STATE_FINISHING);
+        cancelShowForTimer();
         cleanUpAnimation();
         mAnimationCurrent = ValueAnimator.ofFloat(1f, 0f);
         mAnimationCurrent.setDuration(225);
@@ -363,8 +409,10 @@ public class MaterialTapTargetPrompt
             public void onAnimationEnd(Animator animation)
             {
                 cleanUpPrompt(STATE_FINISHED);
+                mView.sendAccessibilityEvent(AccessibilityEvent.TYPE_WINDOW_STATE_CHANGED);
             }
         });
+        onPromptStateChanged(STATE_FINISHING);
         mAnimationCurrent.start();
     }
 
@@ -379,7 +427,7 @@ public class MaterialTapTargetPrompt
         {
             return;
         }
-        onPromptStateChanged(STATE_DISMISSING);
+        cancelShowForTimer();
         cleanUpAnimation();
         mAnimationCurrent = ValueAnimator.ofFloat(1f, 0f);
         mAnimationCurrent.setDuration(225);
@@ -399,8 +447,10 @@ public class MaterialTapTargetPrompt
             public void onAnimationEnd(Animator animation)
             {
                 cleanUpPrompt(STATE_DISMISSED);
+                mView.sendAccessibilityEvent(AccessibilityEvent.TYPE_WINDOW_STATE_CHANGED);
             }
         });
+        onPromptStateChanged(STATE_DISMISSING);
         mAnimationCurrent.start();
     }
 
@@ -476,6 +526,9 @@ public class MaterialTapTargetPrompt
                     startIdleAnimations();
                 }
                 onPromptStateChanged(STATE_REVEALED);
+
+                mView.requestFocus();
+                mView.sendAccessibilityEvent(AccessibilityEvent.TYPE_VIEW_FOCUSED);
             }
         });
         mAnimationCurrent.start();
@@ -653,6 +706,7 @@ public class MaterialTapTargetPrompt
     {
         mState = state;
         mView.mPromptOptions.onPromptStateChanged(this, state);
+        mView.mPromptOptions.onExtraPromptStateChanged(this, state);
     }
 
     /**
@@ -681,8 +735,10 @@ public class MaterialTapTargetPrompt
         PromptTouchedListener mPromptTouchedListener;
         Rect mClipBounds = new Rect();
         View mTargetRenderView;
+        MaterialTapTargetPrompt mPrompt;
         PromptOptions mPromptOptions;
         boolean mClipToBounds;
+        AccessibilityManager mAccessibilityManager;
 
         /**
          * Create a new prompt view.
@@ -695,10 +751,23 @@ public class MaterialTapTargetPrompt
             setId(R.id.material_target_prompt_view);
             setFocusableInTouchMode(true);
             requestFocus();
+            // Hardware acceleration for clipping to a path is not supported on SDK < 18
+            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN_MR2)
+            {
+                // Disable hardware acceleration
+                setLayerType(View.LAYER_TYPE_SOFTWARE, null);
+            }
             /*paddingPaint.setColor(Color.GREEN);
             paddingPaint.setAlpha(100);
             itemPaint.setColor(Color.BLUE);
             itemPaint.setAlpha(100);*/
+
+            setAccessibilityDelegate(new AccessibilityDelegate());
+            mAccessibilityManager = (AccessibilityManager) context.getSystemService(Context.ACCESSIBILITY_SERVICE);
+
+            if (mAccessibilityManager.isEnabled()) {
+                setClickable(true);
+            }
         }
 
         @Override
@@ -709,8 +778,20 @@ public class MaterialTapTargetPrompt
                 canvas.clipRect(mClipBounds);
             }
 
-            //Draw the backgrounds
+            //Draw the backgrounds, clipping the focal path so we don't draw over it.
+            final Path focalPath = mPromptOptions.getPromptFocal().getPath();
+            if (focalPath != null)
+            {
+                canvas.save();
+                canvas.clipPath(focalPath, Region.Op.DIFFERENCE);
+            }
+
             mPromptOptions.getPromptBackground().draw(canvas);
+
+            if (focalPath != null)
+            {
+                canvas.restore();
+            }
 
             //Draw the focal
             mPromptOptions.getPromptFocal().draw(canvas);
@@ -735,6 +816,26 @@ public class MaterialTapTargetPrompt
 
             //Draw the text
             mPromptOptions.getPromptText().draw(canvas);
+        }
+
+        @Override
+        public boolean onHoverEvent(MotionEvent event) {
+            if (mAccessibilityManager.isTouchExplorationEnabled() && event.getPointerCount() == 1) {
+                final int action = event.getAction();
+                switch (action) {
+                    case MotionEvent.ACTION_HOVER_ENTER: {
+                        event.setAction(MotionEvent.ACTION_DOWN);
+                    } break;
+                    case MotionEvent.ACTION_HOVER_MOVE: {
+                        event.setAction(MotionEvent.ACTION_MOVE);
+                    } break;
+                    case MotionEvent.ACTION_HOVER_EXIT: {
+                        event.setAction(MotionEvent.ACTION_UP);
+                    } break;
+                }
+                return onTouchEvent(event);
+            }
+            return super.onHoverEvent(event);
         }
 
         @Override
@@ -801,6 +902,13 @@ public class MaterialTapTargetPrompt
             return super.dispatchKeyEventPreIme(event);
         }
 
+        @Override
+        protected void onDetachedFromWindow()
+        {
+            super.onDetachedFromWindow();
+            mPrompt.cleanUpAnimation();
+        }
+
         /**
          * Interface definition for a callback to be invoked when a {@link PromptView} is touched.
          */
@@ -817,6 +925,55 @@ public class MaterialTapTargetPrompt
              */
             void onNonFocalPressed();
         }
+
+        class AccessibilityDelegate extends View.AccessibilityDelegate {
+
+            @Override
+            public void onInitializeAccessibilityNodeInfo(View host, AccessibilityNodeInfo info)
+            {
+                super.onInitializeAccessibilityNodeInfo(host, info);
+
+                info.setClassName(PromptView.this.getClass().getName());
+                info.setPackageName(PromptView.this.getClass().getPackage().getName());
+                info.setSource(host);
+                info.setClickable(true);
+                info.setEnabled(true);
+                info.setChecked(false);
+                info.setFocusable(true);
+                info.setFocused(true);
+
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1)
+                {
+                    info.setLabelFor(mPromptOptions.getTargetView());
+                }
+
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT)
+                {
+                    info.setDismissable(true);
+                }
+
+                info.setContentDescription(String.format("%s. %s", mPromptOptions.getPrimaryText(), mPromptOptions.getSecondaryText()));
+                info.setText(String.format("%s. %s", mPromptOptions.getPrimaryText(), mPromptOptions.getSecondaryText()));
+            }
+
+            @Override
+            public void onPopulateAccessibilityEvent(View host, AccessibilityEvent event)
+            {
+                super.onPopulateAccessibilityEvent(host, event);
+
+                final CharSequence primary = mPromptOptions.getPrimaryText();
+                if (!TextUtils.isEmpty(primary))
+                {
+                    event.getText().add(primary);
+                }
+
+                final CharSequence secondary = mPromptOptions.getSecondaryText();
+                if (!TextUtils.isEmpty(secondary))
+                {
+                    event.getText().add(secondary);
+                }
+            }
+        }
     }
 
     /**
@@ -828,10 +985,71 @@ public class MaterialTapTargetPrompt
          * Creates a builder for a tap target prompt that uses the default tap target prompt theme.
          *
          * @param fragment the fragment to show the prompt within.
+         * @deprecated use support library fragments instead
+         */
+        @Deprecated
+        public Builder(@NonNull final android.app.Fragment fragment)
+        {
+            this(fragment.getActivity(), 0);
+        }
+
+        /**
+         * Creates a builder for a material tap target prompt that uses an explicit theme resource.
+         * <p>
+         * The {@code themeResId} may be specified as {@code 0} to use the parent {@code context}'s
+         * resolved value for {@link R.attr#MaterialTapTargetPromptTheme}.
+         *
+         * @param fragment   the fragment to show the prompt within.
+         * @param themeResId the resource ID of the theme against which to inflate this dialog, or
+         *                   {@code 0} to use the parent {@code context}'s default material tap
+         *                   target prompt theme
+         * @deprecated use support library fragments instead
+         */
+        @Deprecated
+        public Builder(@NonNull final android.app.Fragment fragment, int themeResId)
+        {
+            this(fragment.getActivity(), themeResId);
+        }
+
+        /**
+         * Creates a builder for a tap target prompt that uses the default tap target prompt theme.
+         *
+         * @param dialogFragment the dialog fragment to show the prompt within.
+         * @deprecated use support library fragments instead
+         */
+        @Deprecated
+        public Builder(@NonNull final android.app.DialogFragment dialogFragment)
+        {
+            this(dialogFragment, 0);
+        }
+
+        /**
+         * Creates a builder for a material tap target prompt that uses an explicit theme resource.
+         * <p>
+         * The {@code themeResId} may be specified as {@code 0} to use the parent {@code context}'s
+         * resolved value for {@link R.attr#MaterialTapTargetPromptTheme}.
+         *
+         * @param dialogFragment the dialog fragment to show the prompt within.
+         * @param themeResId     the resource ID of the theme against which to inflate this dialog,
+         *                       or {@code 0} to use the parent {@code context}'s default material
+         *                       tap target prompt theme
+         * @deprecated use support library fragments instead
+         */
+        @Deprecated
+        public Builder(@NonNull final android.app.DialogFragment dialogFragment, int themeResId)
+        {
+            this(dialogFragment.getDialog(), themeResId);
+        }
+
+        /**
+         * Creates a builder for a tap target prompt that uses the default tap target prompt theme.
+         *
+         * @param fragment the fragment to show the prompt within.
+         * @see #Builder(Fragment, int)
          */
         public Builder(@NonNull final Fragment fragment)
         {
-            this(fragment.getActivity(), 0);
+            this(fragment, 0);
         }
 
         /**
@@ -847,13 +1065,14 @@ public class MaterialTapTargetPrompt
          */
         public Builder(@NonNull final Fragment fragment, int themeResId)
         {
-            this(fragment.getActivity(), themeResId);
+            this(fragment.requireActivity(), themeResId);
         }
 
         /**
          * Creates a builder for a tap target prompt that uses the default tap target prompt theme.
          *
          * @param dialogFragment the dialog fragment to show the prompt within.
+         * @see #Builder(DialogFragment, int)
          */
         public Builder(@NonNull final DialogFragment dialogFragment)
         {

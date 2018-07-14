@@ -153,6 +153,13 @@ public class PromptOptions<T extends PromptOptions>
      */
     @Nullable private MaterialTapTargetPrompt.PromptStateChangeListener mPromptStateChangeListener;
 
+    /**
+     * Additional listener that can be set by other package classes for handling e.g. sequences of
+     * prompts.
+     */
+    @Nullable private MaterialTapTargetPrompt.PromptStateChangeListener mSequencePromptStateChangeListener;
+
+
     private boolean mCaptureTouchEventOnFocal;
     private float mTextSeparation;
     private boolean mAutoDismiss = true;
@@ -953,6 +960,20 @@ public class PromptOptions<T extends PromptOptions>
     }
 
     /**
+     * Set the internal listener to listen for when the prompt state changes.
+     * This does not return a builder is it's not intended to be user during the
+     * creation of Prompts
+     *
+     * @param listener The listener to use
+     */
+    public void setSequenceListener(
+            @Nullable final MaterialTapTargetPrompt.PromptStateChangeListener listener)
+    {
+        mSequencePromptStateChangeListener = listener;
+    }
+
+
+    /**
      * Handles emitting the prompt state changed events.
      *
      * @param state The state that the prompt is now in.
@@ -964,6 +985,21 @@ public class PromptOptions<T extends PromptOptions>
             mPromptStateChangeListener.onPromptStateChanged(prompt, state);
         }
     }
+
+
+    /**
+     * Handles emitting the additional prompt state changed events.
+     *
+     * @param state The state that the prompt is now in.
+     */
+    public void onExtraPromptStateChanged(@NonNull final MaterialTapTargetPrompt prompt, final int state)
+    {
+        if (mSequencePromptStateChangeListener != null)
+        {
+            mSequencePromptStateChangeListener.onPromptStateChanged(prompt, state);
+        }
+    }
+
 
     /**
      * Set if the prompt should stop touch events on the focal point from passing to underlying
@@ -1451,7 +1487,7 @@ public class PromptOptions<T extends PromptOptions>
     }
 
     /**
-     * Creates an {@link MaterialTapTargetPrompt} with the arguments supplied to this
+     * Creates a {@link MaterialTapTargetPrompt} with the arguments supplied to this
      * builder and immediately displays the prompt.
      * <p>
      * Calling this method is functionally identical to:
@@ -1461,8 +1497,8 @@ public class PromptOptions<T extends PromptOptions>
      *     prompt.show();
      * </pre>
      * <p>
-     * Will return {@link null} if a valid target has not been set or the primary text is {@link
-     * null}.
+     * Will return {@link null} if a valid target has not been set or the primary text and secondary
+     * text are {@link null}.
      * To check that a valid target has been set call {@link #isTargetSet()}.
      * </p>
      *
@@ -1475,6 +1511,36 @@ public class PromptOptions<T extends PromptOptions>
         if (mPrompt != null)
         {
             mPrompt.show();
+        }
+        return mPrompt;
+    }
+
+    /**
+     * Creates a {@link MaterialTapTargetPrompt} with the arguments supplied to this
+     * builder and immediately displays the prompt for the number of milliseconds supplied.
+     * <p>
+     * Calling this method is functionally identical to:
+     * </p>
+     * <pre>
+     *     MaterialTapTargetPrompt prompt = builder.create();
+     *     prompt.showFor(milliseconds);
+     * </pre>
+     * <p>
+     * Will return {@link null} if a valid target has not been set or the primary text and secondary
+     * text are {@link null}.
+     * To check that a valid target has been set call {@link #isTargetSet()}.
+     * </p>
+     *
+     * @param milliseconds The number of milliseconds to show the prompt for.
+     * @return The created builder or null if no target
+     */
+    @Nullable
+    public MaterialTapTargetPrompt showFor(final long milliseconds)
+    {
+        final MaterialTapTargetPrompt mPrompt = create();
+        if (mPrompt != null)
+        {
+            mPrompt.showFor(milliseconds);
         }
         return mPrompt;
     }

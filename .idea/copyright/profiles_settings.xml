@@ -1,3 +1,7 @@
 <component name="CopyrightManager">
-  <settings default="Material Tap Target Prompt" />
+  <settings default="Material Tap Target Prompt">
+    <module2copyright>
+      <element module="All" copyright="Material Tap Target Prompt" />
+    </module2copyright>
+  </settings>
 </component>

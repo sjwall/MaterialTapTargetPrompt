@@ -903,4 +903,21 @@ public class PromptOptionsUnitTest
         assertEquals(options, options.setSecondaryText("text"));
         assertNotNull(options.show());
     }
+
+    @Test
+    public void testPromptOptions_ShowFor()
+    {
+        final PromptOptions options = UnitTestUtils.createPromptOptions();
+        assertEquals(options, options.setTarget(mock(View.class)));
+        assertEquals(options, options.setPrimaryText("text"));
+        assertEquals(options, options.setSecondaryText("text"));
+        final MaterialTapTargetPrompt prompt = options.showFor(5000);
+        assertNotNull(prompt);
+    }
+
+    @Test
+    public void testPromptOptions_ShowFor_Empty()
+    {
+        assertNull(UnitTestUtils.createPromptOptions().showFor(6000));
+    }
 }

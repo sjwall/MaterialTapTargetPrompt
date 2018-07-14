@@ -2,6 +2,80 @@
 
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## v2.12.0 (2018-07-14)
+
+### Features
+
+* Added TalkBack support ([#127](https://github.com/sjwall/MaterialTapTargetPrompt/issues/127))
+
+## v2.11.0 (2018-07-08)
+
+### Features
+
+* Added `finish` to `MaterialTapTargetSequence` to cancel a sequence mid way with a finish action
+* Added `dismiss` to `MaterialTapTargetSequence` to cancel a sequence mid way with a dismiss action
+* Added `showFromIndex` to `MaterialTapTargetSequence` to start or continue a sequence from any prompt in it
+
+## v2.10.0 (2018-06-30)
+
+### Features
+
+* Added `showFor` support to `MaterialTapTargetSequence`
+* Added support for passing `MaterialTapTargetPrompt.Builder` or `PromptOptions` to `MaterialTapTargetSequence`
+
+### Improvements
+
+* Improved circle background position calculations
+
+### Other
+
+* Added examples written in Kotlin
+
+## v2.9.0 (2018-05-19)
+
+### Features
+
+* Added `MaterialTapTargetSequence` for showing prompts one after another ([#118](https://github.com/sjwall/MaterialTapTargetPrompt/issues/118))
+
+### Bug Fixes
+
+* Fixed incorrect prompt size calculation ([#116](https://github.com/sjwall/MaterialTapTargetPrompt/issues/116))
+* Fixed incorrect prompt size calculation when target is wider than the text
+
+## v2.8.0 (2018-05-06)
+
+### Features
+
+* Added support library as a `CompileOnly` dependency ([#114](https://github.com/sjwall/MaterialTapTargetPrompt/issues/114))
+* Added support library fragment constructors to `Builder` ([#114](https://github.com/sjwall/MaterialTapTargetPrompt/issues/114))
+
+### Bug Fixes
+
+* Fixed memory leak caused by animation maintaining view reference ([#113](https://github.com/sjwall/MaterialTapTargetPrompt/issues/113))
+
+### Deprecated
+
+* Deprecated Android system fragment constructors in `Builder` ([#114](https://github.com/sjwall/MaterialTapTargetPrompt/issues/114))
+
+## v2.7.0 (2018-02-17)
+
+### Features
+
+* Added showFor to show prompt for a time limit
+
+## v2.6.1 (2018-02-04)
+
+### Bug Fixes
+
+* Fixed UnsupportedOperationException caused by clipping to path in Android SDK < 18 ([#101](https://github.com/sjwall/MaterialTapTargetPrompt/issues/101))
+
+## v2.6.0 (2018-01-11)
+
+### Features
+
+* Added `getPath` to `PromptFocal` to get the clip path for the prompt focal ([#99](https://github.com/sjwall/MaterialTapTargetPrompt/pull/95))
+* Transparent focal colour is now supported and no longer renders black ([#99](https://github.com/sjwall/MaterialTapTargetPrompt/pull/95))
+
 ## v2.5.2 (2017-12-20)
 
 ### Bug Fixes

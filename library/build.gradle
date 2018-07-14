@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2016 Samuel Wall
+ * Copyright (C) 2016-2018 Samuel Wall
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,8 +14,8 @@
  * limitations under the License.
  */
 
-apply plugin: 'jacoco'
 apply plugin: 'com.android.library'
+apply plugin: 'jacoco'
 apply plugin: 'com.github.dcendents.android-maven'
 apply plugin: 'com.jfrog.bintray'
 
@@ -55,10 +55,12 @@ configurations {
 
 dependencies {
     implementation 'com.android.support:support-annotations:' + rootProject.supportLibVersion
+    compileOnly 'com.android.support:support-fragment:' + rootProject.supportLibVersion
 
-    testImplementation 'com.android.support:support-annotations:' + rootProject.supportLibVersion
+    testImplementation 'com.android.support:support-fragment:' + rootProject.supportLibVersion
     testImplementation 'junit:junit:4.12'
     testImplementation 'org.robolectric:robolectric:3.5.1'
+    testImplementation 'org.robolectric:shadows-support-v4:3.3.2'
     testImplementation 'org.mockito:mockito-core:2.10.0'
 
     javadocCompile 'com.android.support:support-annotations:' + rootProject.supportLibVersion
@@ -148,11 +150,15 @@ bintray {
 }
 
 jacoco {
-    toolVersion = "0.7.1.201405082137"
+    toolVersion = "0.8.1"
+}
+
+tasks.withType(Test) {
+    jacoco.includeNoLocationClasses = true
 }
 
 //gradlew clean jacocoTestReport
-task jacocoTestReport(type: JacocoReport, dependsOn: 'testDebugUnitTest') {
+task jacocoTestReport(type: JacocoReport, dependsOn: ['testDebugUnitTest', 'createDebugCoverageReport']) {
 
     reports {
         xml.enabled = true

@@ -1,5 +1,5 @@
 <!--
-  ~ Copyright (C) 2016 Samuel Wall
+  ~ Copyright (C) 2018 Samuel Wall
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
   ~ you may not use this file except in compliance with the License.
@@ -55,8 +55,8 @@
     <string name="example_no_auto_dismiss_title">No auto dismiss</string>
     <string name="example_no_auto_dismiss_description">Displays prompt over the FAB button that can only be dismissed by pressing the FAB button</string>
 
-    <string name="example_activity_title">Activity</string>
-    <string name="example_activity_description">An example with an Activity with out a navigation drawer</string>
+    <string name="kotlin_activity_title">Kotlin</string>
+    <string name="kotlin_activity_description">Examples written in Kotlin</string>
 
     <string name="example_dialog_title">Dialog</string>
     <string name="example_dialog_description">An example with a dialog</string>
@@ -84,6 +84,9 @@
     <string name="example_card_title">Cards</string>
     <string name="example_card_description">Displays activity with a prompt contained within a card</string>
 
+    <string name="example_list_title">List</string>
+    <string name="example_list_description">Displays activity with a prompt targeting a list item</string>
+
     <string name="title_activity_card">Card Example</string>
 
     <string name="example_card_fab_title">Card example</string>
@@ -98,4 +101,11 @@
     <string name="example_rectangle_title" translatable="false">Rectangle Prompt</string>
     <string name="example_fullscreen_rectangle_title" translatable="false">Fullscreen Rectangle Prompt</string>
     <string name="example_rectangle_description" translatable="false">Displays a prompt with a rectangle background and focal</string>
+
+    <string name="example_show_for_title">showFor</string>
+    <string name="example_show_for_description">Displays prompt over the FAB button for 7 seconds</string>
+
+    <string name="title_activity_list_example" translatable="false">List Example</string>
+    <string name="example_sequence">Show an example of a sequence of prompts</string>
+    <string name="example_sequence_title">Sequence</string>
 </resources>

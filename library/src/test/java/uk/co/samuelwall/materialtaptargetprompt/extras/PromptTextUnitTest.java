@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017 Samuel Wall
+ * Copyright (C) 2017-2018 Samuel Wall
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,27 +16,22 @@
 
 package uk.co.samuelwall.materialtaptargetprompt.extras;
 
-import android.app.Activity;
 import android.graphics.Canvas;
 import android.graphics.Rect;
 import android.graphics.RectF;
-import android.text.Layout;
 import android.view.Gravity;
 import android.view.ViewGroup;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.robolectric.Robolectric;
 import org.robolectric.RobolectricTestRunner;
 import org.robolectric.annotation.Config;
 
-import uk.co.samuelwall.materialtaptargetprompt.TestResourceFinder;
 import uk.co.samuelwall.materialtaptargetprompt.UnitTestUtils;
 
 import static junit.framework.TestCase.assertFalse;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.when;
 
 @RunWith(RobolectricTestRunner.class)
@@ -77,8 +72,7 @@ public class PromptTextUnitTest
 
         final Rect clipBounds = new Rect(0, 0, 1080, 1920);
         final RectF focalBounds = new RectF(1036, 1876, 1080, 1920);
-        final PromptOptions options = UnitTestUtils.createPromptOptions(new TestResourceFinder(Robolectric.buildActivity(Activity.class)
-                .create().get()));
+        final PromptOptions options = UnitTestUtils.createPromptOptionsWithTestResourceFinder();
         final ViewGroup parentView = options.getResourceFinder().getPromptParentView();
         when(parentView.getWidth()).thenReturn(1080);
         when(parentView.getRight()).thenReturn(1080);
@@ -123,8 +117,7 @@ public class PromptTextUnitTest
 
         final Rect clipBounds = new Rect(0, 0, 1080, 1920);
         final RectF focalBounds = new RectF(1036, 1876, 1080, 1920);
-        final PromptOptions options = UnitTestUtils.createPromptOptions(new TestResourceFinder(Robolectric.buildActivity(Activity.class)
-                .create().get()));
+        final PromptOptions options = UnitTestUtils.createPromptOptionsWithTestResourceFinder();
         final ViewGroup parentView = options.getResourceFinder().getPromptParentView();
         when(parentView.getWidth()).thenReturn(1080);
         when(parentView.getRight()).thenReturn(1080);
@@ -175,8 +168,7 @@ public class PromptTextUnitTest
 
         final Rect clipBounds = new Rect(0, 0, 1080, 1920);
         final RectF focalBounds = new RectF(1036, 1876, 1080, 1920);
-        final PromptOptions options = UnitTestUtils.createPromptOptions(new TestResourceFinder(Robolectric.buildActivity(Activity.class)
-                .create().get()));
+        final PromptOptions options = UnitTestUtils.createPromptOptionsWithTestResourceFinder();
         final ViewGroup parentView = options.getResourceFinder().getPromptParentView();
         when(parentView.getWidth()).thenReturn(1080);
         when(parentView.getRight()).thenReturn(1080);
@@ -220,8 +212,7 @@ public class PromptTextUnitTest
 
         final Rect clipBounds = new Rect(0, 0, 1080, 1920);
         final RectF focalBounds = new RectF(0, 1876, 44, 1920);
-        final PromptOptions options = UnitTestUtils.createPromptOptions(new TestResourceFinder(Robolectric.buildActivity(Activity.class)
-                .create().get()));
+        final PromptOptions options = UnitTestUtils.createPromptOptionsWithTestResourceFinder();
         final ViewGroup parentView = options.getResourceFinder().getPromptParentView();
         when(parentView.getWidth()).thenReturn(1080);
         when(parentView.getRight()).thenReturn(1080);
@@ -266,8 +257,7 @@ public class PromptTextUnitTest
 
         final Rect clipBounds = new Rect(0, 0, 1080, 1920);
         final RectF focalBounds = new RectF(1036, 0, 1080, 44);
-        final PromptOptions options = UnitTestUtils.createPromptOptions(new TestResourceFinder(Robolectric.buildActivity(Activity.class)
-                .create().get()));
+        final PromptOptions options = UnitTestUtils.createPromptOptionsWithTestResourceFinder();
         final ViewGroup parentView = options.getResourceFinder().getPromptParentView();
         when(parentView.getWidth()).thenReturn(1080);
         when(parentView.getRight()).thenReturn(1080);
@@ -312,8 +302,7 @@ public class PromptTextUnitTest
 
         final Rect clipBounds = new Rect(0, 0, 1080, 1920);
         final RectF focalBounds = new RectF(0, 0, 44, 44);
-        final PromptOptions options = UnitTestUtils.createPromptOptions(new TestResourceFinder(Robolectric.buildActivity(Activity.class)
-                .create().get()));
+        final PromptOptions options = UnitTestUtils.createPromptOptionsWithTestResourceFinder();
         final ViewGroup parentView = options.getResourceFinder().getPromptParentView();
         when(parentView.getWidth()).thenReturn(1080);
         when(parentView.getRight()).thenReturn(1080);
@@ -358,8 +347,7 @@ public class PromptTextUnitTest
 
         final Rect clipBounds = new Rect(0, 0, 1080, 1920);
         final RectF focalBounds = new RectF(1036, 1876, 1080, 1920);
-        final PromptOptions options = UnitTestUtils.createPromptOptions(new TestResourceFinder(Robolectric.buildActivity(Activity.class)
-                .create().get()));
+        final PromptOptions options = UnitTestUtils.createPromptOptionsWithTestResourceFinder();
         final ViewGroup parentView = options.getResourceFinder().getPromptParentView();
         when(parentView.getWidth()).thenReturn(1080);
         when(parentView.getRight()).thenReturn(1080);
@@ -404,8 +392,7 @@ public class PromptTextUnitTest
 
         final Rect clipBounds = new Rect(0, 0, 1080, 1920);
         final RectF focalBounds = new RectF(0, 1876, 44, 1920);
-        final PromptOptions options = UnitTestUtils.createPromptOptions(new TestResourceFinder(Robolectric.buildActivity(Activity.class)
-                .create().get()));
+        final PromptOptions options = UnitTestUtils.createPromptOptionsWithTestResourceFinder();
         final ViewGroup parentView = options.getResourceFinder().getPromptParentView();
         when(parentView.getWidth()).thenReturn(1080);
         when(parentView.getRight()).thenReturn(1080);
@@ -451,8 +438,7 @@ public class PromptTextUnitTest
 
         final Rect clipBounds = new Rect(0, 0, 1080, 1920);
         final RectF focalBounds = new RectF(1036, 0, 1080, 44);
-        final PromptOptions options = UnitTestUtils.createPromptOptions(new TestResourceFinder(Robolectric.buildActivity(Activity.class)
-                .create().get()));
+        final PromptOptions options = UnitTestUtils.createPromptOptionsWithTestResourceFinder();
         final ViewGroup parentView = options.getResourceFinder().getPromptParentView();
         when(parentView.getWidth()).thenReturn(1080);
         when(parentView.getRight()).thenReturn(1080);
@@ -497,8 +483,7 @@ public class PromptTextUnitTest
 
         final Rect clipBounds = new Rect(0, 0, 1080, 1920);
         final RectF focalBounds = new RectF(0, 0, 44, 44);
-        final PromptOptions options = UnitTestUtils.createPromptOptions(new TestResourceFinder(Robolectric.buildActivity(Activity.class)
-                .create().get()));
+        final PromptOptions options = UnitTestUtils.createPromptOptionsWithTestResourceFinder();
         final ViewGroup parentView = options.getResourceFinder().getPromptParentView();
         when(parentView.getWidth()).thenReturn(1080);
         when(parentView.getRight()).thenReturn(1080);
@@ -543,8 +528,7 @@ public class PromptTextUnitTest
 
         final Rect clipBounds = new Rect(0, 0, 1080, 1920);
         final RectF focalBounds = new RectF(948, 1788, 992, 1832);
-        final PromptOptions options = UnitTestUtils.createPromptOptions(new TestResourceFinder(Robolectric.buildActivity(Activity.class)
-                .create().get()));
+        final PromptOptions options = UnitTestUtils.createPromptOptionsWithTestResourceFinder();
         final ViewGroup parentView = options.getResourceFinder().getPromptParentView();
         when(parentView.getWidth()).thenReturn(1080);
         when(parentView.getRight()).thenReturn(1080);
@@ -589,8 +573,7 @@ public class PromptTextUnitTest
 
         final Rect clipBounds = new Rect(0, 0, 1080, 1920);
         final RectF focalBounds = new RectF(88, 1788, 132, 1832);
-        final PromptOptions options = UnitTestUtils.createPromptOptions(new TestResourceFinder(Robolectric.buildActivity(Activity.class)
-                .create().get()));
+        final PromptOptions options = UnitTestUtils.createPromptOptionsWithTestResourceFinder();
         final ViewGroup parentView = options.getResourceFinder().getPromptParentView();
         when(parentView.getWidth()).thenReturn(1080);
         when(parentView.getRight()).thenReturn(1080);
@@ -635,8 +618,7 @@ public class PromptTextUnitTest
 
         final Rect clipBounds = new Rect(0, 0, 1080, 1920);
         final RectF focalBounds = new RectF(948, 88, 992, 132);
-        final PromptOptions options = UnitTestUtils.createPromptOptions(new TestResourceFinder(Robolectric.buildActivity(Activity.class)
-                .create().get()));
+        final PromptOptions options = UnitTestUtils.createPromptOptionsWithTestResourceFinder();
         final ViewGroup parentView = options.getResourceFinder().getPromptParentView();
         when(parentView.getWidth()).thenReturn(1080);
         when(parentView.getRight()).thenReturn(1080);
@@ -681,8 +663,7 @@ public class PromptTextUnitTest
 
         final Rect clipBounds = new Rect(0, 0, 1080, 1920);
         final RectF focalBounds = new RectF(88, 88, 132, 132);
-        final PromptOptions options = UnitTestUtils.createPromptOptions(new TestResourceFinder(Robolectric.buildActivity(Activity.class)
-                .create().get()));
+        final PromptOptions options = UnitTestUtils.createPromptOptionsWithTestResourceFinder();
         final ViewGroup parentView = options.getResourceFinder().getPromptParentView();
         when(parentView.getWidth()).thenReturn(1080);
         when(parentView.getRight()).thenReturn(1080);
@@ -727,8 +708,7 @@ public class PromptTextUnitTest
 
         final Rect clipBounds = new Rect(20, 0, 1080, 1920);
         final RectF focalBounds = new RectF(88, 88, 132, 132);
-        final PromptOptions options = UnitTestUtils.createPromptOptions(new TestResourceFinder(Robolectric.buildActivity(Activity.class)
-                .create().get()));
+        final PromptOptions options = UnitTestUtils.createPromptOptionsWithTestResourceFinder();
         final ViewGroup parentView = options.getResourceFinder().getPromptParentView();
         when(parentView.getWidth()).thenReturn(1080);
         when(parentView.getRight()).thenReturn(1080);
