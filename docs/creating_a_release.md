@@ -17,6 +17,6 @@ The instructions below detail the release process:
 0. Delete the existing JavaDocs in `docs/javadocs`
 0. Copy the newly generated JavaDocs from `library/build/docs` to `docs/javadocs`
 0. Update `CHANGELOG.md` detailing any changes made in the new release
-0. Update README.md installation instructions to reference the new library version
+0. Update README.md installation instructions to reference the new library version. The version numbering in the docs is retrieved from the github releases
 0. Commit and push
 0. Log in to Bintray and release the update
