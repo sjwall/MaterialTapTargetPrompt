@@ -3,7 +3,7 @@
 [![Build Status](https://travis-ci.org/sjwall/MaterialTapTargetPrompt.svg?branch=master)](https://travis-ci.org/sjwall/MaterialTapTargetPrompt)
 [![codecov](https://codecov.io/gh/sjwall/MaterialTapTargetPrompt/branch/master/graph/badge.svg)](https://codecov.io/gh/sjwall/MaterialTapTargetPrompt)
 [![Download](https://api.bintray.com/packages/sjwall/maven/material-tap-target-prompt/images/download.svg)](https://bintray.com/sjwall/maven/material-tap-target-prompt/_latestVersion)
-[![JavaDoc](https://img.shields.io/badge/JavaDocs-v2.5.2-green.svg)][4]
+[![JavaDoc](https://img.shields.io/badge/JavaDocs-v2.12.0-green.svg)][4]
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat)](http://makeapullrequest.com)
 
 A Tap Target implementation in Android based on Material Design Onboarding guidelines. For more information on tap targets check out the [guidelines][1].
@@ -32,7 +32,7 @@ dependencies {
     implementation 'uk.co.samuelwall:material-tap-target-prompt:2.12.0'
 }
 ```
-Supports minSdkVersion 14
+Supports Android minSdkVersion 14
 
 ## Usage
 Basic usage is shown below with more examples in the [sample app][2] and [documentation][3]:
@@ -83,7 +83,7 @@ Documentation and examples are available [here][8].
     See the License for the specific language governing permissions and
     limitations under the License.
 
-[1]: https://www.google.com/design/spec/growth-communications/feature-discovery.html#feature-discovery-design
+[1]: https://material.io/design/communication/onboarding.html#quickstart-model
 [2]: https://github.com/sjwall/MaterialTapTargetPrompt/tree/master/sample/src/main/java/uk/co/samuelwall/materialtaptargetprompt/sample
 [3]: https://sjwall.github.io/MaterialTapTargetPrompt/examples
 [4]: https://sjwall.github.io/MaterialTapTargetPrompt/javadocs
