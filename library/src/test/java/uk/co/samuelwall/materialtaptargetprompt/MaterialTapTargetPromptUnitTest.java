@@ -902,6 +902,49 @@ public class MaterialTapTargetPromptUnitTest extends BaseTestStateProgress
 
         prompt.mView.sendAccessibilityEvent(AccessibilityEvent.TYPE_VIEW_FOCUSED);
     }
+
+    @Test
+    public void testOnPopulateAccessibilityEvent()
+    {
+        MaterialTapTargetPrompt prompt = createMockBuilder(SCREEN_WIDTH, SCREEN_HEIGHT)
+                .setTarget(10, 10)
+                .setPrimaryText("Primary text")
+                .setSecondaryText("Secondary text")
+                .setIdleAnimationEnabled(false)
+                .show();
+        assertNotNull(prompt);
+        AccessibilityEvent event = AccessibilityEvent.obtain();
+        prompt.mView.onPopulateAccessibilityEvent(event);
+        assertEquals("[Primary text, Secondary text]", event.getText().toString());
+    }
+
+    @Test
+    public void testOnPopulateAccessibilityEventPrimaryText()
+    {
+        MaterialTapTargetPrompt prompt = createMockBuilder(SCREEN_WIDTH, SCREEN_HEIGHT)
+                .setTarget(10, 10)
+                .setPrimaryText("Primary text")
+                .setIdleAnimationEnabled(false)
+                .show();
+        assertNotNull(prompt);
+        AccessibilityEvent event = AccessibilityEvent.obtain();
+        prompt.mView.onPopulateAccessibilityEvent(event);
+        assertEquals("[Primary text]", event.getText().toString());
+    }
+
+    @Test
+    public void testOnPopulateAccessibilityEventSecondaryText()
+    {
+        MaterialTapTargetPrompt prompt = createMockBuilder(SCREEN_WIDTH, SCREEN_HEIGHT)
+                .setTarget(10, 10)
+                .setSecondaryText("Secondary text")
+                .setIdleAnimationEnabled(false)
+                .show();
+        assertNotNull(prompt);
+        AccessibilityEvent event = AccessibilityEvent.obtain();
+        prompt.mView.onPopulateAccessibilityEvent(event);
+        assertEquals("[Secondary text]", event.getText().toString());
+    }
     
     private MaterialTapTargetPrompt.Builder createMockBuilder(final int screenWidth,
                                                               final int screenHeight)
