@@ -909,6 +909,12 @@ public class MaterialTapTargetPrompt
             mPrompt.cleanUpAnimation();
         }
 
+        @Override
+        public CharSequence getAccessibilityClassName()
+        {
+            return PromptView.class.getName();
+        }
+
         /**
          * Interface definition for a callback to be invoked when a {@link PromptView} is touched.
          */
@@ -933,8 +939,11 @@ public class MaterialTapTargetPrompt
             {
                 super.onInitializeAccessibilityNodeInfo(host, info);
 
-                info.setClassName(PromptView.this.getClass().getName());
-                info.setPackageName(PromptView.this.getClass().getPackage().getName());
+                @Nullable final Package viewPackage = PromptView.this.getClass().getPackage();
+                if (viewPackage != null)
+                {
+                    info.setPackageName(viewPackage.getName());
+                }
                 info.setSource(host);
                 info.setClickable(true);
                 info.setEnabled(true);
