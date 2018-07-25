@@ -2,6 +2,12 @@
 
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## v2.12.1 (2018-07-25)
+
+### Bug Fixes
+
+* Fixed NPE in TalkBack accessibility ([#131](https://github.com/sjwall/MaterialTapTargetPrompt/issues/131))
+
 ## v2.12.0 (2018-07-14)
 
 ### Features
