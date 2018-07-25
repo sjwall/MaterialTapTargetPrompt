@@ -41,7 +41,7 @@ Basic usage is shown below with more examples in the [sample app][2] and [docume
 new MaterialTapTargetPrompt.Builder(MainActivity.this)
         .setTarget(R.id.fab)
         .setPrimaryText("Send your first email")
-        .setSecondaryText("Tap the envelop to start composing your first email")
+        .setSecondaryText("Tap the envelope to start composing your first email")
         .setPromptStateChangeListener(new MaterialTapTargetPrompt.PromptStateChangeListener()
         {
             @Override

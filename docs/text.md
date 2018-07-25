@@ -9,7 +9,7 @@ For most use cases it should not be necessary to extend this calls as it support
 
 ```java
 SpannableStringBuilder secondaryText = new SpannableStringBuilder(
-    "Tap the envelop to start composing your first email");
+    "Tap the envelope to start composing your first email");
 secondaryText.setSpan(
     new ForegroundColorSpan(ContextCompat.getColor(this, R.color.colorAccent)),
     8, 15, Spanned.SPAN_INCLUSIVE_INCLUSIVE);

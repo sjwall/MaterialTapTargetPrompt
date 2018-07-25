@@ -10,7 +10,7 @@ BackgroundColorSpan backgroundColour = BackgroundColorSpan(
 primaryText.setSpan(backgroundColour, 0, 4, Spanned.SPAN_INCLUSIVE_INCLUSIVE);
 
 SpannableStringBuilder secondaryText = new SpannableStringBuilder(
-    "Tap the envelop to start composing your first email");
+    "Tap the envelope to start composing your first email");
 ForegroundColorSpan foregroundColour = new ForegroundColorSpan(
     ContextCompat.getColor(this, R.color.colorAccent));
 secondaryText.setSpan(foregroundColour, 8, 15, Spanned.SPAN_INCLUSIVE_INCLUSIVE);

@@ -78,7 +78,7 @@ class KotlinActivity : AppCompatActivity() {
         mFabPrompt = MaterialTapTargetPrompt.Builder(this@KotlinActivity)
                 .setTarget(findViewById<View>(R.id.fab))
                 .setPrimaryText("Send your first email")
-                .setSecondaryText("Tap the envelop to start composing your first email")
+                .setSecondaryText("Tap the envelope to start composing your first email")
                 .setAnimationInterpolator(FastOutSlowInInterpolator())
                 .setPromptStateChangeListener { prompt, state ->
                     if (state == MaterialTapTargetPrompt.STATE_FOCAL_PRESSED || state == MaterialTapTargetPrompt.STATE_DISMISSING) {

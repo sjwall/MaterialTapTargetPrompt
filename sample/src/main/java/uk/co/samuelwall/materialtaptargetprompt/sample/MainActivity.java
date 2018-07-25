@@ -90,7 +90,7 @@ public class MainActivity extends AppCompatActivity
         {
             return;
         }
-        SpannableStringBuilder secondaryText = new SpannableStringBuilder("Tap the envelop to start composing your first email");
+        SpannableStringBuilder secondaryText = new SpannableStringBuilder("Tap the envelope to start composing your first email");
         secondaryText.setSpan(new ForegroundColorSpan(ContextCompat.getColor(this, R.color.colorAccent)), 8, 15, Spanned.SPAN_INCLUSIVE_INCLUSIVE);
         SpannableStringBuilder primaryText = new SpannableStringBuilder("Send your first email");
         primaryText.setSpan(new BackgroundColorSpan(ContextCompat.getColor(this, R.color.colorAccent)), 0, 4, Spanned.SPAN_INCLUSIVE_INCLUSIVE);
