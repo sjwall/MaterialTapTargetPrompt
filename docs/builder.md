@@ -18,8 +18,16 @@ import uk.co.samuelwall.materialtaptargetprompt.MaterialTapTargetPrompt;
 import uk.co.samuelwall.materialtaptargetprompt.ResourceFinder;
 import uk.co.samuelwall.materialtaptargetprompt.extras.PromptOptions;
 
+/**
+ * {@link PromptOptions} implementation that only shows the 
+ * prompt if it hasn't been shown before.
+ */
 public class CustomPromptBuilder extends PromptOptions<CustomPromptBuilder>
 {
+    /**
+     * The key to use in the shared preferences to check if the
+     * prompt has already been shown.
+     */
     @Nullable private String key;
 
     /**
@@ -56,15 +64,19 @@ public class CustomPromptBuilder extends PromptOptions<CustomPromptBuilder>
         return this;
     }
 
-    public MaterialTapTargetPrompt show()
+    @Nullable
+    @Override
+    public MaterialTapTargetPrompt create()
     {
         final SharedPreferences sharedPreferences = this.getResourceFinder()
             .getContext()
             .getSharedPreferences("preferences", 0);
         MaterialTapTargetPrompt prompt = null;
+        // Create the prompt if key is not set or prompt hasn't already been shown
         if (this.key == null || !sharedPreferences.getBoolean(this.key, false))
         {
-            prompt = super.show();
+            prompt = super.create();
+            // Set the prompt as shown if the prompt has been created and key has been set
             if (prompt != null && this.key != null)
             {
                 sharedPreferences.edit().putBoolean(this.key, true).apply();
