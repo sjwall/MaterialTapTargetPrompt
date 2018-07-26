@@ -1,2 +1,8 @@
 title: Material Tap Target Prompt
 description: A Tap Target implementation in Android based on Material Design Onboarding guidelines.
+repository: sjwall/MaterialTapTargetPrompt
+
+# Exclude these files from the production _site
+exclude:
+  - Gemfile
+  - Gemfile.lock
