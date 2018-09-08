@@ -114,4 +114,7 @@
     <string name="title_activity_list_example" translatable="false">List Example</string>
     <string name="example_sequence">Show an example of a sequence of prompts</string>
     <string name="example_sequence_title">Sequence</string>
+
+    <string name="example_spinner_description">Displays a prompt over a spinner item</string>
+    <string name="spinner_prompt_text">Targeting a spinner item</string>
 </resources>

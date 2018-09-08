@@ -101,4 +101,7 @@
 
     <string name="example_card_card_title">Card example</string>
     <string name="example_card_card_description">Clipped to card bounds</string>
+
+    <string name="example_spinner_description">Displays a prompt over a spinner item</string>
+    <string name="spinner_prompt_text">Targeting a spinner item</string>
 </resources>

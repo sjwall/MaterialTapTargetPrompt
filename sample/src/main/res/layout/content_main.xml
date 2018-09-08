@@ -228,6 +228,22 @@
                     android:layout_gravity="center_vertical"
                     android:text="@string/example_no_auto_dismiss_description"/>
             </LinearLayout>
+            <LinearLayout
+                    android:id="@+id/other_examples_spinner"
+                    android:orientation="horizontal"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="@dimen/example_item_top_padding">
+                <Spinner
+                        android:id="@+id/example_spinner"
+                        android:layout_width="@dimen/example_button_width"
+                        android:layout_height="wrap_content"/>
+                <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:text="@string/example_spinner_description" />
+            </LinearLayout>
             <android.support.v4.widget.Space
                 android:layout_width="match_parent"
                 android:layout_height="40dp"/>

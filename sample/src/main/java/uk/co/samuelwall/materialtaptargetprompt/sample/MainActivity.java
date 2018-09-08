@@ -18,6 +18,8 @@ package uk.co.samuelwall.materialtaptargetprompt.sample;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
@@ -36,12 +38,12 @@ import android.text.SpannableStringBuilder;
 import android.text.Spanned;
 import android.text.style.BackgroundColorSpan;
 import android.text.style.ForegroundColorSpan;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
-import android.view.View;
+import android.view.*;
+import android.widget.ArrayAdapter;
+import android.widget.Spinner;
 import android.widget.Toast;
 
+import com.squareup.haha.perflib.Main;
 import uk.co.samuelwall.materialtaptargetprompt.MaterialTapTargetPrompt;
 import uk.co.samuelwall.materialtaptargetprompt.MaterialTapTargetSequence;
 import uk.co.samuelwall.materialtaptargetprompt.extras.backgrounds.FullscreenPromptBackground;
@@ -51,6 +53,11 @@ import uk.co.samuelwall.materialtaptargetprompt.extras.focals.RectanglePromptFoc
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener
 {
+    final String[] values = new String[] { "Banana",
+            "Apple",
+            "Pear",
+    };
+
     private ActionMode mActionMode;
     private ActionMode.Callback mActionModeCallback = new ActionMode.Callback()
     {
@@ -397,6 +404,33 @@ public class MainActivity extends AppCompatActivity
 
         NavigationView navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+
+        final Spinner spinner = findViewById(R.id.example_spinner);
+        final SpinnerAdapter<String> adapter = new SpinnerAdapter<>(this,
+                R.layout.list_item, R.id.firstLine, values);
+        adapter.addSpinnerListener(new SpinnerAdapter.SpinnerListener()
+        {
+            @Override
+            public void onSpinnerExpanded(View viewParent)
+            {
+                final View view = ((ViewGroup) viewParent).getChildAt(1);
+                if (view != null)
+                {
+                    new MaterialTapTargetPrompt.Builder(viewParent.getRootView())
+                            .setTarget(view)
+                            .setPrimaryText(R.string.spinner_prompt_text)
+                            .setPromptFocal(new RectanglePromptFocal())
+                            .show();
+                }
+            }
+
+            @Override
+            public void onSpinnerCollapsed()
+            {
+
+            }
+        });
+        spinner.setAdapter(adapter);
     }
 
     @Override

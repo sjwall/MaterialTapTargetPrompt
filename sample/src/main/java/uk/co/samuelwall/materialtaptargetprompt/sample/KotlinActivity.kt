@@ -70,6 +70,7 @@ class KotlinActivity : AppCompatActivity() {
         findViewById<View>(R.id.other_examples_list).visibility = View.GONE
         findViewById<View>(R.id.other_examples_support_fragment_dialog).visibility = View.GONE
         findViewById<View>(R.id.other_examples_fragment_dialog).visibility = View.GONE
+        findViewById<View>(R.id.other_examples_spinner).visibility = View.GONE
         supportActionBar!!.setDisplayHomeAsUpEnabled(true)
     }
 

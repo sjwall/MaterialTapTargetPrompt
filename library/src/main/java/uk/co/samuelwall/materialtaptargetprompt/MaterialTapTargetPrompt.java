@@ -30,16 +30,14 @@ import android.graphics.RectF;
 import android.graphics.Region;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
+import android.os.Handler;
+import android.os.Looper;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.text.TextUtils;
-import android.view.KeyEvent;
-import android.view.MotionEvent;
-import android.view.View;
-import android.view.ViewGroup;
-import android.view.ViewTreeObserver;
+import android.view.*;
 import android.view.accessibility.AccessibilityEvent;
 import android.view.accessibility.AccessibilityManager;
 import android.view.accessibility.AccessibilityNodeInfo;
@@ -1162,6 +1160,33 @@ public class MaterialTapTargetPrompt
         public Builder(@NonNull final Activity activity, int themeResId)
         {
             this(new ActivityResourceFinder(activity), themeResId);
+        }
+
+        /**
+         * Creates a builder for a tap target prompt that uses the default tap target prompt theme.
+         *
+         * @param activity the activity to show the prompt within.
+         */
+        public Builder(@NonNull final View view)
+        {
+            this(view, 0);
+        }
+
+        /**
+         * Creates a builder for a material tap target prompt that uses an explicit theme resource.
+         * <p>
+         * The {@code themeResId} may be specified as {@code 0} to use the parent {@code context}'s
+         * resolved value for {@link R.attr#MaterialTapTargetPromptTheme}.
+         *
+         * @param activity   the activity to show the prompt within.
+         * @param themeResId the resource ID of the theme against which to inflate this dialog, or
+         *                   {@code 0} to use the parent {@code context}'s default material tap
+         *                   target prompt theme
+         */
+        public Builder(@NonNull final View view, int themeResId)
+        {
+            this(new ViewResourceFinder(view), themeResId);
+            this.setTarget(view);
         }
 
         /**
