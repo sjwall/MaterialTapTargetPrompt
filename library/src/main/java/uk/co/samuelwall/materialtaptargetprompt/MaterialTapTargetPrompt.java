@@ -1101,7 +1101,7 @@ public class MaterialTapTargetPrompt
          */
         public Builder(@NonNull final DialogFragment dialogFragment, int themeResId)
         {
-            this(dialogFragment.getDialog(), themeResId);
+            this(new SupportDialogFragmentResourceFinder(dialogFragment), themeResId);
         }
 
         /**

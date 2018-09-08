@@ -263,8 +263,11 @@ public class PromptOptions<T extends PromptOptions>
                 mTargetSet = true;
             }
         }
-
-        mClipToView = (View) mResourceFinder.findViewById(android.R.id.content).getParent();
+        final View contentView = mResourceFinder.findViewById(android.R.id.content);
+        if (contentView != null)
+        {
+            mClipToView = (View) contentView.getParent();
+        }
     }
 
     /**

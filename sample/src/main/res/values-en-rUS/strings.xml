@@ -62,6 +62,12 @@
     <string name="example_dialog_title">Dialog</string>
     <string name="example_dialog_description">An example with a dialog</string>
 
+    <string name="example_support_fragment_dialog_title">Support Fragment Dialog</string>
+    <string name="example_support_fragment_dialog_description">An example with a support library fragment dialog</string>
+
+    <string name="example_fragment_dialog_title">Fragment Dialog</string>
+    <string name="example_fragment_dialog_description">An example with a library fragment dialog</string>
+
     <string name="example_action_mode_title">Action Mode</string>
     <string name="example_action_mode_description">Shows an action mode with a prompt shown</string>
 

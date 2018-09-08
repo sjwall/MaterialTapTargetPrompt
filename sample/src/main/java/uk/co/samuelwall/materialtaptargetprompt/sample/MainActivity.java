@@ -268,6 +268,16 @@ public class MainActivity extends AppCompatActivity
         startActivity(new Intent(this, DialogStyleActivity.class));
     }
 
+    public void showSupportFragmentDialog(View view)
+    {
+        new SupportDialogFragmentExample().show(this.getSupportFragmentManager(), "DIALOGFRAGMENT");
+    }
+
+    public void showFragmentDialog(View view)
+    {
+        new DialogFragmentExample().show(this.getFragmentManager(), "DIALOGFRAGMENT");
+    }
+
     public void showActionModePrompt(View view)
     {
         mActionMode = this.startSupportActionMode(mActionModeCallback);
