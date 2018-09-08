@@ -771,6 +771,14 @@ public class MaterialTapTargetPrompt
         }
 
         @Override
+        protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec)
+        {
+            // Stop the prompt increasing the parent size by setting it to the parents size.
+            final View parent = (View) this.getParent();
+            this.setMeasuredDimension(parent.getMeasuredWidth(), parent.getMeasuredHeight());
+        }
+
+        @Override
         public void onDraw(final Canvas canvas)
         {
             if (mClipToBounds)

@@ -63,8 +63,8 @@ public class DialogFragmentExample extends DialogFragment
         new MaterialTapTargetPrompt.Builder(this)
                 .setTarget(R.id.fab)
                 .setAnimationInterpolator(new FastOutSlowInInterpolator())
-                .setPrimaryText("Clipped to activity bounds")
-                .setSecondaryText("The prompt does not draw outside the activity")
+                .setPrimaryText("Clipped to dialog bounds")
+                .setSecondaryText("The prompt does not draw outside the dialog")
                 .show();
     }
 }
