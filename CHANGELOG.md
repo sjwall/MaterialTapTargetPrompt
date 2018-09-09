@@ -2,6 +2,13 @@
 
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## v2.12.2 (2018-09-09)
+
+### Bug Fixes
+
+* Fixed prompt clipping incorrectly in support dialog fragment
+* Fixed prompt increasing parent view size
+
 ## v2.12.1 (2018-07-25)
 
 ### Bug Fixes
