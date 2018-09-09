@@ -1082,7 +1082,7 @@ public class MaterialTapTargetPrompt
          */
         public Builder(@NonNull final Fragment fragment, int themeResId)
         {
-            this(fragment.requireActivity(), themeResId);
+            this(new SupportFragmentResourceFinder(fragment), themeResId);
         }
 
         /**
@@ -1109,7 +1109,7 @@ public class MaterialTapTargetPrompt
          */
         public Builder(@NonNull final DialogFragment dialogFragment, int themeResId)
         {
-            this(new SupportDialogFragmentResourceFinder(dialogFragment), themeResId);
+            this(new SupportFragmentResourceFinder(dialogFragment), themeResId);
         }
 
         /**

@@ -22,35 +22,35 @@ import android.content.res.TypedArray;
 import android.graphics.drawable.Drawable;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v4.app.DialogFragment;
+import android.support.v4.app.Fragment;
 import android.view.View;
 import android.view.ViewGroup;
 
 /**
- * {@link ResourceFinder} implementation for {@link DialogFragment}.
+ * {@link ResourceFinder} implementation for {@link Fragment}.
  */
-public class SupportDialogFragmentResourceFinder implements ResourceFinder
+public class SupportFragmentResourceFinder implements ResourceFinder
 {
     /**
      * The fragment to get the resources from.
      */
-    private final DialogFragment dialogFragment;
+    private final Fragment fragment;
 
     /**
      * Constructor.
      *
      * @param fragment Fragment to get the resources from.
      */
-    public SupportDialogFragmentResourceFinder(final DialogFragment fragment)
+    public SupportFragmentResourceFinder(final Fragment fragment)
     {
-        this.dialogFragment = fragment;
+        this.fragment = fragment;
     }
 
     @Nullable
     @Override
     public View findViewById(int resId)
     {
-        return this.dialogFragment.getView().findViewById(resId);
+        return this.fragment.getView().findViewById(resId);
     }
 
     @NonNull
@@ -58,48 +58,48 @@ public class SupportDialogFragmentResourceFinder implements ResourceFinder
     public ViewGroup getPromptParentView()
     {
         //noinspection ConstantConditions
-        return (ViewGroup) this.dialogFragment.getView();
+        return (ViewGroup) this.fragment.getView();
     }
 
     @NonNull
     @Override
     public Context getContext()
     {
-        return this.dialogFragment.requireContext();
+        return this.fragment.requireContext();
     }
 
     @NonNull
     @Override
     public Resources getResources()
     {
-        return this.dialogFragment.getResources();
+        return this.fragment.getResources();
     }
 
     @NonNull
     @Override
     public Resources.Theme getTheme()
     {
-        return this.dialogFragment.requireActivity().getTheme();
+        return this.fragment.requireActivity().getTheme();
     }
 
     @NonNull
     @Override
     public String getString(int resId)
     {
-        return this.dialogFragment.getString(resId);
+        return this.fragment.getString(resId);
     }
 
     @NonNull
     @Override
     public TypedArray obtainStyledAttributes(int resId, int[] attrs)
     {
-        return this.dialogFragment.requireActivity().obtainStyledAttributes(resId, attrs);
+        return this.fragment.requireActivity().obtainStyledAttributes(resId, attrs);
     }
 
     @Nullable
     @Override
     public Drawable getDrawable(int resId)
     {
-        return this.dialogFragment.getResources().getDrawable(resId);
+        return this.fragment.getResources().getDrawable(resId);
     }
 }

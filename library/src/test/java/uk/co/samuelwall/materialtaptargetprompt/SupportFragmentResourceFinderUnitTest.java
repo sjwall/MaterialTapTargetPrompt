@@ -35,7 +35,7 @@ import static org.mockito.Mockito.when;
 
 @RunWith(RobolectricTestRunner.class)
 @Config(constants = BuildConfig.class, sdk = 22)
-public class SupportDialogFragmentResourceFinderUnitTest
+public class SupportFragmentResourceFinderUnitTest
 {
     @Test
     public void testGetString()
@@ -43,7 +43,7 @@ public class SupportDialogFragmentResourceFinderUnitTest
         final String resource = "test string";
         final int resourceId = 64532;
         final DialogFragment dialogFragment = spy(new DialogFragment());
-        final SupportDialogFragmentResourceFinder resourceFinder = new SupportDialogFragmentResourceFinder(dialogFragment);
+        final SupportFragmentResourceFinder resourceFinder = new SupportFragmentResourceFinder(dialogFragment);
         final Context context = mock(Context.class);
         when(dialogFragment.getContext()).thenReturn(context);
         final Resources resources = mock(Resources.class);
@@ -58,7 +58,7 @@ public class SupportDialogFragmentResourceFinderUnitTest
 
         final int resourceId = 64532;
         final DialogFragment dialogFragment = spy(new DialogFragment());
-        final SupportDialogFragmentResourceFinder resourceFinder = new SupportDialogFragmentResourceFinder(dialogFragment);
+        final SupportFragmentResourceFinder resourceFinder = new SupportFragmentResourceFinder(dialogFragment);
         final Drawable resource = mock(Drawable.class);
         final Resources resources = mock(Resources.class);
         final Context context = mock(Context.class);
@@ -75,7 +75,7 @@ public class SupportDialogFragmentResourceFinderUnitTest
         final Drawable resource = mock(Drawable.class);
         final int resourceId = 64532;
         final DialogFragment dialogFragment = spy(new DialogFragment());
-        final SupportDialogFragmentResourceFinder resourceFinder = new SupportDialogFragmentResourceFinder(dialogFragment);
+        final SupportFragmentResourceFinder resourceFinder = new SupportFragmentResourceFinder(dialogFragment);
         final Resources resources = mock(Resources.class);
         final Context context = mock(Context.class);
         when(dialogFragment.getContext()).thenReturn(context);
@@ -88,7 +88,7 @@ public class SupportDialogFragmentResourceFinderUnitTest
     {
         final DialogFragment dialogFragment = spy(new DialogFragment());
         final ViewGroup view = mock(ViewGroup.class);
-        final SupportDialogFragmentResourceFinder resourceFinder = new SupportDialogFragmentResourceFinder(dialogFragment);
+        final SupportFragmentResourceFinder resourceFinder = new SupportFragmentResourceFinder(dialogFragment);
         when(dialogFragment.getView()).thenReturn(view);
         assertEquals(view, resourceFinder.getPromptParentView());
     }
@@ -98,7 +98,7 @@ public class SupportDialogFragmentResourceFinderUnitTest
     {
         final DialogFragment dialogFragment = spy(new DialogFragment());
         final Context context = mock(Context.class);
-        final SupportDialogFragmentResourceFinder resourceFinder = new SupportDialogFragmentResourceFinder(dialogFragment);
+        final SupportFragmentResourceFinder resourceFinder = new SupportFragmentResourceFinder(dialogFragment);
         when(dialogFragment.getContext()).thenReturn(context);
         assertEquals(context, resourceFinder.getContext());
     }
