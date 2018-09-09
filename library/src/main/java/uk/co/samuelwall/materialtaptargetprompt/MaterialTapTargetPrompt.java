@@ -688,11 +688,7 @@ public class MaterialTapTargetPrompt
         }
         else
         {
-            final View contentView = mView.mPromptOptions.getResourceFinder().findViewById(android.R.id.content);
-            if (contentView != null)
-            {
-                contentView.getGlobalVisibleRect(mView.mClipBounds, new Point());
-            }
+            mView.mPromptOptions.getResourceFinder().getPromptParentView().getGlobalVisibleRect(mView.mClipBounds, new Point());
             mView.mClipToBounds = false;
         }
     }
