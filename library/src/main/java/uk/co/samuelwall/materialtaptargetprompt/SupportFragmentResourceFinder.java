@@ -34,6 +34,7 @@ public class SupportFragmentResourceFinder implements ResourceFinder
     /**
      * The fragment to get the resources from.
      */
+    @NonNull
     private final Fragment fragment;
 
     /**
@@ -41,7 +42,7 @@ public class SupportFragmentResourceFinder implements ResourceFinder
      *
      * @param fragment Fragment to get the resources from.
      */
-    public SupportFragmentResourceFinder(final Fragment fragment)
+    public SupportFragmentResourceFinder(@NonNull final Fragment fragment)
     {
         this.fragment = fragment;
     }
@@ -58,7 +59,7 @@ public class SupportFragmentResourceFinder implements ResourceFinder
     public ViewGroup getPromptParentView()
     {
         //noinspection ConstantConditions
-        return (ViewGroup) this.fragment.getView();
+        return (ViewGroup) this.fragment.getView().getParent();
     }
 
     @NonNull

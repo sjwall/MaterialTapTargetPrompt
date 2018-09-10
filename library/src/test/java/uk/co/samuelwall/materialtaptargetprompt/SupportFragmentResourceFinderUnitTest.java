@@ -87,10 +87,12 @@ public class SupportFragmentResourceFinderUnitTest
     public void testGetPromptParentView()
     {
         final DialogFragment dialogFragment = spy(new DialogFragment());
+        final ViewGroup parent = mock(ViewGroup.class);
         final ViewGroup view = mock(ViewGroup.class);
         final SupportFragmentResourceFinder resourceFinder = new SupportFragmentResourceFinder(dialogFragment);
         when(dialogFragment.getView()).thenReturn(view);
-        assertEquals(view, resourceFinder.getPromptParentView());
+        when(view.getParent()).thenReturn(parent);
+        assertEquals(parent, resourceFinder.getPromptParentView());
     }
 
     @Test
