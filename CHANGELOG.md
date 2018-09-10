@@ -2,6 +2,13 @@
 
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## v2.12.3 (2018-09-10)
+
+### Bug Fixes
+
+* Fixed prompt being added to wrong view for fragments
+* Fixed prompt text being laid out incorrectly when clipping bounds are empty
+
 ## v2.12.2 (2018-09-09)
 
 ### Bug Fixes
