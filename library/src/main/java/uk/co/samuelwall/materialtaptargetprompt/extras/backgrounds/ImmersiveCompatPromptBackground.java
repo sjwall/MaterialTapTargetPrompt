@@ -30,7 +30,7 @@ public class ImmersiveCompatPromptBackground extends FullscreenPromptBackground
     private final WindowManager mWindowManager;
 
     public ImmersiveCompatPromptBackground(@NonNull WindowManager windowManager) {
-        this.mWindowManager = windowManager;
+        mWindowManager = windowManager;
         mBaseMetrics = new DisplayMetrics();
     }
 
