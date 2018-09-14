@@ -82,11 +82,16 @@ public class FullscreenPromptBackground extends PromptBackground
     public void prepare(@NonNull final PromptOptions options, final boolean clipToBounds, @NonNull Rect clipBounds)
     {
         final RectF focalBounds = options.getPromptFocal().getBounds();
-        DisplayMetrics metrics = Resources.getSystem().getDisplayMetrics();
+        DisplayMetrics metrics = getDisplayMetrics();
 
         mBaseBounds.set(0, 0, metrics.widthPixels, metrics.heightPixels);
         mFocalCentre.x = focalBounds.centerX();
         mFocalCentre.y = focalBounds.centerY();
+    }
+
+    @NonNull
+    protected DisplayMetrics getDisplayMetrics() {
+        return Resources.getSystem().getDisplayMetrics();
     }
 
     @Override
