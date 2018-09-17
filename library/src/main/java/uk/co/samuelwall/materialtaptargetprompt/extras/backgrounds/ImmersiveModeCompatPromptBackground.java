@@ -22,14 +22,14 @@ import android.util.DisplayMetrics;
 import android.view.Display;
 import android.view.WindowManager;
 
-public class ImmersiveCompatPromptBackground extends FullscreenPromptBackground
+public class ImmersiveModeCompatPromptBackground extends FullscreenPromptBackground
 {
     @NonNull
     private final DisplayMetrics mBaseMetrics;
     @NonNull
     private final WindowManager mWindowManager;
 
-    public ImmersiveCompatPromptBackground(@NonNull WindowManager windowManager) {
+    public ImmersiveModeCompatPromptBackground(@NonNull WindowManager windowManager) {
         mWindowManager = windowManager;
         mBaseMetrics = new DisplayMetrics();
     }
