@@ -351,7 +351,7 @@ public class MaterialTapTargetPrompt
      */
     void addGlobalLayoutListener()
     {
-        final ViewTreeObserver viewTreeObserver = mView.mPromptOptions.getResourceFinder().getPromptParentView().getViewTreeObserver();
+        final ViewTreeObserver viewTreeObserver = ((ViewGroup) mView.getParent()).getViewTreeObserver();
         if (viewTreeObserver.isAlive())
         {
             viewTreeObserver.addOnGlobalLayoutListener(mGlobalLayoutListener);
@@ -363,7 +363,12 @@ public class MaterialTapTargetPrompt
      */
     void removeGlobalLayoutListener()
     {
-        final ViewTreeObserver viewTreeObserver = mView.mPromptOptions.getResourceFinder().getPromptParentView().getViewTreeObserver();
+        final ViewGroup parent = (ViewGroup) mView.getParent();
+        if (parent == null)
+        {
+            return;
+        }
+        final ViewTreeObserver viewTreeObserver = ((ViewGroup) mView.getParent()).getViewTreeObserver();
         if (viewTreeObserver.isAlive())
         {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN)
@@ -461,7 +466,11 @@ public class MaterialTapTargetPrompt
     {
         cleanUpAnimation();
         removeGlobalLayoutListener();
-        mView.mPromptOptions.getResourceFinder().getPromptParentView().removeView(mView);
+        final ViewGroup parent = (ViewGroup) mView.getParent();
+        if (parent != null)
+        {
+            parent.removeView(mView);
+        }
         if (isDismissing())
         {
             onPromptStateChanged(state);
@@ -596,6 +605,10 @@ public class MaterialTapTargetPrompt
      */
     void updateAnimation(final float revealModifier, final float alphaModifier)
     {
+        if (mView.getParent() == null)
+        {
+            return;
+        }
         mView.mPromptOptions.getPromptText().update(mView.mPromptOptions, revealModifier, alphaModifier);
         if (mView.mIconDrawable != null)
         {
@@ -688,7 +701,7 @@ public class MaterialTapTargetPrompt
         }
         else
         {
-            mView.mPromptOptions.getResourceFinder().getPromptParentView().getGlobalVisibleRect(mView.mClipBounds, new Point());
+            ((ViewGroup) mView.getParent()).getGlobalVisibleRect(mView.mClipBounds, new Point());
             mView.mClipToBounds = false;
         }
     }

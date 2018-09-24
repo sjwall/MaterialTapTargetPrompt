@@ -937,33 +937,6 @@ public class MaterialTapTargetPromptUnitTest extends BaseTestStateProgress
                                 return null;
                             }
                         }).when(prompt).updateClipBounds();
-
-                        Mockito.doAnswer(new Answer<Void>()
-                        {
-                            @SuppressLint("WrongCall")
-                            public Void answer(InvocationOnMock invocation)
-                            {
-                                try
-                                {
-                                    invocation.callRealMethod();
-                                }
-                                catch (Throwable throwable)
-                                {
-                                    throwable.printStackTrace();
-                                }
-                                assertNotNull(prompt.mGlobalLayoutListener);
-                                prompt.mGlobalLayoutListener.onGlobalLayout();
-                                prompt.prepare();
-                                final Canvas canvas = mock(Canvas.class);
-                                prompt.mView.onDraw(canvas);
-                                prompt.mView.mPromptOptions.getPromptFocal().update(prompt.mView.mPromptOptions, 1, 1);
-                                prompt.mView.mPromptOptions.getPromptFocal().updateRipple(1, 1);
-                                prompt.mView.mPromptOptions.getPromptBackground().update(prompt.mView.mPromptOptions, 1, 1);
-                                prompt.mView.mPromptOptions.getPromptText().update(prompt.mView.mPromptOptions, 1, 1);
-                                prompt.mView.onDraw(canvas);
-                                return null;
-                            }
-                        }).when(prompt).show();
                         assertEquals(MaterialTapTargetPrompt.STATE_NOT_SHOWN, prompt.getState());
                         return prompt;
                     }
