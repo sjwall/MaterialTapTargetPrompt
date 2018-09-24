@@ -101,4 +101,7 @@
 
     <string name="example_card_card_title">Card example</string>
     <string name="example_card_card_description">Clipped to card bounds</string>
+
+    <string name="example_view_pager_title">View pager tab</string>
+    <string name="example_view_pager_description">Show a prompt targeting a view pager tab</string>
 </resources>
