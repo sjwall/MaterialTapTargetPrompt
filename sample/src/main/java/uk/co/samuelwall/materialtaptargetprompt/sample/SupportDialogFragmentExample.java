@@ -91,7 +91,7 @@ public class SupportDialogFragmentExample extends DialogFragment
     public void showViewPagerTab()
     {
         new MaterialTapTargetPrompt.Builder((Fragment) this)
-            .setTarget(this.viewPager)//.getChildAt(0))
+            .setTarget(this.viewPager.getChildAt(0))
             .setPromptFocal(new RectanglePromptFocal())
             .setAnimationInterpolator(new FastOutSlowInInterpolator())
             .setPrimaryText("View Pager Tab")

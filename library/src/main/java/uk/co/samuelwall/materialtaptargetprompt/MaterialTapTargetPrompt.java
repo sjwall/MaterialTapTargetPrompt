@@ -659,8 +659,8 @@ public class MaterialTapTargetPrompt
             final int[] targetPosition = new int[2];
             mView.mTargetRenderView.getLocationInWindow(targetPosition);
 
-            mView.mIconDrawableLeft = targetPosition[0] - viewPosition[0];
-            mView.mIconDrawableTop = targetPosition[1] - viewPosition[1];
+            mView.mIconDrawableLeft = targetPosition[0] - viewPosition[0] - mView.mTargetRenderView.getScrollX();
+            mView.mIconDrawableTop = targetPosition[1] - viewPosition[1] - mView.mTargetRenderView.getScrollY();
         }
     }
 
