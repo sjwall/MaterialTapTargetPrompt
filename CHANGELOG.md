@@ -2,6 +2,13 @@
 
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## v2.12.4 (2018-09-24)
+
+### Bug Fixes
+
+* Correct target rendered position with scroll ([#136](https://github.com/sjwall/MaterialTapTargetPrompt/issues/136))
+* Fix animation trying to continue after view removed
+
 ## v2.12.3 (2018-09-10)
 
 ### Bug Fixes
