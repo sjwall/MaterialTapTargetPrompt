@@ -701,7 +701,7 @@ public class MaterialTapTargetPrompt
         }
         else
         {
-            ((ViewGroup) mView.getParent()).getGlobalVisibleRect(mView.mClipBounds, new Point());
+            mView.mPromptOptions.getResourceFinder().getPromptParentView().getGlobalVisibleRect(mView.mClipBounds, new Point());
             mView.mClipToBounds = false;
         }
     }

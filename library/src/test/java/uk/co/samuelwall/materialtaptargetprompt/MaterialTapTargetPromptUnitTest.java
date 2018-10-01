@@ -16,6 +16,8 @@
 
 package uk.co.samuelwall.materialtaptargetprompt;
 
+import android.animation.Animator;
+import android.animation.ValueAnimator;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.graphics.Canvas;
@@ -902,7 +904,19 @@ public class MaterialTapTargetPromptUnitTest extends BaseTestStateProgress
 
         prompt.mView.sendAccessibilityEvent(AccessibilityEvent.TYPE_VIEW_FOCUSED);
     }
-    
+
+    @Test
+    @Deprecated
+    public void testAnimatorListener()
+    {
+        final MaterialTapTargetPrompt.AnimatorListener al = new MaterialTapTargetPrompt.AnimatorListener();
+        final Animator animator = new ValueAnimator();
+        al.onAnimationStart(animator);
+        al.onAnimationRepeat(animator);
+        al.onAnimationEnd(animator);
+        al.onAnimationCancel(animator);
+    }
+
     private MaterialTapTargetPrompt.Builder createMockBuilder(final int screenWidth,
                                                               final int screenHeight)
     {
@@ -937,6 +951,37 @@ public class MaterialTapTargetPromptUnitTest extends BaseTestStateProgress
                                 return null;
                             }
                         }).when(prompt).updateClipBounds();
+
+                        Mockito.doAnswer(new Answer<Void>()
+                        {
+                            @SuppressLint("WrongCall")
+                            public Void answer(InvocationOnMock invocation)
+                            {
+                                try
+                                {
+                                    invocation.callRealMethod();
+                                }
+                                catch (Throwable throwable)
+                                {
+                                    throwable.printStackTrace();
+                                }
+                                assertNotNull(prompt.mGlobalLayoutListener);
+                                prompt.mGlobalLayoutListener.onGlobalLayout();
+                                prompt.prepare();
+                                final Canvas canvas = mock(Canvas.class);
+                                prompt.mView.onDraw(canvas);
+                                prompt.mView.mPromptOptions.getPromptFocal()
+                                        .update(prompt.mView.mPromptOptions, 1, 1);
+                                prompt.mView.mPromptOptions.getPromptFocal()
+                                        .updateRipple(1, 1);
+                                prompt.mView.mPromptOptions.getPromptBackground()
+                                        .update(prompt.mView.mPromptOptions, 1, 1);
+                                prompt.mView.mPromptOptions.getPromptText()
+                                        .update(prompt.mView.mPromptOptions, 1, 1);
+                                prompt.mView.onDraw(canvas);
+                                return null;
+                            }
+                        }).when(prompt).show();
                         assertEquals(MaterialTapTargetPrompt.STATE_NOT_SHOWN, prompt.getState());
                         return prompt;
                     }
