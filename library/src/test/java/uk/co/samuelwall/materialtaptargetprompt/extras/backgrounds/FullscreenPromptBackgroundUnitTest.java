@@ -17,6 +17,7 @@
 package uk.co.samuelwall.materialtaptargetprompt.extras.backgrounds;
 
 
+import android.content.res.Resources;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Rect;
@@ -50,6 +51,8 @@ public class FullscreenPromptBackgroundUnitTest
         when(parentView.getWidth()).thenReturn(clipBounds.width());
         when(parentView.getRight()).thenReturn(clipBounds.right);
         when(parentView.getLeft()).thenReturn(clipBounds.left);
+        Resources.getSystem().getDisplayMetrics().widthPixels = 480;
+        Resources.getSystem().getDisplayMetrics().heightPixels = 800;
         options.load(-1);
         final FullscreenPromptBackground promptBackground = new FullscreenPromptBackground();
         promptBackground.setColour(Color.YELLOW);
