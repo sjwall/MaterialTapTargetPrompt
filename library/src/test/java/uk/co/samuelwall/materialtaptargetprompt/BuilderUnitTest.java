@@ -21,6 +21,7 @@ import android.app.Dialog;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 
+import android.view.ViewGroup;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.robolectric.Robolectric;
@@ -85,35 +86,41 @@ public class BuilderUnitTest
         assertTrue(builder.getResourceFinder() instanceof ActivityResourceFinder);
     }
 
-    //@Test
+    @Test
     public void testBuilder_SupportFragment()
     {
-        final Fragment fragment = new Fragment();
+        final Fragment fragment = spy(new Fragment());
+        final ViewGroup view = mock(ViewGroup.class);
+        when(fragment.getView()).thenReturn(view);
         startFragment(fragment);
         final MaterialTapTargetPrompt.Builder builder = new MaterialTapTargetPrompt.Builder(fragment);
-        assertTrue(builder.getResourceFinder() instanceof ActivityResourceFinder);
+        assertTrue(builder.getResourceFinder() instanceof SupportFragmentResourceFinder);
     }
 
-    //@Test
+    @Test
     public void testBuilder_SupportFragment_Resource()
     {
-        final Fragment fragment = new Fragment();
+        final Fragment fragment = spy(new Fragment());
+        final ViewGroup view = mock(ViewGroup.class);
+        when(fragment.getView()).thenReturn(view);
         startFragment(fragment);
         final MaterialTapTargetPrompt.Builder builder = new MaterialTapTargetPrompt.Builder(fragment, 0);
-        assertTrue(builder.getResourceFinder() instanceof ActivityResourceFinder);
+        assertTrue(builder.getResourceFinder() instanceof SupportFragmentResourceFinder);
     }
 
-    //@Test
+    @Test
     public void testBuilder_SupportDialogFragment()
     {
         final DialogFragment dialogFragment = spy(new DialogFragment());
         startFragment(dialogFragment);
+        final ViewGroup view = mock(ViewGroup.class);
+        when(dialogFragment.getView()).thenReturn(view);
         final Activity activity = Robolectric.buildActivity(Activity.class).create().get();
         final Dialog dialog = mock(Dialog.class);
         when(dialogFragment.getDialog()).thenReturn(dialog);
         when(dialog.getOwnerActivity()).thenReturn(activity);
         when(dialog.findViewById(android.R.id.content)).thenReturn(activity.findViewById(android.R.id.content));
         final MaterialTapTargetPrompt.Builder builder = new MaterialTapTargetPrompt.Builder(dialogFragment);
-        assertTrue(builder.getResourceFinder() instanceof DialogResourceFinder);
+        assertTrue(builder.getResourceFinder() instanceof SupportFragmentResourceFinder);
     }
 }
