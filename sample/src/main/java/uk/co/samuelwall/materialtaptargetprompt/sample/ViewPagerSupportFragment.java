@@ -18,6 +18,7 @@ package uk.co.samuelwall.materialtaptargetprompt.sample;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.animation.FastOutSlowInInterpolator;
@@ -49,15 +50,26 @@ public class ViewPagerSupportFragment extends Fragment
                 @Override
                 public void onClick(View v)
                 {
-                    new MaterialTapTargetPrompt.Builder(dialogFragment)
-                            .setTarget(v)
-                            .setAnimationInterpolator(new FastOutSlowInInterpolator())
-                            .setPrimaryText("Clipped to dialog bounds")
-                            .setSecondaryText("The prompt does not draw outside the dialog")
-                            .setClipToView(null)
-                            .show();
+                    showPrompt();
                 }
             });
         return view;
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState)
+    {
+        showPrompt();
+    }
+
+    private void showPrompt()
+    {
+        new MaterialTapTargetPrompt.Builder(dialogFragment)
+                .setTarget(R.id.button)
+                .setAnimationInterpolator(new FastOutSlowInInterpolator())
+                .setPrimaryText("Clipped to dialog bounds")
+                .setSecondaryText("The prompt does not draw outside the dialog")
+                .setClipToView(null)
+                .show();
     }
 }
