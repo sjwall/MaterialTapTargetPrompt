@@ -480,7 +480,7 @@ public class MaterialTapTargetPromptUnitTest extends BaseTestStateProgress
     @Test
     public void testPromptBackButtonDismiss()
     {
-        expectedStateProgress = 5;
+        expectedStateProgress = 6;
         MaterialTapTargetPrompt prompt = createMockBuilder(SCREEN_WIDTH, SCREEN_HEIGHT)
                 .setTarget(10, 10)
                 .setPrimaryText("Primary text")
@@ -502,16 +502,21 @@ public class MaterialTapTargetPromptUnitTest extends BaseTestStateProgress
                         }
                         else if (actualStateProgress == 2)
                         {
+                            assertEquals(MaterialTapTargetPrompt.STATE_BACK_BUTTON_PRESSED, state);
+                            assertEquals(MaterialTapTargetPrompt.STATE_BACK_BUTTON_PRESSED, prompt.getState());
+                        }
+                        else if (actualStateProgress == 3)
+                        {
                             assertEquals(MaterialTapTargetPrompt.STATE_NON_FOCAL_PRESSED, state);
                             assertEquals(MaterialTapTargetPrompt.STATE_NON_FOCAL_PRESSED, prompt.getState());
                         }
-                        else if (actualStateProgress == 3)
+                        else if (actualStateProgress == 4)
                         {
                             assertEquals(MaterialTapTargetPrompt.STATE_DISMISSING, state);
                             assertEquals(MaterialTapTargetPrompt.STATE_DISMISSING, prompt.getState());
                             UnitTestUtils.endCurrentAnimation(prompt);
                         }
-                        else if (actualStateProgress == 4)
+                        else if (actualStateProgress == 5)
                         {
                             assertEquals(MaterialTapTargetPrompt.STATE_DISMISSED, state);
                             assertEquals(MaterialTapTargetPrompt.STATE_DISMISSED, prompt.getState());

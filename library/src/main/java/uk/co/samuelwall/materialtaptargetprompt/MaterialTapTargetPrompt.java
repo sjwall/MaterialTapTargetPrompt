@@ -111,6 +111,11 @@ public class MaterialTapTargetPrompt
     public static final int STATE_SHOW_FOR_TIMEOUT = 9;
 
     /**
+     * The prompt has been dismissed by the system back button being pressed.
+     */
+    public static final int STATE_BACK_BUTTON_PRESSED = 10;
+
+    /**
      * The view that renders the prompt.
      */
     PromptView mView;
@@ -197,6 +202,20 @@ public class MaterialTapTargetPrompt
             {
                 if (!isDismissing())
                 {
+                    onPromptStateChanged(STATE_NON_FOCAL_PRESSED);
+                    if (mView.mPromptOptions.getAutoDismiss())
+                    {
+                        dismiss();
+                    }
+                }
+            }
+
+            @Override
+            public void onBackButtonPressed()
+            {
+                if (!isDismissing())
+                {
+                    onPromptStateChanged(STATE_BACK_BUTTON_PRESSED);
                     onPromptStateChanged(STATE_NON_FOCAL_PRESSED);
                     if (mView.mPromptOptions.getAutoDismiss())
                     {
@@ -295,9 +314,10 @@ public class MaterialTapTargetPrompt
      * @see #STATE_REVEALING
      * @see #STATE_REVEALED
      * @see #STATE_FOCAL_PRESSED
+     * @see #STATE_NON_FOCAL_PRESSED
+     * @see #STATE_BACK_BUTTON_PRESSED
      * @see #STATE_FINISHING
      * @see #STATE_FINISHED
-     * @see #STATE_NON_FOCAL_PRESSED
      * @see #STATE_DISMISSING
      * @see #STATE_DISMISSED
      */
@@ -908,7 +928,7 @@ public class MaterialTapTargetPrompt
                     {
                         if (mPromptTouchedListener != null)
                         {
-                            mPromptTouchedListener.onNonFocalPressed();
+                            mPromptTouchedListener.onBackButtonPressed();
                         }
                         return mPromptOptions.getAutoDismiss()
                                 || super.dispatchKeyEventPreIme(event);
@@ -947,6 +967,11 @@ public class MaterialTapTargetPrompt
              * pressed.
              */
             void onNonFocalPressed();
+
+            /**
+             * Called when the system back button is pressed.
+             */
+            void onBackButtonPressed();
         }
 
         class AccessibilityDelegate extends View.AccessibilityDelegate {

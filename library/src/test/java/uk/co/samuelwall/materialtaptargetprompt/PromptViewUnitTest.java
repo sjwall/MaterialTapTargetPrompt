@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017 Samuel Wall
+ * Copyright (C) 2017-2018 Samuel Wall
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,7 +22,6 @@ import android.app.Activity;
 import android.graphics.Canvas;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
-import android.inputmethodservice.Keyboard;
 import android.os.SystemClock;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
@@ -195,6 +194,12 @@ public class PromptViewUnitTest
         @Override
         public void onNonFocalPressed()
         {
+            fail();
+        }
+
+        @Override
+        public void onBackButtonPressed()
+        {
             success = true;
         }
     }
@@ -212,6 +217,12 @@ public class PromptViewUnitTest
 
             @Override
             public void onNonFocalPressed()
+            {
+                fail();
+            }
+
+            @Override
+            public void onBackButtonPressed()
             {
                 fail();
             }
@@ -240,6 +251,12 @@ public class PromptViewUnitTest
             {
                 fail();
             }
+
+            @Override
+            public void onBackButtonPressed()
+            {
+                fail();
+            }
         };
         KeyEvent.DispatcherState state = new KeyEvent.DispatcherState();
         when(promptView.getKeyDispatcherState()).thenReturn(state);
@@ -265,6 +282,12 @@ public class PromptViewUnitTest
             {
                 fail();
             }
+
+            @Override
+            public void onBackButtonPressed()
+            {
+                fail();
+            }
         };
         when(promptView.getKeyDispatcherState()).thenReturn(null);
         final KeyEvent event = new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_BACK);
@@ -284,6 +307,12 @@ public class PromptViewUnitTest
 
             @Override
             public void onNonFocalPressed()
+            {
+                fail();
+            }
+
+            @Override
+            public void onBackButtonPressed()
             {
                 fail();
             }
@@ -308,6 +337,12 @@ public class PromptViewUnitTest
 
             @Override
             public void onNonFocalPressed()
+            {
+                fail();
+            }
+
+            @Override
+            public void onBackButtonPressed()
             {
                 fail();
             }
