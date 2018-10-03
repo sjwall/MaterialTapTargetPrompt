@@ -2,6 +2,12 @@
 
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## v2.13.0 (2018-10-03)
+
+### Features
+
+* Added `STATE_BACK_BUTTON_PRESSED` state which is emitted before `STATE_NON_FOCAL_PRESSED` when the system back button is pressed ([#138](https://github.com/sjwall/MaterialTapTargetPrompt/issues/138))
+
 ## v2.12.4 (2018-09-24)
 
 ### Bug Fixes
