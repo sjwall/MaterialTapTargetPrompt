@@ -22,6 +22,9 @@ import android.util.DisplayMetrics;
 import android.view.Display;
 import android.view.WindowManager;
 
+/**
+ * {@link ImmersiveModeCompatPromptBackground} implementation that renders the prompt background as a rectangle for supporting immersive mode.
+ */
 public class ImmersiveModeCompatPromptBackground extends FullscreenPromptBackground
 {
     @NonNull
