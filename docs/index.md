@@ -1,6 +1,21 @@
 ---
 layout: home
 ---
+<!--
+  ~ Copyright (C) 2018 Samuel Wall
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~ http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
 
 Follow the [quick start guide](#quick-start) below to get started.
 
@@ -31,28 +46,94 @@ Supports Android minSdkVersion 14
 
 Tap target prompts are created with a [builder](javadocs/uk/co/samuelwall/materialtaptargetprompt/MaterialTapTargetPrompt.Builder.html) class much like the Android AlertDialog builder:
 
+<div class="tabs">
+<div class="tabs-titles">
+<div class="tabs-title">
+    Java
+</div>
+<div class="tabs-title">
+    Kotlin
+</div>
+</div>
+<div class="tabs-content" markdown="1">
 ```java
 builder = new MaterialTapTargetPrompt.Builder(MainActivity.this)
 ```
+</div>
+<div class="tabs-content" markdown="1">
+```kotlin
+builder = MaterialTapTargetPrompt.Builder(this@MainActivity)
+```
+</div>
+</div>
 
 Set the view to focus the prompt on:
-
+<div class="tabs">
+<div class="tabs-titles">
+<div class="tabs-title">
+    Java
+</div>
+<div class="tabs-title">
+    Kotlin
+</div>
+</div>
+<div class="tabs-content" markdown="1">
 ```java
 builder.setTarget(R.id.target_view_id)
 ```
+</div>
+<div class="tabs-content" markdown="1">
+```kotlin
+builder.target = R.id.target_view_id
+```
+</div>
+</div>
 
 Set the text to display on the first line:
 
+<div class="tabs">
+<div class="tabs-titles">
+<div class="tabs-title">
+    Java
+</div>
+<div class="tabs-title">
+    Kotlin
+</div>
+</div>
+<div class="tabs-content" markdown="1">
 ```java
-builder.setPrimaryText("This text is displayed on the first line")
+builder.setPrimaryText("This text is displayed on the first line");
 ```
-
+</div>
+<div class="tabs-content" markdown="1">
+```kotlin
+builder.primaryText = "This text is displayed on the first line"
+```
+</div>
+</div>
 
 Optionally set the text to display on the second line. If the primary text is not set the secondary text must be set 
 
+<div class="tabs">
+<div class="tabs-titles">
+<div class="tabs-title">
+    Java
+</div>
+<div class="tabs-title">
+    Kotlin
+</div>
+</div>
+<div class="tabs-content" markdown="1">
 ```java
 builder.setSecondaryText("Text to display on the second line")
 ```
+</div>
+<div class="tabs-content" markdown="1">
+```kotlin
+builder.secondaryText = "Text to display on the second line"
+```
+</div>
+</div>
 
 To listen in to the prompt events set a PromptStateChangeListener.
 Possible states are:
@@ -66,6 +147,16 @@ Possible states are:
 * [STATE_FINISHING](javadocs/uk/co/samuelwall/materialtaptargetprompt/MaterialTapTargetPrompt.html#STATE_FINISHING) - Prompt finish method has been called and the prompt is being removed from view
 * [STATE_FINISHED](javadocs/uk/co/samuelwall/materialtaptargetprompt/MaterialTapTargetPrompt.html#STATE_FINISHED) - Prompt has been removed from view after the prompt has been pressed in the focal area
 
+<div class="tabs">
+<div class="tabs-titles">
+<div class="tabs-title">
+    Java
+</div>
+<div class="tabs-title">
+    Kotlin
+</div>
+</div>
+<div class="tabs-content" markdown="1">
 ```java
 builder.setPromptStateChangeListener(new MaterialTapTargetPrompt.PromptStateChangeListener()
         {
@@ -79,17 +170,56 @@ builder.setPromptStateChangeListener(new MaterialTapTargetPrompt.PromptStateChan
             }
         })
 ```
+</div>
+<div class="tabs-content" markdown="1">
+```kotlin
+builder.setPromptStateChangeListener { prompt, state ->
+    if (state == MaterialTapTargetPrompt.STATE_FOCAL_PRESSED) 
+    {
+        // User has pressed the prompt target
+    }
+}
+```
+</div>
+</div>
 
 The Builder extends abstract class [PromptOptions](javadocs/uk/co/samuelwall/materialtaptargetprompt/extras/PromptOptions.html) which contains more customisation options.
 
 Finally show the tap target:
 
+<div class="tabs">
+<div class="tabs-titles">
+<div class="tabs-title">
+    Java
+</div>
+<div class="tabs-title">
+    Kotlin
+</div>
+</div>
+<div class="tabs-content" markdown="1">
 ```java
 builder.show()
 ```
+</div>
+<div class="tabs-content" markdown="1">
+```kotlin
+builder.show()
+```
+</div>
+</div>
 
 All combined together:
 
+<div class="tabs">
+<div class="tabs-titles">
+<div class="tabs-title">
+    Java
+</div>
+<div class="tabs-title">
+    Kotlin
+</div>
+</div>
+<div class="tabs-content" markdown="1">
 ```java
 import uk.co.samuelwall.materialtaptargetprompt.MaterialTapTargetPrompt;
 
@@ -110,6 +240,25 @@ new MaterialTapTargetPrompt.Builder(MainActivity.this)
         })
         .show();
 ```
+</div>
+<div class="tabs-content" markdown="1">
+```kotlin
+import uk.co.samuelwall.materialtaptargetprompt.MaterialTapTargetPrompt;
+
+MaterialTapTargetPrompt.Builder(this@MainActivity)
+        .setTarget(R.id.target_view_id)
+        .setPrimaryText("This text is displayed on the first line")
+        .setSecondaryText("Text to display on the second line")
+        .setPromptStateChangeListener { prompt, state ->
+            if (state == MaterialTapTargetPrompt.STATE_FOCAL_PRESSED) 
+            {
+                // User has pressed the prompt target
+            }
+        }
+        .show()
+```
+</div>
+</div>
 
 ### Note
 
