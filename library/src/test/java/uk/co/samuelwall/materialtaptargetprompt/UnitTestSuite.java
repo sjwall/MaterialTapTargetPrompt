@@ -25,6 +25,7 @@ import uk.co.samuelwall.materialtaptargetprompt.extras.PromptTextUnitTest;
 import uk.co.samuelwall.materialtaptargetprompt.extras.PromptUtilsUnitTest;
 import uk.co.samuelwall.materialtaptargetprompt.extras.backgrounds.CirclePromptBackgroundUnitTest;
 import uk.co.samuelwall.materialtaptargetprompt.extras.backgrounds.FullscreenPromptBackgroundUnitTest;
+import uk.co.samuelwall.materialtaptargetprompt.extras.backgrounds.ImmersiveModeCompatPromptBackgroundUnitTest;
 import uk.co.samuelwall.materialtaptargetprompt.extras.backgrounds.RectanglePromptBackgroundUnitTest;
 import uk.co.samuelwall.materialtaptargetprompt.extras.focals.CirclePromptFocalUnitTest;
 import uk.co.samuelwall.materialtaptargetprompt.extras.focals.RectanglePromptFocalUnitTest;
@@ -39,6 +40,7 @@ import uk.co.samuelwall.materialtaptargetprompt.extras.focals.RectanglePromptFoc
     CirclePromptBackgroundUnitTest.class,
     RectanglePromptBackgroundUnitTest.class,
     FullscreenPromptBackgroundUnitTest.class,
+    ImmersiveModeCompatPromptBackgroundUnitTest.class,
     CirclePromptFocalUnitTest.class,
     RectanglePromptFocalUnitTest.class,
     BuilderUnitTest.class,
