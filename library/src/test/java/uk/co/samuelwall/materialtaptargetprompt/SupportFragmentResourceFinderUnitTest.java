@@ -93,6 +93,7 @@ public class SupportFragmentResourceFinderUnitTest
         when(dialogFragment.getView()).thenReturn(view);
         when(view.getParent()).thenReturn(parent);
         assertEquals(parent, resourceFinder.getPromptParentView());
+        assertEquals(parent, resourceFinder.getPromptParentView());
     }
 
     @Test
