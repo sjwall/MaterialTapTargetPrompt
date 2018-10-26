@@ -2,6 +2,16 @@
 
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## v2.14.0 (2018-10-26)
+
+### Features
+
+* Added `ImmersiveModeCompatPromptBackground` ([#135](https://github.com/sjwall/MaterialTapTargetPrompt/issues/pull/135))
+
+### Bug Fixes
+
+* Fix null pointer exception in `SupportFragmentResourceFinder` ([#137](https://github.com/sjwall/MaterialTapTargetPrompt/issues/137))
+
 ## v2.13.0 (2018-10-03)
 
 ### Features
