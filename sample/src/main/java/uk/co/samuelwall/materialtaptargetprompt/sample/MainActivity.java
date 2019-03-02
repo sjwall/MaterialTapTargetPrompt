@@ -159,6 +159,7 @@ public class MainActivity extends AppCompatActivity
         final MaterialTapTargetPrompt.Builder tapTargetPromptBuilder = new MaterialTapTargetPrompt.Builder(this)
                 .setPrimaryText(R.string.menu_prompt_title)
                 .setSecondaryText(R.string.menu_prompt_description)
+                .setContentDescription(R.string.menu_prompt_content_description)
                 .setFocalPadding(R.dimen.dp40)
                 .setAnimationInterpolator(new FastOutSlowInInterpolator())
                 .setMaxTextWidth(R.dimen.tap_target_menu_max_width)
