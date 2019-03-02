@@ -166,6 +166,7 @@ public class PromptOptions<T extends PromptOptions>
     private boolean mAutoFinish = true;
     private boolean mCaptureTouchEventOutsidePrompt;
     @Nullable private Typeface mPrimaryTextTypeface, mSecondaryTextTypeface;
+    @Nullable private String mContentDescription;
     private int mPrimaryTextTypefaceStyle, mSecondaryTextTypefaceStyle;
     @Nullable private ColorStateList mIconDrawableTintList = null;
     @Nullable private PorterDuff.Mode mIconDrawableTintMode = PorterDuff.Mode.MULTIPLY;
@@ -246,6 +247,7 @@ public class PromptOptions<T extends PromptOptions>
         mSecondaryTextTypefaceStyle = a.getInt(R.styleable.PromptView_mttp_secondaryTextStyle, mSecondaryTextTypefaceStyle);
         mPrimaryTextTypeface = PromptUtils.setTypefaceFromAttrs(a.getString(R.styleable.PromptView_mttp_primaryTextFontFamily), a.getInt(R.styleable.PromptView_mttp_primaryTextTypeface, 0), mPrimaryTextTypefaceStyle);
         mSecondaryTextTypeface = PromptUtils.setTypefaceFromAttrs(a.getString(R.styleable.PromptView_mttp_secondaryTextFontFamily), a.getInt(R.styleable.PromptView_mttp_secondaryTextTypeface, 0), mSecondaryTextTypefaceStyle);
+        mContentDescription = a.getString(R.styleable.PromptView_mttp_contentDescription);
 
         mIconDrawableColourFilter = a.getColor(R.styleable.PromptView_mttp_iconColourFilter, mBackgroundColour);
         mIconDrawableTintList = a.getColorStateList(R.styleable.PromptView_mttp_iconTint);
@@ -699,6 +701,51 @@ public class PromptOptions<T extends PromptOptions>
     public int getSecondaryTextTypefaceStyle()
     {
         return mSecondaryTextTypefaceStyle;
+    }
+
+    /**
+     * Set the accessibility content description text using the given resource id.
+     *
+     * @param resId The string resource id for the accessibility content description text
+     * @return This Builder object to allow for chaining of calls to set methods
+     */
+    @NonNull
+    public T setContentDescription(@StringRes final int resId)
+    {
+        mContentDescription = mResourceFinder.getString(resId);
+        return (T) this;
+    }
+
+    /**
+     * Set the accessibility content description text to the given string
+     *
+     * @param text The accessibility content description text
+     * @return This Builder object to allow for chaining of calls to set methods
+     */
+    @NonNull
+    public T setContentDescription(@Nullable final String text)
+    {
+        mContentDescription = text;
+        return (T) this;
+    }
+
+    /**
+     * Get the text for the accessibility content description.
+     * Defaults to a concatenation of primary and secondary texts.
+     *
+     * @return The accessibility content description text.
+     */
+    @Nullable
+    public String getContentDescription()
+    {
+        if (mContentDescription != null)
+        {
+            return mContentDescription;
+        }
+        else
+        {
+            return String.format("%s. %s", mPrimaryText, mSecondaryText);
+        }
     }
 
     /**

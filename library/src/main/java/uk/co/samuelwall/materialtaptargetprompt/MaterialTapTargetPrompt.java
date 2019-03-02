@@ -1003,8 +1003,8 @@ public class MaterialTapTargetPrompt
                     info.setDismissable(true);
                 }
 
-                info.setContentDescription(String.format("%s. %s", mPromptOptions.getPrimaryText(), mPromptOptions.getSecondaryText()));
-                info.setText(String.format("%s. %s", mPromptOptions.getPrimaryText(), mPromptOptions.getSecondaryText()));
+                info.setContentDescription(mPromptOptions.getContentDescription());
+                info.setText(mPromptOptions.getContentDescription());
             }
 
             @Override
@@ -1012,16 +1012,10 @@ public class MaterialTapTargetPrompt
             {
                 super.onPopulateAccessibilityEvent(host, event);
 
-                final CharSequence primary = mPromptOptions.getPrimaryText();
-                if (!TextUtils.isEmpty(primary))
+                final CharSequence contentDescription = mPromptOptions.getContentDescription();
+                if (!TextUtils.isEmpty(contentDescription))
                 {
-                    event.getText().add(primary);
-                }
-
-                final CharSequence secondary = mPromptOptions.getSecondaryText();
-                if (!TextUtils.isEmpty(secondary))
-                {
-                    event.getText().add(secondary);
+                    event.getText().add(contentDescription);
                 }
             }
         }

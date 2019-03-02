@@ -59,6 +59,7 @@
         <enum name="serif" value="2" />
         <enum name="monospace" value="3" />
     </attr>
+    <attr name="mttp_contentDescription" format="string"/>
     <attr name="mttp_iconTint" format="reference"/>
     <attr name="mttp_iconTintMode" format="enum">
         <enum name="SRC_OVER" value="3" />
@@ -94,6 +95,7 @@
         <attr name="mttp_secondaryTextStyle"/>
         <attr name="mttp_primaryTextTypeface"/>
         <attr name="mttp_secondaryTextTypeface"/>
+        <attr name="mttp_contentDescription"/>
         <attr name="mttp_iconTint"/>
         <attr name="mttp_iconTintMode"/>
         <attr name="mttp_iconColourFilter"/>
