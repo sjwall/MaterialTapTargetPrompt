@@ -795,7 +795,7 @@ public class MaterialTapTargetPrompt
             mAccessibilityManager = (AccessibilityManager) context.getSystemService(Context.ACCESSIBILITY_SERVICE);
 
             if (mAccessibilityManager.isEnabled()) {
-                setClickable(true);
+                setupAccessibilityClickListener();
             }
         }
 
@@ -950,6 +950,32 @@ public class MaterialTapTargetPrompt
         public CharSequence getAccessibilityClassName()
         {
             return PromptView.class.getName();
+        }
+
+        /**
+         * When AccessibilityManager is enabled, the prompt view can be dismissed by double-tap.
+         * The event is also passed as onClick() to the target view, when available.
+         */
+        private void setupAccessibilityClickListener()
+        {
+            setClickable(true);
+            setOnClickListener(new OnClickListener()
+            {
+                @Override
+                public void onClick(View view)
+                {
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH_MR1)
+                    {
+                        final View targetView = mPromptOptions.getTargetView();
+                        if (targetView != null)
+                        {
+                            targetView.callOnClick();
+                        }
+                    }
+
+                    mPrompt.finish();
+                }
+            });
         }
 
         /**
