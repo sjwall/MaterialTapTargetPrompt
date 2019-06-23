@@ -25,6 +25,7 @@
 
     <string name="menu_prompt_title">Just how you want it</string>
     <string name="menu_prompt_description">Tap the menu icon to switch accounts, change settings &amp; more</string>
+    <string name="menu_prompt_content_description">This is an example of the accessibility content description, tap to exit. Tap the menu icon to switch accounts, change settings &amp; more</string>
 
     <string name="overflow_prompt_title">More actions</string>
     <string name="overflow_prompt_description">Tap the 3 vertical dots to see more options</string>

@@ -795,7 +795,7 @@ public class MaterialTapTargetPrompt
             mAccessibilityManager = (AccessibilityManager) context.getSystemService(Context.ACCESSIBILITY_SERVICE);
 
             if (mAccessibilityManager.isEnabled()) {
-                setClickable(true);
+                setupAccessibilityClickListener();
             }
         }
 
@@ -953,6 +953,32 @@ public class MaterialTapTargetPrompt
         }
 
         /**
+         * When AccessibilityManager is enabled, the prompt view can be dismissed by double-tap.
+         * The event is also passed as onClick() to the target view, when available.
+         */
+        private void setupAccessibilityClickListener()
+        {
+            setClickable(true);
+            setOnClickListener(new OnClickListener()
+            {
+                @Override
+                public void onClick(View view)
+                {
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH_MR1)
+                    {
+                        final View targetView = mPromptOptions.getTargetView();
+                        if (targetView != null)
+                        {
+                            targetView.callOnClick();
+                        }
+                    }
+
+                    mPrompt.finish();
+                }
+            });
+        }
+
+        /**
          * Interface definition for a callback to be invoked when a {@link PromptView} is touched.
          */
         public interface PromptTouchedListener
@@ -1003,8 +1029,8 @@ public class MaterialTapTargetPrompt
                     info.setDismissable(true);
                 }
 
-                info.setContentDescription(String.format("%s. %s", mPromptOptions.getPrimaryText(), mPromptOptions.getSecondaryText()));
-                info.setText(String.format("%s. %s", mPromptOptions.getPrimaryText(), mPromptOptions.getSecondaryText()));
+                info.setContentDescription(mPromptOptions.getContentDescription());
+                info.setText(mPromptOptions.getContentDescription());
             }
 
             @Override
@@ -1012,16 +1038,10 @@ public class MaterialTapTargetPrompt
             {
                 super.onPopulateAccessibilityEvent(host, event);
 
-                final CharSequence primary = mPromptOptions.getPrimaryText();
-                if (!TextUtils.isEmpty(primary))
+                final CharSequence contentDescription = mPromptOptions.getContentDescription();
+                if (!TextUtils.isEmpty(contentDescription))
                 {
-                    event.getText().add(primary);
-                }
-
-                final CharSequence secondary = mPromptOptions.getSecondaryText();
-                if (!TextUtils.isEmpty(secondary))
-                {
-                    event.getText().add(secondary);
+                    event.getText().add(contentDescription);
                 }
             }
         }
