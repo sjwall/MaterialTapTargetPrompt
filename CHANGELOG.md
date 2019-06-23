@@ -2,6 +2,16 @@
 
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## v2.15.0 (2019-06-23)
+
+### Features
+
+* Added `setContentDescription` to override content description for accessibility ([#157](https://github.com/sjwall/MaterialTapTargetPrompt/issues/pull/157)) ([@mudar](https://github.com/mudar))
+
+### Bug Fixes
+
+* Fix index out of bounds exception in sequence showFromIndex([@radgospodinov](https://github.com/radgospodinov))
+
 ## v2.14.0 (2018-10-26)
 
 ### Features
