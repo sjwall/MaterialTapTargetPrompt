@@ -290,6 +290,7 @@ public class MaterialTapTargetSequence
     public MaterialTapTargetSequence showFromIndex(final int index)
     {
         this.dismiss();
+        this.nextPromptIndex = index;
         this.show(index);
         return this;
     }
