@@ -65,8 +65,6 @@ dependencies {
 
     implementation 'androidx.fragment:fragment:1.1.0-rc03'
 
-    implementation 'androidx.arch.core:core-common:2.1.0-rc01'
-
     debugImplementation 'androidx.fragment:fragment-testing:1.1.0-rc03'
 
     testImplementation 'junit:junit:4.12'

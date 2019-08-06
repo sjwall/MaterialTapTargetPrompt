@@ -16,6 +16,8 @@
 
 package uk.co.samuelwall.materialtaptargetprompt.extras.sequence;
 
+import android.os.Build;
+
 import androidx.annotation.NonNull;
 
 import org.junit.Test;
@@ -32,7 +34,7 @@ import static junit.framework.Assert.fail;
 import static org.junit.Assert.assertEquals;
 
 @RunWith(RobolectricTestRunner.class)
-@Config(sdk = 22)
+@Config(sdk = Build.VERSION_CODES.LOLLIPOP_MR1)
 public class SequenceItemShowForTest extends BaseTestStateProgress
 {
     @Test

@@ -16,6 +16,8 @@
 
 package uk.co.samuelwall.materialtaptargetprompt;
 
+import android.os.Build;
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.robolectric.RobolectricTestRunner;
@@ -31,7 +33,7 @@ import uk.co.samuelwall.materialtaptargetprompt.test.EmptyTestFragment;
 import static junit.framework.Assert.assertTrue;
 
 @RunWith(RobolectricTestRunner.class)
-@Config(sdk = 22)
+@Config(sdk = Build.VERSION_CODES.LOLLIPOP_MR1)
 public class BuilderUnitTest
 {
     @Test
