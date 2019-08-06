@@ -28,7 +28,7 @@ import uk.co.samuelwall.materialtaptargetprompt.extras.PromptOptions;
 import static org.junit.Assert.assertNotNull;
 
 @RunWith(RobolectricTestRunner.class)
-@Config(constants = uk.co.samuelwall.materialtaptargetprompt.BuildConfig.class, sdk = 22)
+@Config(sdk = 22)
 public class SequenceStatePromptOptionsTest
 {
     @Test

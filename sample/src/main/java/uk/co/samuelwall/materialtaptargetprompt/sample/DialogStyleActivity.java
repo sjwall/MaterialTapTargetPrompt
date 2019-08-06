@@ -17,11 +17,11 @@
 package uk.co.samuelwall.materialtaptargetprompt.sample;
 
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.v4.view.animation.FastOutSlowInInterpolator;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.ActionMenuView;
-import android.support.v7.widget.Toolbar;
+import androidx.annotation.NonNull;
+import androidx.interpolator.view.animation.FastOutSlowInInterpolator;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.ActionMenuView;
+import androidx.appcompat.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;

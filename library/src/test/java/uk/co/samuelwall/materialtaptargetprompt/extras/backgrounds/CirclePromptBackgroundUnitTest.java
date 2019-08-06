@@ -20,7 +20,7 @@ import android.graphics.Canvas;
 import android.graphics.PointF;
 import android.graphics.Rect;
 import android.graphics.RectF;
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 import android.view.ViewGroup;
 
 import org.junit.Test;
@@ -44,7 +44,7 @@ import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.when;
 
 @RunWith(RobolectricTestRunner.class)
-@Config(constants = uk.co.samuelwall.materialtaptargetprompt.BuildConfig.class, sdk = 22)
+@Config(sdk = 22)
 public class CirclePromptBackgroundUnitTest
 {
     private PromptOptions createOptions(@NonNull Rect clipBounds, @NonNull RectF focalBounds)

@@ -15,7 +15,7 @@
   ~ limitations under the License.
   -->
 
-<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
      xmlns:app="http://schemas.android.com/apk/res-auto"
      xmlns:tools="http://schemas.android.com/tools"
      android:id="@+id/dialog_view"
@@ -27,7 +27,7 @@
      android:background="@android:color/white"
      tools:context="uk.co.samuelwall.materialtaptargetprompt.sample.SupportDialogFragmentExample">
 
-    <android.support.design.widget.FloatingActionButton
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fab"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -79,17 +79,17 @@
                 android:layout_gravity="center_vertical"
                 android:text="@string/example_view_pager_description"/>
         </LinearLayout>
-        <android.support.v4.view.ViewPager
+        <androidx.viewpager.widget.ViewPager
             android:id="@+id/view_pager"
             android:layout_width="match_parent"
             android:layout_height="80dp">
-            <android.support.v4.view.PagerTabStrip
+            <androidx.viewpager.widget.PagerTabStrip
                 android:id="@+id/pager_header"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="top"
                 android:paddingBottom="4dp"
                 android:paddingTop="4dp" />
-        </android.support.v4.view.ViewPager>
+        </androidx.viewpager.widget.ViewPager>
     </LinearLayout>
-</android.support.design.widget.CoordinatorLayout>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

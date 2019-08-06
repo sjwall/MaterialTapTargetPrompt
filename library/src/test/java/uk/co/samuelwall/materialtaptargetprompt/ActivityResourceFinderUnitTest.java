@@ -34,7 +34,7 @@ import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.when;
 
 @RunWith(RobolectricTestRunner.class)
-@Config(constants = uk.co.samuelwall.materialtaptargetprompt.BuildConfig.class, sdk = 22)
+@Config(sdk = 22)
 public class ActivityResourceFinderUnitTest
 {
     @Test

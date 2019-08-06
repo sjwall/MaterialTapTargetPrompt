@@ -27,7 +27,7 @@ import uk.co.samuelwall.materialtaptargetprompt.UnitTestUtils;
 import static org.junit.Assert.assertEquals;
 
 @RunWith(RobolectricTestRunner.class)
-@Config(constants = uk.co.samuelwall.materialtaptargetprompt.BuildConfig.class, sdk = 22)
+@Config(sdk = 22)
 public class SequenceStateTest
 {
     @Test

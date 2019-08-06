@@ -24,7 +24,7 @@ import android.graphics.Canvas;
 import android.graphics.RectF;
 import android.os.Build;
 import android.os.IBinder;
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
@@ -59,7 +59,7 @@ import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.when;
 
 @RunWith(RobolectricTestRunner.class)
-@Config(constants = uk.co.samuelwall.materialtaptargetprompt.BuildConfig.class, sdk = 22)
+@Config(sdk = 22)
 public class MaterialTapTargetPromptUnitTest extends BaseTestStateProgress
 {
     private static int SCREEN_WIDTH = 1080;

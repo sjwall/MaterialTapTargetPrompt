@@ -20,8 +20,8 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Rect;
 import android.graphics.RectF;
-import android.support.annotation.ColorInt;
-import android.support.annotation.NonNull;
+import androidx.annotation.ColorInt;
+import androidx.annotation.NonNull;
 import android.text.Layout;
 import android.text.TextPaint;
 

@@ -19,10 +19,10 @@ package uk.co.samuelwall.materialtaptargetprompt.extras;
 import android.graphics.Path;
 import android.graphics.PointF;
 import android.graphics.RectF;
-import android.support.annotation.ColorInt;
-import android.support.annotation.FloatRange;
-import android.support.annotation.IntRange;
-import android.support.annotation.NonNull;
+import androidx.annotation.ColorInt;
+import androidx.annotation.FloatRange;
+import androidx.annotation.IntRange;
+import androidx.annotation.NonNull;
 import android.view.View;
 
 /**
