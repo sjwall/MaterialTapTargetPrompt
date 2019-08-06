@@ -71,6 +71,9 @@ dependencies {
     testImplementation 'org.robolectric:robolectric:4.3'
     testImplementation 'org.mockito:mockito-core:3.0.0'
 
+    javadocCompile 'androidx.annotation:annotation:1.1.0'
+    javadocCompile 'androidx.fragment:fragment:1.2.0-alpha01'
+
 }
 
 install {
