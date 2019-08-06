@@ -61,11 +61,11 @@ dependencies {
 
     testImplementation 'androidx.test:core:1.2.0'
 
-    implementation 'androidx.lifecycle:lifecycle-extensions:2.1.0-rc01'
+    implementation 'androidx.lifecycle:lifecycle-extensions:2.2.0-alpha02'
 
-    implementation 'androidx.fragment:fragment:1.1.0-rc03'
+    implementation 'androidx.fragment:fragment:1.2.0-alpha01'
 
-    debugImplementation 'androidx.fragment:fragment-testing:1.1.0-rc03'
+    debugImplementation 'androidx.fragment:fragment-testing:1.2.0-alpha01'
 
     testImplementation 'junit:junit:4.12'
     testImplementation 'org.robolectric:robolectric:4.3'
