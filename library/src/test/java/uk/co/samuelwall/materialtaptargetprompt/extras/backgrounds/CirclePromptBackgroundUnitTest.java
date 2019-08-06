@@ -44,7 +44,7 @@ import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.when;
 
 @RunWith(RobolectricTestRunner.class)
-@Config(sdk = 28)
+@Config(sdk = 22)
 public class CirclePromptBackgroundUnitTest
 {
     private PromptOptions createOptions(@NonNull Rect clipBounds, @NonNull RectF focalBounds)
