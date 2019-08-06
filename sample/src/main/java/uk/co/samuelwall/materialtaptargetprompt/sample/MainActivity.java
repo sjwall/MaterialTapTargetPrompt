@@ -288,7 +288,7 @@ public class MainActivity extends AppCompatActivity
                 .setFocalPadding(R.dimen.dp40)
                 .setAnimationInterpolator(new FastOutSlowInInterpolator())
                 .setMaxTextWidth(R.dimen.tap_target_menu_max_width)
-                .setTarget(findViewById(androidx.appcompat.appcompat.R.id.action_mode_close_button))
+                .setTarget(findViewById(R.id.action_mode_close_button))
                 .setIcon(R.drawable.ic_back)
                 .show();
     }

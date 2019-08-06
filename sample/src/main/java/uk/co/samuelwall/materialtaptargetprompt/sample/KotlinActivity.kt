@@ -117,7 +117,7 @@ class KotlinActivity : AppCompatActivity() {
                 .setAnimationInterpolator(FastOutSlowInInterpolator())
                 .setMaxTextWidth(R.dimen.tap_target_menu_max_width)
                 .setIcon(R.drawable.ic_back)
-        val tb = this.findViewById<Toolbar>(androidx.appcompat.appcompat.R.id.action_bar)
+        val tb = this.findViewById<Toolbar>(R.id.action_bar)
         tapTargetPromptBuilder.setTarget(tb.getChildAt(1))
 
         tapTargetPromptBuilder.setPromptStateChangeListener { prompt, state ->
@@ -135,7 +135,7 @@ class KotlinActivity : AppCompatActivity() {
                 .setAnimationInterpolator(FastOutSlowInInterpolator())
                 .setMaxTextWidth(R.dimen.tap_target_menu_max_width)
                 .setIcon(R.drawable.ic_more_vert)
-        val tb = this.findViewById<Toolbar>(androidx.appcompat.appcompat.R.id.action_bar)
+        val tb = this.findViewById<Toolbar>(R.id.action_bar)
         val child = tb.getChildAt(2)
         if (child is ActionMenuView) {
             tapTargetPromptBuilder.setTarget(child.getChildAt(child.childCount - 1))
@@ -166,7 +166,7 @@ class KotlinActivity : AppCompatActivity() {
     fun showStylePrompt(view: View) {
         val builder = MaterialTapTargetPrompt.Builder(this,
                                                       R.style.MaterialTapTargetPromptTheme_FabTarget)
-        val tb = this.findViewById<Toolbar>(androidx.appcompat.appcompat.R.id.action_bar)
+        val tb = this.findViewById<Toolbar>(R.id.action_bar)
         val child = tb.getChildAt(2)
         if (child is ActionMenuView) {
             builder.setTarget(child.getChildAt(child.childCount - 1))

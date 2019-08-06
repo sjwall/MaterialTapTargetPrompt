@@ -31,7 +31,7 @@ import uk.co.samuelwall.materialtaptargetprompt.test.EmptyTestFragment;
 import static junit.framework.Assert.assertTrue;
 
 @RunWith(RobolectricTestRunner.class)
-@Config(sdk = 22)
+@Config(sdk = 28)
 public class BuilderUnitTest
 {
     @Test

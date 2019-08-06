@@ -31,7 +31,7 @@ import uk.co.samuelwall.materialtaptargetprompt.extras.sequence.SequenceStatePro
 import static org.junit.Assert.*;
 
 @RunWith(RobolectricTestRunner.class)
-@Config(sdk = 22)
+@Config(sdk = 28)
 public class MaterialTapTargetSequenceTest extends BaseTestStateProgress
 {
     @Test

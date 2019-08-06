@@ -27,7 +27,7 @@ import org.robolectric.annotation.Config;
 import static org.junit.Assert.assertEquals;
 
 @RunWith(RobolectricTestRunner.class)
-@Config(sdk = 22)
+@Config(sdk = 28)
 public class AlphaSpanUnitTest
 {
     @Test

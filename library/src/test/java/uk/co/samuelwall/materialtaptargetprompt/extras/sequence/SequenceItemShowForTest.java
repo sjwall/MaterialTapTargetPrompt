@@ -32,7 +32,7 @@ import static junit.framework.Assert.fail;
 import static org.junit.Assert.assertEquals;
 
 @RunWith(RobolectricTestRunner.class)
-@Config(sdk = 22)
+@Config(sdk = 28)
 public class SequenceItemShowForTest extends BaseTestStateProgress
 {
     @Test
