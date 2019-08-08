@@ -19,6 +19,7 @@ apply plugin: 'kotlin-android'
 
 android {
     compileSdkVersion rootProject.compileSdkVersion
+    buildToolsVersion = rootProject.buildToolsVersion
 
     defaultConfig {
         applicationId "uk.co.samuelwall.materialtaptargetprompt.sample"
@@ -39,7 +40,11 @@ android {
     lintOptions {
         abortOnError false
     }
-    buildToolsVersion = '28.0.3'
+
+    compileOptions {
+        sourceCompatibility = 1.8
+        targetCompatibility = 1.8
+    }
 }
 
 dependencies {

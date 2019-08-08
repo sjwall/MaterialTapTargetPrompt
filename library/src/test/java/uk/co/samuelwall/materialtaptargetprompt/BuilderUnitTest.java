@@ -16,98 +16,68 @@
 
 package uk.co.samuelwall.materialtaptargetprompt;
 
-import android.os.Build;
-
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.robolectric.RobolectricTestRunner;
-import org.robolectric.annotation.Config;
 
-import androidx.annotation.NonNull;
 import androidx.fragment.app.testing.FragmentScenario;
 import androidx.test.core.app.ActivityScenario;
+import androidx.test.ext.junit.runners.AndroidJUnit4;
 import uk.co.samuelwall.materialtaptargetprompt.test.EmptyTestActivity;
 import uk.co.samuelwall.materialtaptargetprompt.test.EmptyTestDialogFragment;
 import uk.co.samuelwall.materialtaptargetprompt.test.EmptyTestFragment;
 
 import static junit.framework.Assert.assertTrue;
 
-@RunWith(RobolectricTestRunner.class)
-@Config(sdk = Build.VERSION_CODES.LOLLIPOP_MR1)
+@RunWith(AndroidJUnit4.class)
 public class BuilderUnitTest
 {
     @Test
     public void testBuilder_Activity_Resource()
     {
-        ActivityScenario scenario = ActivityScenario.launch(EmptyTestActivity.class);
-        scenario.onActivity(new ActivityScenario.ActivityAction<EmptyTestActivity>()
-        {
-            @Override
-            public void perform(EmptyTestActivity activity)
-            {
-                final MaterialTapTargetPrompt.Builder builder = new MaterialTapTargetPrompt.Builder(activity, 0);
-                assertTrue(builder.getResourceFinder() instanceof ActivityResourceFinder);
-            }
+        ActivityScenario<EmptyTestActivity> scenario = ActivityScenario.launch(EmptyTestActivity.class);
+        scenario.onActivity(activity -> {
+            final MaterialTapTargetPrompt.Builder builder = new MaterialTapTargetPrompt.Builder(activity, 0);
+            assertTrue(builder.getResourceFinder() instanceof ActivityResourceFinder);
         });
     }
 
     @Test
     public void testBuilder_Activity()
     {
-        ActivityScenario scenario = ActivityScenario.launch(EmptyTestActivity.class);
-        scenario.onActivity(new ActivityScenario.ActivityAction<EmptyTestActivity>()
-        {
-            @Override
-            public void perform(EmptyTestActivity activity)
-            {
-                final MaterialTapTargetPrompt.Builder builder = new MaterialTapTargetPrompt.Builder(activity);
-                assertTrue(builder.getResourceFinder() instanceof ActivityResourceFinder);
-            }
+        ActivityScenario<EmptyTestActivity> scenario = ActivityScenario.launch(EmptyTestActivity.class);
+        scenario.onActivity(activity -> {
+            final MaterialTapTargetPrompt.Builder builder = new MaterialTapTargetPrompt.Builder(activity);
+            assertTrue(builder.getResourceFinder() instanceof ActivityResourceFinder);
         });
     }
 
     @Test
     public void testBuilder_Fragment()
     {
-        FragmentScenario scenario = FragmentScenario.launchInContainer(EmptyTestFragment.class);
-        scenario.onFragment(new FragmentScenario.FragmentAction<EmptyTestFragment>()
-        {
-            @Override
-            public void perform(@NonNull EmptyTestFragment fragment)
-            {
-                final MaterialTapTargetPrompt.Builder builder = new MaterialTapTargetPrompt.Builder(fragment);
-                assertTrue(builder.getResourceFinder() instanceof SupportFragmentResourceFinder);
-            }
+        FragmentScenario<EmptyTestFragment> scenario = FragmentScenario.launchInContainer(EmptyTestFragment.class);
+        scenario.onFragment(fragment -> {
+            final MaterialTapTargetPrompt.Builder builder = new MaterialTapTargetPrompt.Builder(fragment);
+            assertTrue(builder.getResourceFinder() instanceof SupportFragmentResourceFinder);
         });
     }
 
     @Test
     public void testBuilder_Fragment_Resource()
     {
-        FragmentScenario scenario = FragmentScenario.launchInContainer(EmptyTestFragment.class);
-        scenario.onFragment(new FragmentScenario.FragmentAction<EmptyTestFragment>()
-        {
-            @Override
-            public void perform(@NonNull EmptyTestFragment fragment)
-            {
-                final MaterialTapTargetPrompt.Builder builder = new MaterialTapTargetPrompt.Builder(fragment, 0);
-                assertTrue(builder.getResourceFinder() instanceof SupportFragmentResourceFinder);
-            }
+        FragmentScenario<EmptyTestFragment> scenario = FragmentScenario.launchInContainer(EmptyTestFragment.class);
+        scenario.onFragment(fragment -> {
+            final MaterialTapTargetPrompt.Builder builder = new MaterialTapTargetPrompt.Builder(fragment, 0);
+            assertTrue(builder.getResourceFinder() instanceof SupportFragmentResourceFinder);
         });
     }
 
     @Test
     public void testBuilder_DialogFragment()
     {
-        FragmentScenario scenario = FragmentScenario.launchInContainer(EmptyTestDialogFragment.class);
-        scenario.onFragment(new FragmentScenario.FragmentAction<EmptyTestDialogFragment>()
-        {
-            @Override
-            public void perform(@NonNull EmptyTestDialogFragment fragment)
-            {
-                final MaterialTapTargetPrompt.Builder builder = new MaterialTapTargetPrompt.Builder(fragment);
-                assertTrue(builder.getResourceFinder() instanceof SupportFragmentResourceFinder);
-            }
+        FragmentScenario<EmptyTestDialogFragment> scenario = FragmentScenario.launchInContainer(EmptyTestDialogFragment.class);
+        scenario.onFragment(fragment -> {
+            final MaterialTapTargetPrompt.Builder builder = new MaterialTapTargetPrompt.Builder(fragment);
+            assertTrue(builder.getResourceFinder() instanceof SupportFragmentResourceFinder);
         });
     }
 }

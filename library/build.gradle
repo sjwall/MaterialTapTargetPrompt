@@ -25,6 +25,7 @@ version rootProject.versionName
 
 android {
     compileSdkVersion rootProject.compileSdkVersion
+    buildToolsVersion = rootProject.buildToolsVersion
 
     defaultConfig {
         minSdkVersion rootProject.minSdkVersion
@@ -44,12 +45,16 @@ android {
         }
     }
 
-    testOptions.unitTests.includeAndroidResources true
-
     lintOptions {
         abortOnError false
     }
-    buildToolsVersion = '28.0.3'
+
+    testOptions.unitTests.includeAndroidResources true
+
+    compileOptions {
+        sourceCompatibility = 1.8
+        targetCompatibility = 1.8
+    }
 }
 
 configurations {
@@ -65,7 +70,9 @@ dependencies {
 
     implementation 'androidx.fragment:fragment:1.2.0-alpha01'
 
-    debugImplementation 'androidx.fragment:fragment-testing:1.2.0-alpha01'
+    testImplementation 'androidx.test.ext:junit:1.1.1'
+
+    testImplementation 'androidx.fragment:fragment-testing:1.2.0-alpha01'
 
     testImplementation 'junit:junit:4.12'
     testImplementation 'org.robolectric:robolectric:4.3'
