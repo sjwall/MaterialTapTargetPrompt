@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2016-2018 Samuel Wall
+ * Copyright (C) 2016-2019 Samuel Wall
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,7 +15,7 @@
  */
 
 apply plugin: 'com.android.library'
-apply plugin: 'jacoco'
+apply plugin: 'jacoco-android'
 apply plugin: 'com.github.dcendents.android-maven'
 apply plugin: 'com.jfrog.bintray'
 
@@ -66,20 +66,20 @@ dependencies {
 
     testImplementation 'androidx.test:core:1.2.0'
 
-    implementation 'androidx.lifecycle:lifecycle-extensions:2.2.0-alpha02'
+    implementation 'androidx.lifecycle:lifecycle-extensions:2.0.0'
 
-    implementation 'androidx.fragment:fragment:1.2.0-alpha01'
+    compileOnly 'androidx.fragment:fragment:1.0.0'
 
     testImplementation 'androidx.test.ext:junit:1.1.1'
 
-    testImplementation 'androidx.fragment:fragment-testing:1.2.0-alpha01'
+    testImplementation 'androidx.fragment:fragment-testing:1.2.0-alpha02'
 
     testImplementation 'junit:junit:4.12'
     testImplementation 'org.robolectric:robolectric:4.3'
     testImplementation 'org.mockito:mockito-core:3.0.0'
 
     javadocCompile 'androidx.annotation:annotation:1.1.0'
-    javadocCompile 'androidx.fragment:fragment:1.2.0-alpha01'
+    javadocCompile 'androidx.fragment:fragment:1.2.0-alpha02'
 
 }
 
@@ -168,7 +168,7 @@ bintray {
 }
 
 jacoco {
-    toolVersion = "0.8.2"
+    toolVersion = "0.8.3"
 }
 
 tasks.withType(Test) {
@@ -176,20 +176,3 @@ tasks.withType(Test) {
 }
 
 //gradlew clean jacocoTestReport
-task jacocoTestReport(type: JacocoReport, dependsOn: ['testDebugUnitTest', 'createDebugCoverageReport']) {
-
-    reports {
-        xml.enabled = true
-        html.enabled = true
-    }
-
-
-    def fileFilter = ['**/R.class', '**/R$*.class', '**/BuildConfig.*', '**/Manifest*.*', '**/*Test*.*', 'android/**/*.*']
-    def debugTree = fileTree(dir: "${buildDir}/intermediates/classes/debug", excludes: fileFilter)
-    def mainSrc = "${project.projectDir}/src/main/java"
-
-    additionalSourceDirs = files([mainSrc])
-    sourceDirectories = files([mainSrc])
-    classDirectories = files([debugTree])
-    executionData = files("${buildDir}/jacoco/testDebugUnitTest.exec")
-}

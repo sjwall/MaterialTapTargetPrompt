@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2018 Samuel Wall
+ * Copyright (C) 2019 Samuel Wall
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -56,11 +56,11 @@ dependencies {
 
     implementation 'androidx.test:core:1.2.0'
 
-    implementation 'androidx.lifecycle:lifecycle-extensions:2.2.0-alpha02'
+    implementation 'androidx.lifecycle:lifecycle-extensions:2.0.0'
 
-    implementation 'androidx.fragment:fragment:1.2.0-alpha01'
+    implementation 'androidx.fragment:fragment:1.0.0'
 
-    debugImplementation 'androidx.fragment:fragment-testing:1.2.0-alpha01'
+    debugImplementation 'androidx.fragment:fragment-testing:1.2.0-alpha02'
     
     debugImplementation 'com.squareup.leakcanary:leakcanary-android:1.6.3'
     releaseImplementation 'com.squareup.leakcanary:leakcanary-android-no-op:1.6.3'
