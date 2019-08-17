@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017 Samuel Wall
+ * Copyright (C) 2017, 2019 Samuel Wall
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -361,17 +361,5 @@ public class PromptUtils
                 && x < bounds.right - inset
                 && y > bounds.top + inset
                 && y < bounds.bottom - inset;
-    }
-
-    /**
-     * Determines if Android is on or after Jelly Bean MR1.
-     *
-     * @return True if running on Android on or after Jelly Bean MR1.
-     * @deprecated use Build directly: {@code Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1}
-     */
-    @Deprecated
-    public static boolean isVersionAfterJellyBeanMR1()
-    {
-        return Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1;
     }
 }
