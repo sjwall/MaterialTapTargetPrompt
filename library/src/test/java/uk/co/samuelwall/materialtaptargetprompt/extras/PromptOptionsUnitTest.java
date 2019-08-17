@@ -920,4 +920,26 @@ public class PromptOptionsUnitTest
     {
         assertNull(UnitTestUtils.createPromptOptions().showFor(6000));
     }
+
+    @Test
+    public void testPromptOptions_ContentDescription()
+    {
+        final PromptOptions options = UnitTestUtils.createPromptOptions()
+                .setPrimaryText("primary")
+                .setSecondaryText("secondary");
+        assertEquals("primary. secondary", options.getContentDescription());
+        assertEquals(options, options.setContentDescription("content description"));
+        assertEquals("content description", options.getContentDescription());
+    }
+
+    @Test
+    public void testPromptOptions_ContentDescription_Resource()
+    {
+        @IdRes final int resourceId = 325426;
+        final String contentDescription = "Resource content description";
+        final PromptOptions options = UnitTestUtils.createPromptOptions(true);
+        when(options.getResourceFinder().getString(resourceId)).thenReturn(contentDescription);
+        assertEquals(options, options.setContentDescription(resourceId));
+        assertEquals(contentDescription, options.getContentDescription());
+    }
 }
