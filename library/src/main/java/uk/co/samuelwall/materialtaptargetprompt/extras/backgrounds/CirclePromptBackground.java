@@ -22,9 +22,9 @@ import android.graphics.Paint;
 import android.graphics.PointF;
 import android.graphics.Rect;
 import android.graphics.RectF;
-import android.support.annotation.ColorInt;
-import android.support.annotation.IntRange;
-import android.support.annotation.NonNull;
+import androidx.annotation.ColorInt;
+import androidx.annotation.IntRange;
+import androidx.annotation.NonNull;
 
 import uk.co.samuelwall.materialtaptargetprompt.extras.PromptBackground;
 import uk.co.samuelwall.materialtaptargetprompt.extras.PromptOptions;

@@ -16,7 +16,9 @@
 
 package uk.co.samuelwall.materialtaptargetprompt.extras.sequence;
 
-import android.support.annotation.NonNull;
+import android.os.Build;
+
+import androidx.annotation.NonNull;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -25,7 +27,6 @@ import org.robolectric.annotation.Config;
 
 import uk.co.samuelwall.materialtaptargetprompt.BaseTestStateProgress;
 import uk.co.samuelwall.materialtaptargetprompt.MaterialTapTargetPrompt;
-import uk.co.samuelwall.materialtaptargetprompt.MaterialTapTargetSequence;
 import uk.co.samuelwall.materialtaptargetprompt.UnitTestUtils;
 import uk.co.samuelwall.materialtaptargetprompt.extras.PromptOptions;
 
@@ -33,7 +34,7 @@ import static junit.framework.Assert.fail;
 import static org.junit.Assert.assertEquals;
 
 @RunWith(RobolectricTestRunner.class)
-@Config(constants = uk.co.samuelwall.materialtaptargetprompt.BuildConfig.class, sdk = 22)
+@Config(sdk = Build.VERSION_CODES.LOLLIPOP_MR1)
 public class SequenceItemShowForTest extends BaseTestStateProgress
 {
     @Test

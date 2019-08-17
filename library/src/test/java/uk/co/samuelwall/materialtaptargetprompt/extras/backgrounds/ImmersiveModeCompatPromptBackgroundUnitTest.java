@@ -45,7 +45,7 @@ import static org.junit.Assert.assertNotNull;
 import static org.mockito.Mockito.*;
 
 @RunWith(RobolectricTestRunner.class)
-@Config(constants = uk.co.samuelwall.materialtaptargetprompt.BuildConfig.class, sdk = 22)
+@Config(sdk = Build.VERSION_CODES.LOLLIPOP_MR1)
 public class ImmersiveModeCompatPromptBackgroundUnitTest
 {
     private PromptOptions createOptions(Rect clipBounds, RectF focalBounds)

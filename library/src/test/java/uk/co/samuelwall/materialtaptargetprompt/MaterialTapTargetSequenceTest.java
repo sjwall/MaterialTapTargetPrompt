@@ -16,7 +16,9 @@
 
 package uk.co.samuelwall.materialtaptargetprompt;
 
-import android.support.annotation.NonNull;
+import android.os.Build;
+
+import androidx.annotation.NonNull;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -31,7 +33,7 @@ import uk.co.samuelwall.materialtaptargetprompt.extras.sequence.SequenceStatePro
 import static org.junit.Assert.*;
 
 @RunWith(RobolectricTestRunner.class)
-@Config(constants = uk.co.samuelwall.materialtaptargetprompt.BuildConfig.class, sdk = 22)
+@Config(sdk = Build.VERSION_CODES.LOLLIPOP_MR1)
 public class MaterialTapTargetSequenceTest extends BaseTestStateProgress
 {
     @Test

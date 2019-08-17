@@ -19,7 +19,7 @@ package uk.co.samuelwall.materialtaptargetprompt.sample;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.app.DialogFragment;
-import android.support.v4.view.animation.FastOutSlowInInterpolator;
+import androidx.interpolator.view.animation.FastOutSlowInInterpolator;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,7 +27,7 @@ import uk.co.samuelwall.materialtaptargetprompt.MaterialTapTargetPrompt;
 
 /**
  * Prompt example for {@link DialogFragment}.
- * @deprecated use {@link android.support.v4.app.DialogFragment}
+ * @deprecated use {@link androidx.fragment.app.DialogFragment}
  */
 @Deprecated
 public class DialogFragmentExample extends DialogFragment

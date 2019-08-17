@@ -16,7 +16,7 @@
 
 package uk.co.samuelwall.materialtaptargetprompt.extras.sequence;
 
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 import uk.co.samuelwall.materialtaptargetprompt.MaterialTapTargetPrompt;
 

@@ -16,111 +16,68 @@
 
 package uk.co.samuelwall.materialtaptargetprompt;
 
-import android.app.Activity;
-import android.app.Dialog;
-import android.support.v4.app.DialogFragment;
-import android.support.v4.app.Fragment;
-
-import android.view.ViewGroup;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.robolectric.Robolectric;
-import org.robolectric.RobolectricTestRunner;
-import org.robolectric.annotation.Config;
+
+import androidx.fragment.app.testing.FragmentScenario;
+import androidx.test.core.app.ActivityScenario;
+import androidx.test.ext.junit.runners.AndroidJUnit4;
+import uk.co.samuelwall.materialtaptargetprompt.test.EmptyTestActivity;
+import uk.co.samuelwall.materialtaptargetprompt.test.EmptyTestDialogFragment;
+import uk.co.samuelwall.materialtaptargetprompt.test.EmptyTestFragment;
 
 import static junit.framework.Assert.assertTrue;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.spy;
-import static org.mockito.Mockito.when;
-import static org.robolectric.shadows.support.v4.SupportFragmentTestUtil.startFragment;
 
-@RunWith(RobolectricTestRunner.class)
-@Config(constants = uk.co.samuelwall.materialtaptargetprompt.BuildConfig.class, sdk = 22)
+@RunWith(AndroidJUnit4.class)
 public class BuilderUnitTest
 {
     @Test
-    public void testBuilder_Fragment()
+    public void testBuilder_Activity_Resource()
     {
-        final android.app.Fragment fragment = Robolectric.buildFragment(android.app.Fragment.class).create().get();
-        final MaterialTapTargetPrompt.Builder builder = new MaterialTapTargetPrompt.Builder(fragment);
-        assertTrue(builder.getResourceFinder() instanceof ActivityResourceFinder);
-    }
-
-    @Test
-    public void testBuilder_Fragment_Resource()
-    {
-        final android.app.Fragment fragment = Robolectric.buildFragment(android.app.Fragment.class).create().get();
-        final MaterialTapTargetPrompt.Builder builder = new MaterialTapTargetPrompt.Builder(fragment, 0);
-        assertTrue(builder.getResourceFinder() instanceof ActivityResourceFinder);
-    }
-
-    @Test
-    public void testBuilder_DialogFragment()
-    {
-        final android.app.DialogFragment dialogFragment = spy(Robolectric.buildFragment(android.app.DialogFragment.class).create().get());
-        final Activity activity = Robolectric.buildActivity(Activity.class).create().get();
-        final Dialog dialog = mock(Dialog.class);
-        when(dialogFragment.getDialog()).thenReturn(dialog);
-        when(dialog.getOwnerActivity()).thenReturn(activity);
-        when(dialog.findViewById(android.R.id.content)).thenReturn(activity.findViewById(android.R.id.content));
-        final MaterialTapTargetPrompt.Builder builder = new MaterialTapTargetPrompt.Builder(dialogFragment);
-        assertTrue(builder.getResourceFinder() instanceof DialogResourceFinder);
-    }
-
-    @Test
-    public void testBuilder_Dialog()
-    {
-        final Dialog dialog = mock(Dialog.class);
-        final Activity activity = Robolectric.buildActivity(Activity.class).create().get();
-        when(dialog.getOwnerActivity()).thenReturn(activity);
-        when(dialog.findViewById(android.R.id.content)).thenReturn(activity.findViewById(android.R.id.content));
-        final MaterialTapTargetPrompt.Builder builder = new MaterialTapTargetPrompt.Builder(dialog);
-        assertTrue(builder.getResourceFinder() instanceof DialogResourceFinder);
+        ActivityScenario<EmptyTestActivity> scenario = ActivityScenario.launch(EmptyTestActivity.class);
+        scenario.onActivity(activity -> {
+            final MaterialTapTargetPrompt.Builder builder = new MaterialTapTargetPrompt.Builder(activity, 0);
+            assertTrue(builder.getResourceFinder() instanceof ActivityResourceFinder);
+        });
     }
 
     @Test
     public void testBuilder_Activity()
     {
-        final Activity activity = Robolectric.buildActivity(Activity.class).create().get();
-        final MaterialTapTargetPrompt.Builder builder = new MaterialTapTargetPrompt.Builder(activity);
-        assertTrue(builder.getResourceFinder() instanceof ActivityResourceFinder);
+        ActivityScenario<EmptyTestActivity> scenario = ActivityScenario.launch(EmptyTestActivity.class);
+        scenario.onActivity(activity -> {
+            final MaterialTapTargetPrompt.Builder builder = new MaterialTapTargetPrompt.Builder(activity);
+            assertTrue(builder.getResourceFinder() instanceof ActivityResourceFinder);
+        });
     }
 
     @Test
-    public void testBuilder_SupportFragment()
+    public void testBuilder_Fragment()
     {
-        final Fragment fragment = spy(new Fragment());
-        final ViewGroup view = mock(ViewGroup.class);
-        when(fragment.getView()).thenReturn(view);
-        startFragment(fragment);
-        final MaterialTapTargetPrompt.Builder builder = new MaterialTapTargetPrompt.Builder(fragment);
-        assertTrue(builder.getResourceFinder() instanceof SupportFragmentResourceFinder);
+        FragmentScenario<EmptyTestFragment> scenario = FragmentScenario.launchInContainer(EmptyTestFragment.class);
+        scenario.onFragment(fragment -> {
+            final MaterialTapTargetPrompt.Builder builder = new MaterialTapTargetPrompt.Builder(fragment);
+            assertTrue(builder.getResourceFinder() instanceof SupportFragmentResourceFinder);
+        });
     }
 
     @Test
-    public void testBuilder_SupportFragment_Resource()
+    public void testBuilder_Fragment_Resource()
     {
-        final Fragment fragment = spy(new Fragment());
-        final ViewGroup view = mock(ViewGroup.class);
-        when(fragment.getView()).thenReturn(view);
-        startFragment(fragment);
-        final MaterialTapTargetPrompt.Builder builder = new MaterialTapTargetPrompt.Builder(fragment, 0);
-        assertTrue(builder.getResourceFinder() instanceof SupportFragmentResourceFinder);
+        FragmentScenario<EmptyTestFragment> scenario = FragmentScenario.launchInContainer(EmptyTestFragment.class);
+        scenario.onFragment(fragment -> {
+            final MaterialTapTargetPrompt.Builder builder = new MaterialTapTargetPrompt.Builder(fragment, 0);
+            assertTrue(builder.getResourceFinder() instanceof SupportFragmentResourceFinder);
+        });
     }
 
     @Test
-    public void testBuilder_SupportDialogFragment()
+    public void testBuilder_DialogFragment()
     {
-        final DialogFragment dialogFragment = spy(new DialogFragment());
-        startFragment(dialogFragment);
-        final ViewGroup view = mock(ViewGroup.class);
-        when(dialogFragment.getView()).thenReturn(view);
-        final Activity activity = Robolectric.buildActivity(Activity.class).create().get();
-        final Dialog dialog = mock(Dialog.class);
-        when(dialogFragment.getDialog()).thenReturn(dialog);
-        when(dialog.getOwnerActivity()).thenReturn(activity);
-        when(dialog.findViewById(android.R.id.content)).thenReturn(activity.findViewById(android.R.id.content));
-        final MaterialTapTargetPrompt.Builder builder = new MaterialTapTargetPrompt.Builder(dialogFragment);
-        assertTrue(builder.getResourceFinder() instanceof SupportFragmentResourceFinder);
+        FragmentScenario<EmptyTestDialogFragment> scenario = FragmentScenario.launchInContainer(EmptyTestDialogFragment.class);
+        scenario.onFragment(fragment -> {
+            final MaterialTapTargetPrompt.Builder builder = new MaterialTapTargetPrompt.Builder(fragment);
+            assertTrue(builder.getResourceFinder() instanceof SupportFragmentResourceFinder);
+        });
     }
 }

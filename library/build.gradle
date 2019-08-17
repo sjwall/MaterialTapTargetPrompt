@@ -25,6 +25,7 @@ version rootProject.versionName
 
 android {
     compileSdkVersion rootProject.compileSdkVersion
+    buildToolsVersion = rootProject.buildToolsVersion
 
     defaultConfig {
         minSdkVersion rootProject.minSdkVersion
@@ -47,6 +48,13 @@ android {
     lintOptions {
         abortOnError false
     }
+
+    testOptions.unitTests.includeAndroidResources true
+
+    compileOptions {
+        sourceCompatibility = 1.8
+        targetCompatibility = 1.8
+    }
 }
 
 configurations {
@@ -54,17 +62,25 @@ configurations {
 }
 
 dependencies {
-    implementation 'com.android.support:support-annotations:' + rootProject.supportLibVersion
-    compileOnly 'com.android.support:support-fragment:' + rootProject.supportLibVersion
+    implementation 'androidx.annotation:annotation:1.1.0'
 
-    testImplementation 'com.android.support:support-fragment:' + rootProject.supportLibVersion
+    testImplementation 'androidx.test:core:1.2.0'
+
+    implementation 'androidx.lifecycle:lifecycle-extensions:2.2.0-alpha02'
+
+    implementation 'androidx.fragment:fragment:1.2.0-alpha01'
+
+    testImplementation 'androidx.test.ext:junit:1.1.1'
+
+    testImplementation 'androidx.fragment:fragment-testing:1.2.0-alpha01'
+
     testImplementation 'junit:junit:4.12'
-    testImplementation 'org.robolectric:robolectric:3.8'
-    testImplementation 'org.robolectric:shadows-supportv4:3.8'
-    testImplementation 'org.mockito:mockito-core:2.21.0'
+    testImplementation 'org.robolectric:robolectric:4.3'
+    testImplementation 'org.mockito:mockito-core:3.0.0'
 
-    javadocCompile 'com.android.support:support-annotations:' + rootProject.supportLibVersion
-    javadocCompile 'com.android.support:support-fragment:' + rootProject.supportLibVersion
+    javadocCompile 'androidx.annotation:annotation:1.1.0'
+    javadocCompile 'androidx.fragment:fragment:1.2.0-alpha01'
+
 }
 
 install {

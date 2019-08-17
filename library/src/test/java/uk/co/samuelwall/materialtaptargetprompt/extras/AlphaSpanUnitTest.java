@@ -17,6 +17,7 @@
 package uk.co.samuelwall.materialtaptargetprompt.extras;
 
 import android.graphics.Color;
+import android.os.Build;
 import android.text.TextPaint;
 
 import org.junit.Test;
@@ -27,7 +28,7 @@ import org.robolectric.annotation.Config;
 import static org.junit.Assert.assertEquals;
 
 @RunWith(RobolectricTestRunner.class)
-@Config(constants = uk.co.samuelwall.materialtaptargetprompt.BuildConfig.class, sdk = 22)
+@Config(sdk = Build.VERSION_CODES.LOLLIPOP_MR1)
 public class AlphaSpanUnitTest
 {
     @Test

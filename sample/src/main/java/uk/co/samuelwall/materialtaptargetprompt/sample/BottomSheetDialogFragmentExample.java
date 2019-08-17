@@ -19,9 +19,9 @@ package uk.co.samuelwall.materialtaptargetprompt.sample;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.design.widget.BottomSheetDialogFragment;
-import android.support.v4.view.animation.FastOutSlowInInterpolator;
+import androidx.annotation.NonNull;
+import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
+import androidx.interpolator.view.animation.FastOutSlowInInterpolator;
 import android.view.View;
 
 import uk.co.samuelwall.materialtaptargetprompt.DialogResourceFinder;
