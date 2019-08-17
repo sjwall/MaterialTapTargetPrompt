@@ -87,7 +87,7 @@ Documentation and examples are available [here][8].
 [1]: https://material.io/design/communication/onboarding.html#quickstart-model
 [2]: https://github.com/sjwall/MaterialTapTargetPrompt/tree/master/sample/src/main/java/uk/co/samuelwall/materialtaptargetprompt/sample
 [3]: https://sjwall.github.io/MaterialTapTargetPrompt/examples
-[4]: https://sjwall.github.io/MaterialTapTargetPrompt/javadocs
+[4]: https://sjwall.github.io/MaterialTapTargetPrompt/javadoc
 [5]: https://play.google.com/store/apps/details?id=uk.co.samuelwall.materialtaptargetprompt.sample&utm_source=global_co&utm_medium=prtnr&utm_content=Mar2515&utm_campaign=PartBadge&pcampaignid=MKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1
 [6]: https://github.com/sjwall/MaterialTapTargetPrompt/blob/master/library/src/main/java/uk/co/samuelwall/materialtaptargetprompt/extras/PromptBackground.java
 [7]: https://github.com/sjwall/MaterialTapTargetPrompt/blob/master/library/src/main/java/uk/co/samuelwall/materialtaptargetprompt/extras/PromptFocal.java
