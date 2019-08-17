@@ -1,5 +1,5 @@
 <!--
-  ~ Copyright (C) 2018 Samuel Wall
+  ~ Copyright (C) 2018-2019 Samuel Wall
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
   ~ you may not use this file except in compliance with the License.
@@ -33,8 +33,8 @@
     <string name="search_prompt_title">Search your emails</string>
     <string name="search_prompt_description">Tap the icon to quickly scan your emails</string>
 
-    <string name="FabTarget.primaryText">Loaded from style</string>
-    <string name="FabTarget.secondaryText">This was loaded from a style</string>
+    <string name="FabTarget_primaryText">Loaded from style</string>
+    <string name="FabTarget_secondaryText">This was loaded from a style</string>
 
     <string name="dialog_content">Tap on the Floating Action Button to see the prompt in this dialog</string>
 
@@ -64,9 +64,6 @@
 
     <string name="example_support_fragment_dialog_title">Support Fragment Dialog</string>
     <string name="example_support_fragment_dialog_description">An example with a support library fragment dialog</string>
-
-    <string name="example_fragment_dialog_title">Fragment Dialog</string>
-    <string name="example_fragment_dialog_description">An example with a library fragment dialog</string>
 
     <string name="example_action_mode_title">Action Mode</string>
     <string name="example_action_mode_description">Shows an action mode with a prompt shown</string>

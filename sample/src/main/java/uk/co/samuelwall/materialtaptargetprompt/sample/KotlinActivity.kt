@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2018 Samuel Wall
+ * Copyright (C) 2018-2019 Samuel Wall
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -69,7 +69,6 @@ class KotlinActivity : AppCompatActivity() {
         findViewById<View>(R.id.other_examples_card).visibility = View.GONE
         findViewById<View>(R.id.other_examples_list).visibility = View.GONE
         findViewById<View>(R.id.other_examples_support_fragment_dialog).visibility = View.GONE
-        findViewById<View>(R.id.other_examples_fragment_dialog).visibility = View.GONE
         supportActionBar!!.setDisplayHomeAsUpEnabled(true)
     }
 

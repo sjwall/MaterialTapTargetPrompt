@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2018 Samuel Wall
+ * Copyright (C) 2018-2019 Samuel Wall
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -272,11 +272,6 @@ public class MainActivity extends AppCompatActivity
     public void showSupportFragmentDialog(View view)
     {
         new SupportDialogFragmentExample().show(this.getSupportFragmentManager(), "DIALOGFRAGMENT");
-    }
-
-    public void showFragmentDialog(View view)
-    {
-        new DialogFragmentExample().show(this.getFragmentManager(), "DIALOGFRAGMENT");
     }
 
     public void showActionModePrompt(View view)

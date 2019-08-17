@@ -57,8 +57,8 @@
     <style name="MaterialTapTargetPromptTheme.FabTarget" parent="MaterialTapTargetPromptTheme">
         <item name="mttp_backgroundColour">@color/colorAccentPromptBackground</item>
         <item name="mttp_focalColour">@color/colorPrimary</item>
-        <item name="mttp_primaryText">@string/FabTarget.primaryText</item>
-        <item name="mttp_secondaryText">@string/FabTarget.secondaryText</item>
+        <item name="mttp_primaryText">@string/FabTarget_primaryText</item>
+        <item name="mttp_secondaryText">@string/FabTarget_secondaryText</item>
         <item name="mttp_primaryTextColour">@color/green_200</item>
         <item name="mttp_secondaryTextColour">@color/orange_200</item>
         <item name="mttp_target">@id/fab</item>
