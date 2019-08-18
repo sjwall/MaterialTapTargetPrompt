@@ -16,7 +16,6 @@
 
 package uk.co.samuelwall.materialtaptargetprompt.sample;
 
-import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -53,7 +52,7 @@ public class SupportDialogFragmentExample extends DialogFragment
                 .setOnClickListener(view -> showFragmentFabPrompt());
 
         rootView.findViewById(R.id.button_view_pager_prompt)
-            .setOnClickListener(v -> showViewPagerTab());
+                .setOnClickListener(v -> showViewPagerTab());
 
         viewPager = rootView.findViewById(R.id.view_pager);
         viewPager.setAdapter(new MyPagerAdapter(getChildFragmentManager(), this));
@@ -73,13 +72,13 @@ public class SupportDialogFragmentExample extends DialogFragment
     private void showViewPagerTab()
     {
         new MaterialTapTargetPrompt.Builder((Fragment) this)
-            .setTarget(this.viewPager.getChildAt(0))
-            .setPromptFocal(new RectanglePromptFocal())
-            .setAnimationInterpolator(new FastOutSlowInInterpolator())
-            .setPrimaryText("View Pager Tab")
-            .setSecondaryText("Change tab")
-            .setFocalRadius(R.dimen.dp60)
-            .show();
+                .setTarget(this.viewPager.getChildAt(0))
+                .setPromptFocal(new RectanglePromptFocal())
+                .setAnimationInterpolator(new FastOutSlowInInterpolator())
+                .setPrimaryText("View Pager Tab")
+                .setSecondaryText("Change tab")
+                .setFocalRadius(R.dimen.dp60)
+                .show();
     }
 
     public static class MyPagerAdapter extends FragmentPagerAdapter
@@ -87,10 +86,9 @@ public class SupportDialogFragmentExample extends DialogFragment
         private static int ITEM_COUNT = 6;
         private DialogFragment dialogFragment;
 
-        @SuppressLint("WrongConstant")
         MyPagerAdapter(@NonNull FragmentManager fragmentManager, @NonNull DialogFragment fragment)
         {
-            super(fragmentManager, 1);//FragmentPagerAdapter.BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT);
+            super(fragmentManager);
             dialogFragment = fragment;
         }
 
