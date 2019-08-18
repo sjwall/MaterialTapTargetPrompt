@@ -45,5 +45,5 @@ ext {
     buildToolsVersion = '28.0.3'
 
     versionCode = 59
-    versionName = '2.16.0'
+    versionName = '3.0.0'
 }

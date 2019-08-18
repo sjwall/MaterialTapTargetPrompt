@@ -2,6 +2,15 @@
 
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## v3.0.0 (2019-08-18)
+
+* Migrate to [AndroidX](https://developer.android.com/jetpack/androidx) ([#164](https://github.com/sjwall/MaterialTapTargetPrompt/issues/pull/164)) ([@virengujariya](https://github.com/virengujariya), [@liaowng](https://github.com/liaowng))
+
+### Removed
+
+* Remove android.app.Fragment and android.app.DialogFragment builder constructors. 
+These Fragments can still be used by passing `getActivity()` and `getDialog()` respectively.
+
 ## v2.15.0 (2019-06-23)
 
 ### Features
@@ -10,7 +19,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 ### Bug Fixes
 
-* Fix index out of bounds exception in sequence showFromIndex([@radgospodinov](https://github.com/radgospodinov))
+* Fix index out of bounds exception in sequence showFromIndex ([#161](https://github.com/sjwall/MaterialTapTargetPrompt/issues/pull/161)) ([@radgospodinov](https://github.com/radgospodinov))
 
 ## v2.14.0 (2018-10-26)
 
