@@ -16,6 +16,7 @@
 
 package uk.co.samuelwall.materialtaptargetprompt.sample;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -86,9 +87,10 @@ public class SupportDialogFragmentExample extends DialogFragment
         private static int ITEM_COUNT = 6;
         private DialogFragment dialogFragment;
 
+        @SuppressLint("WrongConstant")
         MyPagerAdapter(@NonNull FragmentManager fragmentManager, @NonNull DialogFragment fragment)
         {
-            super(fragmentManager, FragmentPagerAdapter.BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT);
+            super(fragmentManager, 1);//FragmentPagerAdapter.BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT);
             dialogFragment = fragment;
         }
 
