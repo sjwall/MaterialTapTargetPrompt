@@ -30,10 +30,6 @@ import android.graphics.RectF;
 import android.graphics.Region;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.DialogFragment;
-import androidx.fragment.app.Fragment;
 import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
@@ -44,6 +40,10 @@ import android.view.accessibility.AccessibilityEvent;
 import android.view.accessibility.AccessibilityManager;
 import android.view.accessibility.AccessibilityNodeInfo;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.DialogFragment;
+import androidx.fragment.app.Fragment;
 import uk.co.samuelwall.materialtaptargetprompt.extras.PromptOptions;
 
 /**
@@ -1031,7 +1031,7 @@ public class MaterialTapTargetPrompt
          * Creates a builder for a material tap target prompt that uses an explicit theme resource.
          * <p>
          * The {@code themeResId} may be specified as {@code 0} to use the parent {@code context}'s
-         * resolved value for {@link R.attr#MaterialTapTargetPromptTheme}.
+         * resolved value for {@link uk.co.samuelwall.materialtaptargetprompt.R.attr#MaterialTapTargetPromptTheme}.
          *
          * @param fragment   the fragment to show the prompt within.
          * @param themeResId the resource ID of the theme against which to inflate this dialog, or
@@ -1058,7 +1058,7 @@ public class MaterialTapTargetPrompt
          * Creates a builder for a material tap target prompt that uses an explicit theme resource.
          * <p>
          * The {@code themeResId} may be specified as {@code 0} to use the parent {@code context}'s
-         * resolved value for {@link R.attr#MaterialTapTargetPromptTheme}.
+         * resolved value for {@link uk.co.samuelwall.materialtaptargetprompt.R.attr#MaterialTapTargetPromptTheme}.
          *
          * @param dialogFragment the dialog fragment to show the prompt within.
          * @param themeResId     the resource ID of the theme against which to inflate this dialog,
@@ -1084,7 +1084,7 @@ public class MaterialTapTargetPrompt
          * Creates a builder for a material tap target prompt that uses an explicit theme resource.
          * <p>
          * The {@code themeResId} may be specified as {@code 0} to use the parent {@code context}'s
-         * resolved value for {@link R.attr#MaterialTapTargetPromptTheme}.
+         * resolved value for {@link uk.co.samuelwall.materialtaptargetprompt.R.attr#MaterialTapTargetPromptTheme}.
          *
          * @param dialog     the dialog to show the prompt within.
          * @param themeResId the resource ID of the theme against which to inflate this dialog, or
@@ -1110,7 +1110,7 @@ public class MaterialTapTargetPrompt
          * Creates a builder for a material tap target prompt that uses an explicit theme resource.
          * <p>
          * The {@code themeResId} may be specified as {@code 0} to use the parent {@code context}'s
-         * resolved value for {@link R.attr#MaterialTapTargetPromptTheme}.
+         * resolved value for {@link uk.co.samuelwall.materialtaptargetprompt.R.attr#MaterialTapTargetPromptTheme}.
          *
          * @param activity   the activity to show the prompt within.
          * @param themeResId the resource ID of the theme against which to inflate this dialog, or
@@ -1126,7 +1126,7 @@ public class MaterialTapTargetPrompt
          * Creates a builder for a material tap target prompt that uses an explicit theme resource.
          * <p>
          * The {@code themeResId} may be specified as {@code 0} to use the parent {@code context}'s
-         * resolved value for {@link R.attr#MaterialTapTargetPromptTheme}.
+         * resolved value for {@link uk.co.samuelwall.materialtaptargetprompt.R.attr#MaterialTapTargetPromptTheme}.
          *
          * @param resourceFinder The {@link ResourceFinder} used to find views and resources.
          * @param themeResId     the resource ID of the theme against which to inflate this dialog,
