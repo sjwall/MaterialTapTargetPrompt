@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017 Samuel Wall
+ * Copyright (C) 2017, 2019 Samuel Wall
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,13 +17,14 @@
 package uk.co.samuelwall.materialtaptargetprompt.sample;
 
 import android.app.Dialog;
-import android.content.DialogInterface;
 import android.os.Bundle;
-import androidx.annotation.NonNull;
-import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
-import androidx.interpolator.view.animation.FastOutSlowInInterpolator;
 import android.view.View;
 
+import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
+
+import org.jetbrains.annotations.NotNull;
+
+import androidx.interpolator.view.animation.FastOutSlowInInterpolator;
 import uk.co.samuelwall.materialtaptargetprompt.DialogResourceFinder;
 import uk.co.samuelwall.materialtaptargetprompt.MaterialTapTargetPrompt;
 
@@ -32,27 +33,21 @@ import uk.co.samuelwall.materialtaptargetprompt.MaterialTapTargetPrompt;
  */
 public class BottomSheetDialogFragmentExample extends BottomSheetDialogFragment
 {
+    @NotNull
     @Override
-    public Dialog onCreateDialog(@NonNull final Bundle savedInstanceState) {
+    public Dialog onCreateDialog(final Bundle savedInstanceState) {
         final Dialog dialog = super.onCreateDialog(savedInstanceState);
         View contentView = View.inflate(getContext(), R.layout.fragment_bottom_sheet, null);
         dialog.setContentView(contentView);
 
-        dialog.setOnShowListener(new DialogInterface.OnShowListener()
-        {
-            @Override
-            public void onShow(DialogInterface dialog)
-            {
-                new MaterialTapTargetPrompt.Builder(new DialogResourceFinder(getDialog()), 0)
-                        .setPrimaryText(R.string.search_prompt_title)
-                        .setSecondaryText(R.string.search_prompt_description)
-                        .setAnimationInterpolator(new FastOutSlowInInterpolator())
-                        .setMaxTextWidth(R.dimen.tap_target_menu_max_width)
-                        .setIcon(R.drawable.ic_search)
-                        .setTarget(R.id.bs_search)
-                        .show();
-            }
-        });
+        dialog.setOnShowListener(dialog1 -> new MaterialTapTargetPrompt.Builder(new DialogResourceFinder(getDialog()), 0)
+                .setPrimaryText(R.string.search_prompt_title)
+                .setSecondaryText(R.string.search_prompt_description)
+                .setAnimationInterpolator(new FastOutSlowInInterpolator())
+                .setMaxTextWidth(R.dimen.tap_target_menu_max_width)
+                .setIcon(R.drawable.ic_search)
+                .setTarget(R.id.bs_search)
+                .show());
         return dialog;
     }
 }

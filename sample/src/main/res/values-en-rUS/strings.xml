@@ -37,8 +37,6 @@
     <string name="FabTarget_primaryText">Loaded from style</string>
     <string name="FabTarget_secondaryText">This was loaded from a style</string>
 
-    <string name="dialog_content">Tap on the Floating Action Button to see the prompt in this dialog</string>
-
     <string name="example_navigation_title">Navigation</string>
     <string name="example_navigation_description">Displays prompt over the hamburger menu icon</string>
 
@@ -103,14 +101,14 @@
     <string name="example_bottom_sheet_title">Bottom Sheet Dialog</string>
     <string name="example_bottom_sheet_description">Displays prompt over a bottom sheet dialog</string>
 
-    <string name="example_rectangle_title" translatable="false">Rectangle Prompt</string>
-    <string name="example_fullscreen_rectangle_title" translatable="false">Fullscreen Rectangle Prompt</string>
-    <string name="example_rectangle_description" translatable="false">Displays a prompt with a rectangle background and focal</string>
+    <string name="example_rectangle_title">Rectangle Prompt</string>
+    <string name="example_fullscreen_rectangle_title">Fullscreen Rectangle Prompt</string>
+    <string name="example_rectangle_description">Displays a prompt with a rectangle background and focal</string>
 
     <string name="example_show_for_title">showFor</string>
     <string name="example_show_for_description">Displays prompt over the FAB button for 7 seconds</string>
 
-    <string name="title_activity_list_example" translatable="false">List Example</string>
+    <string name="title_activity_list_example">List Example</string>
     <string name="example_sequence">Show an example of a sequence of prompts</string>
     <string name="example_sequence_title">Sequence</string>
 

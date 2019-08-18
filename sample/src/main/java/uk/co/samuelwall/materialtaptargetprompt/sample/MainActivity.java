@@ -18,20 +18,6 @@ package uk.co.samuelwall.materialtaptargetprompt.sample;
 
 import android.content.Intent;
 import android.os.Bundle;
-import androidx.annotation.NonNull;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.navigation.NavigationView;
-import com.google.android.material.snackbar.Snackbar;
-import androidx.core.content.ContextCompat;
-import androidx.core.view.GravityCompat;
-import androidx.interpolator.view.animation.FastOutSlowInInterpolator;
-import androidx.interpolator.view.animation.LinearOutSlowInInterpolator;
-import androidx.drawerlayout.widget.DrawerLayout;
-import androidx.appcompat.app.ActionBarDrawerToggle;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.view.ActionMode;
-import androidx.appcompat.widget.ActionMenuView;
-import androidx.appcompat.widget.Toolbar;
 import android.text.SpannableStringBuilder;
 import android.text.Spanned;
 import android.text.style.BackgroundColorSpan;
@@ -42,6 +28,22 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.navigation.NavigationView;
+import com.google.android.material.snackbar.Snackbar;
+
+import org.jetbrains.annotations.NotNull;
+
+import androidx.appcompat.app.ActionBarDrawerToggle;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.view.ActionMode;
+import androidx.appcompat.widget.ActionMenuView;
+import androidx.appcompat.widget.Toolbar;
+import androidx.core.content.ContextCompat;
+import androidx.core.view.GravityCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.interpolator.view.animation.FastOutSlowInInterpolator;
+import androidx.interpolator.view.animation.LinearOutSlowInInterpolator;
 import uk.co.samuelwall.materialtaptargetprompt.MaterialTapTargetPrompt;
 import uk.co.samuelwall.materialtaptargetprompt.MaterialTapTargetSequence;
 import uk.co.samuelwall.materialtaptargetprompt.extras.backgrounds.FullscreenPromptBackground;
@@ -101,21 +103,19 @@ public class MainActivity extends AppCompatActivity
                 .setSecondaryText(secondaryText)
                 .setBackButtonDismissEnabled(true)
                 .setAnimationInterpolator(new FastOutSlowInInterpolator())
-                .setPromptStateChangeListener(new MaterialTapTargetPrompt.PromptStateChangeListener()
-                {
-                    @Override
-                    public void onPromptStateChanged(@NonNull MaterialTapTargetPrompt prompt, int state)
+                .setPromptStateChangeListener((prompt, state) -> {
+                    if (state == MaterialTapTargetPrompt.STATE_FOCAL_PRESSED
+                            || state == MaterialTapTargetPrompt.STATE_NON_FOCAL_PRESSED)
                     {
-                        if (state == MaterialTapTargetPrompt.STATE_FOCAL_PRESSED
-                                || state == MaterialTapTargetPrompt.STATE_NON_FOCAL_PRESSED)
-                        {
-                            mFabPrompt = null;
-                            //Do something such as storing a value so that this prompt is never shown again
-                        }
+                        mFabPrompt = null;
+                        //Do something such as storing a value so that this prompt is never shown again
                     }
                 })
                 .create();
-        mFabPrompt.show();
+        if (mFabPrompt != null)
+        {
+            mFabPrompt.show();
+        }
     }
 
     public void showFabPromptFor(View view)
@@ -126,18 +126,13 @@ public class MainActivity extends AppCompatActivity
                 .setPrimaryText("showFor(7000)")
                 .setSecondaryText("This prompt will show for 7 seconds")
                 .setAnimationInterpolator(new FastOutSlowInInterpolator())
-                .setPromptStateChangeListener(new MaterialTapTargetPrompt.PromptStateChangeListener()
-                {
-                    @Override
-                    public void onPromptStateChanged(@NonNull MaterialTapTargetPrompt prompt, int state)
+                .setPromptStateChangeListener((prompt, state) -> {
+                    if (state == MaterialTapTargetPrompt.STATE_SHOW_FOR_TIMEOUT)
                     {
-                        if (state == MaterialTapTargetPrompt.STATE_SHOW_FOR_TIMEOUT)
-                        {
 
-                            Toast.makeText(MainActivity.this,
-                                "Prompt timedout after 7 seconds", Toast.LENGTH_SHORT)
-                                .show();
-                        }
+                        Toast.makeText(MainActivity.this,
+                            "Prompt timedout after 7 seconds", Toast.LENGTH_SHORT)
+                            .show();
                     }
                 })
                 .showFor(7000);
@@ -167,15 +162,10 @@ public class MainActivity extends AppCompatActivity
         final Toolbar tb = this.findViewById(R.id.toolbar);
         tapTargetPromptBuilder.setTarget(tb.getChildAt(1));
 
-        tapTargetPromptBuilder.setPromptStateChangeListener(new MaterialTapTargetPrompt.PromptStateChangeListener()
-        {
-            @Override
-            public void onPromptStateChanged(@NonNull MaterialTapTargetPrompt prompt, int state)
+        tapTargetPromptBuilder.setPromptStateChangeListener((prompt, state) -> {
+            if (state == MaterialTapTargetPrompt.STATE_FOCAL_PRESSED)
             {
-                if (state == MaterialTapTargetPrompt.STATE_FOCAL_PRESSED)
-                {
-                    //Do something such as storing a value so that this prompt is never shown again
-                }
+                //Do something such as storing a value so that this prompt is never shown again
             }
         });
         tapTargetPromptBuilder.show();
@@ -198,7 +188,7 @@ public class MainActivity extends AppCompatActivity
         }
         else
         {
-            Toast.makeText(this, R.string.overflow_unavailable, Toast.LENGTH_SHORT);
+            Toast.makeText(this, R.string.overflow_unavailable, Toast.LENGTH_SHORT).show();
         }
         tapTargetPromptBuilder.show();
     }
@@ -236,7 +226,7 @@ public class MainActivity extends AppCompatActivity
         }
         else
         {
-            Toast.makeText(this, R.string.overflow_unavailable, Toast.LENGTH_SHORT);
+            Toast.makeText(this, R.string.overflow_unavailable, Toast.LENGTH_SHORT).show();
         }
         builder.setIcon(R.drawable.ic_more_vert)
                 .show();
@@ -342,20 +332,15 @@ public class MainActivity extends AppCompatActivity
                 .setAutoDismiss(false)
                 .setAutoFinish(false)
                 .setCaptureTouchEventOutsidePrompt(true)
-                .setPromptStateChangeListener(new MaterialTapTargetPrompt.PromptStateChangeListener()
-                {
-                    @Override
-                    public void onPromptStateChanged(@NonNull MaterialTapTargetPrompt prompt, int state)
+                .setPromptStateChangeListener((prompt, state) -> {
+                    if (state == MaterialTapTargetPrompt.STATE_FOCAL_PRESSED)
                     {
-                        if (state == MaterialTapTargetPrompt.STATE_FOCAL_PRESSED)
-                        {
-                            prompt.finish();
-                            mFabPrompt = null;
-                        }
-                        else if (state == MaterialTapTargetPrompt.STATE_NON_FOCAL_PRESSED)
-                        {
-                            mFabPrompt = null;
-                        }
+                        prompt.finish();
+                        mFabPrompt = null;
+                    }
+                    else if (state == MaterialTapTargetPrompt.STATE_NON_FOCAL_PRESSED)
+                    {
+                        mFabPrompt = null;
                     }
                 })
                 .show();
@@ -370,25 +355,20 @@ public class MainActivity extends AppCompatActivity
         setSupportActionBar(toolbar);
 
         FloatingActionButton fab = findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener()
-        {
-            @Override
-            public void onClick(View view)
+        fab.setOnClickListener(view -> {
+            if (mFabPrompt != null)
             {
-                if (mFabPrompt != null)
-                {
-                    mFabPrompt.finish();
-                    mFabPrompt = null;
-                }
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+                mFabPrompt.finish();
+                mFabPrompt = null;
             }
+            Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+                    .setAction("Action", null).show();
         });
 
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        drawer.setDrawerListener(toggle);
+        drawer.addDrawerListener(toggle);
         toggle.syncState();
 
         NavigationView navigationView = findViewById(R.id.nav_view);
@@ -434,9 +414,8 @@ public class MainActivity extends AppCompatActivity
         return super.onOptionsItemSelected(item);
     }
 
-    @SuppressWarnings("StatementWithEmptyBody")
     @Override
-    public boolean onNavigationItemSelected(MenuItem item)
+    public boolean onNavigationItemSelected(@NotNull MenuItem item)
     {
         // Handle navigation view item clicks here.
         DrawerLayout drawer = findViewById(R.id.drawer_layout);

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2016-2018 Samuel Wall
+ * Copyright (C) 2016-2019 Samuel Wall
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,10 +16,10 @@
 
 package uk.co.samuelwall.materialtaptargetprompt;
 
-import junit.framework.Assert;
-
 import org.junit.After;
 import org.junit.Before;
+
+import static org.junit.Assert.assertEquals;
 
 /**
  * Base test class that provides easy state testing with listeners.
@@ -51,7 +51,7 @@ public class BaseTestStateProgress
         // If there is an expected state progress
         if (expectedStateProgress > -1)
         {
-            Assert.assertEquals(expectedStateProgress, actualStateProgress);
+            assertEquals(expectedStateProgress, actualStateProgress);
         }
     }
 }

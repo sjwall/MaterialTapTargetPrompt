@@ -155,15 +155,10 @@ public class MaterialTapTargetPrompt
     /**
      * Task used for triggering the prompt timeout.
      */
-    final Runnable mTimeoutRunnable = new Runnable()
-    {
-        @Override
-        public void run()
-        {
-            // Emit the state change and dismiss the prompt
-            onPromptStateChanged(STATE_SHOW_FOR_TIMEOUT);
-            dismiss();
-        }
+    final Runnable mTimeoutRunnable = () -> {
+        // Emit the state change and dismiss the prompt
+        onPromptStateChanged(STATE_SHOW_FOR_TIMEOUT);
+        dismiss();
     };
 
     /**
@@ -229,36 +224,31 @@ public class MaterialTapTargetPrompt
         resourceFinder.getPromptParentView().getWindowVisibleDisplayFrame(rect);
         mStatusBarHeight = rect.top;
 
-        mGlobalLayoutListener = new ViewTreeObserver.OnGlobalLayoutListener()
-        {
-            @Override
-            public void onGlobalLayout()
+        mGlobalLayoutListener = () -> {
+            final View targetView = mView.mPromptOptions.getTargetView();
+            if (targetView != null)
             {
-                final View targetView = mView.mPromptOptions.getTargetView();
-                if (targetView != null)
+                final boolean isTargetAttachedToWindow;
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT)
                 {
-                    final boolean isTargetAttachedToWindow;
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT)
-                    {
-                        isTargetAttachedToWindow = targetView.isAttachedToWindow();
-                    }
-                    else
-                    {
-                        isTargetAttachedToWindow = targetView.getWindowToken() != null;
-                    }
-
-                    if (!isTargetAttachedToWindow)
-                    {
-                        return;
-                    }
+                    isTargetAttachedToWindow = targetView.isAttachedToWindow();
                 }
-                prepare();
-
-                if (mAnimationCurrent == null)
+                else
                 {
-                    // Force a relayout to update the view's location
-                    updateAnimation(1, 1);
+                    isTargetAttachedToWindow = targetView.getWindowToken() != null;
                 }
+
+                if (!isTargetAttachedToWindow)
+                {
+                    return;
+                }
+            }
+            prepare();
+
+            if (mAnimationCurrent == null)
+            {
+                // Force a relayout to update the view's location
+                updateAnimation(1, 1);
             }
         };
     }
@@ -397,7 +387,6 @@ public class MaterialTapTargetPrompt
             }
             else
             {
-                //noinspection deprecation
                 viewTreeObserver.removeGlobalOnLayoutListener(mGlobalLayoutListener);
             }
         }
@@ -419,14 +408,9 @@ public class MaterialTapTargetPrompt
         mAnimationCurrent = ValueAnimator.ofFloat(1f, 0f);
         mAnimationCurrent.setDuration(225);
         mAnimationCurrent.setInterpolator(mView.mPromptOptions.getAnimationInterpolator());
-        mAnimationCurrent.addUpdateListener(new ValueAnimator.AnimatorUpdateListener()
-        {
-            @Override
-            public void onAnimationUpdate(@NonNull ValueAnimator animation)
-            {
-                final float value = (float) animation.getAnimatedValue();
-                updateAnimation(1f + ((1f - value) / 4), value);
-            }
+        mAnimationCurrent.addUpdateListener(animation -> {
+            final float value = (float) animation.getAnimatedValue();
+            updateAnimation(1f + ((1f - value) / 4), value);
         });
         mAnimationCurrent.addListener(new AnimatorListener()
         {
@@ -457,14 +441,9 @@ public class MaterialTapTargetPrompt
         mAnimationCurrent = ValueAnimator.ofFloat(1f, 0f);
         mAnimationCurrent.setDuration(225);
         mAnimationCurrent.setInterpolator(mView.mPromptOptions.getAnimationInterpolator());
-        mAnimationCurrent.addUpdateListener(new ValueAnimator.AnimatorUpdateListener()
-        {
-            @Override
-            public void onAnimationUpdate(@NonNull ValueAnimator animation)
-            {
-                final float value = (float) animation.getAnimatedValue();
-                updateAnimation(value, value);
-            }
+        mAnimationCurrent.addUpdateListener(animation -> {
+            final float value = (float) animation.getAnimatedValue();
+            updateAnimation(value, value);
         });
         mAnimationCurrent.addListener(new AnimatorListener()
         {
@@ -533,14 +512,9 @@ public class MaterialTapTargetPrompt
         mAnimationCurrent = ValueAnimator.ofFloat(0f, 1f);
         mAnimationCurrent.setInterpolator(mView.mPromptOptions.getAnimationInterpolator());
         mAnimationCurrent.setDuration(225);
-        mAnimationCurrent.addUpdateListener(new ValueAnimator.AnimatorUpdateListener()
-        {
-            @Override
-            public void onAnimationUpdate(@NonNull ValueAnimator animation)
-            {
-                final float value = (float) animation.getAnimatedValue();
-                updateAnimation(value, value);
-            }
+        mAnimationCurrent.addUpdateListener(animation -> {
+            final float value = (float) animation.getAnimatedValue();
+            updateAnimation(value, value);
         });
         mAnimationCurrent.addListener(new AnimatorListener()
         {
@@ -606,14 +580,9 @@ public class MaterialTapTargetPrompt
         mAnimationFocalRipple = ValueAnimator.ofFloat(1.1f, 1.6f);
         mAnimationFocalRipple.setInterpolator(mView.mPromptOptions.getAnimationInterpolator());
         mAnimationFocalRipple.setDuration(500);
-        mAnimationFocalRipple.addUpdateListener(new ValueAnimator.AnimatorUpdateListener()
-        {
-            @Override
-            public void onAnimationUpdate(@NonNull ValueAnimator animation)
-            {
-                final float value = (float) animation.getAnimatedValue();
-                mView.mPromptOptions.getPromptFocal().updateRipple(value, (1.6f - value) * 2);
-            }
+        mAnimationFocalRipple.addUpdateListener(animation -> {
+            final float value = (float) animation.getAnimatedValue();
+            mView.mPromptOptions.getPromptFocal().updateRipple(value, (1.6f - value) * 2);
         });
     }
 
@@ -959,22 +928,17 @@ public class MaterialTapTargetPrompt
         private void setupAccessibilityClickListener()
         {
             setClickable(true);
-            setOnClickListener(new OnClickListener()
-            {
-                @Override
-                public void onClick(View view)
+            setOnClickListener(view -> {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH_MR1)
                 {
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH_MR1)
+                    final View targetView = mPromptOptions.getTargetView();
+                    if (targetView != null)
                     {
-                        final View targetView = mPromptOptions.getTargetView();
-                        if (targetView != null)
-                        {
-                            targetView.callOnClick();
-                        }
+                        targetView.callOnClick();
                     }
-
-                    mPrompt.finish();
                 }
+
+                mPrompt.finish();
             });
         }
 

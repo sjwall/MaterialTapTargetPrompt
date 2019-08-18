@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017-2018 Samuel Wall
+ * Copyright (C) 2017-2019 Samuel Wall
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,9 +22,6 @@ import org.junit.runner.RunWith;
 import androidx.fragment.app.testing.FragmentScenario;
 import androidx.test.core.app.ActivityScenario;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
-import uk.co.samuelwall.materialtaptargetprompt.test.EmptyTestActivity;
-import uk.co.samuelwall.materialtaptargetprompt.test.EmptyTestDialogFragment;
-import uk.co.samuelwall.materialtaptargetprompt.test.EmptyTestFragment;
 
 import static junit.framework.Assert.assertTrue;
 

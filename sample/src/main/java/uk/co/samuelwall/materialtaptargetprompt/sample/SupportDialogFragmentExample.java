@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2016-2018 Samuel Wall
+ * Copyright (C) 2016-2019 Samuel Wall
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,18 +16,20 @@
 
 package uk.co.samuelwall.materialtaptargetprompt.sample;
 
-import android.content.DialogInterface;
 import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+
+import org.jetbrains.annotations.NotNull;
+
 import androidx.annotation.NonNull;
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
-import androidx.viewpager.widget.ViewPager;
 import androidx.interpolator.view.animation.FastOutSlowInInterpolator;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
+import androidx.viewpager.widget.ViewPager;
 import uk.co.samuelwall.materialtaptargetprompt.MaterialTapTargetPrompt;
 import uk.co.samuelwall.materialtaptargetprompt.extras.focals.RectanglePromptFocal;
 
@@ -36,49 +38,28 @@ import uk.co.samuelwall.materialtaptargetprompt.extras.focals.RectanglePromptFoc
  */
 public class SupportDialogFragmentExample extends DialogFragment
 {
-    ViewPager viewPager;
+    private ViewPager viewPager;
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-            Bundle savedInstanceState)
+    public View onCreateView(@NotNull LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState)
     {
         View rootView = inflater.inflate(R.layout.support_fragment_dialog, container);
 
         getDialog().setTitle("DialogFragment");
-        getDialog().setOnShowListener(new DialogInterface.OnShowListener()
-        {
-            @Override
-            public void onShow(DialogInterface dialog)
-            {
-                showFragmentFabPrompt();
-            }
-        });
+        getDialog().setOnShowListener(dialog -> showFragmentFabPrompt());
         rootView.findViewById(R.id.button_fab_prompt)
-                .setOnClickListener(new View.OnClickListener()
-                {
-                    @Override
-                    public void onClick(View view)
-                    {
-                        showFragmentFabPrompt();
-                    }
-                });
+                .setOnClickListener(view -> showFragmentFabPrompt());
 
         rootView.findViewById(R.id.button_view_pager_prompt)
-            .setOnClickListener(new View.OnClickListener()
-            {
-                @Override
-                public void onClick(View v)
-                {
-                    showViewPagerTab();
-                }
-            });
+            .setOnClickListener(v -> showViewPagerTab());
 
         viewPager = rootView.findViewById(R.id.view_pager);
         viewPager.setAdapter(new MyPagerAdapter(getChildFragmentManager(), this));
         return rootView;
     }
 
-    public void showFragmentFabPrompt()
+    private void showFragmentFabPrompt()
     {
         new MaterialTapTargetPrompt.Builder((Fragment) this)
                 .setTarget(R.id.fab)
@@ -88,7 +69,7 @@ public class SupportDialogFragmentExample extends DialogFragment
                 .show();
     }
 
-    public void showViewPagerTab()
+    private void showViewPagerTab()
     {
         new MaterialTapTargetPrompt.Builder((Fragment) this)
             .setTarget(this.viewPager.getChildAt(0))
@@ -105,9 +86,9 @@ public class SupportDialogFragmentExample extends DialogFragment
         private static int ITEM_COUNT = 6;
         private DialogFragment dialogFragment;
 
-        public MyPagerAdapter(@NonNull FragmentManager fragmentManager, @NonNull DialogFragment fragment)
+        MyPagerAdapter(@NonNull FragmentManager fragmentManager, @NonNull DialogFragment fragment)
         {
-            super(fragmentManager);
+            super(fragmentManager, FragmentPagerAdapter.BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT);
             dialogFragment = fragment;
         }
 
@@ -117,6 +98,7 @@ public class SupportDialogFragmentExample extends DialogFragment
             return ITEM_COUNT;
         }
 
+        @NotNull
         @Override
         public Fragment getItem(int position)
         {

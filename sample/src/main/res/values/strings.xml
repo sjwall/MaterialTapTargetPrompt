@@ -1,5 +1,5 @@
 <!--
-  ~ Copyright (C) 2018-2019 Samuel Wall
+  ~ Copyright (C) 2016-2019 Samuel Wall
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
   ~ you may not use this file except in compliance with the License.
@@ -35,8 +35,6 @@
 
     <string name="FabTarget_primaryText">Loaded from style</string>
     <string name="FabTarget_secondaryText">This was loaded from a style</string>
-
-    <string name="dialog_content">Tap on the Floating Action Button to see the prompt in this dialog</string>
 
     <string name="example_navigation_title">Navigation</string>
     <string name="example_navigation_description">Displays prompt over the hamburger menu icon</string>

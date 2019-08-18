@@ -569,7 +569,9 @@ public class PromptUtilsUnitTest
         assertEquals(300, layout.getWidth());
     }
 
-    /*@Test
+    /*
+    // StaticLayout.Builder.obtain is not mocked so this test will fail
+    @Test
     @TargetApi(Build.VERSION_CODES.M)
     public void testCreateStaticTextLayoutMarshmallow()
     {

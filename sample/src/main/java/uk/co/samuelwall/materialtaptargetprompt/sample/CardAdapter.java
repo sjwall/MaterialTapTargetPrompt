@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017 Samuel Wall
+ * Copyright (C) 2017, 2019 Samuel Wall
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,41 +23,44 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import org.jetbrains.annotations.NotNull;
+
 public class CardAdapter extends RecyclerView.Adapter<CardAdapter.ViewHolder>
 {
-    private String[] mDataset = {"foo", "bar", "baz"};;
+    private String[] mDataSet = {"foo", "bar", "baz"};
 
-    public static class ViewHolder extends RecyclerView.ViewHolder
+    static class ViewHolder extends RecyclerView.ViewHolder
     {
-        public TextView mTextView;
-        public ImageView mImageView;
-        public ViewHolder(View v)
+        TextView mTextView;
+        ImageView mImageView;
+        ViewHolder(View v)
         {
             super(v);
-            mTextView = (TextView) v.findViewById(R.id.info_text);
-            mImageView = (ImageView) v.findViewById(R.id.info_icon);
+            mTextView = v.findViewById(R.id.info_text);
+            mImageView = v.findViewById(R.id.info_icon);
         }
     }
 
-    public CardAdapter()
+    CardAdapter()
     {
     }
 
+    @NotNull
     @Override
-    public CardAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType)
+    public CardAdapter.ViewHolder onCreateViewHolder(@NotNull ViewGroup parent, int viewType)
     {
         return new ViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.card, parent, false));
     }
 
     @Override
-    public void onBindViewHolder(ViewHolder holder, int position)
+    public void onBindViewHolder(@NotNull ViewHolder holder, int position)
     {
-        holder.mTextView.setText(mDataset[position]);
+        holder.mTextView.setText(mDataSet[position]);
     }
 
     @Override
     public int getItemCount()
     {
-        return mDataset.length;
+        return mDataSet.length;
     }
 }

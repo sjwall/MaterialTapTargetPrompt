@@ -14,26 +14,19 @@
  * limitations under the License.
  */
 
-package uk.co.samuelwall.materialtaptargetprompt.test;
+package uk.co.samuelwall.materialtaptargetprompt;
 
+import android.app.Activity;
 import android.os.Bundle;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.fragment.app.DialogFragment;
-import androidx.fragment.app.Fragment;
 import uk.co.samuelwall.materialtaptargetprompt.R;
 
-public class EmptyTestDialogFragment extends DialogFragment
-{
-    @Nullable
+public class EmptyTestActivity extends Activity {
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
-                             @Nullable Bundle savedInstanceState)
+    protected void onCreate(@Nullable Bundle savedInstanceState)
     {
-        return inflater.inflate(R.layout.fragment_test, container, false);
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_test);
     }
 }

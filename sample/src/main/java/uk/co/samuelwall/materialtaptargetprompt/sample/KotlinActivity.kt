@@ -139,7 +139,7 @@ class KotlinActivity : AppCompatActivity() {
         if (child is ActionMenuView) {
             tapTargetPromptBuilder.setTarget(child.getChildAt(child.childCount - 1))
         } else {
-            Toast.makeText(this, R.string.overflow_unavailable, Toast.LENGTH_SHORT)
+            Toast.makeText(this, R.string.overflow_unavailable, Toast.LENGTH_SHORT).show()
         }
         tapTargetPromptBuilder.show()
     }
@@ -170,7 +170,7 @@ class KotlinActivity : AppCompatActivity() {
         if (child is ActionMenuView) {
             builder.setTarget(child.getChildAt(child.childCount - 1))
         } else {
-            Toast.makeText(this, R.string.overflow_unavailable, Toast.LENGTH_SHORT)
+            Toast.makeText(this, R.string.overflow_unavailable, Toast.LENGTH_SHORT).show()
         }
         builder.setIcon(R.drawable.ic_more_vert)
                 .show()

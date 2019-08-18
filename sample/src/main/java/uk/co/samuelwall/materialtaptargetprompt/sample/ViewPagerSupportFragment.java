@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2016-2018 Samuel Wall
+ * Copyright (C) 2016-2019 Samuel Wall
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -32,7 +32,7 @@ public class ViewPagerSupportFragment extends Fragment
     @NonNull
     private DialogFragment dialogFragment;
 
-    public static ViewPagerSupportFragment newInstance(@NonNull DialogFragment dialogFragment)
+    static ViewPagerSupportFragment newInstance(@NonNull DialogFragment dialogFragment)
     {
         ViewPagerSupportFragment fragment = new ViewPagerSupportFragment();
         fragment.dialogFragment = dialogFragment;
@@ -45,14 +45,7 @@ public class ViewPagerSupportFragment extends Fragment
     {
         View view = inflater.inflate(R.layout.fragment_view_pager, container, false);
         view.findViewById(R.id.button)
-            .setOnClickListener(new View.OnClickListener()
-            {
-                @Override
-                public void onClick(View v)
-                {
-                    showPrompt();
-                }
-            });
+            .setOnClickListener(v -> showPrompt());
         return view;
     }
 

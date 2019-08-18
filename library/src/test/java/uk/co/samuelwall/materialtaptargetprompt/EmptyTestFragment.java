@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package uk.co.samuelwall.materialtaptargetprompt.test;
+package uk.co.samuelwall.materialtaptargetprompt;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
