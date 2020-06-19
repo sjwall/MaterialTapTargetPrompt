@@ -17,6 +17,7 @@
 apply plugin: 'com.android.library'
 apply plugin: 'jacoco-android'
 apply plugin: 'com.github.dcendents.android-maven'
+apply plugin: 'maven-publish'
 apply plugin: 'com.jfrog.bintray'
 
 // Maven Group ID for the artifact
@@ -92,7 +93,7 @@ install {
                 name 'material-tap-target-prompt'
                 url 'https://github.com/sjwall/MaterialTapTargetPrompt'
 
-                groupId 'uk.co.samuelwall'
+                groupId group
                 artifactId 'material-tap-target-prompt'
 
                 licenses {
@@ -176,3 +177,35 @@ tasks.withType(Test) {
 }
 
 //gradlew clean jacocoTestReport
+
+project.afterEvaluate {
+    publishing {
+        publications {
+            gpr(MavenPublication) {
+                groupId = group
+                artifactId = 'material-tap-target-prompt'
+                version = rootProject.versionName
+                artifact(sourcesJar)
+                artifact(javadocJar)
+                artifact("$buildDir/outputs/aar/material-tap-target-prompt-release.aar")
+            }
+        }
+        repositories {
+            maven {
+                Properties properties = new Properties()
+                File propertiesFile = project.rootProject.file('local.properties')
+                if (propertiesFile.exists()) {
+                    properties.load(propertiesFile.newDataInputStream())
+                }
+                name = "GitHubPackages"
+                url = uri("https://maven.pkg.github.com/sjwall/MaterialTapTargetPrompt")
+                // Github Package
+                credentials {
+                    //Fetch these details from the properties file or from Environment variables
+                    username = properties.get("gpr.usr")
+                    password = properties.get("gpr.key")
+                }
+            }
+        }
+    }
+}

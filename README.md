@@ -37,6 +37,8 @@ Supports Android minSdkVersion 14
 
 Version 2.15.0 works with Android Support Library
 
+Also available from [GitHub packages](https://github.com/sjwall/MaterialTapTargetPrompt/packages/277676)
+
 ## Usage
 Basic usage is shown below with more examples in the [sample app][2] and [documentation][3]:
 
