@@ -66,11 +66,11 @@ public class SupportFragmentResourceFinder implements ResourceFinder
     {
         if (this.parent == null)
         {
+            //noinspection ConstantConditions
             ViewParent parent = this.fragment.getView().getParent();
             while (parent.getClass().getName().contains("FragmentContainerView"))
                 parent = parent.getParent();
-            //noinspection ConstantConditions
-            this.parent = (ViewGroup) this.fragment.getView().getParent();
+            this.parent = (ViewGroup) parent;
         }
         return this.parent;
     }
