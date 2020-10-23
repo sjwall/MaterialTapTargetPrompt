@@ -25,6 +25,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewParent;
 
 /**
  * {@link ResourceFinder} implementation for {@link Fragment}.
@@ -66,7 +67,10 @@ public class SupportFragmentResourceFinder implements ResourceFinder
         if (this.parent == null)
         {
             //noinspection ConstantConditions
-            this.parent = (ViewGroup) this.fragment.getView().getParent();
+            ViewParent parent = this.fragment.getView().getParent();
+            while (parent.getClass().getName().contains("FragmentContainerView"))
+                parent = parent.getParent();
+            this.parent = (ViewGroup) parent;
         }
         return this.parent;
     }
