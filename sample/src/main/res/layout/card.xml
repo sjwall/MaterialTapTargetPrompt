@@ -45,7 +45,7 @@
                 android:layout_alignParentEnd="true"
                 android:layout_margin="16dp"
                 android:src="@drawable/ic_menu_share"
-                android:tint="@color/colorPrimary"/>
+                card_view:tint="@color/colorPrimary" />
         </RelativeLayout>
     </androidx.cardview.widget.CardView>
 </LinearLayout>

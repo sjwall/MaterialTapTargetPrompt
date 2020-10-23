@@ -228,7 +228,7 @@
                     android:layout_gravity="center_vertical"
                     android:text="@string/example_no_auto_dismiss_description"/>
             </LinearLayout>
-            <androidx.legacy.widget.Space
+            <Space
                 android:layout_width="match_parent"
                 android:layout_height="40dp"/>
             <LinearLayout
