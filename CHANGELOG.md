@@ -2,13 +2,21 @@
 
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## v3.0.1 (2020-10-23)
+
+* Upgraded dependecies to be not version specific
+
+### Bug Fixes
+
+*  Fix FragmentContainerView as parent ([#180](https://github.com/sjwall/MaterialTapTargetPrompt/pull/180)) ([@JMavrelos](https://github.com/JMavrelos))
+
 ## v3.0.0 (2019-08-18)
 
 * Migrate to [AndroidX](https://developer.android.com/jetpack/androidx) ([#164](https://github.com/sjwall/MaterialTapTargetPrompt/issues/pull/164)) ([@virengujariya](https://github.com/virengujariya), [@liaowng](https://github.com/liaowng))
 
 ### Removed
 
-* Remove android.app.Fragment and android.app.DialogFragment builder constructors. 
+* Remove android.app.Fragment and android.app.DialogFragment builder constructors.
 These Fragments can still be used by passing `getActivity()` and `getDialog()` respectively.
 
 ## v2.15.0 (2019-06-23)
