@@ -48,9 +48,7 @@ import uk.co.samuelwall.materialtaptargetprompt.extras.PromptOptions;
 
 /**
  * A Material Design tap target onboarding implementation.
- * <p>
  * <div class="special reference">
- * <h3>Onboarding</h3>
  * <p>For more information about onboarding and tap targets, read the
  * <a href="https://www.google.com/design/spec/growth-communications/onboarding.html">Onboarding</a>
  * Material Design guidelines.</p>

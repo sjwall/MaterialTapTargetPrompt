@@ -26,7 +26,7 @@ import androidx.annotation.NonNull;
 interface PromptUIElement
 {
     /**
-     * Update the current prompt rendering state based on the prompt options and current reveal & alpha scales.
+     * Update the current prompt rendering state based on the prompt options and current reveal &amp; alpha scales.
      *
      * @param options        The options used to create the prompt.
      * @param revealModifier The current size/revealed scale from 0 - 1.

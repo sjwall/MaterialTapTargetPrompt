@@ -93,7 +93,7 @@ install {
                 name 'material-tap-target-prompt'
                 url 'https://github.com/sjwall/MaterialTapTargetPrompt'
 
-                groupId group
+                groupId 'uk.co.samuelwall'
                 artifactId 'material-tap-target-prompt'
 
                 licenses {
@@ -130,7 +130,6 @@ task javadoc(type: Javadoc) {
     source += files(["$buildDir/generated/source/r/release"])
     classpath += project.files(android.getBootClasspath().join(File.pathSeparator))
     classpath += configurations.javadocCompile
-    failOnError false
 }
 
 task javadocJar(type: Jar, dependsOn: javadoc) {
@@ -208,4 +207,7 @@ project.afterEvaluate {
             }
         }
     }
+    javadoc.classpath += files(android.libraryVariants.collect { variant ->
+        variant.javaCompileProvider.get().classpath.files
+    })
 }

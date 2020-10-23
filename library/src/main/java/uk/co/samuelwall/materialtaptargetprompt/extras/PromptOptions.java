@@ -1378,7 +1378,7 @@ public class PromptOptions<T extends PromptOptions>
 
     /**
      * Back button can be used to dismiss the prompt.
-     * Default: {@link true}
+     * Default: true
      *
      * @param enabled True for back button dismiss enabled
      * @return This Builder object to allow for chaining of calls to set methods
@@ -1481,8 +1481,7 @@ public class PromptOptions<T extends PromptOptions>
      * create and display the prompt.
      * </p>
      * <p>
-     * Will return {@link null} if a valid target has not been set or the primary text is {@link
-     * null}.
+     * Will return null if a valid target has not been set or the primary text is null.
      * To check that a valid target has been set call {@link #isTargetSet()}.
      * </p>
      *
@@ -1547,8 +1546,8 @@ public class PromptOptions<T extends PromptOptions>
      *     prompt.show();
      * </pre>
      * <p>
-     * Will return {@link null} if a valid target has not been set or the primary text and secondary
-     * text are {@link null}.
+     * Will return null if a valid target has not been set or the primary text and secondary
+     * text are null.
      * To check that a valid target has been set call {@link #isTargetSet()}.
      * </p>
      *
@@ -1576,8 +1575,8 @@ public class PromptOptions<T extends PromptOptions>
      *     prompt.showFor(milliseconds);
      * </pre>
      * <p>
-     * Will return {@link null} if a valid target has not been set or the primary text and secondary
-     * text are {@link null}.
+     * Will return null if a valid target has not been set or the primary text and secondary
+     * text are null.
      * To check that a valid target has been set call {@link #isTargetSet()}.
      * </p>
      *
