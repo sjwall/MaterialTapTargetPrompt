@@ -220,7 +220,7 @@ public class MaterialTapTargetPrompt
 
         Rect rect = new Rect();
         resourceFinder.getPromptParentView().getWindowVisibleDisplayFrame(rect);
-        mStatusBarHeight = rect.top;
+        mStatusBarHeight = mView.mPromptOptions.getIgnoreStatusBar() ? 0 : rect.top;
 
         mGlobalLayoutListener = () -> {
             final View targetView = mView.mPromptOptions.getTargetView();
