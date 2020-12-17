@@ -2,9 +2,19 @@
 
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## v3.1.0 (2020-12-17)
+
+### Features
+
+* Add `setIgnoreStatusBar` to `PromptOptions` to allow configuring if the prompt displays over the status bar. Default is false. ([#183](https://github.com/sjwall/MaterialTapTargetPrompt/pull/183)) ([@alexeyosminin](https://github.com/alexeyosminin))
+
+### Bug Fixes
+
+* Fix `FullscreenPromptBackground` not displaying correctly on displays with cutouts ([#182](https://github.com/sjwall/MaterialTapTargetPrompt/pull/182)) ([@Iljo](https://github.com/Iljo))
+
 ## v3.0.1 (2020-10-23)
 
-* Upgraded dependecies to be not version specific
+* Upgraded dependencies to be not version specific
 
 ### Bug Fixes
 
