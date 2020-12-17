@@ -149,6 +149,11 @@ public class PromptOptions<T extends PromptOptions>
     private boolean mBackButtonDismissEnabled = true;
 
     /**
+     * Indicates how drawing area should be placed regarding to system status bar
+     */
+    private boolean mIgnoreStatusBar = false;
+
+    /**
      * Listener for when the prompt state changes.
      */
     @Nullable private MaterialTapTargetPrompt.PromptStateChangeListener mPromptStateChangeListener;
@@ -1398,6 +1403,30 @@ public class PromptOptions<T extends PromptOptions>
     public boolean getBackButtonDismissEnabled()
     {
         return mBackButtonDismissEnabled;
+    }
+
+    /**
+     * Indicates whether to ignore system status bar. Drawing area will be increased to the top of
+     * screen regardless of status bar if this flag is true (status bar should be transparent to see
+     * any effect from this)
+     * Default: false
+     * @param enabled true for drawing behind system status bar
+     * @return This Builder object to allow for chaining of calls to set methods
+     */
+    @NonNull
+    public T setIgnoreStatusBar(final boolean enabled)
+    {
+        mIgnoreStatusBar = enabled;
+        return (T) this;
+    }
+
+    /**
+     * Get ignore status bar flag
+     * @return true if status bar should be ignored, otherwise false
+     */
+    public boolean getIgnoreStatusBar()
+    {
+        return mIgnoreStatusBar;
     }
 
     /**
