@@ -54,6 +54,7 @@ public class CirclePromptFocal extends PromptFocal
         mPaint.setAntiAlias(true);
         mPosition = new PointF();
         mBounds = new RectF();
+        mPath = new Path();
     }
 
     /**
