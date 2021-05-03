@@ -1,19 +1,56 @@
-# Material Tap Target Prompt
+<h1 align="center">Material Tap Target Prompt</h1>
 
-[![Build Status](https://travis-ci.org/sjwall/MaterialTapTargetPrompt.svg?branch=master)](https://travis-ci.org/sjwall/MaterialTapTargetPrompt)
-[![codecov](https://codecov.io/gh/sjwall/MaterialTapTargetPrompt/branch/master/graph/badge.svg)](https://codecov.io/gh/sjwall/MaterialTapTargetPrompt)
-[![Maintainability](https://api.codeclimate.com/v1/badges/242b94ecd2d181b8298e/maintainability)](https://codeclimate.com/github/sjwall/MaterialTapTargetPrompt/maintainability)
-[![Download](https://api.bintray.com/packages/sjwall/maven/material-tap-target-prompt/images/download.svg)](https://bintray.com/sjwall/maven/material-tap-target-prompt/_latestVersion)
-[![JavaDoc](https://img.shields.io/badge/JavaDoc-3.1.0-brightgreen.svg)][4]
-[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat)](http://makeapullrequest.com)
+<p align="center">
+    <img src="docs/assets/app_icon.svg" alt="library-logo" width="120px" height="120px"/>
+    <br>
+    <i>A Tap Target implementation in Android based on Material Design Onboarding guidelines. For more information on tap targets check out the <a href="https://material.io/design/communication/onboarding.html#quickstart-model">guidelines</a>.</i>
+</p>
 
-A Tap Target implementation in Android based on Material Design Onboarding guidelines. For more information on tap targets check out the [guidelines][1].
+<p align="center">
+  <a href="https://sjwall.github.io/MaterialTapTargetPrompt"><strong>sjwall.github.io/MaterialTapTargetPrompt</strong></a>
+  <br>
+</p>
 
-[JavaDocs][4], [examples][3] and a [sample app][2] with examples implemented are available.
+<p align="center">
+    <a href="https://sjwall.github.io/MaterialTapTargetPrompt/#quick-start">Quick start</a>
+    ·
+    <a href="https://sjwall.github.io/MaterialTapTargetPrompt/examples">Examples</a>
+    ·
+    <a href="https://github.com/sjwall/MaterialTapTargetPrompt/tree/master/sample/src/main/java/uk/co/samuelwall/materialtaptargetprompt/sample">Sample app</a>
+    <br>
+    <br>
+</p>
 
-![FAB Example](docs/assets/example_FAB.png) ![App Bar Example](docs/assets/example_appbar.png)
+<p align="center">
+    <a href="https://travis-ci.org/sjwall/MaterialTapTargetPrompt">
+        <img alt="Build Status" src="https://travis-ci.org/sjwall/MaterialTapTargetPrompt.svg?branch=master">
+    </a>
+    <a href="https://codecov.io/gh/sjwall/MaterialTapTargetPrompt">
+        <img alt="codecov" src="https://codecov.io/gh/sjwall/MaterialTapTargetPrompt/branch/master/graph/badge.svg">
+    </a>
+    <a href="https://codeclimate.com/github/sjwall/MaterialTapTargetPrompt/maintainability">
+        <img alt="Maintainability" src="https://api.codeclimate.com/v1/badges/242b94ecd2d181b8298e/maintainability">
+    </a>
+    <a href="https://repo1.maven.org/maven2/uk/co/samuelwall/material-tap-target-prompt/">
+        <img alt="Download" src="https://img.shields.io/maven-central/v/uk.co.samuelwall/material-tap-target-prompt">
+    </a>
+    <a href="https://sjwall.github.io/MaterialTapTargetPrompt/javadoc">
+        <img alt="JavaDoc" src="https://img.shields.io/badge/JavaDoc-3.1.0-brightgreen.svg">
+    </a>
+    <a href="https://github.com/sjwall/MaterialTapTargetPrompt/blob/master/LICENSE">
+        <img alt="License" src="https://img.shields.io/github/license/sjwall/MaterialTapTargetPrompt">
+    </a>
+    <a href="http://makeapullrequest.com">
+        <img alt="PRs Welcome" src="https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat">
+    </a>
+</p>
 
-![Card Example](docs/assets/example_card.png) ![Centre Example](docs/assets/example_centre.png)
+<p align="center">
+    <img alt="FAB Example" src="docs/assets/example_FAB.png">
+    <img alt="App Bar Example" src="docs/assets/example_appbar.png">
+    <img alt="Card Example" src="docs/assets/example_card.png">
+    <img alt="Centre Example" src="docs/assets/example_centre.png">
+</p>
 
 The sample app is available to download on the [Google Play Store][5]:
 <a href='https://play.google.com/store/apps/details?id=uk.co.samuelwall.materialtaptargetprompt.sample&utm_source=global_co&utm_medium=prtnr&utm_content=Mar2515&utm_campaign=PartBadge&pcampaignid=MKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1'><img alt='Get it on Google Play' style='max-width:90px' src='docs/assets/play_store.png'/></a>
@@ -22,13 +59,9 @@ The sample app is available to download on the [Google Play Store][5]:
 
 ## Gradle
 
-Add the following to `build.gradle`:
+Add the following to `build.gradle` using Maven Central:
 
 ```groovy
-repositories {
-    jcenter()
-}
-
 dependencies {
     implementation 'uk.co.samuelwall:material-tap-target-prompt:3.1.0'
 }
@@ -65,7 +98,7 @@ new MaterialTapTargetPrompt.Builder(MainActivity.this)
 
 If a target is not set or the target view could not be found or both the primary and secondary text are `null` then `builder.show` and `builder.create` will return `null`.
 
-## Other shapes
+# Other shapes
 
 The default shape is a circle but any other shape can be rendered by extending the [PromptBackground][6] and [PromptFocal][7] classes.
 Custom shapes such as a rectangle can be set by calling `setPromptBackground` and/or `setPromptFocal`.
@@ -74,7 +107,7 @@ Documentation and examples are available [here][8].
 ![Rectangle Example](docs/assets/example_rectangle.png)
 
 # License
-    Copyright (C) 2016-2018 Samuel Wall
+    Copyright (C) 2016-2021 Samuel Wall
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -88,10 +121,8 @@ Documentation and examples are available [here][8].
     See the License for the specific language governing permissions and
     limitations under the License.
 
-[1]: https://material.io/design/communication/onboarding.html#quickstart-model
 [2]: https://github.com/sjwall/MaterialTapTargetPrompt/tree/master/sample/src/main/java/uk/co/samuelwall/materialtaptargetprompt/sample
 [3]: https://sjwall.github.io/MaterialTapTargetPrompt/examples
-[4]: https://sjwall.github.io/MaterialTapTargetPrompt/javadoc
 [5]: https://play.google.com/store/apps/details?id=uk.co.samuelwall.materialtaptargetprompt.sample&utm_source=global_co&utm_medium=prtnr&utm_content=Mar2515&utm_campaign=PartBadge&pcampaignid=MKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1
 [6]: https://github.com/sjwall/MaterialTapTargetPrompt/blob/master/library/src/main/java/uk/co/samuelwall/materialtaptargetprompt/extras/PromptBackground.java
 [7]: https://github.com/sjwall/MaterialTapTargetPrompt/blob/master/library/src/main/java/uk/co/samuelwall/materialtaptargetprompt/extras/PromptFocal.java

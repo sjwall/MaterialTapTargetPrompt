@@ -29,13 +29,9 @@ The sample app is available to download on the Google Play Store:
 
 ## Gradle
 
-Add the following to build.gradle:
+Add the following to build.gradle using Maven Central:
 
 ```groovy
-repositories {
-    jcenter()
-}
-
 dependencies {
     implementation 'uk.co.samuelwall:material-tap-target-prompt:{{ site.github.latest_release.tag_name | remove_first: "v" }}'
 }
@@ -112,7 +108,7 @@ builder.primaryText = "This text is displayed on the first line"
 </div>
 </div>
 
-Optionally set the text to display on the second line. If the primary text is not set the secondary text must be set 
+Optionally set the text to display on the second line. If the primary text is not set the secondary text must be set
 
 <div class="tabs">
 <div class="tabs-titles">
@@ -174,7 +170,7 @@ builder.setPromptStateChangeListener(new MaterialTapTargetPrompt.PromptStateChan
 <div class="tabs-content" markdown="1">
 ```kotlin
 builder.setPromptStateChangeListener { prompt, state ->
-    if (state == MaterialTapTargetPrompt.STATE_FOCAL_PRESSED) 
+    if (state == MaterialTapTargetPrompt.STATE_FOCAL_PRESSED)
     {
         // User has pressed the prompt target
     }
@@ -250,7 +246,7 @@ MaterialTapTargetPrompt.Builder(this@MainActivity)
         .setPrimaryText("This text is displayed on the first line")
         .setSecondaryText("Text to display on the second line")
         .setPromptStateChangeListener { prompt, state ->
-            if (state == MaterialTapTargetPrompt.STATE_FOCAL_PRESSED) 
+            if (state == MaterialTapTargetPrompt.STATE_FOCAL_PRESSED)
             {
                 // User has pressed the prompt target
             }
