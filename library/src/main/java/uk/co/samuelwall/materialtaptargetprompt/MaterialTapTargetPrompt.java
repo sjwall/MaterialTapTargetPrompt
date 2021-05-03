@@ -573,7 +573,6 @@ public class MaterialTapTargetPrompt
                 mView.invalidate();
             }
         });
-        mAnimationFocalBreathing.start();
 
         mAnimationFocalRipple = ValueAnimator.ofFloat(1.1f, 1.6f);
         mAnimationFocalRipple.setInterpolator(mView.mPromptOptions.getAnimationInterpolator());
@@ -582,6 +581,7 @@ public class MaterialTapTargetPrompt
             final float value = (float) animation.getAnimatedValue();
             mView.mPromptOptions.getPromptFocal().updateRipple(value, (1.6f - value) * 2);
         });
+        mAnimationFocalBreathing.start();
     }
 
     /**
