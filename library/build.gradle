@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2016-2019 Samuel Wall
+ * Copyright (C) 2016-2021 Samuel Wall
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,6 +18,7 @@ apply plugin: 'com.android.library'
 apply plugin: 'com.hiya.jacoco-android'
 apply plugin: 'com.github.dcendents.android-maven'
 apply plugin: 'maven-publish'
+apply plugin: 'signing'
 
 // Maven Group ID for the artifact
 group = 'uk.co.samuelwall'
@@ -83,42 +84,6 @@ dependencies {
 
 }
 
-install {
-    repositories.mavenInstaller {
-        pom {
-            //noinspection GroovyAssignabilityCheck
-            project {
-                packaging 'aar'
-                name 'material-tap-target-prompt'
-                url 'https://github.com/sjwall/MaterialTapTargetPrompt'
-
-                groupId 'uk.co.samuelwall'
-                artifactId 'material-tap-target-prompt'
-
-                licenses {
-                    license {
-                        name 'The Apache Software License, Version 2.0'
-                        url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
-                    }
-                }
-                developers {
-                    developer {
-                        id 'sjwall'
-                        name 'Samuel Wall'
-                        email 'wallsamuelj@gmail.com'
-                    }
-                }
-                scm {
-                    connection 'https://github.com/sjwall/MaterialTapTargetPrompt.git'
-                    developerConnection 'https://github.com/sjwall/MaterialTapTargetPrompt.git'
-                    url 'https://github.com/sjwall/MaterialTapTargetPrompt'
-
-                }
-            }
-        }
-    }
-}
-
 task sourcesJar(type: Jar) {
     from android.sourceSets.main.java.srcDirs
     classifier = 'sources'
@@ -141,6 +106,10 @@ artifacts {
     archives sourcesJar
 }
 
+signing {
+    sign publishing.publications
+}
+
 jacoco {
     toolVersion = "0.8.6"
 }
@@ -154,22 +123,52 @@ tasks.withType(Test) {
 project.afterEvaluate {
     publishing {
         publications {
-            gpr(MavenPublication) {
-                groupId = group
-                artifactId = 'material-tap-target-prompt'
-                version = rootProject.versionName
+            maven(MavenPublication) {
+                from components.release
                 artifact(sourcesJar)
                 artifact(javadocJar)
-                artifact("$buildDir/outputs/aar/material-tap-target-prompt-release.aar")
+                pom {
+                    name = 'material-tap-target-prompt'
+                    description = 'A Tap Target implementation in Android based on Material Design Onboarding guidelines.'
+                    url = 'https://github.com/sjwall/MaterialTapTargetPrompt'
+
+                    licenses {
+                        license {
+                            name = 'The Apache Software License, Version 2.0'
+                            url = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+                        }
+                    }
+                    developers {
+                        developer {
+                            id = 'sjwall'
+                            name = 'Samuel Wall'
+                            email = 'oss@samuelwall.co.uk'
+                        }
+                    }
+                    scm {
+                        connection = 'https://github.com/sjwall/MaterialTapTargetPrompt.git'
+                        developerConnection = 'https://github.com/sjwall/MaterialTapTargetPrompt.git'
+                        url = 'https://github.com/sjwall/MaterialTapTargetPrompt'
+                    }
+                }
             }
         }
         repositories {
+            Properties properties = new Properties()
+            File propertiesFile = project.rootProject.file('local.properties')
+            if (propertiesFile.exists()) {
+                properties.load(propertiesFile.newDataInputStream())
+            }
+
             maven {
-                Properties properties = new Properties()
-                File propertiesFile = project.rootProject.file('local.properties')
-                if (propertiesFile.exists()) {
-                    properties.load(propertiesFile.newDataInputStream())
+                name = "ossrh"
+                url = uri("https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/")
+                credentials {
+                    username = properties.get("sona.usr")
+                    password = properties.get("sona.key")
                 }
+            }
+            maven {
                 name = "GitHubPackages"
                 url = uri("https://maven.pkg.github.com/sjwall/MaterialTapTargetPrompt")
                 // Github Package
