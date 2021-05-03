@@ -2,6 +2,14 @@
 
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## v3.1.1 (2021-05-03)
+
+### Bug Fixes
+
+* Fix NPE on animation start ([#164](https://github.com/sjwall/MaterialTapTargetPrompt/issues/186))
+* Fix NPE on `CircleFocal` path ([#164](https://github.com/sjwall/MaterialTapTargetPrompt/issues/190))
+* Fix `PromptView` content description not being set
+
 ## v3.1.0 (2020-12-17)
 
 ### Features
