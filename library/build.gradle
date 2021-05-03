@@ -18,7 +18,6 @@ apply plugin: 'com.android.library'
 apply plugin: 'com.hiya.jacoco-android'
 apply plugin: 'com.github.dcendents.android-maven'
 apply plugin: 'maven-publish'
-apply plugin: 'com.jfrog.bintray'
 
 // Maven Group ID for the artifact
 group = 'uk.co.samuelwall'
@@ -140,31 +139,6 @@ task javadocJar(type: Jar, dependsOn: javadoc) {
 artifacts {
     archives javadocJar
     archives sourcesJar
-}
-
-// Bintray
-bintray {
-    Properties properties = new Properties()
-    File propertiesFile = project.rootProject.file('local.properties')
-    if (propertiesFile.exists()) {
-        properties.load(propertiesFile.newDataInputStream())
-    }
-
-    user = properties.getProperty("bintray.user")
-    key = properties.getProperty("bintray.apikey")
-
-    configurations = ['archives']
-
-    publish = false
-    pkg {
-        repo = 'maven'
-        name = 'material-tap-target-prompt'
-        desc = 'Material Design tap target for Android'
-        websiteUrl = 'https://github.com/sjwall/MaterialTapTargetPrompt'
-        vcsUrl = 'https://github.com/sjwall/MaterialTapTargetPrompt.git'
-        licenses = ["Apache-2.0"]
-        publicDownloadNumbers = false
-    }
 }
 
 jacoco {
