@@ -44,6 +44,7 @@
             android:layout_gravity="center"
             android:layout_margin="@dimen/fab_margin"
             android:src="@android:drawable/ic_dialog_dialer"
+            android:contentDescription="@string/example_navigation_description"
             android:onClick="showNavPrompt"/>
     </com.google.android.material.navigation.NavigationView>
 

@@ -17,6 +17,7 @@
 package uk.co.samuelwall.materialtaptargetprompt.extras.sequence;
 
 import android.os.Build;
+import android.os.Looper;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -31,6 +32,7 @@ import uk.co.samuelwall.materialtaptargetprompt.UnitTestUtils;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
+import static org.robolectric.Shadows.shadowOf;
 
 @RunWith(RobolectricTestRunner.class)
 @Config(sdk = Build.VERSION_CODES.LOLLIPOP_MR1)
@@ -82,12 +84,14 @@ public class SequenceItemTest extends BaseTestStateProgress
         final SequenceState state = new SequenceState(prompt);
         final SequenceItem sequenceItem = new SequenceItem(state);
         sequenceItem.show();
+        shadowOf(Looper.getMainLooper()).idle();
         assertEquals(MaterialTapTargetPrompt.STATE_REVEALED, prompt.getState());
     }
 
     @Test
     public void testDismiss()
     {
+        shadowOf(Looper.getMainLooper()).idle();
         expectedStateProgress = 1;
         final MaterialTapTargetPrompt prompt = UnitTestUtils.createPromptOptions()
                 .setTarget(32, 43)
@@ -106,6 +110,7 @@ public class SequenceItemTest extends BaseTestStateProgress
         });
         UnitTestUtils.initSequenceItem(prompt, sequenceItem);
         sequenceItem.show();
+        shadowOf(Looper.getMainLooper()).idle();
         assertEquals(MaterialTapTargetPrompt.STATE_REVEALED, prompt.getState());
         prompt.dismiss();
         UnitTestUtils.endCurrentAnimation(prompt);
@@ -131,6 +136,7 @@ public class SequenceItemTest extends BaseTestStateProgress
         });
         UnitTestUtils.initSequenceItem(prompt, sequenceItem);
         sequenceItem.show();
+        shadowOf(Looper.getMainLooper()).idle();
         assertEquals(MaterialTapTargetPrompt.STATE_REVEALED, prompt.getState());
         prompt.dismiss();
         UnitTestUtils.endCurrentAnimation(prompt);

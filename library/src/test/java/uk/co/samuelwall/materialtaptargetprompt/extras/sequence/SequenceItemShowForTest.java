@@ -17,21 +17,33 @@
 package uk.co.samuelwall.materialtaptargetprompt.extras.sequence;
 
 import android.os.Build;
+import android.os.Looper;
 
 import androidx.annotation.NonNull;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.Mockito;
+import org.mockito.invocation.InvocationOnMock;
+import org.mockito.stubbing.Answer;
 import org.robolectric.RobolectricTestRunner;
 import org.robolectric.annotation.Config;
 
+import java.util.concurrent.TimeUnit;
+
 import uk.co.samuelwall.materialtaptargetprompt.BaseTestStateProgress;
 import uk.co.samuelwall.materialtaptargetprompt.MaterialTapTargetPrompt;
+import uk.co.samuelwall.materialtaptargetprompt.MaterialTapTargetPromptUnitTest;
 import uk.co.samuelwall.materialtaptargetprompt.UnitTestUtils;
 import uk.co.samuelwall.materialtaptargetprompt.extras.PromptOptions;
 
 import static junit.framework.Assert.fail;
 import static org.junit.Assert.assertEquals;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.Mockito.spy;
+import static org.mockito.Mockito.when;
+import static org.robolectric.Shadows.shadowOf;
 
 @RunWith(RobolectricTestRunner.class)
 @Config(sdk = Build.VERSION_CODES.LOLLIPOP_MR1)
@@ -58,7 +70,7 @@ public class SequenceItemShowForTest extends BaseTestStateProgress
                         {
                             assertEquals(MaterialTapTargetPrompt.STATE_REVEALED, state);
                             assertEquals(MaterialTapTargetPrompt.STATE_REVEALED, prompt.getState());
-                            UnitTestUtils.runPromptTimeOut(prompt);
+                            UnitTestUtils.runPromptMainLooperTimeOut(prompt);
                         }
                         else if (actualStateProgress == 2)
                         {
@@ -86,5 +98,7 @@ public class SequenceItemShowForTest extends BaseTestStateProgress
                 });
         final SequenceItem sequenceItem = new SequenceItemShowFor(new SequenceStatePromptOptions(promptOptions), 1000);
         sequenceItem.show();
+        assertEquals(1, actualStateProgress);
+        shadowOf(Looper.getMainLooper()).idleFor(1, TimeUnit.SECONDS);
     }
 }

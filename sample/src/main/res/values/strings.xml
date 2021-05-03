@@ -113,4 +113,6 @@
 
     <string name="example_view_pager_title">View pager tab</string>
     <string name="example_view_pager_description">Show a prompt targeting a view pager tab</string>
+
+    <string name="fab_dummy_content_desc">Dummy floating action button used for examples</string>
 </resources>

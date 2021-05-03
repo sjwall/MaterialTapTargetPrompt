@@ -16,10 +16,13 @@
 
 package uk.co.samuelwall.materialtaptargetprompt;
 
+import android.os.Looper;
+
 import org.junit.After;
 import org.junit.Before;
 
 import static org.junit.Assert.assertEquals;
+import static org.robolectric.Shadows.shadowOf;
 
 /**
  * Base test class that provides easy state testing with listeners.
@@ -51,6 +54,7 @@ public class BaseTestStateProgress
         // If there is an expected state progress
         if (expectedStateProgress > -1)
         {
+            shadowOf(Looper.getMainLooper()).idle();
             assertEquals(expectedStateProgress, actualStateProgress);
         }
     }

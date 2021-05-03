@@ -23,8 +23,11 @@ import android.app.Activity;
 import android.graphics.Canvas;
 import android.graphics.RectF;
 import android.os.Build;
+import android.os.Handler;
 import android.os.IBinder;
 import androidx.annotation.NonNull;
+
+import android.os.Looper;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
@@ -40,11 +43,12 @@ import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 import org.robolectric.Robolectric;
 import org.robolectric.RobolectricTestRunner;
-import org.robolectric.android.AccessibilityUtil;
-import org.robolectric.annotation.AccessibilityChecks;
 import org.robolectric.annotation.Config;
 import org.robolectric.util.ReflectionHelpers;
 
+import java.util.concurrent.TimeUnit;
+
+import kotlin.Unit;
 import uk.co.samuelwall.materialtaptargetprompt.extras.PromptFocal;
 import uk.co.samuelwall.materialtaptargetprompt.extras.PromptOptions;
 
@@ -54,9 +58,12 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.when;
+import static org.robolectric.Shadows.shadowOf;
 
 @RunWith(RobolectricTestRunner.class)
 @Config(sdk = Build.VERSION_CODES.LOLLIPOP_MR1)
@@ -171,6 +178,7 @@ public class MaterialTapTargetPromptUnitTest extends BaseTestStateProgress
                 })
                 .show();
         assertNotNull(prompt);
+        shadowOf(Looper.getMainLooper()).idle();
         assertFalse(prompt.mView.onTouchEvent(MotionEvent.obtain(0, 0, MotionEvent.ACTION_DOWN, 10, 10, 0)));
     }
 
@@ -264,6 +272,7 @@ public class MaterialTapTargetPromptUnitTest extends BaseTestStateProgress
                     }
                 })
                 .show();
+        shadowOf(Looper.getMainLooper()).idle();
         assertNotNull(prompt);
         assertFalse(prompt.mView.onTouchEvent(MotionEvent.obtain(0, 0, MotionEvent.ACTION_DOWN, 10, 10, 0)));
     }
@@ -316,6 +325,7 @@ public class MaterialTapTargetPromptUnitTest extends BaseTestStateProgress
                     }
                 })
                 .show();
+        shadowOf(Looper.getMainLooper()).idle();
         assertNotNull(prompt);
         assertTrue(prompt.mView.onTouchEvent(MotionEvent.obtain(0, 0, MotionEvent.ACTION_DOWN, 10, 10, 0)));
     }
@@ -379,6 +389,7 @@ public class MaterialTapTargetPromptUnitTest extends BaseTestStateProgress
                     }
                 })
                 .show();
+        shadowOf(Looper.getMainLooper()).idle();
         assertNotNull(prompt);
         assertTrue(prompt.mView.onTouchEvent(MotionEvent.obtain(0, 0, MotionEvent.ACTION_DOWN, 60, 60, 0)));
     }
@@ -473,6 +484,7 @@ public class MaterialTapTargetPromptUnitTest extends BaseTestStateProgress
                     }
                 })
                 .show();
+        shadowOf(Looper.getMainLooper()).idle();
         assertNotNull(prompt);
         assertTrue(prompt.mView.onTouchEvent(MotionEvent.obtain(0, 0, MotionEvent.ACTION_DOWN, 60, 60, 0)));
     }
@@ -541,6 +553,7 @@ public class MaterialTapTargetPromptUnitTest extends BaseTestStateProgress
             }
         })
         .when(prompt.mView).getKeyDispatcherState();
+        shadowOf(Looper.getMainLooper()).idle();
         assertTrue(prompt.mView.dispatchKeyEventPreIme(new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_BACK)));
         assertTrue(prompt.mView.dispatchKeyEventPreIme(new KeyEvent(KeyEvent.ACTION_UP, KeyEvent.KEYCODE_BACK)));
     }
@@ -624,8 +637,7 @@ public class MaterialTapTargetPromptUnitTest extends BaseTestStateProgress
     }
 
     @Test
-    public void testShowFor()
-    {
+    public void testShowFor() throws InterruptedException {
         expectedStateProgress = 5;
         createMockBuilder(SCREEN_WIDTH, SCREEN_HEIGHT)
                 .setTarget(10, 10)
@@ -671,6 +683,8 @@ public class MaterialTapTargetPromptUnitTest extends BaseTestStateProgress
                     }
                 })
                 .showFor(1000);
+        assertEquals(1, actualStateProgress);
+        shadowOf(Looper.getMainLooper()).idleFor(1001, TimeUnit.MILLISECONDS);
     }
 
     @Test
@@ -691,6 +705,7 @@ public class MaterialTapTargetPromptUnitTest extends BaseTestStateProgress
             e.printStackTrace();
             fail(e.getMessage());
         }
+        shadowOf(Looper.getMainLooper()).idle();
         assertEquals(MaterialTapTargetPrompt.STATE_REVEALED, prompt.mState);
     }
 
@@ -894,23 +909,6 @@ public class MaterialTapTargetPromptUnitTest extends BaseTestStateProgress
     }
 
     @Test
-    @AccessibilityChecks
-    public void testPromptAccessibility() {
-        MaterialTapTargetPrompt prompt = createMockBuilder(SCREEN_WIDTH, SCREEN_HEIGHT)
-                .setTarget(10, 10)
-                .setPrimaryText("Primary text")
-                .setIdleAnimationEnabled(false)
-                .create();
-        assertNotNull(prompt);
-        prompt.show();
-
-        AccessibilityUtil.setThrowExceptionForErrors(true);
-        AccessibilityUtil.checkView(prompt.mView);
-
-        prompt.mView.sendAccessibilityEvent(AccessibilityEvent.TYPE_VIEW_FOCUSED);
-    }
-
-    @Test
     @Deprecated
     public void testAnimatorListener()
     {
@@ -938,6 +936,14 @@ public class MaterialTapTargetPromptUnitTest extends BaseTestStateProgress
                         final MaterialTapTargetPrompt prompt = spy(basePrompt);
                         prompt.mView = spy(prompt.mView);
 
+                        Mockito.doAnswer(new Answer<Void>() {
+                            @Override
+                            public Void answer(InvocationOnMock invocation) throws Throwable {
+                                shadowOf(Looper.getMainLooper()).post(
+                                        invocation.getArgument(0), invocation.getArgument(1));
+                                return null;
+                            }
+                        }).when(prompt.mView).postDelayed(any(), anyLong());
 
                         Mockito.doAnswer(new Answer<Void>()
                         {
@@ -996,7 +1002,7 @@ public class MaterialTapTargetPromptUnitTest extends BaseTestStateProgress
         return builder;
     }
 
-    private MaterialTapTargetPrompt.Builder createBuilder(final int screenWidth,
+    public static MaterialTapTargetPrompt.Builder createBuilder(final int screenWidth,
                                                           final int screenHeight)
     {
         final Activity activity = spy(Robolectric.buildActivity(Activity.class).create().get());
@@ -1010,7 +1016,7 @@ public class MaterialTapTargetPromptUnitTest extends BaseTestStateProgress
         return builder;
     }
 
-    private void setViewBounds(final View view, final int width, final int height)
+    public static void setViewBounds(final View view, final int width, final int height)
     {
         //TODO make this work for all versions
         view.setLeft(0);

@@ -17,17 +17,30 @@
 package uk.co.samuelwall.materialtaptargetprompt;
 
 import android.animation.Animator;
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.res.Resources;
+import android.graphics.Canvas;
+import android.os.Looper;
 import android.util.DisplayMetrics;
+import android.view.View;
+import android.view.ViewParent;
+import android.widget.FrameLayout;
 
+import org.mockito.Mockito;
+import org.mockito.invocation.InvocationOnMock;
+import org.mockito.stubbing.Answer;
 import org.robolectric.Robolectric;
 
 import uk.co.samuelwall.materialtaptargetprompt.extras.PromptOptions;
 import uk.co.samuelwall.materialtaptargetprompt.extras.sequence.SequenceItem;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.when;
+import static org.robolectric.Shadows.shadowOf;
 
 /**
  * Common method calls required to run various tests.
@@ -144,5 +157,15 @@ public class UnitTestUtils
                 prompt.mTimeoutRunnable.run();
             }
         });
+    }
+
+    /**
+     * Calls the show for timeout run method.
+     *
+     * @param prompt The prompt to call the timeout on.
+     */
+    public static void runPromptMainLooperTimeOut(final MaterialTapTargetPrompt prompt)
+    {
+        shadowOf(Looper.getMainLooper()).postAtFrontOfQueue(prompt.mTimeoutRunnable);
     }
 }
