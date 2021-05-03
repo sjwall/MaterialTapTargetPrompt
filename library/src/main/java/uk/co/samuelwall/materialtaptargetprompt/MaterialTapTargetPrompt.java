@@ -175,6 +175,7 @@ public class MaterialTapTargetPrompt
         mView = new PromptView(resourceFinder.getContext());
         mView.mPrompt = this;
         mView.mPromptOptions = promptOptions;
+        mView.setContentDescription(promptOptions.getContentDescription());
         mView.mPromptTouchedListener = new PromptView.PromptTouchedListener()
         {
             @Override
