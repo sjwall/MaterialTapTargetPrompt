@@ -16,11 +16,13 @@
 
 package uk.co.samuelwall.materialtaptargetprompt.sample;
 
-import androidx.test.filters.LargeTest;
-import androidx.test.rule.ActivityTestRule;
-
+import org.junit.Assert;
 import org.junit.Rule;
 import org.junit.Test;
+
+import androidx.test.filters.LargeTest;
+import androidx.test.rule.ActivityTestRule;
+import uk.co.samuelwall.materialtaptargetprompt.MaterialTapTargetPrompt;
 
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
@@ -42,6 +44,9 @@ public class MainActivityTest
         // Type text and then press the button.
         onView(withId(R.id.btn_navigation_prompt))
                 .perform(click());
+        MaterialTapTargetPrompt.PromptView promptView = mActivityRule.getActivity().findViewById(uk.co.samuelwall.materialtaptargetprompt.R.id.material_target_prompt_view);
+
+        Assert.assertEquals(mActivityRule.getActivity().getString(R.string.menu_prompt_title), promptView.getPromptOptions().getPrimaryText());
 
         // Check that the text was changed.
         onView(withId(uk.co.samuelwall.materialtaptargetprompt.R.id.material_target_prompt_view))

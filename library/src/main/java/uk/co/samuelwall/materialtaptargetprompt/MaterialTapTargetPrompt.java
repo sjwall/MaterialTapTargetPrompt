@@ -42,6 +42,7 @@ import android.view.accessibility.AccessibilityNodeInfo;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.VisibleForTesting;
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 import uk.co.samuelwall.materialtaptargetprompt.extras.PromptOptions;
@@ -721,7 +722,8 @@ public class MaterialTapTargetPrompt
     /**
      * View used to render the tap target.
      */
-    static class PromptView extends View
+    @VisibleForTesting
+    public static class PromptView extends View
     {
         /*int padding;
         Paint paddingPaint = new Paint();
@@ -918,6 +920,13 @@ public class MaterialTapTargetPrompt
         public CharSequence getAccessibilityClassName()
         {
             return PromptView.class.getName();
+        }
+
+
+        @VisibleForTesting
+        public PromptOptions getPromptOptions()
+        {
+            return mPromptOptions;
         }
 
         /**
