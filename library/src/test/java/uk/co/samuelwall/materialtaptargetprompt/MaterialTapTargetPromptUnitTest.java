@@ -23,16 +23,12 @@ import android.app.Activity;
 import android.graphics.Canvas;
 import android.graphics.RectF;
 import android.os.Build;
-import android.os.Handler;
 import android.os.IBinder;
-import androidx.annotation.NonNull;
-
 import android.os.Looper;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewParent;
-import android.view.accessibility.AccessibilityEvent;
 import android.widget.Button;
 import android.widget.FrameLayout;
 
@@ -48,7 +44,7 @@ import org.robolectric.util.ReflectionHelpers;
 
 import java.util.concurrent.TimeUnit;
 
-import kotlin.Unit;
+import androidx.annotation.NonNull;
 import uk.co.samuelwall.materialtaptargetprompt.extras.PromptFocal;
 import uk.co.samuelwall.materialtaptargetprompt.extras.PromptOptions;
 
@@ -906,6 +902,18 @@ public class MaterialTapTargetPromptUnitTest extends BaseTestStateProgress
         assertNotNull(prompt);
         prompt.show();
         assertNull(prompt.mAnimationFocalBreathing);
+    }
+
+    @Test
+    public void testGetPromptOptions()
+    {
+        String text = "Primary text";
+        MaterialTapTargetPrompt prompt = createMockBuilder(SCREEN_WIDTH, SCREEN_HEIGHT)
+                .setTarget(10, 10)
+                .setPrimaryText(text)
+                .create();
+        assertNotNull(prompt);
+        assertEquals("Texts should be equal", text, prompt.mView.getPromptOptions().getPrimaryText());
     }
 
     @Test
