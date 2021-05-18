@@ -35,7 +35,7 @@
         <img alt="Download" src="https://img.shields.io/maven-central/v/uk.co.samuelwall/material-tap-target-prompt">
     </a>
     <a href="https://sjwall.github.io/MaterialTapTargetPrompt/javadoc">
-        <img alt="JavaDoc" src="https://img.shields.io/badge/JavaDoc-3.1.1-brightgreen.svg">
+        <img alt="JavaDoc" src="https://img.shields.io/badge/JavaDoc-3.2.0-brightgreen.svg">
     </a>
     <a href="https://github.com/sjwall/MaterialTapTargetPrompt/blob/master/LICENSE">
         <img alt="License" src="https://img.shields.io/github/license/sjwall/MaterialTapTargetPrompt">
@@ -63,7 +63,7 @@ Add the following to `build.gradle` using Maven Central:
 
 ```groovy
 dependencies {
-    implementation 'uk.co.samuelwall:material-tap-target-prompt:3.1.1'
+    implementation 'uk.co.samuelwall:material-tap-target-prompt:3.2.0'
 }
 ```
 Supports Android minSdkVersion 14

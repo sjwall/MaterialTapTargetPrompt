@@ -2,6 +2,12 @@
 
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## v3.2.0 (2021-05-18)
+
+### Testing
+
+* PromptView and PromptView.mPromptOptions are visible for testing ([#193](https://github.com/sjwall/MaterialTapTargetPrompt/pull/193)) ([@hdani9307](https://github.com/hdani9307))
+
 ## v3.1.1 (2021-05-03)
 
 ### Bug Fixes
