@@ -2,6 +2,16 @@
 
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## v3.3.0 (2021-07-02)
+
+### Bug Fixes
+
+* Fix NPE when setting Typeface with style 0 ([#188](https://github.com/sjwall/MaterialTapTargetPrompt/issues/188)) ([@akwizgran](https://github.com/akwizgran)))
+
+### Other
+
+* Target Android SDK 30
+
 ## v3.2.0 (2021-05-18)
 
 ### Testing
