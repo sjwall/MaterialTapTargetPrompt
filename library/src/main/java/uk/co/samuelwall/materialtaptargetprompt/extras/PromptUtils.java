@@ -123,6 +123,11 @@ public class PromptUtils
             case 3:
                 tf = Typeface.MONOSPACE;
                 break;
+
+            case 0:
+            default:
+                tf = Typeface.DEFAULT;
+                break;
         }
         return Typeface.create(tf, styleIndex);
     }

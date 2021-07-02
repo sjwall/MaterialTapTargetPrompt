@@ -129,6 +129,24 @@ public class PromptUtilsUnitTest
         assertNotNull(typeface);
         assertEquals(Typeface.BOLD_ITALIC, typeface.getStyle());
 
+        // Null
+
+        typeface = PromptUtils.setTypefaceFromAttrs(null, 0, Typeface.NORMAL);
+        assertNotNull(typeface);
+        assertEquals(Typeface.NORMAL, typeface.getStyle());
+
+        typeface = PromptUtils.setTypefaceFromAttrs(null, 0, Typeface.BOLD);
+        assertNotNull(typeface);
+        assertEquals(Typeface.BOLD, typeface.getStyle());
+
+        typeface = PromptUtils.setTypefaceFromAttrs(null, 0, Typeface.ITALIC);
+        assertNotNull(typeface);
+        assertEquals(Typeface.ITALIC, typeface.getStyle());
+
+        typeface = PromptUtils.setTypefaceFromAttrs(null, 0, Typeface.BOLD_ITALIC);
+        assertNotNull(typeface);
+        assertEquals(Typeface.BOLD_ITALIC, typeface.getStyle());
+
         typeface = PromptUtils.setTypefaceFromAttrs(null, 1, Typeface.NORMAL);
         assertNotNull(typeface);
         assertEquals(Typeface.NORMAL, typeface.getStyle());
@@ -174,6 +192,72 @@ public class PromptUtilsUnitTest
         assertEquals(Typeface.ITALIC, typeface.getStyle());
 
         typeface = PromptUtils.setTypefaceFromAttrs(null, 3, Typeface.BOLD_ITALIC);
+        assertNotNull(typeface);
+        assertEquals(Typeface.BOLD_ITALIC, typeface.getStyle());
+
+        // Family not found
+
+        typeface = PromptUtils.setTypefaceFromAttrs("I do not exist", 0, Typeface.NORMAL);
+        assertNotNull(typeface);
+        assertEquals(Typeface.NORMAL, typeface.getStyle());
+
+        typeface = PromptUtils.setTypefaceFromAttrs("I do not exist", 0, Typeface.BOLD);
+        assertNotNull(typeface);
+        assertEquals(Typeface.BOLD, typeface.getStyle());
+
+        typeface = PromptUtils.setTypefaceFromAttrs("I do not exist", 0, Typeface.ITALIC);
+        assertNotNull(typeface);
+        assertEquals(Typeface.ITALIC, typeface.getStyle());
+
+        typeface = PromptUtils.setTypefaceFromAttrs("I do not exist", 0, Typeface.BOLD_ITALIC);
+        assertNotNull(typeface);
+        assertEquals(Typeface.BOLD_ITALIC, typeface.getStyle());
+
+        typeface = PromptUtils.setTypefaceFromAttrs("I do not exist", 1, Typeface.NORMAL);
+        assertNotNull(typeface);
+        assertEquals(Typeface.NORMAL, typeface.getStyle());
+
+        typeface = PromptUtils.setTypefaceFromAttrs("I do not exist", 1, Typeface.BOLD);
+        assertNotNull(typeface);
+        assertEquals(Typeface.BOLD, typeface.getStyle());
+
+        typeface = PromptUtils.setTypefaceFromAttrs("I do not exist", 1, Typeface.ITALIC);
+        assertNotNull(typeface);
+        assertEquals(Typeface.ITALIC, typeface.getStyle());
+
+        typeface = PromptUtils.setTypefaceFromAttrs("I do not exist", 1, Typeface.BOLD_ITALIC);
+        assertNotNull(typeface);
+        assertEquals(Typeface.BOLD_ITALIC, typeface.getStyle());
+
+        typeface = PromptUtils.setTypefaceFromAttrs("I do not exist", 2, Typeface.NORMAL);
+        assertNotNull(typeface);
+        assertEquals(Typeface.NORMAL, typeface.getStyle());
+
+        typeface = PromptUtils.setTypefaceFromAttrs("I do not exist", 2, Typeface.BOLD);
+        assertNotNull(typeface);
+        assertEquals(Typeface.BOLD, typeface.getStyle());
+
+        typeface = PromptUtils.setTypefaceFromAttrs("I do not exist", 2, Typeface.ITALIC);
+        assertNotNull(typeface);
+        assertEquals(Typeface.ITALIC, typeface.getStyle());
+
+        typeface = PromptUtils.setTypefaceFromAttrs("I do not exist", 2, Typeface.BOLD_ITALIC);
+        assertNotNull(typeface);
+        assertEquals(Typeface.BOLD_ITALIC, typeface.getStyle());
+
+        typeface = PromptUtils.setTypefaceFromAttrs("I do not exist", 3, Typeface.NORMAL);
+        assertNotNull(typeface);
+        assertEquals(Typeface.NORMAL, typeface.getStyle());
+
+        typeface = PromptUtils.setTypefaceFromAttrs("I do not exist", 3, Typeface.BOLD);
+        assertNotNull(typeface);
+        assertEquals(Typeface.BOLD, typeface.getStyle());
+
+        typeface = PromptUtils.setTypefaceFromAttrs("I do not exist", 3, Typeface.ITALIC);
+        assertNotNull(typeface);
+        assertEquals(Typeface.ITALIC, typeface.getStyle());
+
+        typeface = PromptUtils.setTypefaceFromAttrs("I do not exist", 3, Typeface.BOLD_ITALIC);
         assertNotNull(typeface);
         assertEquals(Typeface.BOLD_ITALIC, typeface.getStyle());
     }
