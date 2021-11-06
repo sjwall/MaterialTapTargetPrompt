@@ -751,8 +751,12 @@ public class MaterialTapTargetPrompt
             setFocusableInTouchMode(true);
             requestFocus();
 
-            // Enable Software layer so we're able to apply blending mode.
-            setLayerType(View.LAYER_TYPE_SOFTWARE, null);
+            // Hardware acceleration for clipping to a path is not supported on SDK < 18
+            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN_MR2)
+            {
+                // Disable hardware acceleration
+                setLayerType(View.LAYER_TYPE_SOFTWARE, null);
+            }
 
             /*paddingPaint.setColor(Color.GREEN);
             paddingPaint.setAlpha(100);
@@ -820,7 +824,17 @@ public class MaterialTapTargetPrompt
             }
 
             //Draw the text
+            Path backgroundPath = mPromptOptions.getPromptBackground().getPath();
+            if (backgroundPath != null)
+            {
+                canvas.save();
+                canvas.clipPath(backgroundPath, Region.Op.INTERSECT);
+            }
             mPromptOptions.getPromptText().draw(canvas);
+            if (backgroundPath != null)
+            {
+                canvas.restore();
+            }
         }
 
         @Override

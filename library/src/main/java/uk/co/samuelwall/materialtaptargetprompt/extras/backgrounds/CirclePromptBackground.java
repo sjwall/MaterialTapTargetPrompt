@@ -19,6 +19,7 @@ package uk.co.samuelwall.materialtaptargetprompt.extras.backgrounds;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.Path;
 import android.graphics.PointF;
 import android.graphics.Rect;
 import android.graphics.RectF;
@@ -72,6 +73,11 @@ public class CirclePromptBackground extends PromptBackground
     Paint pointPaint = new Paint();*/
 
     /**
+     * The current path of the background (useful for clipping)
+     */
+    Path mPath;
+
+    /**
      * Constructor.
      */
     public CirclePromptBackground()
@@ -80,6 +86,7 @@ public class CirclePromptBackground extends PromptBackground
         mPaint.setAntiAlias(true);
         mPosition = new PointF();
         mBasePosition = new PointF();
+        mPath = new Path();
         /*pointPaint.setColor(Color.RED);
         pointPaint.setAlpha(100);*/
     }
@@ -212,6 +219,8 @@ public class CirclePromptBackground extends PromptBackground
         // Change the current centre position to be a position scaled from the focal to the base.
         mPosition.set(focalCentreX + ((mBasePosition.x - focalCentreX) * revealModifier),
                 focalCentreY + ((mBasePosition.y - focalCentreY) * revealModifier));
+        mPath.reset();
+        mPath.addCircle(mPosition.x, mPosition.y, mRadius, Path.Direction.CW);
     }
 
     @Override
@@ -234,5 +243,11 @@ public class CirclePromptBackground extends PromptBackground
     public boolean contains(float x, float y)
     {
         return PromptUtils.isPointInCircle(x, y, mPosition, mRadius);
+    }
+
+    @Override
+    public Path getPath()
+    {
+        return mPath;
     }
 }

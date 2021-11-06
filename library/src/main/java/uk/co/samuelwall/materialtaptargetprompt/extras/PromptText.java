@@ -95,7 +95,6 @@ public class PromptText implements PromptUIElement
             mPaintPrimaryText.setAlpha(Color.alpha(primaryTextColour));
             mPaintPrimaryText.setAntiAlias(true);
             mPaintPrimaryText.setTextSize(options.getPrimaryTextSize());
-            mPaintPrimaryText.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC_IN));
             PromptUtils.setTypeface(mPaintPrimaryText, options.getPrimaryTextTypeface(), options.getPrimaryTextTypefaceStyle());
             mPrimaryTextAlignment = PromptUtils.getTextAlignment(options.getResourceFinder().getResources(),
                     options.getPrimaryTextGravity(), primaryText);
@@ -107,7 +106,6 @@ public class PromptText implements PromptUIElement
             mPaintSecondaryText = new TextPaint();
             @ColorInt final int secondaryTextColour = options.getSecondaryTextColour();
             mPaintSecondaryText.setColor(secondaryTextColour);
-            mPaintSecondaryText.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC_IN));
             mPaintSecondaryText.setAlpha(Color.alpha(secondaryTextColour));
             mPaintSecondaryText.setAntiAlias(true);
             mPaintSecondaryText.setTextSize(options.getSecondaryTextSize());

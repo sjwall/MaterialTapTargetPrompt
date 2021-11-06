@@ -20,6 +20,7 @@ import android.content.res.Resources;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.Path;
 import android.graphics.PointF;
 import android.graphics.Rect;
 import android.graphics.RectF;
@@ -41,6 +42,7 @@ public class FullscreenPromptBackground extends PromptBackground
     int mBaseColourAlpha;
     float mRx, mRy;
     PointF mFocalCentre;
+    Path mPath;
 
     /**
      * Constructor.
@@ -52,6 +54,7 @@ public class FullscreenPromptBackground extends PromptBackground
         mBounds = new RectF();
         mBaseBounds = new RectF();
         mFocalCentre = new PointF();
+        mPath = new Path();
         mRx = mRy = 0;
     }
 
@@ -100,6 +103,8 @@ public class FullscreenPromptBackground extends PromptBackground
     {
         mPaint.setAlpha((int) (mBaseColourAlpha * alphaModifier));
         PromptUtils.scale(mFocalCentre, mBaseBounds, mBounds, revealModifier, false);
+        mPath.reset();
+        mPath.addRect(mBounds, Path.Direction.CW);
     }
 
     @Override
@@ -112,5 +117,11 @@ public class FullscreenPromptBackground extends PromptBackground
     public boolean contains(float x, float y)
     {
         return mBounds.contains(x, y);
+    }
+
+    @Override
+    public Path getPath()
+    {
+        return mPath;
     }
 }
