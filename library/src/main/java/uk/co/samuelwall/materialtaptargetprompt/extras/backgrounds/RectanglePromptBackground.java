@@ -52,6 +52,7 @@ public class RectanglePromptBackground extends PromptBackground
         mBounds = new RectF();
         mBaseBounds = new RectF();
         mFocalCentre = new PointF();
+        mPath = new Path();
         final float density = Resources.getSystem().getDisplayMetrics().density;
         mRx = mRy = 2 * density;
     }
