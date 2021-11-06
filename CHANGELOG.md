@@ -2,6 +2,12 @@
 
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## v3.3.1 (2021-11-06)
+
+### Bug Fixes
+
+* Add Xfer mode to paint, so the text pixels are only drawn when the background reaches them ([#200](https://github.com/sjwall/MaterialTapTargetPrompt/pull/200) [#146](https://github.com/sjwall/MaterialTapTargetPrompt/issues/146)) ([@danilodanicomendes](https://github.com/danilodanicomendes)))
+
 ## v3.3.0 (2021-07-02)
 
 ### Bug Fixes
