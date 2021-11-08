@@ -22,8 +22,8 @@
 </p>
 
 <p align="center">
-    <a href="https://travis-ci.org/sjwall/MaterialTapTargetPrompt">
-        <img alt="Build Status" src="https://travis-ci.com/sjwall/MaterialTapTargetPrompt.svg?branch=master">
+    <a href="https://app.travis-ci.com/github/sjwall/MaterialTapTargetPrompt">
+        <img alt="Build Status" src="https://app.travis-ci.com/sjwall/MaterialTapTargetPrompt.svg?branch=master">
     </a>
     <a href="https://codecov.io/gh/sjwall/MaterialTapTargetPrompt">
         <img alt="codecov" src="https://codecov.io/gh/sjwall/MaterialTapTargetPrompt/branch/master/graph/badge.svg">
