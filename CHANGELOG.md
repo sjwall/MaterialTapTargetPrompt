@@ -2,6 +2,12 @@
 
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## v3.3.2 (2021-11-08
+
+### Bug Fixes
+
+* Clip text using background path instead of via Xfermode to fix weird UI issues ([#202](https://github.com/sjwall/MaterialTapTargetPrompt/pull/202) [#201](https://github.com/sjwall/MaterialTapTargetPrompt/issues/201)) ([@peterdk](https://github.com/peterdk)))
+
 ## v3.3.1 (2021-11-06)
 
 ### Bug Fixes
