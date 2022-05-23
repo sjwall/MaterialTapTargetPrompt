@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-  ~ Copyright (C) 2018-2019 Samuel Wall
+  ~ Copyright (C) 2016-2022 Samuel Wall
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
   ~ you may not use this file except in compliance with the License.
@@ -116,4 +116,7 @@
     <string name="example_view_pager_description">Show a prompt targeting a view pager tab</string>
 
     <string name="fab_dummy_content_desc">Dummy floating action button used for examples</string>
+
+    <string name="example_compose_title">Androidx Compose</string>
+    <string name="example_compose_description">Displays activity with prompts created with compose</string>
 </resources>
