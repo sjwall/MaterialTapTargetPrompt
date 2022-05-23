@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2016-2021 Samuel Wall
+ * Copyright (C) 2016-2022 Samuel Wall
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,7 +15,7 @@
  */
 
 buildscript {
-    ext.kotlin_version = '1.5.10'
+    ext.kotlin_version = '1.5.31'
     repositories {
         mavenCentral()
         google()
@@ -25,11 +25,11 @@ buildscript {
     }
 
     dependencies {
-        classpath 'com.android.tools.build:gradle:4.2.2'
-        classpath 'com.github.dcendents:android-maven-gradle-plugin:2.1'
+        classpath 'com.android.tools.build:gradle:7.2.0'
         classpath 'org.jacoco:org.jacoco.core:0.8.6'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
         classpath 'com.hiya:jacoco-android:0.2'
+        classpath 'com.vanniktech:gradle-maven-publish-plugin:0.19.0'
     }
 }
 
@@ -42,10 +42,11 @@ allprojects {
 
 ext {
     minSdkVersion = 14
-    targetSdkVersion = 30
-    compileSdkVersion = 30
-    buildToolsVersion = '30.0.3'
+    targetSdkVersion = 31
+    compileSdkVersion = 31
 
     versionCode = 66
     versionName = '3.3.2'
 }
+
+apply plugin: "com.vanniktech.maven.publish"

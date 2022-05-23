@@ -14,11 +14,9 @@
   ~ See the License for the specific language governing permissions and
   ~ limitations under the License.
 -->
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
-          package="uk.co.samuelwall.materialtaptargetprompt.sample">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
 
     <application
-        android:name=".Mttp"
         android:label="@string/app_name"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -26,6 +24,7 @@
         android:theme="@style/AppTheme">
         <activity
             android:name=".MainActivity"
+            android:exported="true"
             android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
@@ -36,6 +35,7 @@
         </activity>
         <activity
             android:name=".DialogStyleActivity"
+            android:exported="false"
             android:parentActivityName=".MainActivity"
             android:theme="@style/AppTheme.Dialog">
             <meta-data
@@ -44,14 +44,17 @@
         </activity>
         <activity
             android:name=".KotlinActivity"
+            android:exported="false"
             android:theme="@style/AppTheme">
         </activity>
         <activity
             android:name=".CentrePositionActivity"
+            android:exported="false"
             android:theme="@style/AppTheme.NoActionBar">
         </activity>
         <activity
             android:name=".CardActivity"
+            android:exported="false"
             android:label="@string/title_activity_card"
             android:parentActivityName=".MainActivity"
             android:theme="@style/AppTheme.NoActionBar">
@@ -61,6 +64,7 @@
         </activity>
         <activity
             android:name=".ListActivity"
+            android:exported="false"
             android:label="@string/title_activity_list_example"
             android:parentActivityName=".MainActivity"
             android:theme="@style/AppTheme.NoActionBar">
