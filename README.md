@@ -1,3 +1,11 @@
+# DEPRECATED
+
+Android is moving towards compose, for an alternative library in compose have a look at [intro-showcase-view](https://github.com/canopas/Intro-showcase-view).
+
+Bug fix pull requests will be accepted for this library for the immediate future but there will be no active development or new features and it will eventually be archived.
+
+Thank you to everyone who has contributed to the library over the years!
+
 <h1 align="center">Material Tap Target Prompt</h1>
 
 <p align="center">
@@ -22,6 +30,9 @@
 </p>
 
 <p align="center">
+    <a href="http://unmaintained.tech/">
+        <img alt="No Maintenance Intended" src="http://unmaintained.tech/badge.svg">
+    </a>
     <a href="https://app.travis-ci.com/github/sjwall/MaterialTapTargetPrompt">
         <img alt="Build Status" src="https://app.travis-ci.com/sjwall/MaterialTapTargetPrompt.svg?branch=master">
     </a>
